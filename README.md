@@ -39,7 +39,7 @@ Dzentric  Co.,Ltd. สงวนสิทธิ์ในการพิจาร�
 
 :
 
-- [Lab: Write your first Flutter app](https://www.dzentric.com/chao_perty/#/)
+- [: Write your first Flutter app](https://www.dzentric.com/chao_perty/#/)
 - [Cookbook: Useful Flutter samples](https://www.chaoperty.com/)
 
 

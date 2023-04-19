@@ -568,17 +568,17 @@ class _SettingScreenState extends State<SettingScreen> {
 
   double _scaleFactor = 1.0; // define the initial scale factor
 
-  // void _zoomIn() {
-  //   setState(() {
-  //     _scaleFactor *= 1.2; // increase the scale factor by 20%
-  //   });
-  // }
+  void _zoomIn() {
+    setState(() {
+      _scaleFactor *= 1.2; // increase the scale factor by 20%
+    });
+  }
 
-  // void _zoomOut() {
-  //   setState(() {
-  //     _scaleFactor /= 1.2; // decrease the scale factor by 20%
-  //   });
-  // }
+  void _zoomOut() {
+    setState(() {
+      _scaleFactor /= 1.2; // decrease the scale factor by 20%
+    });
+  }
 
 ////--------------------------------------------------------------------->
   Future<void> _showMyDialogImg(String Url, String title_) async {

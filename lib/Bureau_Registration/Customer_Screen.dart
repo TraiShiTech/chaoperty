@@ -13,6 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
+import '../Model/GetContract_Model.dart';
 import '../Model/GetCustomer_Model.dart';
 import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetTeNant_Model.dart';
@@ -38,6 +39,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
   List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
   List<FinnancetransModel> finnancetransModels = [];
   List<TeNantModel> teNantModels = [];
+  List<ContractModel> contractModels = [];
   List<TypeModel> typeModels = [];
   String _verticalGroupValue = '';
   String? renTal_user, renTal_name, zone_ser, zone_name, pdate, numinvoice;
@@ -48,8 +50,11 @@ class _CustomerScreenState extends State<CustomerScreen> {
   int Total_early_payment = 0; //ชำระก่อรกำหนด
   int Total_ontime_payment = 0; //ชำระตรงเวลา
   double Total_tenant = 0; //ค้างชำระ
-  List<String> addAreaCusto = [];
-
+  List<String> addAreaCusto1 = [];
+  List<String> addAreaCusto2 = [];
+  List<String> addAreaCusto3 = [];
+  List<String> addAreaCusto4 = [];
+  List<String> addrtname = [];
   double Total_amtbill = 0.0;
   String tappedIndex_ = '';
   String tappedIndex_2 = '';
@@ -97,6 +102,165 @@ class _CustomerScreenState extends State<CustomerScreen> {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
     });
+  }
+
+  Future<Null> read_GC_Contract(custno_) async {
+    if (contractModels.isNotEmpty) {
+      contractModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = preferences.getString('zonePSer');
+    String url =
+        '${MyConstant().domain}/GC_ContractAll_Bureau_Custo.php?isAdd=true&ren=$ren&zone=$zone&custno_c=$custno_';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      //print(result);
+      if (result != null) {
+        for (var map in result) {
+          ContractModel contractModelss = ContractModel.fromJson(map);
+          setState(() {
+            contractModels.add(contractModelss);
+          });
+        }
+      } else {}
+    } catch (e) {}
+  }
+
+  Future<Null> read_GC_tenant(custno_) async {
+    DateTime datex = DateTime.now();
+    if (teNantModels.isNotEmpty) {
+      teNantModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = preferences.getString('zonePSer');
+
+    String url =
+        '${MyConstant().domain}/GC_tenantAll_Bureau_Custo.php?isAdd=true&ren=$ren&zone=$zone&custno_c=$custno_';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          TeNantModel teNantModel = TeNantModel.fromJson(map);
+          setState(() {
+            teNantModels.add(teNantModel);
+          });
+        }
+        for (int index = 0; index < teNantModels.length; index++) {
+          if (teNantModels[index].rtname.toString() != 'null') {
+            if (!addrtname.contains(
+              '${teNantModels[index].rtname}',
+            )) {
+              addrtname.add(
+                '${teNantModels[index].rtname}',
+              );
+
+              addrtname.sort();
+            }
+          }
+
+          if (teNantModels[index].quantity == '1') {
+            if (datex.isAfter(
+                    DateTime.parse('${teNantModels[index].ldate} 00:00:00.000')
+                        .subtract(const Duration(days: 0))) ==
+                true) {
+              ///////////--------------------------->(1)
+              if (!addAreaCusto1.contains(
+                teNantModels[index].ln_c == null
+                    ? teNantModels[index].ln_q == null
+                        ? ''
+                        : '${teNantModels[index].ln_q}'
+                    : '${teNantModels[index].ln_c}',
+              )) {
+                addAreaCusto1.add(
+                  teNantModels[index].ln_c == null
+                      ? teNantModels[index].ln_q == null
+                          ? ''
+                          : '${teNantModels[index].ln_q}'
+                      : '${teNantModels[index].ln_c}',
+                );
+
+                addAreaCusto1.sort();
+              }
+              ///////////--------------------------->(1)
+            } else if (datex.isAfter(
+                    DateTime.parse('${teNantModels[index].ldate} 00:00:00.000')
+                        .subtract(const Duration(days: 30))) ==
+                true) {
+              ///////////--------------------------->(2)
+              if (!addAreaCusto2.contains(
+                teNantModels[index].ln_c == null
+                    ? teNantModels[index].ln_q == null
+                        ? ''
+                        : '${teNantModels[index].ln_q}'
+                    : '${teNantModels[index].ln_c}',
+              )) {
+                addAreaCusto2.add(
+                  teNantModels[index].ln_c == null
+                      ? teNantModels[index].ln_q == null
+                          ? ''
+                          : '${teNantModels[index].ln_q}'
+                      : '${teNantModels[index].ln_c}',
+                );
+
+                addAreaCusto2.sort();
+              }
+              ///////////--------------------------->(2)
+            } else {
+              ///////////--------------------------->(3)
+              if (!addAreaCusto3.contains(
+                teNantModels[index].ln_c == null
+                    ? teNantModels[index].ln_q == null
+                        ? ''
+                        : '${teNantModels[index].ln_q}'
+                    : '${teNantModels[index].ln_c}',
+              )) {
+                addAreaCusto3.add(
+                  teNantModels[index].ln_c == null
+                      ? teNantModels[index].ln_q == null
+                          ? ''
+                          : '${teNantModels[index].ln_q}'
+                      : '${teNantModels[index].ln_c}',
+                );
+
+                addAreaCusto3.sort();
+              }
+              ///////////--------------------------->(3)
+            }
+          } else if (teNantModels[index].quantity == '2') {
+            ///////////--------------------------->(4)
+            if (!addAreaCusto4.contains(
+              teNantModels[index].ln_c == null
+                  ? teNantModels[index].ln_q == null
+                      ? ''
+                      : '${teNantModels[index].ln_q}'
+                  : '${teNantModels[index].ln_c}',
+            )) {
+              addAreaCusto4.add(
+                teNantModels[index].ln_c == null
+                    ? teNantModels[index].ln_q == null
+                        ? ''
+                        : '${teNantModels[index].ln_q}'
+                    : '${teNantModels[index].ln_c}',
+              );
+
+              addAreaCusto4.sort();
+            }
+            ///////////--------------------------->(4)
+          } else if (teNantModels[index].quantity == '3') {}
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Null> read_GC_tenant1(custno_) async {
@@ -364,15 +528,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
           setState(() {
             Total_amtbill = Total_amtbill +
                 double.parse(transReBillModel.total_bill.toString());
-            if (!addAreaCusto.contains(transReBillModel.ln.toString())) {
-              addAreaCusto.add(
-                transReBillModel.ln == null
-                    ? '${transReBillModel.room_number}'
-                    : '${transReBillModel.ln}',
-              );
 
-              addAreaCusto.sort();
-            }
+            // if (!addAreaCusto.contains(transReBillModel.ln.toString())) {
+            //   addAreaCusto.add(
+            //     transReBillModel.ln == null
+            //         ? '${transReBillModel.room_number}'
+            //         : '${transReBillModel.ln}',
+            //   );
+
+            //   addAreaCusto.sort();
+            // }
 
             _TransReBillModels.add(transReBillModel);
 
@@ -1783,7 +1948,29 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                   padding:
                                                       const EdgeInsets.all(5),
                                                   child: ListTile(
-                                                    onTap: () {
+                                                    onTap: () async {
+                                                      String custno_ =
+                                                          customerModels[index]
+                                                                      .custno ==
+                                                                  null
+                                                              ? ''
+                                                              : '${customerModels[index].custno}';
+                                                      setState(() {
+                                                        Total_doctax = 0;
+                                                        Total_late_payment = 0;
+                                                        Total_early_payment = 0;
+                                                        Total_ontime_payment =
+                                                            0;
+                                                        addAreaCusto1 = [];
+                                                        addAreaCusto2 = [];
+                                                        addAreaCusto3 = [];
+                                                        addAreaCusto4 = [];
+                                                        addrtname = [];
+                                                      });
+                                                      red_Trans_bill(custno_);
+                                                      read_GC_tenant1(custno_);
+                                                      read_GC_tenant(custno_);
+                                                      read_GC_Contract(custno_);
                                                       setState(() {
                                                         tappedIndex_ =
                                                             index.toString();
@@ -1823,12 +2010,6 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             ? "-"
                                                             : '${customerModels[index].tax}';
                                                       });
-                                                      String custno_ =
-                                                          customerModels[index]
-                                                                      .custno ==
-                                                                  null
-                                                              ? ''
-                                                              : '${customerModels[index].custno}';
 
                                                       for (int i = 0;
                                                           i < typeModels.length;
@@ -1861,16 +2042,6 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                           });
                                                         } else {}
                                                       }
-                                                      setState(() {
-                                                        Total_doctax = 0;
-                                                        Total_late_payment = 0;
-                                                        Total_early_payment = 0;
-                                                        Total_ontime_payment =
-                                                            0;
-                                                        addAreaCusto = [];
-                                                      });
-                                                      red_Trans_bill(custno_);
-                                                      read_GC_tenant1(custno_);
 
                                                       // Navigator.pop(context);
                                                     },
@@ -3920,18 +4091,22 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                               FontWeight.bold,
                                                           fontFamily:
                                                               FontWeight_
-                                                                  .Fonts_T
-                                                          //fontSize: 10.0
+                                                                  .Fonts_T,
+                                                          fontSize: 20.0
                                                           //fontSize: 10.0
                                                           ),
                                                     ),
                                                   ),
                                                   content: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
+                                                    width: (Responsive
+                                                            .isDesktop(context))
+                                                        ? MediaQuery.of(context)
                                                                 .size
                                                                 .width *
-                                                            0.4,
+                                                            0.4
+                                                        : MediaQuery.of(context)
+                                                            .size
+                                                            .width,
                                                     child:
                                                         SingleChildScrollView(
                                                       child:
@@ -3969,6 +4144,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             decoration:
                                                                                 const BoxDecoration(
                                                                               color: AppbackgroundColor.TiTile_Colors,
@@ -3997,6 +4175,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             decoration:
                                                                                 BoxDecoration(
                                                                               color: Colors.grey[200],
@@ -4035,6 +4216,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             padding:
@@ -4055,6 +4239,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 Colors.grey[200],
                                                                             padding:
@@ -4085,6 +4272,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             padding:
@@ -4105,6 +4295,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 Colors.grey[200],
                                                                             padding:
@@ -4135,6 +4328,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             padding:
@@ -4155,6 +4351,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 Colors.grey[200],
                                                                             padding:
@@ -4185,6 +4384,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             padding:
@@ -4205,6 +4407,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 Colors.grey[200],
                                                                             padding:
@@ -4235,6 +4440,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 AppbackgroundColor.TiTile_Colors,
                                                                             padding:
@@ -4255,6 +4463,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             color:
                                                                                 Colors.grey[200],
                                                                             padding:
@@ -4285,12 +4496,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
-                                                                            height:
-                                                                                50,
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             decoration:
                                                                                 const BoxDecoration(
                                                                               color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(0)),
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                               // border: Border.all(
                                                                               //     color: Colors
                                                                               //         .white,
@@ -4303,7 +4515,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                 const Align(
                                                                               alignment: Alignment.centerLeft,
                                                                               child: Text(
-                                                                                'พื้นที่เคยเช่าทั้งหมด :',
+                                                                                'ประเภทการเช่า:',
                                                                                 textAlign: TextAlign.start,
                                                                                 style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
                                                                                     //fontSize: 10.0
@@ -4318,12 +4530,247 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                               1,
                                                                           child:
                                                                               Container(
-                                                                            height:
-                                                                                50,
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
                                                                             decoration:
                                                                                 BoxDecoration(
                                                                               color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: ResponsiveGridList(
+                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                  verticalGridMargin: 5, // Vertical space around the grid
+                                                                                  minItemWidth: 10, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                  minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                  children: List.generate(
+                                                                                    addrtname.length,
+                                                                                    (index) => Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.white54,
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          '${addrtname[index]}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                              color: CustomerScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T
+                                                                                              //fontSize: 10.0
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${addAreaCusto}  ',
+                                                                            //   // '$Total_amtbill',
+                                                                            //   textAlign:
+                                                                            //       TextAlign
+                                                                            //           .end,
+                                                                            //   style: const TextStyle(
+                                                                            //       color: CustomerScreen_Color
+                                                                            //           .Colors_Text1_,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //       fontFamily:
+                                                                            //           FontWeight_.Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(
+                                                                                'หมดสัญญา:',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey[200],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: ResponsiveGridList(
+                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                  verticalGridMargin: 5, // Vertical space around the grid
+                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                  children: List.generate(
+                                                                                    addAreaCusto1.length,
+                                                                                    (index) => Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.red[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          '${addAreaCusto1[index]}',
+                                                                                          textAlign: TextAlign.end,
+                                                                                          style: const TextStyle(
+                                                                                              color: CustomerScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T
+                                                                                              //fontSize: 10.0
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${addAreaCusto}  ',
+                                                                            //   // '$Total_amtbill',
+                                                                            //   textAlign:
+                                                                            //       TextAlign
+                                                                            //           .end,
+                                                                            //   style: const TextStyle(
+                                                                            //       color: CustomerScreen_Color
+                                                                            //           .Colors_Text1_,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //       fontFamily:
+                                                                            //           FontWeight_.Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(
+                                                                                'ใกล้หมดสัญญา :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey[200],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                               // border: Border.all(
                                                                               //     color: Colors
                                                                               //         .white,
@@ -4344,20 +4791,20 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                   horizontalGridMargin: 5, // Horizontal space around the grid
                                                                                   verticalGridMargin: 5, // Vertical space around the grid
                                                                                   minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
                                                                                   listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
                                                                                   children: List.generate(
-                                                                                    addAreaCusto.length,
+                                                                                    addAreaCusto2.length,
                                                                                     (index) => Container(
                                                                                       decoration: BoxDecoration(
-                                                                                        color: Colors.white60,
+                                                                                        color: Colors.orange[300],
                                                                                         borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                         border: Border.all(color: Colors.white, width: 1),
                                                                                       ),
                                                                                       child: Center(
                                                                                         child: Text(
-                                                                                          '${addAreaCusto[index]}',
+                                                                                          '${addAreaCusto2[index]}',
                                                                                           textAlign: TextAlign.end,
                                                                                           style: const TextStyle(
                                                                                               color: CustomerScreen_Color.Colors_Text2_,
@@ -4367,6 +4814,392 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                                               ),
                                                                                         ),
                                                                                       ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${addAreaCusto}  ',
+                                                                            //   // '$Total_amtbill',
+                                                                            //   textAlign:
+                                                                            //       TextAlign
+                                                                            //           .end,
+                                                                            //   style: const TextStyle(
+                                                                            //       color: CustomerScreen_Color
+                                                                            //           .Colors_Text1_,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //       fontFamily:
+                                                                            //           FontWeight_.Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(
+                                                                                'เช่าอยู่ :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey[200],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: ResponsiveGridList(
+                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                  verticalGridMargin: 5, // Vertical space around the grid
+                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                  children: List.generate(
+                                                                                    addAreaCusto3.length,
+                                                                                    (index) => Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.green[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          '${addAreaCusto3[index]}',
+                                                                                          textAlign: TextAlign.end,
+                                                                                          style: const TextStyle(
+                                                                                              color: CustomerScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T
+                                                                                              //fontSize: 10.0
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${addAreaCusto}  ',
+                                                                            //   // '$Total_amtbill',
+                                                                            //   textAlign:
+                                                                            //       TextAlign
+                                                                            //           .end,
+                                                                            //   style: const TextStyle(
+                                                                            //       color: CustomerScreen_Color
+                                                                            //           .Colors_Text1_,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //       fontFamily:
+                                                                            //           FontWeight_.Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(
+                                                                                'เสนอราคา :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey[200],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: ResponsiveGridList(
+                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                  verticalGridMargin: 5, // Vertical space around the grid
+                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                  children: List.generate(
+                                                                                    addAreaCusto4.length,
+                                                                                    (index) => Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.blue[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      child: Center(
+                                                                                        child: Text(
+                                                                                          '${addAreaCusto4[index]}',
+                                                                                          textAlign: TextAlign.end,
+                                                                                          style: const TextStyle(
+                                                                                              color: CustomerScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T
+                                                                                              //fontSize: 10.0
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                            // Text(
+                                                                            //   '${addAreaCusto}  ',
+                                                                            //   // '$Total_amtbill',
+                                                                            //   textAlign:
+                                                                            //       TextAlign
+                                                                            //           .end,
+                                                                            //   style: const TextStyle(
+                                                                            //       color: CustomerScreen_Color
+                                                                            //           .Colors_Text1_,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //       fontFamily:
+                                                                            //           FontWeight_.Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Text(
+                                                                                'ยกเลิกสัญญา:',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              1,
+                                                                          child:
+                                                                              Container(
+                                                                            height: (!Responsive.isDesktop(context))
+                                                                                ? 80
+                                                                                : 50,
+                                                                            decoration:
+                                                                                BoxDecoration(
+                                                                              color: Colors.grey[200],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                              // border: Border.all(
+                                                                              //     color: Colors
+                                                                              //         .white,
+                                                                              //     width:
+                                                                              //         1),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                ScrollConfiguration(
+                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                PointerDeviceKind.touch,
+                                                                                PointerDeviceKind.mouse,
+                                                                              }),
+                                                                              child: ResponsiveGridList(
+                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                  verticalGridMargin: 5, // Vertical space around the grid
+                                                                                  minItemWidth: 15, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                  minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens /  Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>ลบ(${areaModels[index].lncode} : ${areaModels[index].ln})');
+                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                  children: List.generate(
+                                                                                    contractModels.length,
+                                                                                    (index) => Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.white54,
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.white, width: 1),
+                                                                                      ),
+                                                                                      padding: const EdgeInsets.all(2.0),
+                                                                                      child: PopupMenuButton(
+                                                                                        tooltip: 'เหตุผล : ${contractModels[index].cc_remark}',
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${contractModels[index].cid} >',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        itemBuilder: (BuildContext context) => [
+                                                                                          PopupMenuItem(
+                                                                                            mouseCursor: MaterialStateMouseCursor.textable,
+                                                                                            child: InkWell(
+                                                                                                onTap: () {
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: Container(
+                                                                                                    color: Colors.white,
+                                                                                                    padding: const EdgeInsets.all(10),
+                                                                                                    width: MediaQuery.of(context).size.width,
+                                                                                                    child: Text(
+                                                                                                      'เหตุผล : ${contractModels[index].cc_remark}',
+                                                                                                      style: const TextStyle(
+                                                                                                          color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                          //fontWeight: FontWeight.bold,
+                                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                                    ))),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+
+                                                                                      // Center(
+                                                                                      //   child: Text(
+                                                                                      //     '${contractModels[index].cid} >',
+                                                                                      //     textAlign: TextAlign.center,
+                                                                                      //     style: const TextStyle(
+                                                                                      //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                                      //         // fontWeight: FontWeight.bold,
+                                                                                      //         fontFamily: Font_.Fonts_T
+                                                                                      //         //fontSize: 10.0
+                                                                                      //         ),
+                                                                                      //   ),
+                                                                                      // ),
                                                                                     ),
                                                                                   )),
                                                                             ),

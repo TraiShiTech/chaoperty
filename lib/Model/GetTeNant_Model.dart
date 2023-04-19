@@ -47,58 +47,63 @@ class TeNantModel {
   String? count_bill;
   String? invoice;
   String? expname;
-   String? ser_tran;
+  String? ser_tran;
+  String? custno_1;
+  String? custno_2;
 
-  TeNantModel(
-      {this.ser,
-      this.datex,
-      this.timex,
-      this.rser,
-      this.zser,
-      this.lncode,
-      this.ln,
-      this.area,
-      this.rent,
-      this.st,
-      this.img,
-      this.tser,
-      this.tname,
-      this.cid,
-      this.dataUpdate,
-      this.total,
-      this.sdate,
-      this.ldate,
-      this.cname,
-      this.sname,
-      this.ln_c,
-      this.area_c,
-      this.docno,
-      this.date,
-      this.cname_q,
-      this.sname_q,
-      this.ln_q,
-      this.ldate_q,
-      this.sdate_q,
-      this.area_q,
-      this.quantity,
-      this.period,
-      this.period_q,
-      this.rtname,
-      this.rtname_q,
-      this.stype,
-      this.attn,
-      this.addr,
-      this.tax,
-      this.tel,
-      this.email,
-      this.ctype,
-      this.zn,
-      this.aser,
-      this.qty,
-      this.count_bill,
-      this.invoice,
-      this.expname,
-      this.ser_tran});
+  TeNantModel({
+    this.ser,
+    this.datex,
+    this.timex,
+    this.rser,
+    this.zser,
+    this.lncode,
+    this.ln,
+    this.area,
+    this.rent,
+    this.st,
+    this.img,
+    this.tser,
+    this.tname,
+    this.cid,
+    this.dataUpdate,
+    this.total,
+    this.sdate,
+    this.ldate,
+    this.cname,
+    this.sname,
+    this.ln_c,
+    this.area_c,
+    this.docno,
+    this.date,
+    this.cname_q,
+    this.sname_q,
+    this.ln_q,
+    this.ldate_q,
+    this.sdate_q,
+    this.area_q,
+    this.quantity,
+    this.period,
+    this.period_q,
+    this.rtname,
+    this.rtname_q,
+    this.stype,
+    this.attn,
+    this.addr,
+    this.tax,
+    this.tel,
+    this.email,
+    this.ctype,
+    this.zn,
+    this.aser,
+    this.qty,
+    this.count_bill,
+    this.invoice,
+    this.expname,
+    this.ser_tran,
+    this.custno_1,
+    this.custno_2,
+  });
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -149,8 +154,12 @@ class TeNantModel {
     qty = json['qty'];
     count_bill = json['count_bill'];
     invoice = json['invoice'];
-    expname = json['expname'];ser_tran= json['ser_tran'];
-  } 
+    expname = json['expname'];
+    ser_tran = json['ser_tran'];
+
+    custno_1 = json['custno_1'];
+    custno_2 = json['custno_2'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -201,8 +210,11 @@ class TeNantModel {
     data['qty'] = this.qty;
     data['count_bill'] = this.count_bill;
     data['invoice'] = this.invoice;
-    data['expname'] = this.expname;data['ser_tran'] = this.ser_tran;
-    
+    data['expname'] = this.expname;
+    data['ser_tran'] = this.ser_tran;
+
+    data['custno_1'] = this.custno_1;
+    data['custno_2'] = this.custno_2;
 
     return data;
   }

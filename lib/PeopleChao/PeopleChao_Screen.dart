@@ -449,9 +449,15 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
             var notTitle = teNantModels.lncode.toString().toLowerCase();
             var notTitle2 = teNantModels.cid.toString().toLowerCase();
             var notTitle3 = teNantModels.docno.toString().toLowerCase();
+            var notTitle4 = teNantModels.cname.toString().toLowerCase() == null
+                ? teNantModels.cname_q.toString().toLowerCase() == null
+                    ? ''
+                    : teNantModels.cname_q.toString().toLowerCase()
+                : teNantModels.cname.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notTitle2.contains(text) ||
-                notTitle3.contains(text);
+                notTitle3.contains(text) ||
+                notTitle4.contains(text);
           }).toList();
         });
       },
@@ -1159,7 +1165,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                   ),
                                                 ),
                                               ),
-                                              const Padding(
+                                              Padding(
                                                 padding: EdgeInsets.all(8.0),
                                                 child: Text(
                                                   'ค้นหา:',
@@ -1211,102 +1217,102 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     ),
                                   ),
                                 ),
-                                // Padding(
-                                //   padding:
-                                //       const EdgeInsets.fromLTRB(8, 8, 15, 8),
-                                //   child: InkWell(
-                                //     child: Container(
-                                //         // padding: EdgeInsets.all(8.0),
-                                //         child: CircleAvatar(
-                                //       backgroundColor: Colors.yellow[700],
-                                //       radius: 20,
-                                //       child: PopupMenuButton(
-                                //         child: const Text(
-                                //           '...',
-                                //           style: TextStyle(
-                                //               fontSize: 25,
-                                //               color: Colors.white,
-                                //               fontWeight: FontWeight.bold,
-                                //               fontFamily: FontWeight_.Fonts_T),
-                                //         ),
-                                //         itemBuilder: (BuildContext context) => [
-                                //           PopupMenuItem(
-                                //             child: InkWell(
-                                //                 onTap: () async {
-                                //                   Navigator.pop(context);
-                                //                   setState(() {
-                                //                     ReturnBodyPeople =
-                                //                         'PeopleChaoScreen3';
-                                //                   });
-                                //                 },
-                                //                 child: Container(
-                                //                     padding:
-                                //                         const EdgeInsets.all(
-                                //                             10),
-                                //                     width:
-                                //                         MediaQuery.of(context)
-                                //                             .size
-                                //                             .width,
-                                //                     child: Row(
-                                //                       children: const [
-                                //                         Expanded(
-                                //                           child: Text(
-                                //                             'คุมเงินประกัน',
-                                //                             style: TextStyle(
-                                //                                 color: PeopleChaoScreen_Color
-                                //                                     .Colors_Text1_,
-                                //                                 fontWeight:
-                                //                                     FontWeight
-                                //                                         .bold,
-                                //                                 fontFamily:
-                                //                                     FontWeight_
-                                //                                         .Fonts_T),
-                                //                           ),
-                                //                         )
-                                //                       ],
-                                //                     ))),
-                                //           ),
-                                //           PopupMenuItem(
-                                //             child: InkWell(
-                                //                 onTap: () async {
-                                //                   Navigator.pop(context);
-                                //                   setState(() {
-                                //                     ReturnBodyPeople =
-                                //                         'PeopleChaoScreen4';
-                                //                   });
-                                //                 },
-                                //                 child: Container(
-                                //                     padding:
-                                //                         const EdgeInsets.all(
-                                //                             10),
-                                //                     width:
-                                //                         MediaQuery.of(context)
-                                //                             .size
-                                //                             .width,
-                                //                     child: Row(
-                                //                       children: const [
-                                //                         Expanded(
-                                //                           child: Text(
-                                //                             'ยกเลิกสัญญา',
-                                //                             style: TextStyle(
-                                //                                 color: PeopleChaoScreen_Color
-                                //                                     .Colors_Text1_,
-                                //                                 fontWeight:
-                                //                                     FontWeight
-                                //                                         .bold,
-                                //                                 fontFamily:
-                                //                                     FontWeight_
-                                //                                         .Fonts_T),
-                                //                           ),
-                                //                         )
-                                //                       ],
-                                //                     ))),
-                                //           ),
-                                //         ],
-                                //       ),
-                                //     )),
-                                //   ),
-                                // ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 15, 8),
+                                  child: InkWell(
+                                    child: Container(
+                                        // padding: EdgeInsets.all(8.0),
+                                        child: CircleAvatar(
+                                      backgroundColor: Colors.yellow[700],
+                                      radius: 20,
+                                      child: PopupMenuButton(
+                                        child: const Text(
+                                          '...',
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T),
+                                        ),
+                                        itemBuilder: (BuildContext context) => [
+                                          PopupMenuItem(
+                                            child: InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    ReturnBodyPeople =
+                                                        'PeopleChaoScreen3';
+                                                  });
+                                                },
+                                                child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: Row(
+                                                      children: const [
+                                                        Expanded(
+                                                          child: Text(
+                                                            'คุมเงินประกัน',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ))),
+                                          ),
+                                          PopupMenuItem(
+                                            child: InkWell(
+                                                onTap: () async {
+                                                  Navigator.pop(context);
+                                                  setState(() {
+                                                    ReturnBodyPeople =
+                                                        'PeopleChaoScreen4';
+                                                  });
+                                                },
+                                                child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    child: Row(
+                                                      children: const [
+                                                        Expanded(
+                                                          child: Text(
+                                                            'ยกเลิกสัญญา',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ))),
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

@@ -38,6 +38,7 @@ class ContractModel {
   String? renew_cid;
   String? remark;
   String? data_update;
+  String? cc_remark;
 
   ContractModel({
     this.ser,
@@ -78,6 +79,7 @@ class ContractModel {
     this.renew_cid,
     this.remark,
     this.data_update,
+    this.cc_remark,
   });
 
   ContractModel.fromJson(Map<String, dynamic> json) {
@@ -120,6 +122,7 @@ class ContractModel {
     renew_cid = json['renew_cid'];
     remark = json['remark'];
     data_update = json['data_update'];
+    cc_remark = json['cc_remark'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +166,7 @@ class ContractModel {
     data['renew_cid'] = this.renew_cid;
     data['remark'] = this.remark;
     data['data_update'] = this.data_update;
+    data['cc_remark'] = this.cc_remark;
     return data;
   }
 }

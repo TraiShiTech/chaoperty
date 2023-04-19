@@ -13,6 +13,7 @@ import '../Account/Account_Screen.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
 import '../Home/Home_Screen.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Manage/Manage_Screen.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Report/Report_Screen.dart';
@@ -386,6 +387,9 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                                 response.body);
                                                         print(
                                                             'BBBBBBBBBBBBBBBB>>>> $result');
+                                                        Insert_log.Insert_logs(
+                                                            'ผู้เช่า',
+                                                            'เรียกดู>>ยกเลิกสัญญา(${widget.Get_Value_cid} : $because_');
                                                         if (result.toString() ==
                                                             'true') {
                                                           Navigator.pop(

@@ -84,6 +84,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
     read_GC_type();
   }
 
+////////////////////123456
   int Status_ = 1;
   List Status = [
     'ทะเบียนลูกค้า',

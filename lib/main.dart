@@ -21,6 +21,11 @@ void main() {
 ///  flutter build web --web-renderer html --release --no-sound-null-safety --dart-define=web-browser-flag=--disable-web-security (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 ///  flutter build web --release --web-renderer=html --dart-define=web-browser-flag=--disable-web-security
 //----------------------------------------------------->
+//----(Git Lab)
+//1.----> git add .
+//2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
+//3.-------->git commit -m "commit message"
+//4.-----------> git push origin main
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

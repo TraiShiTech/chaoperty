@@ -38,6 +38,8 @@ import 'User_Information.dart';
 import 'package:http/http.dart' as http;
 import 'dart:html' as html;
 
+import 'Webview.dart';
+
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
 
@@ -69,7 +71,7 @@ class _SettingScreenState extends State<SettingScreen> {
     'การรับชำระ',
     'สิทธิการเข้าถึง',
     // 'ข้อมูลผู้ใช้งาน',
-    // 'อื่นๆ',
+    // '📍ติดต่อเรา',
   ];
   List Style_Area_thi = [
     'คอมมูนิตี้มอลล์',
@@ -715,56 +717,107 @@ class _SettingScreenState extends State<SettingScreen> {
           //     // padding: const EdgeInsets.all(8.0),
           //   ),
           // ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: Align(
-              alignment: Alignment.topLeft,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
-                child: Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    color: AppbackgroundColor.TiTile_Colors,
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
+                      child: Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: AppbackgroundColor.TiTile_Colors,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                          ),
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            AutoSizeText(
+                              'ตั้งค่า',
+                              overflow: TextOverflow.ellipsis,
+                              minFontSize: 8,
+                              maxFontSize: 20,
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                                color: ReportScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                            AutoSizeText(
+                              ' > >',
+                              overflow: TextOverflow.ellipsis,
+                              minFontSize: 8,
+                              maxFontSize: 20,
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                    border: Border.all(color: Colors.white, width: 2),
-                  ),
-                  padding: const EdgeInsets.all(5.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      AutoSizeText(
-                        'ตั้งค่า',
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 8,
-                        maxFontSize: 20,
-                        style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: ReportScreen_Color.Colors_Text1_,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                      AutoSizeText(
-                        ' > >',
-                        overflow: TextOverflow.ellipsis,
-                        minFontSize: 8,
-                        maxFontSize: 20,
-                        style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontWeight_.Fonts_T,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      Status_ = 7;
+                    });
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.tealAccent[700],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                        bottomLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10),
+                      ),
+                      border: Border.all(color: Colors.white, width: 2),
+                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    width: 120,
+                    // height: 30,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '🔰 ',
+                          style: TextStyle(
+                              // color:
+                              //     (Status_ == 7) ? Colors.black : Colors.black,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                        Text(
+                          'ติดต่อผู้ดูแล',
+                          style: TextStyle(
+                              // decoration: TextDecoration.underline,
+                              color:
+                                  (Status_ == 7) ? Colors.black : Colors.black,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -801,22 +854,28 @@ class _SettingScreenState extends State<SettingScreen> {
                                         setState(() {
                                           Status_ = i + 1;
                                         });
+                                        // setState(() {
+                                        //   if (i + 1 > 5) {
+                                        //     Status_ = i + 2;
+                                        //   } else {
+                                        //     Status_ = i + 1;
+                                        //   }
+                                        // });
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: (i + 1 == 1)
                                               ? Colors.green
                                               : (i + 1 == 2)
-                                                  ? Colors.red
+                                                  ? Colors.blue
                                                   : (i + 1 == 3)
-                                                      ? Colors.blue
+                                                      ? Colors.deepPurple[300]
                                                       : (i + 1 == 4)
-                                                          ? Colors
-                                                              .deepPurple[300]
+                                                          ? Colors.red
                                                           : (i + 1 == 5)
                                                               ? Colors.orange
-                                                              : (i + 1 == 6)
-                                                                  ? Colors.pink
+                                                              : (i + 1 == 7)
+                                                                  ? Colors.green
                                                                   : Colors.teal,
                                           borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(10),
@@ -856,7 +915,7 @@ class _SettingScreenState extends State<SettingScreen> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.blueGrey,
+                          color: Colors.purpleAccent,
                           borderRadius: const BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -6098,7 +6157,8 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget Status7_Web() {
-    return const OtherScreen();
+    return const WebViewXPage();
+    // return const OtherScreen();
   }
 
   Widget BodyHome_mobile() {
@@ -6116,7 +6176,7 @@ class _SettingScreenState extends State<SettingScreen> {
                             ? const Accessrights()
                             : (Status_ == 6)
                                 ? const USerInformation()
-                                : const OtherScreen()
+                                : const WebViewXPage()
       ],
     );
   }

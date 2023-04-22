@@ -1236,7 +1236,7 @@ class _PaysState extends State<Pays> {
                                               maxLines: 1,
                                               _TransBillModels[index].invoice ==
                                                       null
-                                                  ? ''
+                                                  ? '${_TransBillModels[index].docno}'
                                                   : '${_TransBillModels[index].invoice}',
                                               textAlign: TextAlign.end,
                                               style: const TextStyle(

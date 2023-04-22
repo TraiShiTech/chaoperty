@@ -23,6 +23,7 @@ import '../Manage/Manage_Screen.dart';
 import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
+import '../Model/areak_model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Register/SignIn_Screen.dart';
 import '../Register/SignUp_Screen.dart';
@@ -63,6 +64,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   int? perMissioncount;
   List<RenTalModel> renTalModels = [];
   List<PerMissionModel> perMissionModels = [];
+  List<AreakModel> areakModels = [];
   int? timeoutper = null;
   DateTime? alert;
   Timer? timer;
@@ -82,6 +84,34 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     alert = DateTime.now().add(Duration(seconds: 300));
     readTime();
     read_GC_rental();
+    read_GC_areak();
+  }
+
+  Future<Null> read_GC_areak() async {
+    if (renTalModels.isNotEmpty) {
+      renTalModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/In_c_areak.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          AreakModel areakModel = AreakModel.fromJson(map);
+        
+          setState(() {
+            areakModels.add(areakModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
+    print('name>>>>>  $renname');
   }
 
   Future<Null> read_GC_rental() async {

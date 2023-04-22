@@ -449,15 +449,9 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
             var notTitle = teNantModels.lncode.toString().toLowerCase();
             var notTitle2 = teNantModels.cid.toString().toLowerCase();
             var notTitle3 = teNantModels.docno.toString().toLowerCase();
-            var notTitle4 = teNantModels.cname.toString().toLowerCase() == null
-                ? teNantModels.cname_q.toString().toLowerCase() == null
-                    ? ''
-                    : teNantModels.cname_q.toString().toLowerCase()
-                : teNantModels.cname.toString().toLowerCase();
             return notTitle.contains(text) ||
                 notTitle2.contains(text) ||
-                notTitle3.contains(text) ||
-                notTitle4.contains(text);
+                notTitle3.contains(text);
           }).toList();
         });
       },

@@ -1957,6 +1957,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                               ? ''
                                                               : '${customerModels[index].custno}';
                                                       setState(() {
+                                                        Total_amtbill = 0;
                                                         Total_doctax = 0;
                                                         Total_late_payment = 0;
                                                         Total_early_payment = 0;

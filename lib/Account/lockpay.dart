@@ -1640,6 +1640,25 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           [];
                                                                       _selecteSerbool =
                                                                           [];
+                                                                      // _formKey
+                                                                      //     .currentState!
+                                                                      //     .reset();
+                                                                      // Status4Form_nameshop
+                                                                      //     .text = '';
+                                                                      // Status4Form_typeshop
+                                                                      //     .text = '';
+                                                                      // Status4Form_bussshop
+                                                                      //     .text = '';
+                                                                      // Status4Form_bussscontact
+                                                                      //     .text = '';
+                                                                      _TransModels
+                                                                          .clear();
+                                                                      _TransModels =
+                                                                          [];
+                                                                      Form_payment1
+                                                                          .clear();
+                                                                      Form_payment2
+                                                                          .clear();
                                                                     });
                                                                     read_GC_areaSelect();
                                                                     Navigator.pop(
@@ -1694,6 +1713,27 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         )),
                                                                 onTap:
                                                                     () async {
+                                                                  setState(() {
+                                                                    _TransModels
+                                                                        .clear();
+                                                                    _TransModels =
+                                                                        [];
+                                                                    Form_payment1
+                                                                        .clear();
+                                                                    Form_payment2
+                                                                        .clear();
+                                                                  });
+                                                                  // _formKey
+                                                                  //     .currentState!
+                                                                  //     .reset();
+                                                                  // Status4Form_nameshop
+                                                                  //     .text = '';
+                                                                  // Status4Form_typeshop
+                                                                  //     .text = '';
+                                                                  // Status4Form_bussshop
+                                                                  //     .text = '';
+                                                                  // Status4Form_bussscontact
+                                                                  //     .text = '';
                                                                   Navigator.pop(
                                                                       context,
                                                                       '');
@@ -5473,7 +5513,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         builder: (context) => AlertDialog(
                                             title: const Center(
                                               child: Text(
-                                                '{widget.Get_Value_cid}',
+                                                '',
                                                 maxLines: 1,
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
@@ -5846,22 +5886,26 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () async {
-                                    Status4Form_nameshop.text =
-                                        _Form_nameshop.toString();
-                                    Status4Form_typeshop.text =
-                                        _Form_typeshop.toString();
-                                    Status4Form_bussshop.text =
-                                        _Form_bussshop.toString();
-                                    Status4Form_bussscontact.text =
-                                        _Form_bussscontact.toString();
-                                    Status4Form_address.text =
-                                        _Form_address.toString();
-                                    Status4Form_tel.text = _Form_tel.toString();
-                                    Status4Form_email.text =
-                                        _Form_email.toString();
-                                    Status4Form_tax.text = _Form_tax == null
-                                        ? "-"
-                                        : _Form_tax.toString();
+                                    if (_Form_nameshop != null) {
+                                      Status4Form_nameshop.text =
+                                          _Form_nameshop.toString();
+                                      Status4Form_typeshop.text =
+                                          _Form_typeshop.toString();
+                                      Status4Form_bussshop.text =
+                                          _Form_bussshop.toString();
+                                      Status4Form_bussscontact.text =
+                                          _Form_bussscontact.toString();
+                                      Status4Form_address.text =
+                                          _Form_address.toString();
+                                      Status4Form_tel.text =
+                                          _Form_tel.toString();
+                                      Status4Form_email.text =
+                                          _Form_email.toString();
+                                      Status4Form_tax.text = _Form_tax == null
+                                          ? "-"
+                                          : _Form_tax.toString();
+                                    }
+
                                     //----------------------------------->
 
                                     setState(() {
@@ -6398,8 +6442,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
           '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
         ],
     ];
-    String Area_ =
-        '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+    String Area_ = (No_Area_ != '')
+        ? '$No_Area_(${Status5Form_NoArea_.text})'
+        : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
     print('tableData00.length');
     print(tableData00.length);
     print('---------------------------------->');
@@ -6559,6 +6604,19 @@ class _LockpayScreenState extends State<LockpayScreen> {
           // Value_newDateD = '';
           discount_ = null;
           base64_Slip = null;
+
+          _selecteSer = [];
+          _selecteSerbool = [];
+          Status4Form_nameshop.text = '';
+          Status4Form_typeshop.text = '';
+          Status4Form_bussshop.text = '';
+          Status4Form_bussscontact.text = '';
+          Status4Form_address.text = '';
+          Status4Form_tel.text = '';
+          Status4Form_email.text = '';
+          Status4Form_tax.text = '';
+          Status5Form_NoArea_.text = '';
+          No_Area_ = '';
         });
 
         print('rrrrrrrrrrrrrr');

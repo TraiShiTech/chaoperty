@@ -27,7 +27,12 @@ void main() {
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
-
+//----(Git Hub)
+//1.----> git add .
+//2.------> git remote set-url origin https://github.com/TraiShiTech/chaoperty.git
+//3.-------->git commit -m "commit message"
+//4.-----------> git push origin main
+//----------------------------------------------------->
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

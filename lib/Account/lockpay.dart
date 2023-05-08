@@ -26,6 +26,7 @@ import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/GetType_Model.dart';
 import '../Model/GetZone_Model.dart';
+import '../Model/areak_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../PDF/pdf_LockReceipt.dart';
 import '../PDF/pdf_Receipt.dart';
@@ -65,6 +66,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
   List<RenTalModel> renTalModels = [];
   List<TypeModel> typeModels = [];
   List<AreaModel> areaModels = [];
+  List<AreakModel> areakModels = [];
   List<PayMentModel> _PayMentModels = [];
   List Area_ = [
     'คอมมูนิตี้มอลล์',
@@ -147,6 +149,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
   final Status4Form_email = TextEditingController();
   final Status4Form_tax = TextEditingController();
   final Status5Form_NoArea_ = TextEditingController();
+  final Status5Form_NoArea_ren = TextEditingController();
 
   String _verticalGroupValue = '';
   int Value_AreaSer_ = 0;
@@ -198,10 +201,44 @@ class _LockpayScreenState extends State<LockpayScreen> {
     red_payMent();
     read_GC_Exp();
     red_Trans_select2();
+    read_GC_areak();
     Value_newDateY1 = DateFormat('yyyy-MM-dd').format(newDatetime);
     Value_newDateD1 = DateFormat('dd-MM-yyyy').format(newDatetime);
     Value_newDateY = DateFormat('yyyy-MM-dd').format(newDatetime);
     Value_newDateD = DateFormat('dd-MM-yyyy').format(newDatetime);
+  }
+
+  Future<Null> read_GC_areak() async {
+    if (areakModels.isNotEmpty) {
+      areakModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var zone = preferences.getString('zoneSer');
+    String url = '${MyConstant().domain}/In_c_areak.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          AreakModel areakModel = AreakModel.fromJson(map);
+
+          setState(() {
+            if (int.parse(areakModel.aserQout!) == 0) {
+              if (zone == areakModel.zser) {
+                areakModels.add(areakModel);
+              } else if (zone == '0') {
+                areakModels.add(areakModel);
+              }
+            }
+          });
+        }
+      } else {}
+    } catch (e) {}
+    print('name>>>>>  $renname');
   }
 
   Future<Null> red_Trans_select2() async {
@@ -813,8 +850,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
     var day = DateFormat('dd').format(newDatetimex);
     var timex = DateFormat('HHmmss').format(newDatetimex);
 
-    var ciddoc =
-        'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}'; //In_c_paynew
+    var ciddoc = No_Area_ == 'ไม่ระบุพื้นที่'
+        ? 'L$day$timex-${Status5Form_NoArea_.text}'
+        : 'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}'; //In_c_paynew
 
     print('$tser>>>>$selecte>>>>$_area_rent_sum');
 
@@ -1409,6 +1447,82 @@ class _LockpayScreenState extends State<LockpayScreen> {
     );
   }
 
+///////----------------------------------------->
+  Future<void> _showMyDialogPay_Error(text) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '$text',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T
+                            //fontSize: 10.0
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  ///----------------->
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -1640,6 +1754,16 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           [];
                                                                       _selecteSerbool =
                                                                           [];
+
+                                                                      _area_sum =
+                                                                          _area_sum +
+                                                                              1;
+                                                                      _area_rent_sum =
+                                                                          _area_rent_sum +
+                                                                              1;
+                                                                      Status5Form_NoArea_ren
+                                                                          .clear();
+
                                                                       // _formKey
                                                                       //     .currentState!
                                                                       //     .reset();
@@ -1714,6 +1838,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 onTap:
                                                                     () async {
                                                                   setState(() {
+                                                                    No_Area_ =
+                                                                        '';
                                                                     _TransModels
                                                                         .clear();
                                                                     _TransModels =
@@ -1722,6 +1848,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         .clear();
                                                                     Form_payment2
                                                                         .clear();
+                                                                    read_GC_areak();
                                                                   });
                                                                   // _formKey
                                                                   //     .currentState!
@@ -1777,7 +1904,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                             activeColor: Colors.red,
                                                                                             checkColor: Colors.white,
                                                                                             labels: <String>[
-                                                                                              for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
+                                                                                              for (var i = 0; i < areakModels.length; i++) '${areakModels[i].type}',
                                                                                             ],
                                                                                             onChange: (isChecked, label, index) {
                                                                                               setState(() {
@@ -1785,10 +1912,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                                 Status5Form_NoArea_.clear();
                                                                                               });
                                                                                               if (isChecked == false) {
-                                                                                                _selecteSer.remove(areaModels[index].ser);
+                                                                                                _selecteSer.remove(areakModels[index].ser);
 
-                                                                                                double areax = double.parse(areaModels[index].area!);
-                                                                                                double rentx = double.parse(areaModels[index].rent!);
+                                                                                                double areax = double.parse(areakModels[index].area!);
+                                                                                                double rentx = double.parse(areakModels[index].rent!);
                                                                                                 _area_sum = _area_sum - areax;
                                                                                                 _area_rent_sum = _area_rent_sum - rentx;
 
@@ -1796,17 +1923,17 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                                   setState(() {
                                                                                                     _area_sum = _area_sum + areax;
                                                                                                     _area_rent_sum = _area_rent_sum + rentx;
-                                                                                                    _selecteSer.add(areaModels[index].ser);
+                                                                                                    _selecteSer.add(areakModels[index].ser);
                                                                                                   });
                                                                                                 }
                                                                                               } else {
-                                                                                                double areax = double.parse(areaModels[index].area!);
-                                                                                                double rentx = double.parse(areaModels[index].rent!);
+                                                                                                double areax = double.parse(areakModels[index].area!);
+                                                                                                double rentx = double.parse(areakModels[index].rent!);
                                                                                                 if (isChecked == true) {
                                                                                                   setState(() {
                                                                                                     _area_sum = _area_sum + areax;
                                                                                                     _area_rent_sum = _area_rent_sum + rentx;
-                                                                                                    _selecteSer.add(areaModels[index].ser);
+                                                                                                    _selecteSer.add(areakModels[index].ser);
                                                                                                   });
                                                                                                 }
                                                                                               }
@@ -2359,6 +2486,99 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       //   FilteringTextInputFormatter.digitsOnly
                                       // ],
                                     ),
+                                    // _selecteSerbool
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      // color: Colors.green,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(6),
+                                        topRight: Radius.circular(6),
+                                        bottomLeft: Radius.circular(6),
+                                        bottomRight: Radius.circular(6),
+                                      ),
+                                      // border: Border.all(color: Colors.grey, width: 1),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: TextFormField(
+                                      //keyboardType: TextInputType.none,
+                                      controller: Status5Form_NoArea_ren,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _selecteSerbool.clear();
+                                        });
+                                        for (var i = 0;
+                                            i < int.parse(value);
+                                            i++) {
+                                          setState(() {
+                                            _selecteSerbool.add('${i + 1}');
+                                          });
+                                        }
+                                      },
+                                      //initialValue: _Form_typeshop,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'กรอกข้อมูลให้ครบถ้วน ';
+                                        }
+                                        // if (int.parse(value.toString()) < 13) {
+                                        //   return '< 13';
+                                        // }
+                                        return null;
+                                      },
+                                      // maxLength: 13,
+                                      cursorColor: Colors.green,
+                                      decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'จำนวนพื้นที่',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          )),
+                                      inputFormatters: <TextInputFormatter>[
+                                        // for below version 2 use this
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'[0-9]')),
+                                        // for version 2 and greater youcan also use this
+                                        FilteringTextInputFormatter.digitsOnly
+                                      ],
+                                    ),
+                                    // _selecteSerbool
                                   ),
                                 ),
                               ],
@@ -3386,69 +3606,104 @@ class _LockpayScreenState extends State<LockpayScreen> {
                             itemCount: expModels.length,
                             // itemCount: _TransModels.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        maxLines: 1,
-                                        '${expModels[index].expname}',
-                                        textAlign: TextAlign.start,
-                                        style: const TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            //fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T),
-                                      ),
-                                    ),
-                                    Expanded(
-                                        flex: 1,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              if (_formKey.currentState!
-                                                  .validate()) {
-                                                //   print('---------------------------------->');
-                                                print(
-                                                    Status4Form_typeshop.text);
-                                                print(
-                                                    Status4Form_nameshop.text);
-                                                print(
-                                                    Status4Form_typeshop.text);
-                                                print(
-                                                    Status4Form_bussshop.text);
-                                                print(Status4Form_bussscontact
-                                                    .text);
-                                                print(Status4Form_address.text);
-                                                print(Status4Form_tel.text);
-                                                print(Status4Form_email.text);
-                                                print(Status4Form_tax.text);
-                                                print(Status5Form_NoArea_.text);
-                                                //   print('----------------------------------');
+                              return Material(
+                                color: (_TransModels.any((A) =>
+                                        A.name.toString() ==
+                                        expModels[index].expname.toString()))
+                                    ? tappedIndex_Color.tappedIndex_Colors
+                                    : AppbackgroundColor.Sub_Abg_Colors,
+                                child: Container(
+                                  child: ListTile(
+                                    title: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Tooltip(
+                                            richMessage: TextSpan(
+                                              text:
+                                                  '${expModels[index].expname}',
+                                              style: const TextStyle(
+                                                color: HomeScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                //fontSize: 10.0
+                                              ),
+                                            ),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              color: Colors.grey[200],
+                                            ),
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${expModels[index].expname}',
+                                              textAlign: TextAlign.start,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                            flex: 1,
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    //   print('---------------------------------->');
+                                                    print(Status4Form_typeshop
+                                                        .text);
+                                                    print(Status4Form_nameshop
+                                                        .text);
+                                                    print(Status4Form_typeshop
+                                                        .text);
+                                                    print(Status4Form_bussshop
+                                                        .text);
+                                                    print(
+                                                        Status4Form_bussscontact
+                                                            .text);
+                                                    print(Status4Form_address
+                                                        .text);
+                                                    print(Status4Form_tel.text);
+                                                    print(
+                                                        Status4Form_email.text);
+                                                    print(Status4Form_tax.text);
+                                                    print(Status5Form_NoArea_
+                                                        .text);
+                                                    //   print('----------------------------------');
 
-                                                if (_selecteSerbool.length !=
-                                                        0 ||
-                                                    No_Area_ != '') {
-                                                  in_Trans_select(index);
-                                                } else {
-                                                  ScaffoldMessenger.of(context)
-                                                      .showSnackBar(
-                                                    const SnackBar(
-                                                        content: Text(
-                                                            'กรุณาเลือกพื้นที่',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T))),
-                                                  );
-                                                }
-                                              }
-                                            },
-                                            icon: Icon(Icons.east))),
-                                  ],
+                                                    if (_selecteSerbool
+                                                                .length !=
+                                                            0 ||
+                                                        No_Area_ != '') {
+                                                      in_Trans_select(index);
+                                                    } else {
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'กรุณาเลือกพื้นที่',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T))),
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                icon: Icon(Icons.east))),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -3627,155 +3882,182 @@ class _LockpayScreenState extends State<LockpayScreen> {
                             itemCount: _TransModels.length,
                             // itemCount: _TransModels.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                title: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        maxLines: 1,
-                                        '${_TransModels[index].name}',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            //fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T),
-                                      ),
-                                    ), //
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        maxLines: 1,
-                                        '${_TransModels[index].tqty}',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            //fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: TextFormField(
-                                          keyboardType: TextInputType.number,
-                                          // controller: sum_dispx,
-                                          initialValue: nFormat.format(
-                                              double.parse(
-                                                  _TransModels[index].pvat!)),
-                                          onFieldSubmitted: (value) async {
-                                            var valuex = value;
-                                            var tser = _TransModels[index].ser;
+                              return Material(
+                                // color: (expModels.any((A) =>
+                                //         A.expname.toString() ==
+                                //         _TransModels[index].name.toString()))
+                                //     ? tappedIndex_Color.tappedIndex_Colors
+                                //     : null,
 
-                                            SharedPreferences preferences =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            var ren = preferences
-                                                .getString('renTalSer');
-                                            var user =
-                                                preferences.getString('ser');
-                                            String url =
-                                                '${MyConstant().domain}/UP_c_trans_select.php?isAdd=true&ren=$ren&user=$user&valuex=$valuex&tser=$tser';
-                                            try {
-                                              var response = await http
-                                                  .get(Uri.parse(url));
-
-                                              var result =
-                                                  json.decode(response.body);
-                                              // print(result);
-                                              if (result.toString() != 'null') {
-                                                setState(() {
-                                                  red_Trans_select2();
-                                                });
-                                              }
-                                              print(
-                                                  '------------>>>>> $sum_amt =====  ${sum_disamtx.text}');
-                                            } catch (e) {}
-
-                                            print(
-                                                'sum_dis $sum_dis   /////// ${value.toString()}');
-                                          },
-                                          cursorColor: Colors.black,
-                                          decoration: InputDecoration(
-                                              fillColor:
-                                                  Colors.white.withOpacity(0.3),
-                                              filled: true,
-                                              // prefixIcon:
-                                              //     const Icon(Icons.person, color: Colors.black),
-                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                              focusedBorder:
-                                                  const OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(5),
-                                                  topLeft: Radius.circular(5),
-                                                  bottomRight:
-                                                      Radius.circular(5),
-                                                  bottomLeft:
-                                                      Radius.circular(5),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.black,
-                                                ),
-                                              ),
-                                              enabledBorder:
-                                                  const OutlineInputBorder(
-                                                borderRadius: BorderRadius.only(
-                                                  topRight: Radius.circular(5),
-                                                  topLeft: Radius.circular(5),
-                                                  bottomRight:
-                                                      Radius.circular(5),
-                                                  bottomLeft:
-                                                      Radius.circular(5),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Colors.grey,
-                                                ),
-                                              ),
-                                              // labelText: 'ระบุชื่อร้านค้า',
-                                              labelStyle: const TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 8,
-
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T)),
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter.allow(
-                                                RegExp(r'[0-9 .]')),
-                                            // FilteringTextInputFormatter.digitsOnly
-                                          ],
+                                //  (_TransReBillModels[index]
+                                //             .docno
+                                //             .toString() ==
+                                //         _TransModels[index].name.toString())
+                                //     ? tappedIndex_Color.tappedIndex_Colors
+                                //     : null,
+                                child: ListTile(
+                                  onTap: () {},
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          maxLines: 1,
+                                          '${_TransModels[index].name}',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ), //
+                                      Expanded(
+                                        flex: 1,
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          maxLines: 1,
+                                          '${_TransModels[index].tqty}',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
                                         ),
                                       ),
-                                      // AutoSizeText(
-                                      //   minFontSize: 10,
-                                      //   maxFontSize: 15,
-                                      //   maxLines: 1,
-                                      //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
-                                      //   textAlign: TextAlign.end,
-                                      //   style: TextStyle(
-                                      //       color: PeopleChaoScreen_Color
-                                      //           .Colors_Text2_,
-                                      //       //fontWeight: FontWeight.bold,
-                                      //       fontFamily: Font_.Fonts_T),
-                                      // ),
-                                    ),
-                                    Expanded(
+                                      Expanded(
                                         flex: 1,
-                                        child: IconButton(
-                                            onPressed: () {
-                                              de_Trans_select(index);
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: TextFormField(
+                                            textAlign: TextAlign.end,
+                                            keyboardType: TextInputType.number,
+                                            // controller: sum_dispx,
+                                            initialValue: nFormat.format(
+                                                double.parse(
+                                                    _TransModels[index].pvat!)),
+                                            onFieldSubmitted: (value) async {
+                                              var valuex = value;
+                                              var tser =
+                                                  _TransModels[index].ser;
+
+                                              SharedPreferences preferences =
+                                                  await SharedPreferences
+                                                      .getInstance();
+                                              var ren = preferences
+                                                  .getString('renTalSer');
+                                              var user =
+                                                  preferences.getString('ser');
+                                              String url =
+                                                  '${MyConstant().domain}/UP_c_trans_select.php?isAdd=true&ren=$ren&user=$user&valuex=$valuex&tser=$tser';
+                                              try {
+                                                var response = await http
+                                                    .get(Uri.parse(url));
+
+                                                var result =
+                                                    json.decode(response.body);
+                                                // print(result);
+                                                if (result.toString() !=
+                                                    'null') {
+                                                  setState(() {
+                                                    red_Trans_select2();
+                                                  });
+                                                }
+                                                print(
+                                                    '------------>>>>> $sum_amt =====  ${sum_disamtx.text}');
+                                              } catch (e) {}
+
+                                              print(
+                                                  'sum_dis $sum_dis   /////// ${value.toString()}');
                                             },
-                                            icon: const Icon(
-                                                Icons.remove_circle))),
-                                  ],
+                                            cursorColor: Colors.black,
+                                            decoration: InputDecoration(
+                                                fillColor: Colors.white
+                                                    .withOpacity(0.3),
+                                                filled: true,
+                                                // prefixIcon:
+                                                //     const Icon(Icons.person, color: Colors.black),
+                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                focusedBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(5),
+                                                    topLeft: Radius.circular(5),
+                                                    bottomRight:
+                                                        Radius.circular(5),
+                                                    bottomLeft:
+                                                        Radius.circular(5),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.black,
+                                                  ),
+                                                ),
+                                                enabledBorder:
+                                                    const OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(5),
+                                                    topLeft: Radius.circular(5),
+                                                    bottomRight:
+                                                        Radius.circular(5),
+                                                    bottomLeft:
+                                                        Radius.circular(5),
+                                                  ),
+                                                  borderSide: BorderSide(
+                                                    width: 1,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                // labelText: 'ระบุชื่อร้านค้า',
+                                                labelStyle: const TextStyle(
+                                                    color: Colors.black54,
+                                                    fontSize: 8,
+
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T)),
+                                            inputFormatters: <
+                                                TextInputFormatter>[
+                                              FilteringTextInputFormatter.allow(
+                                                  RegExp(r'[0-9 .]')),
+                                              // FilteringTextInputFormatter.digitsOnly
+                                            ],
+                                          ),
+                                        ),
+                                        // AutoSizeText(
+                                        //   minFontSize: 10,
+                                        //   maxFontSize: 15,
+                                        //   maxLines: 1,
+                                        //   '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                        //   textAlign: TextAlign.end,
+                                        //   style: TextStyle(
+                                        //       color: PeopleChaoScreen_Color
+                                        //           .Colors_Text2_,
+                                        //       //fontWeight: FontWeight.bold,
+                                        //       fontFamily: Font_.Fonts_T),
+                                        // ),
+                                      ),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  de_Trans_select(index);
+                                                },
+                                                icon: const Icon(
+                                                  Icons.remove_circle,
+                                                  color: Colors.red,
+                                                )),
+                                          )),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -4251,7 +4533,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                   child: Text(
                                     _selecteSerbool.length == 0
                                         ? 'ใบเสร็จรับเงิน'
-                                        : 'ใบเสร็จรับเงิน ${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}',
+                                        : 'ใบเสร็จรับเงิน ', //${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}
                                     textAlign: TextAlign.center,
                                     style: const TextStyle(
                                         color: PeopleChaoScreen_Color
@@ -4352,15 +4634,21 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           });
                                           if (pamentpage == 0) {
                                             setState(() {
+                                              Form_payment2.clear();
+                                              Form_payment2.text = '';
                                               paymentName2 = null;
                                             });
                                           } else {}
                                         },
                                         icon: pamentpage == 0
-                                            ? const Icon(
-                                                Icons.add_circle_outline)
+                                            ? Icon(
+                                                Icons.add_circle_outline,
+                                                color: Colors.green,
+                                              )
                                             : const Icon(
-                                                Icons.remove_circle_outline),
+                                                Icons.remove_circle_outline,
+                                                color: Colors.red,
+                                              ),
                                       )
                                     ],
                                   ),
@@ -4476,8 +4764,16 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                           setState(() {
                                             paymentSer1 = rtnameSer.toString();
-                                            paymentName1 =
-                                                rtnameName.toString();
+                                            // paymentName1 =
+                                            //     rtnameName.toString();
+
+                                            if (rtnameSer.toString() == '0') {
+                                              paymentName1 = null;
+                                            } else {
+                                              paymentName1 =
+                                                  rtnameName.toString();
+                                            }
+
                                             if (rtnameSer.toString() == '0') {
                                               Form_payment1.clear();
                                             } else {
@@ -4610,8 +4906,17 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 setState(() {
                                                   paymentSer2 =
                                                       rtnameSer.toString();
-                                                  paymentName2 =
-                                                      rtnameName.toString();
+                                                  // paymentName2 =
+                                                  //     rtnameName.toString();
+
+                                                  if (rtnameSer.toString() ==
+                                                      '0') {
+                                                    paymentName2 = null;
+                                                  } else {
+                                                    paymentName2 =
+                                                        rtnameName.toString();
+                                                  }
+
                                                   if (rtnameSer.toString() ==
                                                       '0') {
                                                     Form_payment2.clear();
@@ -4682,8 +4987,35 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       child: TextFormField(
                                         keyboardType: TextInputType.number,
                                         controller: Form_payment1,
-                                        onChanged: (value) {
-                                          setState(() {});
+                                        onChanged: (value) async {
+                                          if (pamentpage == 1) {
+                                            setState(() {
+                                              Form_payment2.clear();
+                                              Form_payment2.text = '';
+                                            });
+                                          }
+                                          final currentCursorPosition =
+                                              Form_payment1.selection.start;
+
+                                          // Update the text of the controller
+                                          if (paymentSer2 != null) {
+                                            setState(() {
+                                              Form_payment2.text =
+                                                  '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                            });
+                                          }
+
+                                          // Set the new cursor position
+                                          final newCursorPosition =
+                                              currentCursorPosition +
+                                                  (value.length -
+                                                      Form_payment1
+                                                          .text.length);
+                                          Form_payment1.selection =
+                                              TextSelection.fromPosition(
+                                                  TextPosition(
+                                                      offset:
+                                                          newCursorPosition));
                                         },
                                         onFieldSubmitted: (value) {
                                           var money1 = double.parse(value);
@@ -4778,8 +5110,30 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               keyboardType:
                                                   TextInputType.number,
                                               controller: Form_payment2,
-                                              onChanged: (value) {
-                                                setState(() {});
+                                              onChanged: (value) async {
+                                                final currentCursorPosition =
+                                                    Form_payment2
+                                                        .selection.start;
+
+                                                // Update the text of the controller
+                                                if (paymentSer1 != null) {
+                                                  setState(() {
+                                                    Form_payment1.text =
+                                                        '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                  });
+                                                }
+
+                                                // Set the new cursor position
+                                                final newCursorPosition =
+                                                    currentCursorPosition +
+                                                        (value.length -
+                                                            Form_payment2
+                                                                .text.length);
+                                                Form_payment2.selection =
+                                                    TextSelection.fromPosition(
+                                                        TextPosition(
+                                                            offset:
+                                                                newCursorPosition));
                                               },
                                               onFieldSubmitted: (value) {
                                                 var money1 =
@@ -5450,8 +5804,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(0),
                                 topRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(6),
-                                bottomRight: Radius.circular(6),
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(0),
                               ),
                               // border: Border.all(color: Colors.grey, width: 1),
                             ),
@@ -5666,6 +6020,20 @@ class _LockpayScreenState extends State<LockpayScreen> {
                               ],
                             ),
                           ),
+                        Container(
+                          height: 10,
+                          decoration: BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                            // border: Border.all(
+                            //     color: Colors.grey, width: 1),
+                          ),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
@@ -5886,6 +6254,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () async {
+                                    var pay1;
+                                    var pay2;
                                     if (_Form_nameshop != null) {
                                       Status4Form_nameshop.text =
                                           _Form_nameshop.toString();
@@ -5923,285 +6293,187 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                       }
                                     }
+                                    if (pamentpage == 0) {
+                                      setState(() {
+                                        Form_payment2.text = '';
+                                      });
+                                    }
+                                    setState(() {
+                                      pay1 = Form_payment1.text == ''
+                                          ? '0.00'
+                                          : Form_payment1.text;
+                                      pay2 = Form_payment2.text == ''
+                                          ? '0.00'
+                                          : Form_payment2.text;
+                                    });
 
-                                    var pay1 = Form_payment1.text == ''
-                                        ? '0.00'
-                                        : Form_payment1.text;
-                                    var pay2 = Form_payment2.text == ''
-                                        ? '0.00'
-                                        : Form_payment2.text;
-
-                                    print('>>1>  ${Form_payment1.text}');
-                                    print('>>2>  ${Form_payment2.text}  $pay2');
                                     print(
-                                        '${(double.parse(pay1) + double.parse(pay2))}');
+                                        '${double.parse(pay1) + double.parse(pay2)} /// ${(sum_amt - sum_disamt)}****${Form_payment1.text}***${Form_payment2.text}');
+                                    print(
+                                        '************************************++++');
+                                    print(
+                                        '>>1>  ${Form_payment1.text} //// $pay1//***${double.parse(pay1)}');
+                                    print(
+                                        '>>2>  ${Form_payment2.text} //// $pay2 //***${double.parse(pay2)}');
 
-                                    if (paymentSer1 != '0' &&
-                                        paymentSer1 != null) {
-                                      if ((double.parse(pay1) +
-                                                  double.parse(pay2)) >=
-                                              (sum_amt - sum_disamt) ||
-                                          (double.parse(pay1) +
-                                                  double.parse(pay2)) <
-                                              (sum_amt - sum_disamt)) {
-                                        if ((sum_amt - sum_disamt) != 0) {
-                                          if (select_page == 0) {
-                                            print('(select_page == 0)');
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
-                                                final tableData00 = [
-                                                  for (int index = 0;
-                                                      index <
-                                                          _TransModels.length;
-                                                      index++)
-                                                    [
-                                                      '${index + 1}',
-                                                      '${_TransModels[index].name}',
-                                                      '${_TransModels[index].tqty}',
-                                                      '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
-                                                    ],
-                                                ];
-                                                String Area_ =
-                                                    '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+                                    print(
+                                        '${(sum_amt - sum_disamt)}//****${double.parse(pay1) + double.parse(pay2)}');
+                                    print(
+                                        '************************************++++');
 
+                                    if ((double.parse(pay1) +
+                                            double.parse(pay2) !=
+                                        (sum_amt - sum_disamt))) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง ');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text(
+                                      //           'จำนวนเงินไม่ถูกต้อง ',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    } else if (double.parse(pay1) < 0.00 ||
+                                        double.parse(pay2) < 0.00) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    } else {
+                                      if (paymentSer1 != '0' &&
+                                          paymentSer1 != null) {
+                                        if ((double.parse(pay1) +
+                                                    double.parse(pay2)) >=
+                                                (sum_amt - sum_disamt) ||
+                                            (double.parse(pay1) +
+                                                    double.parse(pay2)) <
+                                                (sum_amt - sum_disamt)) {
+                                          if ((sum_amt - sum_disamt) != 0) {
+                                            if (select_page == 0) {
+                                              print('(select_page == 0)');
+                                              if (paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน' ||
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน') {
+                                                if (base64_Slip != null) {
+                                                  final tableData00 = [
+                                                    for (int index = 0;
+                                                        index <
+                                                            _TransModels.length;
+                                                        index++)
+                                                      [
+                                                        '${index + 1}',
+                                                        '${_TransModels[index].name}',
+                                                        '${_TransModels[index].tqty}',
+                                                        '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
+                                                      ],
+                                                  ];
+                                                  String Area_ =
+                                                      '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+
+                                                  try {
+                                                    print('tableData00.length');
+                                                    print(tableData00.length);
+                                                    in_Trans(newValuePDFimg);
+                                                  } catch (e) {}
+                                                } else {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                  //           style: TextStyle(
+                                                  //               color:
+                                                  //                   Colors.white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                }
+                                              } else {
                                                 try {
-                                                  print('tableData00.length');
-                                                  print(tableData00.length);
                                                   in_Trans(newValuePDFimg);
-
-                                                  // PdfgenReceiptLock
-                                                  //     .exportPDF_ReceiptLock2(
-                                                  //         tableData00,
-                                                  //         context,
-                                                  //         Slip_status,
-                                                  //         '$cFinn',
-                                                  //         '$cFinn',
-                                                  //         '${nFormat.format(sum_pvat)}',
-                                                  //         '${nFormat.format(sum_vat)}',
-                                                  //         '${nFormat.format(sum_wht)}',
-                                                  //         '${nFormat.format(sum_amt)}',
-                                                  //         '${sum_dispx.text.toString()}',
-                                                  //         '$sum_disamt',
-                                                  //         sum_disamtx.text == ''
-                                                  //             ? '${sum_amt - 0}'
-                                                  //             : '${sum_amt - double.parse(sum_disamtx.text.toString())}',
-                                                  //         // ? '${nFormat.format(sum_amt - 0).toString()}'
-                                                  //         // : '${nFormat.format(sum_amt - double.parse(sum_disamtx.text)).toString()}',
-                                                  //         renTal_name,
-                                                  //         Status4Form_bussshop
-                                                  //             .text
-                                                  //             .toString(),
-                                                  //         Status4Form_address
-                                                  //             .text
-                                                  //             .toString(),
-                                                  //         Status4Form_tel.text
-                                                  //             .toString(),
-                                                  //         Status4Form_email.text
-                                                  //             .toString(),
-                                                  //         Status4Form_tax.text
-                                                  //             .toString(),
-                                                  //         Status4Form_nameshop
-                                                  //             .text
-                                                  //             .toString(),
-                                                  //         bill_addr,
-                                                  //         bill_email,
-                                                  //         bill_tel,
-                                                  //         bill_tax,
-                                                  //         bill_name,
-                                                  //         newValuePDFimg,
-                                                  //         pamentpage,
-                                                  //         paymentName1,
-                                                  //         paymentName2,
-                                                  //         Form_payment1.text,
-                                                  //         Form_payment2.text,
-                                                  //         numinvoice,
-                                                  //         cFinn,
-                                                  //         '${Area_}');
-                                                } catch (e) {}
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
-                                              }
-                                            } else {
-                                              try {
-                                                in_Trans(newValuePDFimg);
-                                                // OKuploadFile_Slip();
-                                              } catch (e) {}
-                                              // try {
-
-                                              //   // in_Trans();ใช้
-                                              // } catch (e) {}
-                                            }
-                                          } else if (select_page == 1) {
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
-                                                //'${_TransModels[index].name}',  '${_TransModels[index].tqty}', $sum_amt
-                                                try {
-                                                  // final tableData00 = [
-                                                  //   for (int index = 0;
-                                                  //       index <
-                                                  //           _TransModels.length;
-                                                  //       index++)
-                                                  //     [
-                                                  //       '${_TransModels[index].name}',
-                                                  //       '${_TransModels[index].tqty}',
-                                                  //       '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
-                                                  //     ],
-                                                  // ];
-
-                                                  // for (int index = 0;
-                                                  //     index <
-                                                  //         _TransModels.length;
-                                                  //     index++) {
-                                                  //   print(
-                                                  //       '${_TransModels[index].name}');
-                                                  //   print(
-                                                  //       '${_TransModels[index].tqty}');
-
-                                                  //   print(
-                                                  //       '${nFormat.format(double.parse(_TransModels[index].pvat!))}');
-                                                  // }
-
                                                   // OKuploadFile_Slip();
-                                                  // _InvoiceHistoryModels
-                                                  // PdfgenReceipt.exportPDF_Receipt1(
-                                                  //     tableData00,
-                                                  //     context,
-                                                  //     Slip_status,
-                                                  //     _TransModels,
-                                                  //     '${widget.Get_Value_cid}',
-                                                  //     '${widget.namenew}',
-                                                  //     '${sum_pvat}',
-                                                  //     '${sum_vat}',
-                                                  //     '${sum_wht}',
-                                                  //     '${sum_amt}',
-                                                  //     '$sum_disp',
-                                                  //     '${nFormat.format(sum_disamt)}',
-                                                  //     '${sum_amt - sum_disamt}',
-                                                  //     // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                  //     '${renTal_name.toString()}',
-                                                  //     '${Form_bussshop}',
-                                                  //     '${Form_address}',
-                                                  //     '${Form_tel}',
-                                                  //     '${Form_email}',
-                                                  //     '${Form_tax}',
-                                                  //     '${Form_nameshop}',
-                                                  //     '${renTalModels[0].bill_addr}',
-                                                  //     '${renTalModels[0].bill_email}',
-                                                  //     '${renTalModels[0].bill_tel}',
-                                                  //     '${renTalModels[0].bill_tax}',
-                                                  //     '${renTalModels[0].bill_name}',
-                                                  //     newValuePDFimg,
-                                                  //     pamentpage,
-                                                  //     paymentName1,
-                                                  //     paymentName2,
-                                                  //     Form_payment1.text,
-                                                  //     Form_payment2.text);
-                                                  // in_Trans_invoice_refno();
                                                 } catch (e) {}
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
+                                                // try {
+
+                                                //   // in_Trans();ใช้
+                                                // } catch (e) {}
                                               }
-                                            } else {
-                                              // try {
-                                              //   final tableData00 = [
-                                              //     for (int index = 0;
-                                              //         index <
-                                              //             _InvoiceHistoryModels
-                                              //                 .length;
-                                              //         index++)
-                                              //       [
-                                              //         '${index + 1}',
-                                              //         '${_InvoiceHistoryModels[index].date}',
-                                              //         '${_InvoiceHistoryModels[index].descr}',
-                                              //         '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                              //         '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                              //         '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                              //         '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                              //         '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                              //       ],
-                                              //   ];
-                                              //   // OKuploadFile_Slip();
-                                              //   //_InvoiceHistoryModels
-                                              //   PdfgenReceipt.exportPDF_Receipt1(
-                                              //       tableData00,
-                                              //       context,
-                                              //       Slip_status,
-                                              //       _TransModels,
-                                              //       '${widget.Get_Value_cid}',
-                                              //       '${widget.namenew}',
-                                              //       '${sum_pvat}',
-                                              //       '${sum_vat}',
-                                              //       '${sum_wht}',
-                                              //       '${sum_amt}',
-                                              //       '$sum_disp',
-                                              //       '${nFormat.format(sum_disamt)}',
-                                              //       '${sum_amt - sum_disamt}',
-                                              //       // '${nFormat.format(sum_amt - sum_disamt)}',
-                                              //       '${renTal_name.toString()}',
-                                              //       '${Form_bussshop}',
-                                              //       '${Form_address}',
-                                              //       '${Form_tel}',
-                                              //       '${Form_email}',
-                                              //       '${Form_tax}',
-                                              //       '${Form_nameshop}',
-                                              //       '${renTalModels[0].bill_addr}',
-                                              //       '${renTalModels[0].bill_email}',
-                                              //       '${renTalModels[0].bill_tel}',
-                                              //       '${renTalModels[0].bill_tax}',
-                                              //       '${renTalModels[0].bill_name}',
-                                              //       newValuePDFimg,
-                                              //       pamentpage,
-                                              //       paymentName1,
-                                              //       paymentName2,
-                                              //       Form_payment1.text,
-                                              //       Form_payment2.text);
-                                              //   in_Trans_invoice_refno();
-                                              // } catch (e) {}
-                                            }
-                                          } else if (select_page == 2) {
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
+                                            } else if (select_page == 1) {
+                                              if (paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน' ||
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน') {
+                                                if (base64_Slip != null) {
+                                                } else {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                  //           style: TextStyle(
+                                                  //               color:
+                                                  //                   Colors.white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                }
+                                              } else {}
+                                            } else if (select_page == 2) {
+                                              if (paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน' ||
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'เงินโอน') {
+                                                if (base64_Slip != null) {
+                                                  try {
+                                                    // OKuploadFile_Slip();
+                                                    //TransReBillHistoryModel
+
+                                                    // await in_Trans_re_invoice_refno(
+                                                    //     newValuePDFimg);
+                                                  } catch (e) {}
+                                                } else {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                  //           style: TextStyle(
+                                                  //               color:
+                                                  //                   Colors.white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                }
+                                              } else {
                                                 try {
                                                   // OKuploadFile_Slip();
                                                   //TransReBillHistoryModel
@@ -6209,64 +6481,50 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   // await in_Trans_re_invoice_refno(
                                                   //     newValuePDFimg);
                                                 } catch (e) {}
-                                              } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
                                               }
-                                            } else {
-                                              try {
-                                                // OKuploadFile_Slip();
-                                                //TransReBillHistoryModel
-
-                                                // await in_Trans_re_invoice_refno(
-                                                //     newValuePDFimg);
-                                              } catch (e) {}
                                             }
+                                          } else {
+                                            _showMyDialogPay_Error(
+                                                'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text(
+                                            //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
                                           }
                                         } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            Font_.Fonts_T))),
-                                          );
+                                          _showMyDialogPay_Error(
+                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                          // ScaffoldMessenger.of(context)
+                                          //     .showSnackBar(
+                                          //   const SnackBar(
+                                          //       content: Text(
+                                          //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                          //           style: TextStyle(
+                                          //               color: Colors.white,
+                                          //               fontFamily:
+                                          //                   Font_.Fonts_T))),
+                                          // );
                                         }
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          Font_.Fonts_T))),
-                                        );
+                                        _showMyDialogPay_Error(
+                                            'กรุณาเลือกรูปแบบการชำระ!');
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   const SnackBar(
+                                        //       content: Text(
+                                        //           'กรุณาเลือกรูปแบบการชำระ!',
+                                        //           style: TextStyle(
+                                        //               color: Colors.white,
+                                        //               fontFamily:
+                                        //                   Font_.Fonts_T))),
+                                        // );
                                       }
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'กรุณาเลือกรูปแบบการชำระ!',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        Font_.Fonts_T))),
-                                      );
                                     }
                                   },
                                   child: Container(
@@ -6473,8 +6731,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
-    var ciddoc =
-        'L$day$timex${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+    var ciddoc = No_Area_ == 'ไม่ระบุพื้นที่'
+        ? 'L$day$timex-${Status5Form_NoArea_.text}'
+        : 'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
     var qutser = _selecteSerbool.length.toString();
     var sumdis = sum_disamt.toString();
     var sumdisp = sum_disp.toString();

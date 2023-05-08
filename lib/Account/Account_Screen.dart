@@ -119,7 +119,7 @@ class _AccountScreenState extends State<AccountScreen> {
       Value_newDateD = '',
       Value_newDateY1 = '',
       Value_newDateD1 = '';
-  int select_page = 0, pamentpage = 0;
+  int select_page = 0, pamentpage = 0, ser_zn = 0;
   String? cid_Name, name_Name;
   String? rtname,
       type,
@@ -187,8 +187,8 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<Null> read_GC_areak() async {
-    if (renTalModels.isNotEmpty) {
-      renTalModels.clear();
+    if (areakModels.isNotEmpty) {
+      areakModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -205,8 +205,13 @@ class _AccountScreenState extends State<AccountScreen> {
       if (result != null) {
         for (var map in result) {
           AreakModel areakModel = AreakModel.fromJson(map);
+          var zns = int.parse(areakModel.zser!);
           setState(() {
-            areakModels.add(areakModel);
+            if (ser_zn == zns) {
+              areakModels.add(areakModel);
+            } else if (ser_zn == 0) {
+              areakModels.add(areakModel);
+            }
           });
         }
       } else {}
@@ -915,7 +920,82 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  ///----------------->
+////------------------------------------------------>
+  Future<void> _showMyDialogPay_Error(text) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '$text',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T
+                            //fontSize: 10.0
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  ///-------------------------------------------->
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -1606,8 +1686,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                               children: [
                                                 Container(
                                                   width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
+                                                          .size
+                                                          .width *
+                                                      0.8,
                                                   height: MediaQuery.of(context)
                                                       .size
                                                       .width,
@@ -1617,7 +1698,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                                         // width:
                                                         //     MediaQuery.of(context).size.width *
                                                         //         0.5,
-                                                        height: 100,
+                                                        height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
                                                         decoration:
                                                             const BoxDecoration(
                                                           color: Colors.green,
@@ -1642,7 +1727,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                                             Expanded(
                                                               flex: 1,
                                                               child: Container(
-                                                                height: 100,
                                                                 child:
                                                                     SingleChildScrollView(
                                                                         scrollDirection:
@@ -1654,8 +1738,14 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                 Padding(
                                                                                     padding: const EdgeInsets.all(8.0),
                                                                                     child: InkWell(
-                                                                                      onTap: () async {},
+                                                                                      onTap: () async {
+                                                                                        setState(() {
+                                                                                          ser_zn = int.parse(zoneModels[i].ser!);
+                                                                                          read_GC_areak();
+                                                                                        });
+                                                                                      },
                                                                                       child: Container(
+                                                                                        width: 100,
                                                                                         decoration: BoxDecoration(
                                                                                           color: Colors.white,
                                                                                           borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
@@ -1680,75 +1770,127 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           ],
                                                         ),
                                                       ),
-                                                      Container(
-                                                          // width:
-                                                          //     MediaQuery.of(context).size.width *
-                                                          //         0.5,
-                                                          height: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .width,
-                                                          child: GridView.count(
-                                                            crossAxisCount: 15,
-                                                            children: [
-                                                              for (int index =
-                                                                      0;
-                                                                  index <
-                                                                      areakModels
-                                                                          .length;
-                                                                  index++)
-                                                                Card(
-                                                                  child:
-                                                                      InkWell(
-                                                                    onTap:
-                                                                        () async {},
-                                                                    child:
-                                                                        Container(
-                                                                      // width:
-                                                                      //     MediaQuery.of(context).size.width *
-                                                                      //         0.5,
-                                                                      height:
-                                                                          50,
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        color: Colors
-                                                                            .grey,
+                                                      StreamBuilder(
+                                                          stream:
+                                                              Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0)),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            return Container(
+                                                              height: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.5,
+                                                              child: GridView
+                                                                  .count(
+                                                                crossAxisCount:
+                                                                    15,
+                                                                children: [
+                                                                  for (int index =
+                                                                          0;
+                                                                      index <
+                                                                          areakModels
+                                                                              .length;
+                                                                      index++)
+                                                                    Card(
+                                                                      child:
+                                                                          InkWell(
                                                                         borderRadius: BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.grey, width: 1),
-                                                                      ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Row(
-                                                                        children: [
-                                                                          Expanded(
-                                                                            flex:
-                                                                                1,
-                                                                            child:
-                                                                                Text(
-                                                                              '${areakModels[index].type}',
-                                                                              textAlign: TextAlign.center,
-                                                                              style: TextStyle(
-                                                                                color: AccountScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                //fontSize: 10.0
-                                                                              ),
-                                                                            ),
+                                                                        onTap:
+                                                                            () async {
+                                                                          SharedPreferences
+                                                                              preferences =
+                                                                              await SharedPreferences.getInstance();
+                                                                          var ren =
+                                                                              preferences.getString('renTalSer');
+                                                                          var aser =
+                                                                              areakModels[index].aser;
+                                                                          var aserQout =
+                                                                              areakModels[index].aserQout;
+                                                                          String
+                                                                              url =
+                                                                              '${MyConstant().domain}/UP_c_areak.php?isAdd=true&ren=$ren&aser=$aser&aserQout=$aserQout';
+
+                                                                          try {
+                                                                            var response =
+                                                                                await http.get(Uri.parse(url));
+
+                                                                            var result =
+                                                                                json.decode(response.body);
+                                                                            print(result);
+                                                                            if (result.toString() ==
+                                                                                'true') {
+                                                                              setState(() {
+                                                                                read_GC_areak();
+                                                                              });
+                                                                            }
+                                                                          } catch (e) {}
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          // width:
+                                                                          //     MediaQuery.of(context).size.width *
+                                                                          //         0.5,
+                                                                          height:
+                                                                              50,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: areakModels[index].aserQout == '1'
+                                                                                ? Colors.red
+                                                                                : Colors.white,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                        ],
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Row(
+                                                                            children: [
+                                                                              Expanded(
+                                                                                flex: 1,
+                                                                                child: areakModels[index].aserQout == '1'
+                                                                                    ? Text(
+                                                                                        '${areakModels[index].type}\n (เต็ม)',
+                                                                                        textAlign: TextAlign.center,
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.white,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                          //fontSize: 10.0
+                                                                                        ),
+                                                                                      )
+                                                                                    : Text(
+                                                                                        '${areakModels[index].type}\n (ว่าง)',
+                                                                                        textAlign: TextAlign.center,
+                                                                                        style: TextStyle(
+                                                                                          color: AccountScreen_Color.Colors_Text1_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                          //fontSize: 10.0
+                                                                                        ),
+                                                                                      ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
                                                                       ),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                            ],
-                                                          ))
+                                                                    )
+                                                                ],
+                                                              ),
+                                                            );
+                                                          })
                                                     ],
                                                   ),
                                                 ),
@@ -1766,8 +1908,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                     children: [
                                       InkWell(
                                         child: Container(
+                                            width: 100,
                                             decoration: const BoxDecoration(
-                                              color: Colors.green,
+                                              color: Colors.black,
                                               borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(10),
                                                   topRight: Radius.circular(10),
@@ -1779,20 +1922,16 @@ class _AccountScreenState extends State<AccountScreen> {
                                               //     color: Colors.grey, width: 1),
                                             ),
                                             child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: const [
                                                 Padding(
                                                   padding: EdgeInsets.all(8.0),
-                                                  child: Icon(Icons.print,
-                                                      color: Colors.black),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    'พิมพ์',
+                                                    'ปิด',
+                                                    textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        color:
-                                                            AccountScreen_Color
-                                                                .Colors_Text2_,
+                                                        color: Colors.white,
                                                         // fontWeight: FontWeight.bold,
                                                         fontFamily:
                                                             Font_.Fonts_T,
@@ -2128,292 +2267,360 @@ class _AccountScreenState extends State<AccountScreen> {
                                             itemCount: teNantModels.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
-                                              return Container(
+                                              return Material(
                                                 color: tappedIndex_ ==
                                                         index.toString()
                                                     ? tappedIndex_Color
                                                         .tappedIndex_Colors
-                                                        .withOpacity(0.5)
-                                                    : null,
-                                                child: ListTile(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        tappedIndex_ =
-                                                            index.toString();
-                                                      });
-                                                      print(
-                                                          '----->>>>>> ${teNantModels[index].invoice}');
-                                                      if (teNantModels[index]
-                                                              .invoice !=
-                                                          null) {
-                                                        red_Trans_select_inv(
-                                                            index);
-                                                        dialog_pay_inv(
-                                                            index); //
-                                                      } else {
-                                                        in_Trans_select(index);
-                                                        dialog_pay(index);
-                                                      }
-                                                    },
-                                                    title: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        // Expanded(
-                                                        //   flex: 1,
-                                                        //   child: Row(
-                                                        //     mainAxisAlignment:
-                                                        //         MainAxisAlignment
-                                                        //             .center,
-                                                        //     children: [
-                                                        //       Container(
-                                                        //         decoration:
-                                                        //             const BoxDecoration(
-                                                        //           // color:
-                                                        //           //     Colors.grey,
-                                                        //           borderRadius: BorderRadius.only(
-                                                        //               topLeft:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               topRight:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               bottomLeft:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               bottomRight:
-                                                        //                   Radius.circular(
-                                                        //                       10)),
-                                                        //           // border: Border.all(color: Colors.grey, width: 1),
-                                                        //         ),
-                                                        //         padding:
-                                                        //             const EdgeInsets
-                                                        //                     .all(
-                                                        //                 8.0),
-                                                        //         child:
-                                                        //             PopupMenuButton(
-                                                        //           child: Center(
-                                                        //               child:
-                                                        //                   Row(
-                                                        //             mainAxisAlignment:
-                                                        //                 MainAxisAlignment
-                                                        //                     .center,
-                                                        //             children: const [
-                                                        //               Text(
-                                                        //                 'เรียกดู',
-                                                        //                 style:
-                                                        //                     TextStyle(
-                                                        //                   color:
-                                                        //                       AccountScreen_Color.Colors_Text2_,
-                                                        //                   // fontWeight:
-                                                        //                   //     FontWeight
-                                                        //                   //         .bold,
-                                                        //                   fontFamily:
-                                                        //                       Font_.Fonts_T,
-
-                                                        //                   //fontSize: 10.0
-                                                        //                 ),
-                                                        //               ),
-                                                        //               Icon(
-                                                        //                 Icons
-                                                        //                     .navigate_next,
-                                                        //                 color: AccountScreen_Color
-                                                        //                     .Colors_Text2_,
-                                                        //               )
-                                                        //             ],
-                                                        //           )),
-                                                        //           itemBuilder:
-                                                        //               (context) {
-                                                        //             return List.generate(
-                                                        //                 buttonview_
-                                                        //                     .length,
-                                                        //                 (index) {
-                                                        //               return PopupMenuItem(
-                                                        //                 child:
-                                                        //                     Text(
-                                                        //                   buttonview_[
-                                                        //                       index],
-                                                        //                   style:
-                                                        //                       const TextStyle(
-                                                        //                     color:
-                                                        //                         Colors.black,
-
-                                                        //                     //fontSize: 10.0
-                                                        //                   ),
-                                                        //                 ),
-                                                        //               );
-                                                        //             });
-                                                        //           },
-                                                        //         ),
-                                                        //       ),
-                                                        //     ],
-                                                        //   ),
-                                                        // ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${teNantModels[index].cid}',
-                                                            textAlign: TextAlign
+                                                    : AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                child: Container(
+                                                  // color: tappedIndex_ ==
+                                                  //         index.toString()
+                                                  //     ? tappedIndex_Color
+                                                  //         .tappedIndex_Colors
+                                                  //         .withOpacity(0.5)
+                                                  //     : null,
+                                                  child: ListTile(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          tappedIndex_ =
+                                                              index.toString();
+                                                        });
+                                                        print(
+                                                            '----->>>>>> ${teNantModels[index].invoice}');
+                                                        if (teNantModels[index]
+                                                                .invoice !=
+                                                            null) {
+                                                          red_Trans_select_inv(
+                                                              index);
+                                                          dialog_pay_inv(
+                                                              index); //1
+                                                        } else {
+                                                          in_Trans_select(
+                                                              index);
+                                                          dialog_pay(index); //2
+                                                        }
+                                                      },
+                                                      title: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
                                                                 .center,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${teNantModels[index].docno}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            teNantModels[index]
-                                                                        .invoice ==
-                                                                    null
-                                                                ? ''
-                                                                : '${teNantModels[index].invoice}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              //fontSize: 10.0
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              '${teNantModels[index].ln_c}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: AccountScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight:
-                                                                //     FontWeight
-                                                                //         .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                                //fontSize: 10.0
+                                                        children: [
+                                                          // Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Row(
+                                                          //     mainAxisAlignment:
+                                                          //         MainAxisAlignment
+                                                          //             .center,
+                                                          //     children: [
+                                                          //       Container(
+                                                          //         decoration:
+                                                          //             const BoxDecoration(
+                                                          //           // color:
+                                                          //           //     Colors.grey,
+                                                          //           borderRadius: BorderRadius.only(
+                                                          //               topLeft:
+                                                          //                   Radius.circular(
+                                                          //                       10),
+                                                          //               topRight:
+                                                          //                   Radius.circular(
+                                                          //                       10),
+                                                          //               bottomLeft:
+                                                          //                   Radius.circular(
+                                                          //                       10),
+                                                          //               bottomRight:
+                                                          //                   Radius.circular(
+                                                          //                       10)),
+                                                          //           // border: Border.all(color: Colors.grey, width: 1),
+                                                          //         ),
+                                                          //         padding:
+                                                          //             const EdgeInsets
+                                                          //                     .all(
+                                                          //                 8.0),
+                                                          //         child:
+                                                          //             PopupMenuButton(
+                                                          //           child: Center(
+                                                          //               child:
+                                                          //                   Row(
+                                                          //             mainAxisAlignment:
+                                                          //                 MainAxisAlignment
+                                                          //                     .center,
+                                                          //             children: const [
+                                                          //               Text(
+                                                          //                 'เรียกดู',
+                                                          //                 style:
+                                                          //                     TextStyle(
+                                                          //                   color:
+                                                          //                       AccountScreen_Color.Colors_Text2_,
+                                                          //                   // fontWeight:
+                                                          //                   //     FontWeight
+                                                          //                   //         .bold,
+                                                          //                   fontFamily:
+                                                          //                       Font_.Fonts_T,
+
+                                                          //                   //fontSize: 10.0
+                                                          //                 ),
+                                                          //               ),
+                                                          //               Icon(
+                                                          //                 Icons
+                                                          //                     .navigate_next,
+                                                          //                 color: AccountScreen_Color
+                                                          //                     .Colors_Text2_,
+                                                          //               )
+                                                          //             ],
+                                                          //           )),
+                                                          //           itemBuilder:
+                                                          //               (context) {
+                                                          //             return List.generate(
+                                                          //                 buttonview_
+                                                          //                     .length,
+                                                          //                 (index) {
+                                                          //               return PopupMenuItem(
+                                                          //                 child:
+                                                          //                     Text(
+                                                          //                   buttonview_[
+                                                          //                       index],
+                                                          //                   style:
+                                                          //                       const TextStyle(
+                                                          //                     color:
+                                                          //                         Colors.black,
+
+                                                          //                     //fontSize: 10.0
+                                                          //                   ),
+                                                          //                 ),
+                                                          //               );
+                                                          //             });
+                                                          //           },
+                                                          //         ),
+                                                          //       ),
+                                                          //     ],
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Tooltip(
+                                                              richMessage:
+                                                                  TextSpan(
+                                                                text:
+                                                                    '${teNantModels[index].cid}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: HomeScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .grey[200],
+                                                              ),
+                                                              child: Text(
+                                                                '${teNantModels[index].cid}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              '${teNantModels[index].sname}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: AccountScreen_Color
-                                                                    .Colors_Text2_,
-                                                                // fontWeight:
-                                                                //     FontWeight
-                                                                //         .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-
-                                                                //fontSize: 10.0
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Tooltip(
+                                                              richMessage:
+                                                                  TextSpan(
+                                                                text:
+                                                                    '${teNantModels[index].docno}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: HomeScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .grey[200],
+                                                              ),
+                                                              child: Text(
+                                                                '${teNantModels[index].docno}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${teNantModels[index].cname}',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-
-                                                              //fontSize: 10.0
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Tooltip(
+                                                              richMessage:
+                                                                  TextSpan(
+                                                                text: teNantModels[index]
+                                                                            .invoice ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels[index].invoice}',
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: HomeScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            5),
+                                                                color: Colors
+                                                                    .grey[200],
+                                                              ),
+                                                              child: Text(
+                                                                teNantModels[index]
+                                                                            .invoice ==
+                                                                        null
+                                                                    ? ''
+                                                                    : '${teNantModels[index].invoice}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${teNantModels[index].expname}',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-
-                                                              //fontSize: 10.0
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                '${teNantModels[index].ln_c}',
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                '${teNantModels[index].sname}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+
+                                                                  //fontSize: 10.0
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
                                                             child: Text(
-                                                              '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].date} 00:00:00'))}-${DateTime.parse('${teNantModels[index].date} 00:00:00').year + 543}',
+                                                              '${teNantModels[index].cname}',
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
-                                                              maxLines: 1,
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
@@ -2426,50 +2633,106 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                 //         .bold,
                                                                 fontFamily: Font_
                                                                     .Fonts_T,
+
+                                                                //fontSize: 10.0
                                                               ),
                                                             ),
                                                           ),
-                                                        ),
-                                                        // Expanded(
-                                                        //   flex: 1,
-                                                        //   child: Text(
-                                                        //     '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].ldate} 00:00:00').year + 543}',
-                                                        //     textAlign: TextAlign
-                                                        //         .center,
-                                                        //     style:
-                                                        //         const TextStyle(
-                                                        //       color: AccountScreen_Color
-                                                        //           .Colors_Text2_,
-                                                        //       // fontWeight:
-                                                        //       //     FontWeight
-                                                        //       //         .bold,
-                                                        //       fontFamily:
-                                                        //           Font_.Fonts_T,
-                                                        //       //fontSize: 10.0
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${teNantModels[index].total}',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: AccountScreen_Color
-                                                                  .Colors_Text2_,
-                                                              // fontWeight:
-                                                              //     FontWeight
-                                                              //         .bold,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                              //fontSize: 10.0
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '${teNantModels[index].expname}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: AccountScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight
+                                                                //         .bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+
+                                                                //fontSize: 10.0
+                                                              ),
                                                             ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    )),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Text(
+                                                                '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].date} 00:00:00'))}-${DateTime.parse('${teNantModels[index].date} 00:00:00').year + 543}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: AccountScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight:
+                                                                  //     FontWeight
+                                                                  //         .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          // Expanded(
+                                                          //   flex: 1,
+                                                          //   child: Text(
+                                                          //     '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].ldate} 00:00:00').year + 543}',
+                                                          //     textAlign: TextAlign
+                                                          //         .center,
+                                                          //     style:
+                                                          //         const TextStyle(
+                                                          //       color: AccountScreen_Color
+                                                          //           .Colors_Text2_,
+                                                          //       // fontWeight:
+                                                          //       //     FontWeight
+                                                          //       //         .bold,
+                                                          //       fontFamily:
+                                                          //           Font_.Fonts_T,
+                                                          //       //fontSize: 10.0
+                                                          //     ),
+                                                          //   ),
+                                                          // ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: Text(
+                                                              '${nFormat.format(double.parse(teNantModels[index].total!))}',
+                                                              //  '${teNantModels[index].total}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              style:
+                                                                  const TextStyle(
+                                                                color: AccountScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight:
+                                                                //     FontWeight
+                                                                //         .bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                                //fontSize: 10.0
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                ),
                                               );
                                             })),
                               ],
@@ -4029,10 +4292,14 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       },
                                                                       icon: pamentpage ==
                                                                               0
-                                                                          ? const Icon(Icons
-                                                                              .add_circle_outline)
+                                                                          ? Icon(
+                                                                              Icons.add_circle_outline,
+                                                                              color: Colors.green,
+                                                                            )
                                                                           : const Icon(
-                                                                              Icons.remove_circle_outline),
+                                                                              Icons.remove_circle_outline,
+                                                                              color: Colors.red,
+                                                                            ),
                                                                     )
                                                                   ],
                                                                 ),
@@ -4176,8 +4443,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           paymentSer1 = rtnameSer
                                                                               .trim()
                                                                               .toString();
-                                                                          paymentName1 =
-                                                                              rtnameName.toString();
+                                                                          if (rtnameSer.toString() ==
+                                                                              '0') {
+                                                                            paymentName1 =
+                                                                                null;
+                                                                          } else {
+                                                                            paymentName1 =
+                                                                                rtnameName.toString();
+                                                                          }
+
                                                                           if (rtnameSer.toString() ==
                                                                               '0') {
                                                                             Form_payment1.clear();
@@ -4307,6 +4581,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               setState(() {
                                                                                 paymentSer2 = rtnameSer.toString();
                                                                                 paymentName2 = rtnameName.toString();
+
+                                                                                if (rtnameSer.toString() == '0') {
+                                                                                  paymentName2 = null;
+                                                                                } else {
+                                                                                  paymentName2 = rtnameName.toString();
+                                                                                }
                                                                                 if (rtnameSer.toString() == '0') {
                                                                                   Form_payment2.clear();
                                                                                 } else {
@@ -4400,14 +4680,61 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       //   setState(() {});
                                                                       // },
                                                                       onChanged:
+                                                                          (value) async {
+                                                                        // var money1 =
+                                                                        //     double.parse(value);
+                                                                        // var money2 =
+                                                                        //     (sum_amt -
+                                                                        //         sum_disamt);
+                                                                        // var money3 =
+                                                                        //     (money2 - money1).toString();
+                                                                        // setState(
+                                                                        //     () {
+                                                                        //   if (paymentSer2 ==
+                                                                        //       null) {
+                                                                        //     Form_payment1.text =
+                                                                        //         (money1).toStringAsFixed(2).toString();
+                                                                        //   } else {
+                                                                        //     Form_payment1.text =
+                                                                        //         (money1).toStringAsFixed(2).toString();
+                                                                        //     Form_payment2.text =
+                                                                        //         money3;
+                                                                        //   }
+                                                                        // });
+
+                                                                        // Get the current cursor position
+
+                                                                        final currentCursorPosition = Form_payment1
+                                                                            .selection
+                                                                            .start;
+
+                                                                        // Update the text of the controller
+                                                                        if (paymentSer2 !=
+                                                                            null)
+                                                                          setState(
+                                                                              () {
+                                                                            Form_payment2.text =
+                                                                                '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                          });
+
+                                                                        // Set the new cursor position
+                                                                        final newCursorPosition =
+                                                                            currentCursorPosition +
+                                                                                (value.length - Form_payment1.text.length);
+                                                                        Form_payment1.selection =
+                                                                            TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                      },
+                                                                      onFieldSubmitted:
                                                                           (value) {
                                                                         var money1 =
                                                                             double.parse(value);
                                                                         var money2 =
                                                                             (sum_amt -
                                                                                 sum_disamt);
-                                                                        var money3 =
-                                                                            (money2 - money1).toString();
+                                                                        var money3 = (money2 -
+                                                                                money1)
+                                                                            .toStringAsFixed(2)
+                                                                            .toString();
                                                                         setState(
                                                                             () {
                                                                           if (paymentSer2 ==
@@ -4508,6 +4835,32 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             //   setState(() {});
                                                                             // },
                                                                             onChanged:
+                                                                                (value) {
+                                                                              // var money1 = double.parse(value);
+                                                                              // var money2 = (sum_amt - sum_disamt);
+                                                                              // var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                              // setState(() {
+                                                                              //   if (paymentSer1 == null) {
+                                                                              //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                              //   } else {
+                                                                              //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                              //     Form_payment1.text = money3;
+                                                                              //   }
+                                                                              // });
+
+                                                                              final currentCursorPosition = Form_payment2.selection.start;
+
+                                                                              // Update the text of the controller
+                                                                              if (paymentSer1 != null)
+                                                                                setState(() {
+                                                                                  Form_payment1.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                });
+
+                                                                              // Set the new cursor position
+                                                                              final newCursorPosition = currentCursorPosition + (value.length - Form_payment2.text.length);
+                                                                              Form_payment2.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                            },
+                                                                            onFieldSubmitted:
                                                                                 (value) {
                                                                               var money1 = double.parse(value);
                                                                               var money2 = (sum_amt - sum_disamt);
@@ -5372,6 +5725,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                               child: InkWell(
                                                                 onTap:
                                                                     () async {
+                                                                  var pay1;
+                                                                  var pay2;
                                                                   setState(() {
                                                                     Slip_status =
                                                                         '2';
@@ -5395,315 +5750,189 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                                                     }
                                                                   }
+                                                                  if (pamentpage ==
+                                                                      0) {
+                                                                    setState(
+                                                                        () {
+                                                                      // Form_payment2
+                                                                      //     .clear();
+                                                                      Form_payment2
+                                                                          .text = '';
+                                                                    });
+                                                                  }
                                                                   //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
-                                                                  var pay1 = Form_payment1
-                                                                              .text ==
-                                                                          ''
-                                                                      ? '0.00'
-                                                                      : Form_payment1
-                                                                          .text;
-                                                                  var pay2 = Form_payment2
-                                                                              .text ==
-                                                                          ''
-                                                                      ? '0.00'
-                                                                      : Form_payment2
-                                                                          .text;
+                                                                  setState(() {
+                                                                    pay1 = Form_payment1.text ==
+                                                                            ''
+                                                                        ? '0.00'
+                                                                        : Form_payment1
+                                                                            .text;
+                                                                    pay2 = Form_payment2.text ==
+                                                                            ''
+                                                                        ? '0.00'
+                                                                        : Form_payment2
+                                                                            .text;
+                                                                  });
+
                                                                   print(
                                                                       '>>1>  ${Form_payment1.text}');
                                                                   print(
                                                                       '>>2>  ${Form_payment2.text}  $pay2');
                                                                   print(
                                                                       '${(double.parse(pay1) + double.parse(pay2))}');
-
-                                                                  if (paymentSer1 !=
-                                                                          '0' &&
-                                                                      paymentSer1 !=
-                                                                          null) {
-                                                                    if ((double.parse(pay1) + double.parse(pay2)) >=
-                                                                            (sum_amt -
-                                                                                sum_disamt) ||
-                                                                        (double.parse(pay1) + double.parse(pay2)) <
-                                                                            (sum_amt -
-                                                                                sum_disamt)) {
-                                                                      if ((sum_amt -
-                                                                              sum_disamt) !=
-                                                                          0) {
-                                                                        if (paymentName1.toString().trim() ==
-                                                                                'เงินโอน' ||
-                                                                            paymentName2.toString().trim() ==
-                                                                                'เงินโอน') {
-                                                                          if (base64_Slip !=
+                                                                  if ((double.parse(
+                                                                              pay1) +
+                                                                          double.parse(
+                                                                              pay2) !=
+                                                                      (sum_amt -
+                                                                          sum_disamt))) {
+                                                                    _showMyDialogPay_Error(
+                                                                        'จำนวนเงินไม่ถูกต้อง ');
+                                                                    // ScaffoldMessenger.of(
+                                                                    //         context)
+                                                                    //     .showSnackBar(
+                                                                    //   const SnackBar(
+                                                                    //       content: Text(
+                                                                    //           'จำนวนเงินไม่ถูกต้อง ',
+                                                                    //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                    // );
+                                                                  } else if (double.parse(
+                                                                              pay1) <
+                                                                          0.00 ||
+                                                                      double.parse(
+                                                                              pay2) <
+                                                                          0.00) {
+                                                                    _showMyDialogPay_Error(
+                                                                        'จำนวนเงินไม่ถูกต้อง ');
+                                                                    // ScaffoldMessenger.of(
+                                                                    //         context)
+                                                                    //     .showSnackBar(
+                                                                    //   const SnackBar(
+                                                                    //       content: Text(
+                                                                    //           'จำนวนเงินไม่ถูกต้อง',
+                                                                    //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                    // );
+                                                                  } else {
+                                                                    if (pamentpage ==
+                                                                            0 &&
+                                                                        // Form_payment1.text ==
+                                                                        //     '' ||
+                                                                        paymentName1 ==
+                                                                            null) {
+                                                                      _showMyDialogPay_Error(
+                                                                          'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                                      // ScaffoldMessenger.of(
+                                                                      //         context)
+                                                                      //     .showSnackBar(
+                                                                      //   const SnackBar(
+                                                                      //       content:
+                                                                      //           Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                      // );
+                                                                    } else if (pamentpage ==
+                                                                                1 &&
+                                                                            // Form_payment2.text ==
+                                                                            //     '' ||
+                                                                            paymentName2 ==
+                                                                                null ||
+                                                                        paymentName1 ==
+                                                                            null) {
+                                                                      _showMyDialogPay_Error((paymentName1 ==
+                                                                              null)
+                                                                          ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                                          : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                                      // ScaffoldMessenger.of(
+                                                                      //         context)
+                                                                      //     .showSnackBar(
+                                                                      //   SnackBar(
+                                                                      //       content: (paymentName1 == null)
+                                                                      //           ? Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))
+                                                                      //           : Text('กรุณาเลือกรูปแบบชำระ! ที่ 2', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                      // );
+                                                                    } else {
+                                                                      print(
+                                                                          '${pamentpage}: ${paymentName1}////${paymentName2}');
+                                                                      if (paymentSer1 !=
+                                                                              '0' &&
+                                                                          paymentSer1 !=
                                                                               null) {
-                                                                            try {
-                                                                              final tableData00 = [
-                                                                                for (int index = 0; index < _InvoiceHistoryModels.length; index++)
-                                                                                  [
-                                                                                    '${index + 1}',
-                                                                                    '${_InvoiceHistoryModels[index].date}',
-                                                                                    '${_InvoiceHistoryModels[index].descr}',
-                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                                  ],
-                                                                              ];
-                                                                              OKuploadFile_Slip();
-                                                                              in_Trans_invoice_refno(tableData00, newValuePDFimg);
-                                                                              Navigator.pop(context, 'OK');
-                                                                            } catch (e) {}
+                                                                        if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) ||
+                                                                            (double.parse(pay1) + double.parse(pay2)) <
+                                                                                (sum_amt - sum_disamt)) {
+                                                                          if ((sum_amt - sum_disamt) !=
+                                                                              0) {
+                                                                            if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                                                                paymentName2.toString().trim() == 'เงินโอน') {
+                                                                              if (base64_Slip != null) {
+                                                                                try {
+                                                                                  final tableData00 = [
+                                                                                    for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                      [
+                                                                                        '${index + 1}',
+                                                                                        '${_InvoiceHistoryModels[index].date}',
+                                                                                        '${_InvoiceHistoryModels[index].descr}',
+                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                      ],
+                                                                                  ];
+                                                                                  OKuploadFile_Slip();
+                                                                                  in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                  Navigator.pop(context, 'OK');
+                                                                                } catch (e) {}
+                                                                              } else {
+                                                                                _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                                                // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                //   const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                // );
+                                                                              }
+                                                                            } else {
+                                                                              try {
+                                                                                final tableData00 = [
+                                                                                  for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                    [
+                                                                                      '${index + 1}',
+                                                                                      '${_InvoiceHistoryModels[index].date}',
+                                                                                      '${_InvoiceHistoryModels[index].descr}',
+                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                    ],
+                                                                                ];
+                                                                                // OKuploadFile_Slip();
+                                                                                //_InvoiceHistoryModels
+
+                                                                                in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                Navigator.pop(context, 'OK');
+                                                                              } catch (e) {}
+                                                                            }
                                                                           } else {
-                                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                                              const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                            );
+                                                                            _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                            // );
                                                                           }
                                                                         } else {
-                                                                          try {
-                                                                            final tableData00 =
-                                                                                [
-                                                                              for (int index = 0; index < _InvoiceHistoryModels.length; index++)
-                                                                                [
-                                                                                  '${index + 1}',
-                                                                                  '${_InvoiceHistoryModels[index].date}',
-                                                                                  '${_InvoiceHistoryModels[index].descr}',
-                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                                ],
-                                                                            ];
-                                                                            // OKuploadFile_Slip();
-                                                                            //_InvoiceHistoryModels
-
-                                                                            in_Trans_invoice_refno(tableData00,
-                                                                                newValuePDFimg);
-                                                                            Navigator.pop(context,
-                                                                                'OK');
-                                                                          } catch (e) {}
+                                                                          _showMyDialogPay_Error(
+                                                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                                          // ScaffoldMessenger.of(context)
+                                                                          //     .showSnackBar(
+                                                                          //   const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                          // );
                                                                         }
-
-                                                                        // if (select_page == 0) {
-                                                                        //   print('(select_page == 0)');
-                                                                        //   if (paymentName1
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน' ||
-                                                                        //       paymentName2
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน') {
-                                                                        //     if (base64_Slip != null) {
-                                                                        //       try {
-                                                                        //         OKuploadFile_Slip();
-                                                                        //         // _TransModels
-                                                                        //         // sum_disamtx sum_dispx
-
-                                                                        //         await in_Trans_invoice(
-                                                                        //             newValuePDFimg);
-                                                                        //       } catch (e) {}
-                                                                        //     } else {
-                                                                        //       ScaffoldMessenger.of(
-                                                                        //               context)
-                                                                        //           .showSnackBar(
-                                                                        //         const SnackBar(
-                                                                        //             content: Text(
-                                                                        //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                        //                 style: TextStyle(
-                                                                        //                     color: Colors
-                                                                        //                         .white,
-                                                                        //                     fontFamily:
-                                                                        //                         Font_
-                                                                        //                             .Fonts_T))),
-                                                                        //       );
-                                                                        //     }
-                                                                        //   } else {
-                                                                        //     try {
-                                                                        //       // OKuploadFile_Slip();
-                                                                        //       // _TransModels
-                                                                        //       // sum_disamtx sum_dispx
-
-                                                                        //       await in_Trans_invoice(
-                                                                        //           newValuePDFimg);
-                                                                        //     } catch (e) {}
-                                                                        //   }
-                                                                        // } else if (select_page == 1) {
-                                                                        //   if (paymentName1
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน' ||
-                                                                        //       paymentName2
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน') {
-                                                                        //     if (base64_Slip != null) {
-                                                                        //       try {
-                                                                        //         final tableData00 = [
-                                                                        //           for (int index = 0;
-                                                                        //               index <
-                                                                        //                   _InvoiceHistoryModels
-                                                                        //                       .length;
-                                                                        //               index++)
-                                                                        //             [
-                                                                        //               '${index + 1}',
-                                                                        //               '${_InvoiceHistoryModels[index].date}',
-                                                                        //               '${_InvoiceHistoryModels[index].descr}',
-                                                                        //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                        //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                        //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                        //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                        //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                        //             ],
-                                                                        //         ];
-                                                                        //         OKuploadFile_Slip();
-                                                                        //         //_InvoiceHistoryModels
-                                                                        //         // PdfgenReceipt.exportPDF_Receipt1(
-                                                                        //         //     numinvoice,
-                                                                        //         //     tableData00,
-                                                                        //         //     context,
-                                                                        //         //     Slip_status,
-                                                                        //         //     _TransModels,
-                                                                        //         //     '${widget.Get_Value_cid}',
-                                                                        //         //     '${widget.namenew}',
-                                                                        //         //     '${sum_pvat}',
-                                                                        //         //     '${sum_vat}',
-                                                                        //         //     '${sum_wht}',
-                                                                        //         //     '${sum_amt}',
-                                                                        //         //     '$sum_disp',
-                                                                        //         //     '${nFormat.format(sum_disamt)}',
-                                                                        //         //     '${sum_amt - sum_disamt}',
-                                                                        //         //     // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                        //         //     '${renTal_name.toString()}',
-                                                                        //         //     '${Form_bussshop}',
-                                                                        //         //     '${Form_address}',
-                                                                        //         //     '${Form_tel}',
-                                                                        //         //     '${Form_email}',
-                                                                        //         //     '${Form_tax}',
-                                                                        //         //     '${Form_nameshop}',
-                                                                        //         //     '${renTalModels[0].bill_addr}',
-                                                                        //         //     '${renTalModels[0].bill_email}',
-                                                                        //         //     '${renTalModels[0].bill_tel}',
-                                                                        //         //     '${renTalModels[0].bill_tax}',
-                                                                        //         //     '${renTalModels[0].bill_name}',
-                                                                        //         //     newValuePDFimg,
-                                                                        //         //     pamentpage,
-                                                                        //         //     paymentName1,
-                                                                        //         //     paymentName2,
-                                                                        //         //     Form_payment1.text,
-                                                                        //         //     Form_payment2.text);
-                                                                        //         in_Trans_invoice_refno(
-                                                                        //             tableData00,
-                                                                        //             newValuePDFimg);
-                                                                        //       } catch (e) {}
-                                                                        //     } else {
-                                                                        //       ScaffoldMessenger.of(
-                                                                        //               context)
-                                                                        //           .showSnackBar(
-                                                                        //         const SnackBar(
-                                                                        //             content: Text(
-                                                                        //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                        //                 style: TextStyle(
-                                                                        //                     color: Colors
-                                                                        //                         .white,
-                                                                        //                     fontFamily:
-                                                                        //                         Font_
-                                                                        //                             .Fonts_T))),
-                                                                        //       );
-                                                                        //     }
-                                                                        //   } else {
-                                                                        //     try {
-                                                                        //       final tableData00 = [
-                                                                        //         for (int index = 0;
-                                                                        //             index <
-                                                                        //                 _InvoiceHistoryModels
-                                                                        //                     .length;
-                                                                        //             index++)
-                                                                        //           [
-                                                                        //             '${index + 1}',
-                                                                        //             '${_InvoiceHistoryModels[index].date}',
-                                                                        //             '${_InvoiceHistoryModels[index].descr}',
-                                                                        //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                        //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                        //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                        //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                        //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                        //           ],
-                                                                        //       ];
-                                                                        //       // OKuploadFile_Slip();
-                                                                        //       //_InvoiceHistoryModels
-
-                                                                        //       in_Trans_invoice_refno(
-                                                                        //           tableData00,
-                                                                        //           newValuePDFimg);
-                                                                        //     } catch (e) {}
-                                                                        //   }
-                                                                        // } else if (select_page == 2) {
-                                                                        //   if (paymentName1
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน' ||
-                                                                        //       paymentName2
-                                                                        //               .toString()
-                                                                        //               .trim() ==
-                                                                        //           'เงินโอน') {
-                                                                        //     if (base64_Slip != null) {
-                                                                        //       try {
-                                                                        //         OKuploadFile_Slip();
-                                                                        //         //TransReBillHistoryModel
-
-                                                                        //         await in_Trans_re_invoice_refno(
-                                                                        //             newValuePDFimg);
-                                                                        //       } catch (e) {}
-                                                                        //     } else {
-                                                                        //       ScaffoldMessenger.of(
-                                                                        //               context)
-                                                                        //           .showSnackBar(
-                                                                        //         const SnackBar(
-                                                                        //             content: Text(
-                                                                        //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                        //                 style: TextStyle(
-                                                                        //                     color: Colors
-                                                                        //                         .white,
-                                                                        //                     fontFamily:
-                                                                        //                         Font_
-                                                                        //                             .Fonts_T))),
-                                                                        //       );
-                                                                        //     }
-                                                                        //   } else {
-                                                                        //     try {
-                                                                        //       // OKuploadFile_Slip();
-                                                                        //       //TransReBillHistoryModel
-
-                                                                        //       await in_Trans_re_invoice_refno(
-                                                                        //           newValuePDFimg);
-                                                                        //     } catch (e) {}
-                                                                        //   }
-                                                                        // }
                                                                       } else {
-                                                                        ScaffoldMessenger.of(context)
-                                                                            .showSnackBar(
-                                                                          const SnackBar(
-                                                                              content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                        );
+                                                                        _showMyDialogPay_Error(
+                                                                            'กรุณาเลือกรูปแบบการชำระ!');
+                                                                        // ScaffoldMessenger.of(context)
+                                                                        //     .showSnackBar(
+                                                                        //   const SnackBar(
+                                                                        //       content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                        // );
                                                                       }
-                                                                    } else {
-                                                                      ScaffoldMessenger.of(
-                                                                              context)
-                                                                          .showSnackBar(
-                                                                        const SnackBar(
-                                                                            content:
-                                                                                Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                      );
                                                                     }
-                                                                  } else {
-                                                                    ScaffoldMessenger.of(
-                                                                            context)
-                                                                        .showSnackBar(
-                                                                      const SnackBar(
-                                                                          content: Text(
-                                                                              'กรุณาเลือกรูปแบบการชำระ!',
-                                                                              style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                    );
                                                                   }
                                                                 },
                                                                 child: Container(
@@ -7702,7 +7931,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     Expanded(
                                                       child: Container(
                                                         decoration:
-                                                            BoxDecoration(
+                                                            const BoxDecoration(
                                                           border: Border(
                                                             left: BorderSide(
                                                               width: 1,
@@ -7844,8 +8073,14 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               } else {}
                                                                             },
                                                                             icon: pamentpage == 0
-                                                                                ? const Icon(Icons.add_circle_outline)
-                                                                                : const Icon(Icons.remove_circle_outline),
+                                                                                ? Icon(
+                                                                                    Icons.add_circle_outline,
+                                                                                    color: Colors.green,
+                                                                                  )
+                                                                                : const Icon(
+                                                                                    Icons.remove_circle_outline,
+                                                                                    color: Colors.red,
+                                                                                  ),
                                                                           )
                                                                         ],
                                                                       ),
@@ -7961,7 +8196,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                                                               setState(() {
                                                                                 paymentSer1 = rtnameSer.trim().toString();
-                                                                                paymentName1 = rtnameName.toString();
+                                                                                if (rtnameSer.toString() == '0') {
+                                                                                  paymentName1 = null;
+                                                                                } else {
+                                                                                  paymentName1 = rtnameName.toString();
+                                                                                }
+
                                                                                 if (rtnameSer.toString() == '0') {
                                                                                   Form_payment1.clear();
                                                                                 } else {
@@ -8072,7 +8312,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                     print('mmmmm ${rtnameSer.toString()} $rtnameName');
                                                                                     setState(() {
                                                                                       paymentSer2 = rtnameSer.toString();
-                                                                                      paymentName2 = rtnameName.toString();
+                                                                                      if (rtnameSer.toString() == '0') {
+                                                                                        paymentName2 = null;
+                                                                                      } else {
+                                                                                        paymentName2 = rtnameName.toString();
+                                                                                      }
+
                                                                                       if (rtnameSer.toString() == '0') {
                                                                                         Form_payment2.clear();
                                                                                       } else {
@@ -8158,9 +8403,35 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             // },
                                                                             onChanged:
                                                                                 (value) {
+                                                                              // var money1 = double.parse(value);
+                                                                              // var money2 = (sum_amt - sum_disamt);
+                                                                              // var money3 = (money2 - money1).toString();
+                                                                              // setState(() {
+                                                                              //   if (paymentSer2 == null) {
+                                                                              //     Form_payment1.text = (money1).toStringAsFixed(2).toString();
+                                                                              //   } else {
+                                                                              //     Form_payment1.text = (money1).toStringAsFixed(2).toString();
+                                                                              //     Form_payment2.text = money3;
+                                                                              //   }
+                                                                              // });
+
+                                                                              final currentCursorPosition = Form_payment1.selection.start;
+
+                                                                              // Update the text of the controller
+                                                                              if (paymentSer2 != null)
+                                                                                setState(() {
+                                                                                  Form_payment2.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                });
+
+                                                                              // Set the new cursor position
+                                                                              final newCursorPosition = currentCursorPosition + (value.length - Form_payment1.text.length);
+                                                                              Form_payment1.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                            },
+                                                                            onFieldSubmitted:
+                                                                                (value) {
                                                                               var money1 = double.parse(value);
                                                                               var money2 = (sum_amt - sum_disamt);
-                                                                              var money3 = (money2 - money1).toString();
+                                                                              var money3 = (money2 - money1).toStringAsFixed(2).toString();
                                                                               setState(() {
                                                                                 if (paymentSer2 == null) {
                                                                                   Form_payment1.text = (money1).toStringAsFixed(2).toString();
@@ -8241,6 +8512,30 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                   //   setState(() {});
                                                                                   // },
                                                                                   onChanged: (value) {
+                                                                                    // var money1 = double.parse(value);
+                                                                                    // var money2 = (sum_amt - sum_disamt);
+                                                                                    // var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                    // setState(() {
+                                                                                    //   if (paymentSer1 == null) {
+                                                                                    //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                    //   } else {
+                                                                                    //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                    //     Form_payment1.text = money3;
+                                                                                    //   }
+                                                                                    // });
+                                                                                    final currentCursorPosition = Form_payment2.selection.start;
+
+                                                                                    // Update the text of the controller
+                                                                                    if (paymentSer1 != null)
+                                                                                      setState(() {
+                                                                                        Form_payment1.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                      });
+
+                                                                                    // Set the new cursor position
+                                                                                    final newCursorPosition = currentCursorPosition + (value.length - Form_payment2.text.length);
+                                                                                    Form_payment2.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                                  },
+                                                                                  onFieldSubmitted: (value) {
                                                                                     var money1 = double.parse(value);
                                                                                     var money2 = (sum_amt - sum_disamt);
                                                                                     var money3 = (money2 - money1).toStringAsFixed(2).toString();
@@ -9029,6 +9324,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         InkWell(
                                                                       onTap:
                                                                           () async {
+                                                                        var pay1;
+                                                                        var pay2;
                                                                         setState(
                                                                             () {
                                                                           Slip_status =
@@ -9051,14 +9348,24 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           }
                                                                         }
                                                                         //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
-                                                                        var pay1 = Form_payment1.text ==
-                                                                                ''
-                                                                            ? '0.00'
-                                                                            : Form_payment1.text;
-                                                                        var pay2 = Form_payment2.text ==
-                                                                                ''
-                                                                            ? '0.00'
-                                                                            : Form_payment2.text;
+                                                                        setState(
+                                                                            () {
+                                                                          pay1 = Form_payment1.text == ''
+                                                                              ? '0.00'
+                                                                              : Form_payment1.text;
+                                                                          pay2 = Form_payment2.text == ''
+                                                                              ? '0.00'
+                                                                              : Form_payment2.text;
+                                                                        });
+                                                                        if (pamentpage ==
+                                                                            0) {
+                                                                          setState(
+                                                                              () {
+                                                                            Form_payment2.clear();
+                                                                            Form_payment2.text =
+                                                                                '';
+                                                                          });
+                                                                        }
                                                                         print(
                                                                             '>>1>  ${Form_payment1.text}');
                                                                         print(
@@ -9066,251 +9373,96 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                         print(
                                                                             '${(double.parse(pay1) + double.parse(pay2))}');
 
-                                                                        if (paymentSer1 !=
-                                                                                '0' &&
-                                                                            paymentSer1 !=
-                                                                                null) {
-                                                                          if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) ||
-                                                                              (double.parse(pay1) + double.parse(pay2)) < (sum_amt - sum_disamt)) {
-                                                                            if ((sum_amt - sum_disamt) !=
-                                                                                0) {
-                                                                              if (paymentName1.toString().trim() == 'เงินโอน' || paymentName2.toString().trim() == 'เงินโอน') {
-                                                                                if (base64_Slip != null) {
-                                                                                  try {
-                                                                                    OKuploadFile_Slip();
-                                                                                    // _TransModels
-                                                                                    // sum_disamtx sum_dispx
+                                                                        if ((double.parse(pay1) + double.parse(pay2) !=
+                                                                            (sum_amt -
+                                                                                sum_disamt))) {
+                                                                          _showMyDialogPay_Error(
+                                                                              'จำนวนเงินไม่ถูกต้อง ');
+                                                                          // ScaffoldMessenger.of(context)
+                                                                          //     .showSnackBar(
+                                                                          //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง ', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                          // );
+                                                                        } else if (double.parse(pay1) <
+                                                                                0.00 ||
+                                                                            double.parse(pay2) <
+                                                                                0.00) {
+                                                                          _showMyDialogPay_Error(
+                                                                              'จำนวนเงินไม่ถูกต้อง ');
+                                                                          // ScaffoldMessenger.of(context)
+                                                                          //     .showSnackBar(
+                                                                          //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                          // );
+                                                                        } else {
+                                                                          if (pamentpage == 0 &&
+                                                                              // Form_payment1.text ==
+                                                                              //     '' ||
+                                                                              paymentName1 == null) {
+                                                                            _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //   const SnackBar(content: Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                            // );
+                                                                          } else if (pamentpage == 1 &&
+                                                                                  // Form_payment2.text ==
+                                                                                  //     '' ||
+                                                                                  paymentName2 == null ||
+                                                                              paymentName1 == null) {
+                                                                            _showMyDialogPay_Error((paymentName1 == null)
+                                                                                ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                                                : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                                                            //   SnackBar(content: (paymentName1 == null) ? Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T)) : Text('กรุณาเลือกรูปแบบชำระ! ที่ 2', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                            // );
+                                                                          } else {
+                                                                            print('${pamentpage}: ${paymentName1}////${paymentName2}******');
+                                                                            if (paymentSer1 != '0' &&
+                                                                                paymentSer1 != null) {
+                                                                              if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) || (double.parse(pay1) + double.parse(pay2)) < (sum_amt - sum_disamt)) {
+                                                                                if ((sum_amt - sum_disamt) != 0) {
+                                                                                  if (paymentName1.toString().trim() == 'เงินโอน' || paymentName2.toString().trim() == 'เงินโอน') {
+                                                                                    if (base64_Slip != null) {
+                                                                                      try {
+                                                                                        OKuploadFile_Slip();
+                                                                                        // _TransModels
+                                                                                        // sum_disamtx sum_dispx
 
-                                                                                    await in_Trans_invoice(newValuePDFimg, index);
-                                                                                    Navigator.pop(context, 'OK');
-                                                                                  } catch (e) {}
+                                                                                        await in_Trans_invoice(newValuePDFimg, index);
+                                                                                        Navigator.pop(context, 'OK');
+                                                                                      } catch (e) {}
+                                                                                    } else {
+                                                                                      _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                                                      // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                      //   const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      // );
+                                                                                    }
+                                                                                  } else {
+                                                                                    try {
+                                                                                      // OKuploadFile_Slip();
+                                                                                      // _TransModels
+                                                                                      // sum_disamtx sum_dispx
+
+                                                                                      await in_Trans_invoice(newValuePDFimg, index);
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                    } catch (e) {}
+                                                                                  }
                                                                                 } else {
-                                                                                  ScaffoldMessenger.of(context).showSnackBar(
-                                                                                    const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                                  );
+                                                                                  _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                  //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                  // );
                                                                                 }
                                                                               } else {
-                                                                                try {
-                                                                                  // OKuploadFile_Slip();
-                                                                                  // _TransModels
-                                                                                  // sum_disamtx sum_dispx
-
-                                                                                  await in_Trans_invoice(newValuePDFimg, index);
-                                                                                  Navigator.pop(context, 'OK');
-                                                                                } catch (e) {}
+                                                                                _showMyDialogPay_Error('กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                                                // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                //   const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                // );
                                                                               }
-
-                                                                              // if (select_page == 0) {
-                                                                              //   print('(select_page == 0)');
-                                                                              //   if (paymentName1
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน' ||
-                                                                              //       paymentName2
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน') {
-                                                                              //     if (base64_Slip != null) {
-                                                                              //       try {
-                                                                              //         OKuploadFile_Slip();
-                                                                              //         // _TransModels
-                                                                              //         // sum_disamtx sum_dispx
-
-                                                                              //         await in_Trans_invoice(
-                                                                              //             newValuePDFimg);
-                                                                              //       } catch (e) {}
-                                                                              //     } else {
-                                                                              //       ScaffoldMessenger.of(
-                                                                              //               context)
-                                                                              //           .showSnackBar(
-                                                                              //         const SnackBar(
-                                                                              //             content: Text(
-                                                                              //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                              //                 style: TextStyle(
-                                                                              //                     color: Colors
-                                                                              //                         .white,
-                                                                              //                     fontFamily:
-                                                                              //                         Font_
-                                                                              //                             .Fonts_T))),
-                                                                              //       );
-                                                                              //     }
-                                                                              //   } else {
-                                                                              //     try {
-                                                                              //       // OKuploadFile_Slip();
-                                                                              //       // _TransModels
-                                                                              //       // sum_disamtx sum_dispx
-
-                                                                              //       await in_Trans_invoice(
-                                                                              //           newValuePDFimg);
-                                                                              //     } catch (e) {}
-                                                                              //   }
-                                                                              // } else if (select_page == 1) {
-                                                                              //   if (paymentName1
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน' ||
-                                                                              //       paymentName2
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน') {
-                                                                              //     if (base64_Slip != null) {
-                                                                              //       try {
-                                                                              //         final tableData00 = [
-                                                                              //           for (int index = 0;
-                                                                              //               index <
-                                                                              //                   _InvoiceHistoryModels
-                                                                              //                       .length;
-                                                                              //               index++)
-                                                                              //             [
-                                                                              //               '${index + 1}',
-                                                                              //               '${_InvoiceHistoryModels[index].date}',
-                                                                              //               '${_InvoiceHistoryModels[index].descr}',
-                                                                              //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                              //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                              //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                              //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                              //               '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                              //             ],
-                                                                              //         ];
-                                                                              //         OKuploadFile_Slip();
-                                                                              //         //_InvoiceHistoryModels
-                                                                              //         // PdfgenReceipt.exportPDF_Receipt1(
-                                                                              //         //     numinvoice,
-                                                                              //         //     tableData00,
-                                                                              //         //     context,
-                                                                              //         //     Slip_status,
-                                                                              //         //     _TransModels,
-                                                                              //         //     '${widget.Get_Value_cid}',
-                                                                              //         //     '${widget.namenew}',
-                                                                              //         //     '${sum_pvat}',
-                                                                              //         //     '${sum_vat}',
-                                                                              //         //     '${sum_wht}',
-                                                                              //         //     '${sum_amt}',
-                                                                              //         //     '$sum_disp',
-                                                                              //         //     '${nFormat.format(sum_disamt)}',
-                                                                              //         //     '${sum_amt - sum_disamt}',
-                                                                              //         //     // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                              //         //     '${renTal_name.toString()}',
-                                                                              //         //     '${Form_bussshop}',
-                                                                              //         //     '${Form_address}',
-                                                                              //         //     '${Form_tel}',
-                                                                              //         //     '${Form_email}',
-                                                                              //         //     '${Form_tax}',
-                                                                              //         //     '${Form_nameshop}',
-                                                                              //         //     '${renTalModels[0].bill_addr}',
-                                                                              //         //     '${renTalModels[0].bill_email}',
-                                                                              //         //     '${renTalModels[0].bill_tel}',
-                                                                              //         //     '${renTalModels[0].bill_tax}',
-                                                                              //         //     '${renTalModels[0].bill_name}',
-                                                                              //         //     newValuePDFimg,
-                                                                              //         //     pamentpage,
-                                                                              //         //     paymentName1,
-                                                                              //         //     paymentName2,
-                                                                              //         //     Form_payment1.text,
-                                                                              //         //     Form_payment2.text);
-                                                                              //         in_Trans_invoice_refno(
-                                                                              //             tableData00,
-                                                                              //             newValuePDFimg);
-                                                                              //       } catch (e) {}
-                                                                              //     } else {
-                                                                              //       ScaffoldMessenger.of(
-                                                                              //               context)
-                                                                              //           .showSnackBar(
-                                                                              //         const SnackBar(
-                                                                              //             content: Text(
-                                                                              //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                              //                 style: TextStyle(
-                                                                              //                     color: Colors
-                                                                              //                         .white,
-                                                                              //                     fontFamily:
-                                                                              //                         Font_
-                                                                              //                             .Fonts_T))),
-                                                                              //       );
-                                                                              //     }
-                                                                              //   } else {
-                                                                              //     try {
-                                                                              //       final tableData00 = [
-                                                                              //         for (int index = 0;
-                                                                              //             index <
-                                                                              //                 _InvoiceHistoryModels
-                                                                              //                     .length;
-                                                                              //             index++)
-                                                                              //           [
-                                                                              //             '${index + 1}',
-                                                                              //             '${_InvoiceHistoryModels[index].date}',
-                                                                              //             '${_InvoiceHistoryModels[index].descr}',
-                                                                              //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                              //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                              //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                              //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                              //             '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                              //           ],
-                                                                              //       ];
-                                                                              //       // OKuploadFile_Slip();
-                                                                              //       //_InvoiceHistoryModels
-
-                                                                              //       in_Trans_invoice_refno(
-                                                                              //           tableData00,
-                                                                              //           newValuePDFimg);
-                                                                              //     } catch (e) {}
-                                                                              //   }
-                                                                              // } else if (select_page == 2) {
-                                                                              //   if (paymentName1
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน' ||
-                                                                              //       paymentName2
-                                                                              //               .toString()
-                                                                              //               .trim() ==
-                                                                              //           'เงินโอน') {
-                                                                              //     if (base64_Slip != null) {
-                                                                              //       try {
-                                                                              //         OKuploadFile_Slip();
-                                                                              //         //TransReBillHistoryModel
-
-                                                                              //         await in_Trans_re_invoice_refno(
-                                                                              //             newValuePDFimg);
-                                                                              //       } catch (e) {}
-                                                                              //     } else {
-                                                                              //       ScaffoldMessenger.of(
-                                                                              //               context)
-                                                                              //           .showSnackBar(
-                                                                              //         const SnackBar(
-                                                                              //             content: Text(
-                                                                              //                 'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                                              //                 style: TextStyle(
-                                                                              //                     color: Colors
-                                                                              //                         .white,
-                                                                              //                     fontFamily:
-                                                                              //                         Font_
-                                                                              //                             .Fonts_T))),
-                                                                              //       );
-                                                                              //     }
-                                                                              //   } else {
-                                                                              //     try {
-                                                                              //       // OKuploadFile_Slip();
-                                                                              //       //TransReBillHistoryModel
-
-                                                                              //       await in_Trans_re_invoice_refno(
-                                                                              //           newValuePDFimg);
-                                                                              //     } catch (e) {}
-                                                                              //   }
-                                                                              // }
                                                                             } else {
-                                                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                                                const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                              );
+                                                                              _showMyDialogPay_Error('กรุณาเลือกรูปแบบการชำระ!');
+                                                                              // ScaffoldMessenger.of(context).showSnackBar(
+                                                                              //   const SnackBar(content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                              // );
                                                                             }
-                                                                          } else {
-                                                                            ScaffoldMessenger.of(context).showSnackBar(
-                                                                              const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                            );
                                                                           }
-                                                                        } else {
-                                                                          ScaffoldMessenger.of(context)
-                                                                              .showSnackBar(
-                                                                            const SnackBar(content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                          );
                                                                         }
                                                                       },
                                                                       child: Container(
@@ -9712,280 +9864,288 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    return Container(
+                                                    return Material(
                                                       color: tappedIndex_ ==
                                                               index.toString()
                                                           ? tappedIndex_Color
                                                               .tappedIndex_Colors
-                                                              .withOpacity(0.5)
-                                                          : null,
-                                                      child: ListTile(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              tappedIndex_ = index
-                                                                  .toString();
+                                                          : AppbackgroundColor
+                                                              .Sub_Abg_Colors,
+                                                      child: Container(
+                                                        // color: tappedIndex_ ==
+                                                        //         index.toString()
+                                                        //     ? tappedIndex_Color
+                                                        //         .tappedIndex_Colors
+                                                        //         .withOpacity(0.5)
+                                                        //     : null,
+                                                        child: ListTile(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                tappedIndex_ = index
+                                                                    .toString();
 
-                                                              if (teNantcid !=
-                                                                  null) {
-                                                                teNantcid =
-                                                                    null;
-                                                              } else {
-                                                                teNantcid =
-                                                                    teNantModels[
-                                                                            index]
-                                                                        .cid;
-                                                                teNantsname =
-                                                                    teNantModels[
-                                                                            index]
-                                                                        .sname;
-                                                                teNantnamenew =
-                                                                    teNantModels[
-                                                                            index]
-                                                                        .cname;
-                                                              }
-                                                            });
-
-                                                            setState(() {
-                                                              Form_nameshop =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .sname
-                                                                      .toString();
-                                                              Form_typeshop =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .stype
-                                                                      .toString();
-                                                              Form_bussshop =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .cname
-                                                                      .toString();
-                                                              Form_bussscontact =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .attn
-                                                                      .toString();
-                                                              Form_address =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .addr
-                                                                      .toString();
-                                                              Form_tel =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .tel
-                                                                      .toString();
-                                                              Form_email =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .email
-                                                                      .toString();
-                                                              Form_tax = teNantModels[
+                                                                if (teNantcid !=
+                                                                    null) {
+                                                                  teNantcid =
+                                                                      null;
+                                                                } else {
+                                                                  teNantcid =
+                                                                      teNantModels[
                                                                               index]
-                                                                          .tax ==
-                                                                      null
-                                                                  ? "-"
-                                                                  : teNantModels[
-                                                                          index]
-                                                                      .tax
-                                                                      .toString();
-                                                              Form_area =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .area
-                                                                      .toString();
-                                                              Form_ln =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .area_c
-                                                                      .toString();
+                                                                          .cid;
+                                                                  teNantsname =
+                                                                      teNantModels[
+                                                                              index]
+                                                                          .sname;
+                                                                  teNantnamenew =
+                                                                      teNantModels[
+                                                                              index]
+                                                                          .cname;
+                                                                }
+                                                              });
 
-                                                              Form_sdate = DateFormat(
-                                                                      'dd-MM-yyyy')
-                                                                  .format(DateTime
-                                                                      .parse(
-                                                                          '${teNantModels[index].sdate} 00:00:00'))
-                                                                  .toString();
-                                                              Form_ldate = DateFormat(
-                                                                      'dd-MM-yyyy')
-                                                                  .format(DateTime
-                                                                      .parse(
-                                                                          '${teNantModels[index].ldate} 00:00:00'))
-                                                                  .toString();
-                                                              Form_period =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .period
-                                                                      .toString();
-                                                              Form_rtname =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .rtname
-                                                                      .toString();
-                                                              Form_docno =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .docno
-                                                                      .toString();
-                                                              Form_zn =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .zn
-                                                                      .toString();
-                                                              Form_aser =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .aser
-                                                                      .toString();
-                                                              Form_qty =
-                                                                  teNantModels[
-                                                                          index]
-                                                                      .qty
-                                                                      .toString();
-                                                            });
-                                                          },
-                                                          title: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child: Text(
-                                                                    '${teNantModels[index].cid}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AccountScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
+                                                              setState(() {
+                                                                Form_nameshop =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .sname
+                                                                        .toString();
+                                                                Form_typeshop =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .stype
+                                                                        .toString();
+                                                                Form_bussshop =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .cname
+                                                                        .toString();
+                                                                Form_bussscontact =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .attn
+                                                                        .toString();
+                                                                Form_address =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .addr
+                                                                        .toString();
+                                                                Form_tel =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .tel
+                                                                        .toString();
+                                                                Form_email =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .email
+                                                                        .toString();
+                                                                Form_tax = teNantModels[index]
+                                                                            .tax ==
+                                                                        null
+                                                                    ? "-"
+                                                                    : teNantModels[
+                                                                            index]
+                                                                        .tax
+                                                                        .toString();
+                                                                Form_area =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .area
+                                                                        .toString();
+                                                                Form_ln = teNantModels[
+                                                                        index]
+                                                                    .area_c
+                                                                    .toString();
+
+                                                                Form_sdate = DateFormat(
+                                                                        'dd-MM-yyyy')
+                                                                    .format(DateTime
+                                                                        .parse(
+                                                                            '${teNantModels[index].sdate} 00:00:00'))
+                                                                    .toString();
+                                                                Form_ldate = DateFormat(
+                                                                        'dd-MM-yyyy')
+                                                                    .format(DateTime
+                                                                        .parse(
+                                                                            '${teNantModels[index].ldate} 00:00:00'))
+                                                                    .toString();
+                                                                Form_period =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .period
+                                                                        .toString();
+                                                                Form_rtname =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .rtname
+                                                                        .toString();
+                                                                Form_docno =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .docno
+                                                                        .toString();
+                                                                Form_zn = teNantModels[
+                                                                        index]
+                                                                    .zn
+                                                                    .toString();
+                                                                Form_aser =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .aser
+                                                                        .toString();
+                                                                Form_qty =
+                                                                    teNantModels[
+                                                                            index]
+                                                                        .qty
+                                                                        .toString();
+                                                              });
+                                                            },
+                                                            title: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '${teNantModels[index].cid}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        '${teNantModels[index].cid}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              AccountScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight
+                                                                          //         .bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child: Text(
-                                                                    '${teNantModels[index].ln_c}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AccountScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '${teNantModels[index].ln_c}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          Text(
+                                                                        '${teNantModels[index].ln_c}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              AccountScreen_Color.Colors_Text2_,
+                                                                          // fontWeight:
+                                                                          //     FontWeight
+                                                                          //         .bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child: Text(
-                                                                    '${teNantModels[index].sname}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      color: AccountScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight:
-                                                                      //     FontWeight
-                                                                      //         .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontSize: 10.0
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Text(
+                                                                      '${teNantModels[index].sname}',
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: AccountScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight:
+                                                                        //     FontWeight
+                                                                        //         .bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  '${teNantModels[index].cname}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: AccountScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                    //fontSize: 10.0
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  '${teNantModels[index].period} / ${teNantModels[index].rtname}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: AccountScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                    //fontSize: 10.0
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child: Text(
-                                                                    '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].sdate} 00:00:00').year + 543}',
+                                                                    '${teNantModels[index].cname}',
                                                                     textAlign:
                                                                         TextAlign
                                                                             .center,
-                                                                    maxLines: 1,
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -9999,58 +10159,115 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                       fontFamily:
                                                                           Font_
                                                                               .Fonts_T,
+                                                                      //fontSize: 10.0
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].ldate} 00:00:00').year + 543}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: AccountScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                    //fontSize: 10.0
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    '${teNantModels[index].period} / ${teNantModels[index].rtname}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: AccountScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight
+                                                                      //         .bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Text(
-                                                                  teNantModels[index]
-                                                                              .count_bill ==
-                                                                          null
-                                                                      ? '0 รายการ'
-                                                                      : '${teNantModels[index].count_bill} รายการ',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style:
-                                                                      const TextStyle(
-                                                                    color: AccountScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight:
-                                                                    //     FontWeight
-                                                                    //         .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
-                                                                    //fontSize: 10.0
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Text(
+                                                                      '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].sdate} 00:00:00').year + 543}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      maxLines:
+                                                                          1,
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: AccountScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        // fontWeight:
+                                                                        //     FontWeight
+                                                                        //         .bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          )),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    '${DateFormat('dd-MM').format(DateTime.parse('${teNantModels[index].ldate} 00:00:00'))}-${DateTime.parse('${teNantModels[index].ldate} 00:00:00').year + 543}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: AccountScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight
+                                                                      //         .bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    teNantModels[index].count_bill ==
+                                                                            null
+                                                                        ? '0 รายการ'
+                                                                        : '${teNantModels[index].count_bill} รายการ',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        const TextStyle(
+                                                                      color: AccountScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight:
+                                                                      //     FontWeight
+                                                                      //         .bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                      //fontSize: 10.0
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ),
                                                     );
                                                   })),
                                     ],
@@ -10893,280 +11110,567 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   itemBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    return Container(
+                                                    return Material(
                                                       color: tappedIndex_ ==
                                                               index.toString()
                                                           ? tappedIndex_Color
                                                               .tappedIndex_Colors
-                                                              .withOpacity(0.5)
-                                                          : null,
-                                                      child: ListTile(
-                                                          onTap: () {
-                                                            setState(() {
-                                                              tappedIndex_ = index
-                                                                  .toString();
-                                                              red_Trans_select(
+                                                          : AppbackgroundColor
+                                                              .Sub_Abg_Colors,
+                                                      child: Container(
+                                                        // color: tappedIndex_ ==
+                                                        //         index.toString()
+                                                        //     ? tappedIndex_Color
+                                                        //         .tappedIndex_Colors
+                                                        //         .withOpacity(0.5)
+                                                        //     : null,
+                                                        child: ListTile(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                tappedIndex_ = index
+                                                                    .toString();
+                                                                red_Trans_select(
+                                                                    index);
+                                                                red_Invoice(
+                                                                    index);
+                                                              });
+                                                              print(
+                                                                  'objecnort ${_TransReBillModels[index].docno}');
+                                                              checkshowDialog(
                                                                   index);
-                                                              red_Invoice(
-                                                                  index);
-                                                            });
-                                                            print(
-                                                                'objecnort ${_TransReBillModels[index].docno}');
-                                                            checkshowDialog(
-                                                                index);
-                                                          },
-                                                          title: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                            },
+                                                            title: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    '${_TransReBillModels[index].cid}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '${_TransReBillModels[index].cid}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        '${_TransReBillModels[index].cid}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00').year + 543}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  _TransReBillModels[index]
-                                                                              .doctax ==
-                                                                          ''
-                                                                      ? '${_TransReBillModels[index].docno}'
-                                                                      : '${_TransReBillModels[index].doctax}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                                Expanded(
+                                                                  flex: 1,
                                                                   child:
-                                                                      AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        25,
-                                                                    maxLines: 1,
-                                                                    '${_TransReBillModels[index].inv}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: '',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
                                                                         fontFamily:
-                                                                            Font_.Fonts_T),
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].pdate} 00:00:00').year + 543}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  _TransReBillModels[index]
-                                                                              .ln ==
-                                                                          null
-                                                                      ? '${_TransReBillModels[index].room_number}'
-                                                                      : '${_TransReBillModels[index].ln}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: _TransReBillModels[index].doctax ==
+                                                                              ''
+                                                                          ? '${_TransReBillModels[index].docno}'
+                                                                          : '${_TransReBillModels[index].doctax}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].doctax ==
+                                                                              ''
+                                                                          ? '${_TransReBillModels[index].docno}'
+                                                                          : '${_TransReBillModels[index].doctax}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  _TransReBillModels[index]
-                                                                              .sname ==
-                                                                          null
-                                                                      ? '${_TransReBillModels[index].remark}'
-                                                                      : '${_TransReBillModels[index].sname}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Tooltip(
+                                                                      richMessage:
+                                                                          TextSpan(
+                                                                        text:
+                                                                            '${_TransReBillModels[index].inv}',
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          color:
+                                                                              HomeScreen_Color.Colors_Text1_,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          //fontSize: 10.0
+                                                                        ),
+                                                                      ),
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        color: Colors
+                                                                            .grey[200],
+                                                                      ),
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            25,
+                                                                        maxLines:
+                                                                            1,
+                                                                        '${_TransReBillModels[index].inv}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  _TransReBillModels[index]
-                                                                              .total_dis ==
-                                                                          null
-                                                                      ? '${_TransReBillModels[index].total_bill}'
-                                                                      : '${_TransReBillModels[index].total_dis}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: _TransReBillModels[index].ln ==
+                                                                              null
+                                                                          ? '${_TransReBillModels[index].room_number}'
+                                                                          : '${_TransReBillModels[index].ln}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].ln ==
+                                                                              null
+                                                                          ? '${_TransReBillModels[index].room_number}'
+                                                                          : '${_TransReBillModels[index].ln}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: _TransReBillModels[index].sname ==
+                                                                              null
+                                                                          ? '${_TransReBillModels[index].remark}'
+                                                                          : '${_TransReBillModels[index].sname}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].sname ==
+                                                                              null
+                                                                          ? '${_TransReBillModels[index].remark}'
+                                                                          : '${_TransReBillModels[index].sname}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child:
-                                                                    AutoSizeText(
-                                                                  minFontSize:
-                                                                      10,
-                                                                  maxFontSize:
-                                                                      25,
-                                                                  maxLines: 1,
-                                                                  _TransReBillModels[index]
-                                                                              .doctax ==
-                                                                          ''
-                                                                      ? ' '
-                                                                      : 'ใบกำกับภาษี',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: '',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].total_dis ==
+                                                                              null
+                                                                          ? '${_TransReBillModels[index].total_bill}'
+                                                                          : '${_TransReBillModels[index].total_dis}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          )),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: '',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Tooltip(
+                                                                    richMessage:
+                                                                        TextSpan(
+                                                                      text: '',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: HomeScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                        //fontSize: 10.0
+                                                                      ),
+                                                                    ),
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              5),
+                                                                      color: Colors
+                                                                              .grey[
+                                                                          200],
+                                                                    ),
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          25,
+                                                                      maxLines:
+                                                                          1,
+                                                                      _TransReBillModels[index].doctax ==
+                                                                              ''
+                                                                          ? ''
+                                                                          : 'ใบกำกับภาษี',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ),
                                                     );
                                                   })),
                                     ],

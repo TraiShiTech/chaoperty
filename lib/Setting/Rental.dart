@@ -46,6 +46,8 @@ class _RentalState extends State<Rental> {
   List<VatSModel> selectVat = [];
   List<UnitModel> unitModels = [];
   List<UnitxModel> unitxModels = [];
+  String tappedIndex_VAT = '';
+  String tappedIndex_WHT = '';
   //////////////-------------------------------->
   List<String> dates =
       ('01,02,03,04,05,06,07,08,09,10,11,12,13,14,15,16,18,17,19,20,21,22,23,24,25,26,27,28,29,30,31'
@@ -429,7 +431,7 @@ class _RentalState extends State<Rental> {
                                         Row(
                                           children: [
                                             Expanded(
-                                              flex: 1,
+                                              flex: 2,
                                               child: Container(
                                                 height: 50,
                                                 decoration: const BoxDecoration(
@@ -651,385 +653,540 @@ class _RentalState extends State<Rental> {
                                             itemCount: vatModels.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
-                                              return Container(
-                                                color: Colors.white,
-                                                child: ListTile(
-                                                  onTap: () {},
-                                                  title: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: TextFormField(
-                                                            initialValue:
-                                                                vatModels[index]
-                                                                    .vat,
-                                                            onFieldSubmitted:
-                                                                (value) async {
-                                                              SharedPreferences
-                                                                  preferences =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-                                                              String? ren =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'renTalSer');
-                                                              String? ser_user =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'ser');
-                                                              var vser =
+                                              return Material(
+                                                color: tappedIndex_VAT ==
+                                                        index.toString()
+                                                    ? tappedIndex_Color
+                                                        .tappedIndex_Colors
+                                                    : AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                child: Container(
+                                                  // color: Colors.white,
+                                                  child: ListTile(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        tappedIndex_VAT =
+                                                            index.toString();
+                                                      });
+                                                    },
+                                                    title: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child:
+                                                                TextFormField(
+                                                              initialValue:
                                                                   vatModels[
                                                                           index]
-                                                                      .ser;
-                                                              String url =
-                                                                  '${MyConstant().domain}/UpC_vat_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+                                                                      .vat,
+                                                              onFieldSubmitted:
+                                                                  (value) async {
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                var vser =
+                                                                    vatModels[
+                                                                            index]
+                                                                        .ser;
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_vat_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
-                                                              try {
-                                                                var response =
-                                                                    await http.get(
-                                                                        Uri.parse(
-                                                                            url));
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
 
-                                                                var result =
-                                                                    json.decode(
-                                                                        response
-                                                                            .body);
-                                                                print(result);
-                                                                if (result
-                                                                        .toString() ==
-                                                                    'true') {
-                                                                  setState(() {
-                                                                    read_GC_vat();
-                                                                  });
-                                                                } else {}
-                                                              } catch (e) {}
-                                                            },
-                                                            // maxLength: 13,
-                                                            cursorColor:
-                                                                Colors.green,
-                                                            decoration:
-                                                                InputDecoration(
-                                                                    fillColor: Colors
-                                                                        .white
-                                                                        .withOpacity(
-                                                                            0.05),
-                                                                    filled:
-                                                                        true,
-                                                                    // prefixIcon:
-                                                                    //     const Icon(Icons.key, color: Colors.black),
-                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                    focusedBorder:
-                                                                        const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_vat();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration: InputDecoration(
+                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                  filled: true,
+                                                                  // prefixIcon:
+                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                  focusedBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
                                                                     ),
-                                                                    enabledBorder:
-                                                                        const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
                                                                     ),
-                                                                    // labelText: 'PASSWOED',
-                                                                    labelStyle: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T)),
+                                                                  ),
+                                                                  enabledBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                  // labelText: 'PASSWOED',
+                                                                  labelStyle: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T)),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: TextFormField(
-                                                            initialValue:
-                                                                vatModels[index]
-                                                                    .pct,
-                                                            onFieldSubmitted:
-                                                                (value) async {
-                                                              SharedPreferences
-                                                                  preferences =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-                                                              String? ren =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'renTalSer');
-                                                              String? ser_user =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'ser');
-                                                              var vser =
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child:
+                                                                TextFormField(
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              initialValue:
                                                                   vatModels[
                                                                           index]
-                                                                      .ser;
-                                                              String url =
-                                                                  '${MyConstant().domain}/UpC_vat_pct.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+                                                                      .pct,
+                                                              onFieldSubmitted:
+                                                                  (value) async {
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                var vser =
+                                                                    vatModels[
+                                                                            index]
+                                                                        .ser;
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_vat_pct.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
-                                                              try {
-                                                                var response =
-                                                                    await http.get(
-                                                                        Uri.parse(
-                                                                            url));
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
 
-                                                                var result =
-                                                                    json.decode(
-                                                                        response
-                                                                            .body);
-                                                                print(result);
-                                                                if (result
-                                                                        .toString() ==
-                                                                    'true') {
-                                                                  setState(() {
-                                                                    read_GC_vat();
-                                                                  });
-                                                                } else {}
-                                                              } catch (e) {}
-                                                            },
-                                                            // maxLength: 13,
-                                                            cursorColor:
-                                                                Colors.green,
-                                                            decoration:
-                                                                InputDecoration(
-                                                                    fillColor: Colors
-                                                                        .white
-                                                                        .withOpacity(
-                                                                            0.05),
-                                                                    filled:
-                                                                        true,
-                                                                    // prefixIcon:
-                                                                    //     const Icon(Icons.key, color: Colors.black),
-                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                    focusedBorder:
-                                                                        const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_vat();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration: InputDecoration(
+                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                  filled: true,
+                                                                  // prefixIcon:
+                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                  focusedBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
                                                                     ),
-                                                                    enabledBorder:
-                                                                        const OutlineInputBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      borderSide:
-                                                                          BorderSide(
-                                                                        width:
-                                                                            1,
-                                                                        color: Colors
-                                                                            .grey,
-                                                                      ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
                                                                     ),
-                                                                    // labelText: 'PASSWOED',
-                                                                    labelStyle: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T)),
+                                                                  ),
+                                                                  enabledBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                  // labelText: 'PASSWOED',
+                                                                  labelStyle: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T)),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child:
-                                                            DropdownButtonFormField2(
-                                                          decoration:
-                                                              InputDecoration(
-                                                            //Add isDense true and zero Padding.
-                                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                            isDense: true,
-                                                            contentPadding:
-                                                                EdgeInsets.zero,
-                                                            border:
-                                                                OutlineInputBorder(
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child:
+                                                              DropdownButtonFormField2(
+                                                            decoration:
+                                                                InputDecoration(
+                                                              //Add isDense true and zero Padding.
+                                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                              isDense: true,
+                                                              contentPadding:
+                                                                  EdgeInsets
+                                                                      .zero,
+                                                              border:
+                                                                  OutlineInputBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            15),
+                                                              ),
+                                                              //Add more decoration as you want here
+                                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                            ),
+                                                            isExpanded: true,
+                                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                            hint: Text(
+                                                              vatModels[index]
+                                                                          .vtypex ==
+                                                                      '0'
+                                                                  ? 'ไม่มี'
+                                                                  : vatModels[index]
+                                                                              .vtypex ==
+                                                                          '1'
+                                                                      ? 'รวมภาษี'
+                                                                      : 'ไม่รวมภาษี',
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          14,
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
+                                                            icon: const Icon(
+                                                              Icons
+                                                                  .arrow_drop_down,
+                                                              color: Colors
+                                                                  .black45,
+                                                            ),
+                                                            iconSize: 30,
+                                                            buttonHeight: 60,
+                                                            buttonPadding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    left: 10,
+                                                                    right: 10),
+                                                            dropdownDecoration:
+                                                                BoxDecoration(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
                                                                           15),
                                                             ),
-                                                            //Add more decoration as you want here
-                                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                          ),
-                                                          isExpanded: true,
-                                                          // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                          hint: Text(
-                                                            vatModels[index]
-                                                                        .vtypex ==
-                                                                    '0'
-                                                                ? 'ไม่มี'
-                                                                : vatModels[index]
-                                                                            .vtypex ==
-                                                                        '1'
-                                                                    ? 'รวมภาษี'
-                                                                    : 'ไม่รวมภาษี',
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        14,
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          ),
-                                                          icon: const Icon(
-                                                            Icons
-                                                                .arrow_drop_down,
-                                                            color:
-                                                                Colors.black45,
-                                                          ),
-                                                          iconSize: 30,
-                                                          buttonHeight: 60,
-                                                          buttonPadding:
-                                                              const EdgeInsets
-                                                                      .only(
-                                                                  left: 10,
-                                                                  right: 10),
-                                                          dropdownDecoration:
-                                                              BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15),
-                                                          ),
-                                                          items: selectVat
-                                                              .map((item) =>
-                                                                  DropdownMenuItem<
-                                                                      String>(
-                                                                    value:
-                                                                        '${item.ser}:${item.name}',
-                                                                    child: Text(
-                                                                      item.name!,
-                                                                      style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ))
-                                                              .toList(),
-                                                          onChanged:
-                                                              (value) async {
-                                                            var zones = value!
-                                                                .indexOf(':');
-                                                            var vat_ser =
-                                                                value.substring(
-                                                                    0, zones);
-                                                            var vat_name =
-                                                                value.substring(
-                                                                    zones + 1);
-                                                            print(
-                                                                'mmmmm ${vat_ser.toString()} $vat_name');
+                                                            items: selectVat
+                                                                .map((item) =>
+                                                                    DropdownMenuItem<
+                                                                        String>(
+                                                                      value:
+                                                                          '${item.ser}:${item.name}',
+                                                                      child:
+                                                                          Text(
+                                                                        item.name!,
+                                                                        style: const TextStyle(
+                                                                            fontSize: 14,
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ))
+                                                                .toList(),
+                                                            onChanged:
+                                                                (value) async {
+                                                              var zones = value!
+                                                                  .indexOf(':');
+                                                              var vat_ser = value
+                                                                  .substring(
+                                                                      0, zones);
+                                                              var vat_name =
+                                                                  value.substring(
+                                                                      zones +
+                                                                          1);
+                                                              print(
+                                                                  'mmmmm ${vat_ser.toString()} $vat_name');
 
-                                                            SharedPreferences
-                                                                preferences =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                            String? ren =
-                                                                preferences
-                                                                    .getString(
-                                                                        'renTalSer');
-                                                            String? ser_user =
-                                                                preferences
-                                                                    .getString(
-                                                                        'ser');
-                                                            var vser =
-                                                                vatModels[index]
-                                                                    .ser;
-                                                            String url =
-                                                                '${MyConstant().domain}/UpC_vat_type.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
+                                                              SharedPreferences
+                                                                  preferences =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+                                                              String? ren =
+                                                                  preferences
+                                                                      .getString(
+                                                                          'renTalSer');
+                                                              String? ser_user =
+                                                                  preferences
+                                                                      .getString(
+                                                                          'ser');
+                                                              var vser =
+                                                                  vatModels[
+                                                                          index]
+                                                                      .ser;
+                                                              String url =
+                                                                  '${MyConstant().domain}/UpC_vat_type.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
 
-                                                            try {
-                                                              var response =
-                                                                  await http.get(
-                                                                      Uri.parse(
-                                                                          url));
+                                                              try {
+                                                                var response =
+                                                                    await http.get(
+                                                                        Uri.parse(
+                                                                            url));
 
-                                                              var result =
-                                                                  json.decode(
-                                                                      response
-                                                                          .body);
-                                                              print(result);
-                                                              if (result
-                                                                      .toString() ==
-                                                                  'true') {
-                                                                setState(() {
-                                                                  read_GC_vat();
-                                                                });
-                                                              } else {}
-                                                            } catch (e) {}
-                                                          },
-                                                          onSaved: (value) {
-                                                            // selectedValue = value.toString();
-                                                          },
+                                                                var result =
+                                                                    json.decode(
+                                                                        response
+                                                                            .body);
+                                                                print(result);
+                                                                if (result
+                                                                        .toString() ==
+                                                                    'true') {
+                                                                  setState(() {
+                                                                    read_GC_vat();
+                                                                  });
+                                                                } else {}
+                                                              } catch (e) {}
+                                                            },
+                                                            onSaved: (value) {
+                                                              // selectedValue = value.toString();
+                                                            },
+                                                          ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: GestureDetector(
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: GestureDetector(
+                                                              onTap: () async {
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                var open =
+                                                                    vatModels[index].st ==
+                                                                            '1'
+                                                                        ? '0'
+                                                                        : '1';
+                                                                var vser =
+                                                                    vatModels[
+                                                                            index]
+                                                                        .ser;
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_vat_open.php?isAdd=true&ren=$ren&vser=$vser&value=$open&ser_user=$ser_user';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_vat();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              child: vatModels[index].st == '1'
+                                                                  ? const Icon(
+                                                                      Icons
+                                                                          .toggle_on,
+                                                                      color: Colors
+                                                                          .green,
+                                                                      size:
+                                                                          50.0,
+                                                                    )
+                                                                  : const Icon(
+                                                                      Icons
+                                                                          .toggle_off,
+                                                                      size:
+                                                                          50.0,
+                                                                    )
+
+                                                              // Row(
+                                                              //   mainAxisAlignment:
+                                                              //       MainAxisAlignment
+                                                              //           .center,
+                                                              //   children: [
+                                                              //     Padding(
+                                                              //       padding:
+                                                              //           const EdgeInsets
+                                                              //                   .all(
+                                                              //               8.0),
+                                                              //       child:
+                                                              //           Container(
+                                                              //         width: 150,
+                                                              //         // height: 50,
+                                                              //         decoration:
+                                                              //             BoxDecoration(
+                                                              //           color: vatModels[index]
+                                                              //                       .st ==
+                                                              //                   '1'
+                                                              //               ? Colors
+                                                              //                   .green
+                                                              //               : Colors
+                                                              //                   .red,
+                                                              //           borderRadius: const BorderRadius
+                                                              //                   .only(
+                                                              //               topLeft:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               topRight:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               bottomLeft:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               bottomRight:
+                                                              //                   Radius.circular(10)),
+                                                              //         ),
+                                                              //         padding:
+                                                              //             const EdgeInsets
+                                                              //                     .all(
+                                                              //                 8.0),
+                                                              //         child: Center(
+                                                              //           child: Text(
+                                                              //             vatModels[index].st ==
+                                                              //                     '1'
+                                                              //                 ? 'เปิด'
+                                                              //                 : 'ปิด',
+                                                              //             textAlign:
+                                                              //                 TextAlign
+                                                              //                     .center,
+                                                              //             style: TextStyle(
+                                                              //                 color: vatModels[index].st == '1'
+                                                              //                     ? Colors.white
+                                                              //                     : Colors.white,
+                                                              //                 fontFamily: Font_.Fonts_T),
+                                                              //           ),
+                                                              //         ),
+                                                              //       ),
+                                                              //     ),
+                                                              //   ],
+                                                              // ),
+                                                              ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child:
+                                                              GestureDetector(
                                                             onTap: () async {
                                                               SharedPreferences
                                                                   preferences =
@@ -1043,18 +1200,15 @@ class _RentalState extends State<Rental> {
                                                                   preferences
                                                                       .getString(
                                                                           'ser');
-                                                              var open =
-                                                                  vatModels[index]
-                                                                              .st ==
-                                                                          '1'
-                                                                      ? '0'
-                                                                      : '1';
+
                                                               var vser =
                                                                   vatModels[
                                                                           index]
                                                                       .ser;
+                                                              print(
+                                                                  '>>>>>>>>>vat $vser');
                                                               String url =
-                                                                  '${MyConstant().domain}/UpC_vat_open.php?isAdd=true&ren=$ren&vser=$vser&value=$open&ser_user=$ser_user';
+                                                                  '${MyConstant().domain}/DeC_vat.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
 
                                                               try {
                                                                 var response =
@@ -1076,179 +1230,51 @@ class _RentalState extends State<Rental> {
                                                                 } else {}
                                                               } catch (e) {}
                                                             },
-                                                            child: vatModels[
-                                                                            index]
-                                                                        .st ==
-                                                                    '1'
-                                                                ? const Icon(
-                                                                    Icons
-                                                                        .toggle_on,
-                                                                    color: Colors
-                                                                        .green,
-                                                                    size: 50.0,
-                                                                  )
-                                                                : const Icon(
-                                                                    Icons
-                                                                        .toggle_off,
-                                                                    size: 50.0,
-                                                                  )
-
-                                                            // Row(
-                                                            //   mainAxisAlignment:
-                                                            //       MainAxisAlignment
-                                                            //           .center,
-                                                            //   children: [
-                                                            //     Padding(
-                                                            //       padding:
-                                                            //           const EdgeInsets
-                                                            //                   .all(
-                                                            //               8.0),
-                                                            //       child:
-                                                            //           Container(
-                                                            //         width: 150,
-                                                            //         // height: 50,
-                                                            //         decoration:
-                                                            //             BoxDecoration(
-                                                            //           color: vatModels[index]
-                                                            //                       .st ==
-                                                            //                   '1'
-                                                            //               ? Colors
-                                                            //                   .green
-                                                            //               : Colors
-                                                            //                   .red,
-                                                            //           borderRadius: const BorderRadius
-                                                            //                   .only(
-                                                            //               topLeft:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               topRight:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               bottomLeft:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               bottomRight:
-                                                            //                   Radius.circular(10)),
-                                                            //         ),
-                                                            //         padding:
-                                                            //             const EdgeInsets
-                                                            //                     .all(
-                                                            //                 8.0),
-                                                            //         child: Center(
-                                                            //           child: Text(
-                                                            //             vatModels[index].st ==
-                                                            //                     '1'
-                                                            //                 ? 'เปิด'
-                                                            //                 : 'ปิด',
-                                                            //             textAlign:
-                                                            //                 TextAlign
-                                                            //                     .center,
-                                                            //             style: TextStyle(
-                                                            //                 color: vatModels[index].st == '1'
-                                                            //                     ? Colors.white
-                                                            //                     : Colors.white,
-                                                            //                 fontFamily: Font_.Fonts_T),
-                                                            //           ),
-                                                            //         ),
-                                                            //       ),
-                                                            //     ),
-                                                            //   ],
-                                                            // ),
-                                                            ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: GestureDetector(
-                                                          onTap: () async {
-                                                            SharedPreferences
-                                                                preferences =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                            String? ren =
-                                                                preferences
-                                                                    .getString(
-                                                                        'renTalSer');
-                                                            String? ser_user =
-                                                                preferences
-                                                                    .getString(
-                                                                        'ser');
-
-                                                            var vser =
-                                                                vatModels[index]
-                                                                    .ser;
-                                                            print(
-                                                                '>>>>>>>>>vat $vser');
-                                                            String url =
-                                                                '${MyConstant().domain}/DeC_vat.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
-
-                                                            try {
-                                                              var response =
-                                                                  await http.get(
-                                                                      Uri.parse(
-                                                                          url));
-
-                                                              var result =
-                                                                  json.decode(
-                                                                      response
-                                                                          .body);
-                                                              print(result);
-                                                              if (result
-                                                                      .toString() ==
-                                                                  'true') {
-                                                                setState(() {
-                                                                  read_GC_vat();
-                                                                });
-                                                              } else {}
-                                                            } catch (e) {}
-                                                          },
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    Container(
-                                                                  width: 100,
-                                                                  // height: 50,
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    color: Colors
-                                                                        .red,
-                                                                    borderRadius: BorderRadius.only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                  ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
                                                                   padding:
                                                                       const EdgeInsets
                                                                               .all(
                                                                           8.0),
                                                                   child:
-                                                                      const Center(
-                                                                    child: Icon(
-                                                                        Icons
-                                                                            .close),
+                                                                      Container(
+                                                                    width: 100,
+                                                                    // height: 50,
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        const Center(
+                                                                      child: Icon(
+                                                                          Icons
+                                                                              .close),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -1622,7 +1648,7 @@ class _RentalState extends State<Rental> {
                                         Row(
                                           children: [
                                             Expanded(
-                                              flex: 1,
+                                              flex: 2,
                                               child: Container(
                                                 height: 50,
                                                 decoration: const BoxDecoration(
@@ -1662,7 +1688,7 @@ class _RentalState extends State<Rental> {
                                               ),
                                             ),
                                             Expanded(
-                                              flex: 1,
+                                              flex: 2,
                                               child: Container(
                                                 height: 50,
                                                 decoration: const BoxDecoration(
@@ -1700,45 +1726,45 @@ class _RentalState extends State<Rental> {
                                                 ),
                                               ),
                                             ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Container(
-                                                height: 50,
-                                                decoration: const BoxDecoration(
-                                                  color: AppbackgroundColor
-                                                      .TiTile_Colors,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft: Radius.circular(0),
-                                                    topRight:
-                                                        Radius.circular(0),
-                                                    bottomLeft:
-                                                        Radius.circular(0),
-                                                    bottomRight:
-                                                        Radius.circular(0),
-                                                  ),
-                                                  // border: Border.all(
-                                                  //     color: Colors.grey, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Center(
-                                                  child: Text(
-                                                    '',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
+                                            // Expanded(
+                                            //   flex: 1,
+                                            //   child: Container(
+                                            //     height: 50,
+                                            //     decoration: const BoxDecoration(
+                                            //       color: AppbackgroundColor
+                                            //           .TiTile_Colors,
+                                            //       borderRadius:
+                                            //           BorderRadius.only(
+                                            //         topLeft: Radius.circular(0),
+                                            //         topRight:
+                                            //             Radius.circular(0),
+                                            //         bottomLeft:
+                                            //             Radius.circular(0),
+                                            //         bottomRight:
+                                            //             Radius.circular(0),
+                                            //       ),
+                                            //       // border: Border.all(
+                                            //       //     color: Colors.grey, width: 1),
+                                            //     ),
+                                            //     padding:
+                                            //         const EdgeInsets.all(8.0),
+                                            //     child: const Center(
+                                            //       child: Text(
+                                            //         '',
+                                            //         textAlign: TextAlign.center,
+                                            //         style: TextStyle(
+                                            //           color: SettingScreen_Color
+                                            //               .Colors_Text1_,
+                                            //           fontFamily:
+                                            //               FontWeight_.Fonts_T,
+                                            //           fontWeight:
+                                            //               FontWeight.bold,
+                                            //           //fontSize: 10.0
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                             Expanded(
                                               flex: 1,
                                               child: Container(
@@ -1844,141 +1870,30 @@ class _RentalState extends State<Rental> {
                                             itemCount: whtModels.length,
                                             itemBuilder: (BuildContext context,
                                                 int index) {
-                                              return Container(
-                                                color: Colors.white,
-                                                child: ListTile(
-                                                  onTap: () {},
-                                                  title: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: TextFormField(
-                                                          initialValue:
-                                                              whtModels[index]
-                                                                  .wht,
-                                                          onFieldSubmitted:
-                                                              (value) async {
-                                                            SharedPreferences
-                                                                preferences =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                            String? ren =
-                                                                preferences
-                                                                    .getString(
-                                                                        'renTalSer');
-                                                            String? ser_user =
-                                                                preferences
-                                                                    .getString(
-                                                                        'ser');
-                                                            var vser =
-                                                                whtModels[index]
-                                                                    .ser;
-                                                            String url =
-                                                                '${MyConstant().domain}/UpC_wht_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                            try {
-                                                              var response =
-                                                                  await http.get(
-                                                                      Uri.parse(
-                                                                          url));
-
-                                                              var result =
-                                                                  json.decode(
-                                                                      response
-                                                                          .body);
-                                                              print(result);
-                                                              if (result
-                                                                      .toString() ==
-                                                                  'true') {
-                                                                setState(() {
-                                                                  read_GC_wht();
-                                                                });
-                                                              } else {}
-                                                            } catch (e) {}
-                                                          },
-                                                          // maxLength: 13,
-                                                          cursorColor:
-                                                              Colors.green,
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T)),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
+                                              return Material(
+                                                color: tappedIndex_WHT ==
+                                                        index.toString()
+                                                    ? tappedIndex_Color
+                                                        .tappedIndex_Colors
+                                                    : AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                child: Container(
+                                                  // color: Colors.white,
+                                                  child: ListTile(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        tappedIndex_WHT =
+                                                            index.toString();
+                                                      });
+                                                    },
+                                                    title: Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 2,
                                                           child: TextFormField(
                                                             initialValue:
                                                                 whtModels[index]
-                                                                    .pct,
+                                                                    .wht,
                                                             onFieldSubmitted:
                                                                 (value) async {
                                                               SharedPreferences
@@ -1993,12 +1908,12 @@ class _RentalState extends State<Rental> {
                                                                   preferences
                                                                       .getString(
                                                                           'ser');
-                                                              var wser =
+                                                              var vser =
                                                                   whtModels[
                                                                           index]
                                                                       .ser;
                                                               String url =
-                                                                  '${MyConstant().domain}/UpC_wht_ptc.php?isAdd=true&ren=$ren&wser=$wser&value=$value&ser_user=$ser_user';
+                                                                  '${MyConstant().domain}/UpC_wht_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
                                                               try {
                                                                 var response =
@@ -2085,10 +2000,261 @@ class _RentalState extends State<Rental> {
                                                                         fontFamily: Font_.Fonts_T)),
                                                           ),
                                                         ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: GestureDetector(
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child:
+                                                                TextFormField(
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .right,
+                                                              initialValue:
+                                                                  whtModels[
+                                                                          index]
+                                                                      .pct,
+                                                              onFieldSubmitted:
+                                                                  (value) async {
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                var wser =
+                                                                    whtModels[
+                                                                            index]
+                                                                        .ser;
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_wht_ptc.php?isAdd=true&ren=$ren&wser=$wser&value=$value&ser_user=$ser_user';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_wht();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration: InputDecoration(
+                                                                  fillColor: Colors.white.withOpacity(0.05),
+                                                                  filled: true,
+                                                                  // prefixIcon:
+                                                                  //     const Icon(Icons.key, color: Colors.black),
+                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                  focusedBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                  enabledBorder: const OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              15),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    borderSide:
+                                                                        BorderSide(
+                                                                      width: 1,
+                                                                      color: Colors
+                                                                          .grey,
+                                                                    ),
+                                                                  ),
+                                                                  // labelText: 'PASSWOED',
+                                                                  labelStyle: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T)),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: GestureDetector(
+                                                              onTap: () async {
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                var open =
+                                                                    whtModels[index].st ==
+                                                                            '1'
+                                                                        ? '0'
+                                                                        : '1';
+                                                                var vser =
+                                                                    whtModels[
+                                                                            index]
+                                                                        .ser;
+                                                                String url =
+                                                                    '${MyConstant().domain}/UpC_wht_open.php?isAdd=true&ren=$ren&vser=$vser&value=$open&ser_user=$ser_user';
+
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_wht();
+                                                                    });
+                                                                  } else {}
+                                                                } catch (e) {}
+                                                              },
+                                                              child: whtModels[index].st == '1'
+                                                                  ? const Icon(
+                                                                      Icons
+                                                                          .toggle_on,
+                                                                      color: Colors
+                                                                          .green,
+                                                                      size:
+                                                                          50.0,
+                                                                    )
+                                                                  : const Icon(
+                                                                      Icons
+                                                                          .toggle_off,
+                                                                      size:
+                                                                          50.0,
+                                                                    )
+
+                                                              //  Row(
+                                                              //   mainAxisAlignment:
+                                                              //       MainAxisAlignment
+                                                              //           .center,
+                                                              //   children: [
+                                                              //     Padding(
+                                                              //       padding:
+                                                              //           const EdgeInsets
+                                                              //                   .all(
+                                                              //               8.0),
+                                                              //       child:
+                                                              //           Container(
+                                                              //         width: 150,
+                                                              //         decoration:
+                                                              //             BoxDecoration(
+                                                              //           color: whtModels[index]
+                                                              //                       .st ==
+                                                              //                   '1'
+                                                              //               ? Colors
+                                                              //                   .green
+                                                              //               : Colors
+                                                              //                   .red,
+                                                              //           borderRadius: const BorderRadius
+                                                              //                   .only(
+                                                              //               topLeft:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               topRight:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               bottomLeft:
+                                                              //                   Radius.circular(
+                                                              //                       10),
+                                                              //               bottomRight:
+                                                              //                   Radius.circular(10)),
+                                                              //         ),
+                                                              //         padding:
+                                                              //             const EdgeInsets
+                                                              //                     .all(
+                                                              //                 8.0),
+                                                              //         child: Center(
+                                                              //           child: Text(
+                                                              //             whtModels[index].st ==
+                                                              //                     '1'
+                                                              //                 ? 'เปิด'
+                                                              //                 : 'ปิด',
+                                                              //             textAlign:
+                                                              //                 TextAlign
+                                                              //                     .center,
+                                                              //             style: TextStyle(
+                                                              //                 color: whtModels[index].st == '1'
+                                                              //                     ? Colors.white
+                                                              //                     : Colors.white,
+                                                              //                 fontFamily: Font_.Fonts_T),
+                                                              //           ),
+                                                              //         ),
+                                                              //       ),
+                                                              //     ),
+                                                              //   ],
+                                                              // ),
+                                                              ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child:
+                                                              GestureDetector(
                                                             onTap: () async {
                                                               SharedPreferences
                                                                   preferences =
@@ -2102,18 +2268,15 @@ class _RentalState extends State<Rental> {
                                                                   preferences
                                                                       .getString(
                                                                           'ser');
-                                                              var open =
-                                                                  whtModels[index]
-                                                                              .st ==
-                                                                          '1'
-                                                                      ? '0'
-                                                                      : '1';
+
                                                               var vser =
                                                                   whtModels[
                                                                           index]
                                                                       .ser;
+                                                              print(
+                                                                  '>>>>>>>>>vat $vser');
                                                               String url =
-                                                                  '${MyConstant().domain}/UpC_wht_open.php?isAdd=true&ren=$ren&vser=$vser&value=$open&ser_user=$ser_user';
+                                                                  '${MyConstant().domain}/DeC_wht.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
 
                                                               try {
                                                                 var response =
@@ -2135,178 +2298,51 @@ class _RentalState extends State<Rental> {
                                                                 } else {}
                                                               } catch (e) {}
                                                             },
-                                                            child: whtModels[
-                                                                            index]
-                                                                        .st ==
-                                                                    '1'
-                                                                ? const Icon(
-                                                                    Icons
-                                                                        .toggle_on,
-                                                                    color: Colors
-                                                                        .green,
-                                                                    size: 50.0,
-                                                                  )
-                                                                : const Icon(
-                                                                    Icons
-                                                                        .toggle_off,
-                                                                    size: 50.0,
-                                                                  )
-
-                                                            //  Row(
-                                                            //   mainAxisAlignment:
-                                                            //       MainAxisAlignment
-                                                            //           .center,
-                                                            //   children: [
-                                                            //     Padding(
-                                                            //       padding:
-                                                            //           const EdgeInsets
-                                                            //                   .all(
-                                                            //               8.0),
-                                                            //       child:
-                                                            //           Container(
-                                                            //         width: 150,
-                                                            //         decoration:
-                                                            //             BoxDecoration(
-                                                            //           color: whtModels[index]
-                                                            //                       .st ==
-                                                            //                   '1'
-                                                            //               ? Colors
-                                                            //                   .green
-                                                            //               : Colors
-                                                            //                   .red,
-                                                            //           borderRadius: const BorderRadius
-                                                            //                   .only(
-                                                            //               topLeft:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               topRight:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               bottomLeft:
-                                                            //                   Radius.circular(
-                                                            //                       10),
-                                                            //               bottomRight:
-                                                            //                   Radius.circular(10)),
-                                                            //         ),
-                                                            //         padding:
-                                                            //             const EdgeInsets
-                                                            //                     .all(
-                                                            //                 8.0),
-                                                            //         child: Center(
-                                                            //           child: Text(
-                                                            //             whtModels[index].st ==
-                                                            //                     '1'
-                                                            //                 ? 'เปิด'
-                                                            //                 : 'ปิด',
-                                                            //             textAlign:
-                                                            //                 TextAlign
-                                                            //                     .center,
-                                                            //             style: TextStyle(
-                                                            //                 color: whtModels[index].st == '1'
-                                                            //                     ? Colors.white
-                                                            //                     : Colors.white,
-                                                            //                 fontFamily: Font_.Fonts_T),
-                                                            //           ),
-                                                            //         ),
-                                                            //       ),
-                                                            //     ),
-                                                            //   ],
-                                                            // ),
-                                                            ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: GestureDetector(
-                                                          onTap: () async {
-                                                            SharedPreferences
-                                                                preferences =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                            String? ren =
-                                                                preferences
-                                                                    .getString(
-                                                                        'renTalSer');
-                                                            String? ser_user =
-                                                                preferences
-                                                                    .getString(
-                                                                        'ser');
-
-                                                            var vser =
-                                                                whtModels[index]
-                                                                    .ser;
-                                                            print(
-                                                                '>>>>>>>>>vat $vser');
-                                                            String url =
-                                                                '${MyConstant().domain}/DeC_wht.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
-
-                                                            try {
-                                                              var response =
-                                                                  await http.get(
-                                                                      Uri.parse(
-                                                                          url));
-
-                                                              var result =
-                                                                  json.decode(
-                                                                      response
-                                                                          .body);
-                                                              print(result);
-                                                              if (result
-                                                                      .toString() ==
-                                                                  'true') {
-                                                                setState(() {
-                                                                  read_GC_wht();
-                                                                });
-                                                              } else {}
-                                                            } catch (e) {}
-                                                          },
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    Container(
-                                                                  width: 100,
-                                                                  // height: 50,
-                                                                  decoration:
-                                                                      const BoxDecoration(
-                                                                    color: Colors
-                                                                        .red,
-                                                                    borderRadius: BorderRadius.only(
-                                                                        topLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        topRight:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(
-                                                                                10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10)),
-                                                                  ),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
                                                                   padding:
                                                                       const EdgeInsets
                                                                               .all(
                                                                           8.0),
                                                                   child:
-                                                                      const Center(
-                                                                    child: Icon(
-                                                                        Icons
-                                                                            .close),
+                                                                      Container(
+                                                                    width: 100,
+                                                                    // height: 50,
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Colors
+                                                                          .red,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        const Center(
+                                                                      child: Icon(
+                                                                          Icons
+                                                                              .close),
+                                                                    ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               );
@@ -3181,450 +3217,553 @@ class _RentalState extends State<Rental> {
                                             return expTypeModels[Ser_Sub].ser !=
                                                     expModels[index].exptser
                                                 ? const SizedBox()
-                                                : Container(
-                                                    color:
-                                                        tappedIndex_[Ser_Sub] ==
-                                                                index.toString()
-                                                            ? Colors
-                                                                .grey.shade300
-                                                            : null,
-                                                    child: ListTile(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          tappedIndex_[
-                                                                  Ser_Sub] =
-                                                              index.toString();
-                                                        });
-                                                      },
-                                                      title: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                initialValue:
-                                                                    expModels[
-                                                                            index]
-                                                                        .expname,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
+                                                : Material(
+                                                    color: tappedIndex_[
+                                                                Ser_Sub] ==
+                                                            index.toString()
+                                                        ? tappedIndex_Color
+                                                            .tappedIndex_Colors
+                                                        : AppbackgroundColor
+                                                            .Sub_Abg_Colors,
+                                                    child: Container(
+                                                      // color: tappedIndex_[
+                                                      //             Ser_Sub] ==
+                                                      //         index.toString()
+                                                      //     ? Colors.grey.shade300
+                                                      //     : null,
+                                                      child: ListTile(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            tappedIndex_[
+                                                                    Ser_Sub] =
+                                                                index
+                                                                    .toString();
+                                                          });
+                                                        },
+                                                        title: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 3,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
                                                                       expModels[
                                                                               index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_exp_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+                                                                          .expname,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
 
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
                                                                     ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
                                                                     ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
                                                                   ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
                                                                 ),
                                                               ),
+                                                              // Text(
+                                                              //   '${expModels[index].expname}',
+                                                              //   textAlign:
+                                                              //       TextAlign
+                                                              //           .center,
+                                                              //   style: const TextStyle(
+                                                              //       color: SettingScreen_Color
+                                                              //           .Colors_Text2_,
+                                                              //       fontFamily: Font_
+                                                              //           .Fonts_T),
+                                                              // ),
                                                             ),
-                                                            // Text(
-                                                            //   '${expModels[index].expname}',
-                                                            //   textAlign:
-                                                            //       TextAlign
-                                                            //           .center,
-                                                            //   style: const TextStyle(
-                                                            //       color: SettingScreen_Color
-                                                            //           .Colors_Text2_,
-                                                            //       fontFamily: Font_
-                                                            //           .Fonts_T),
-                                                            // ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8),
-                                                              child: expModels[
-                                                                              index]
-                                                                          .exptser ==
-                                                                      '3'
-                                                                  ? DropdownButtonFormField2(
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        isDense:
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(8),
+                                                                child: expModels[index]
+                                                                            .exptser ==
+                                                                        '3'
+                                                                    ? DropdownButtonFormField2(
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          isDense:
+                                                                              true,
+                                                                          contentPadding:
+                                                                              EdgeInsets.zero,
+                                                                          border:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                        ),
+                                                                        isExpanded:
                                                                             true,
-                                                                        contentPadding:
-                                                                            EdgeInsets.zero,
-                                                                        border:
-                                                                            OutlineInputBorder(
+                                                                        hint:
+                                                                            Text(
+                                                                          expModels[index].unitser == '0'
+                                                                              ? 'ไม่ระบุ'
+                                                                              : '${expModels[index].unit}',
+                                                                          maxLines:
+                                                                              1,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .arrow_drop_down,
+                                                                          color:
+                                                                              TextHome_Color.TextHome_Colors,
+                                                                        ),
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.green.shade900,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                        iconSize:
+                                                                            20,
+                                                                        buttonHeight:
+                                                                            50,
+                                                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                        dropdownDecoration:
+                                                                            BoxDecoration(
                                                                           borderRadius:
                                                                               BorderRadius.circular(10),
                                                                         ),
-                                                                      ),
-                                                                      isExpanded:
-                                                                          true,
-                                                                      hint:
-                                                                          Text(
-                                                                        expModels[index].unitser ==
-                                                                                '0'
-                                                                            ? 'ไม่ระบุ'
-                                                                            : '${expModels[index].unit}',
-                                                                        maxLines:
-                                                                            1,
-                                                                        style: const TextStyle(
-                                                                            fontSize: 14,
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_drop_down,
-                                                                        color: TextHome_Color
-                                                                            .TextHome_Colors,
-                                                                      ),
-                                                                      style: TextStyle(
+                                                                        items: unitxModels
+                                                                            .map((item) {
+                                                                          // if
+                                                                          return DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                '${item.ser}:${item.unit}',
+                                                                            child:
+                                                                                Text(
+                                                                              item.unit!,
+                                                                              style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          );
+                                                                        }).toList(),
+
+                                                                        onChanged:
+                                                                            (value) async {
+                                                                          var zones =
+                                                                              value!.indexOf(':');
+                                                                          var unitSer = value.substring(
+                                                                              0,
+                                                                              zones);
+                                                                          var unitName =
+                                                                              value.substring(zones + 1);
+                                                                          print(
+                                                                              'mmmmm ${unitSer.toString()} $unitName');
+
+                                                                          SharedPreferences
+                                                                              preferences =
+                                                                              await SharedPreferences.getInstance();
+                                                                          String?
+                                                                              ren =
+                                                                              preferences.getString('renTalSer');
+                                                                          String?
+                                                                              ser_user =
+                                                                              preferences.getString('ser');
+                                                                          var vser =
+                                                                              expModels[index].ser;
+
+                                                                          String
+                                                                              url =
+                                                                              '${MyConstant().domain}/UpC_exp_unit.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&unitSer=$unitSer&unitName=$unitName';
+
+                                                                          try {
+                                                                            var response =
+                                                                                await http.get(Uri.parse(url));
+
+                                                                            var result =
+                                                                                json.decode(response.body);
+                                                                            print(result);
+                                                                            if (result.toString() ==
+                                                                                'true') {
+                                                                              Insert_log.Insert_logs('ตั้งค่า', 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ความถี่$unitName ${expModels[index].expname})');
+                                                                              setState(() {
+                                                                                read_GC_Exp();
+                                                                              });
+                                                                            } else {}
+                                                                          } catch (e) {}
+                                                                        },
+                                                                      )
+                                                                    : DropdownButtonFormField2(
+                                                                        decoration:
+                                                                            InputDecoration(
+                                                                          isDense:
+                                                                              true,
+                                                                          contentPadding:
+                                                                              EdgeInsets.zero,
+                                                                          border:
+                                                                              OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                          ),
+                                                                        ),
+                                                                        isExpanded:
+                                                                            true,
+                                                                        hint:
+                                                                            Text(
+                                                                          expModels[index].unitser == '0'
+                                                                              ? 'ไม่ระบุ'
+                                                                              : '${expModels[index].unit}',
+                                                                          maxLines:
+                                                                              1,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 14,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ),
+                                                                        icon:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .arrow_drop_down,
+                                                                          color:
+                                                                              TextHome_Color.TextHome_Colors,
+                                                                        ),
+                                                                        style:
+                                                                            TextStyle(
                                                                           color: Colors
                                                                               .green
                                                                               .shade900,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
-                                                                      iconSize:
-                                                                          20,
-                                                                      buttonHeight:
-                                                                          50,
-                                                                      // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                                      dropdownDecoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      items: unitxModels
-                                                                          .map(
-                                                                              (item) {
-                                                                        // if
-                                                                        return DropdownMenuItem<
-                                                                            String>(
-                                                                          value:
-                                                                              '${item.ser}:${item.unit}',
-                                                                          child:
-                                                                              Text(
-                                                                            item.unit!,
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                        );
-                                                                      }).toList(),
-
-                                                                      onChanged:
-                                                                          (value) async {
-                                                                        var zones =
-                                                                            value!.indexOf(':');
-                                                                        var unitSer = value.substring(
-                                                                            0,
-                                                                            zones);
-                                                                        var unitName =
-                                                                            value.substring(zones +
-                                                                                1);
-                                                                        print(
-                                                                            'mmmmm ${unitSer.toString()} $unitName');
-
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-                                                                        var vser =
-                                                                            expModels[index].ser;
-
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UpC_exp_unit.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&unitSer=$unitSer&unitName=$unitName';
-
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            Insert_log.Insert_logs('ตั้งค่า',
-                                                                                'การเช่า>>${expTypeModels[Ser_Sub].bills}(ความถี่$unitName ${expModels[index].expname})');
-                                                                            setState(() {
-                                                                              read_GC_Exp();
-                                                                            });
-                                                                          } else {}
-                                                                        } catch (e) {}
-                                                                      },
-                                                                    )
-                                                                  : DropdownButtonFormField2(
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        isDense:
-                                                                            true,
-                                                                        contentPadding:
-                                                                            EdgeInsets.zero,
-                                                                        border:
-                                                                            OutlineInputBorder(
+                                                                        ),
+                                                                        iconSize:
+                                                                            20,
+                                                                        buttonHeight:
+                                                                            50,
+                                                                        // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                        dropdownDecoration:
+                                                                            BoxDecoration(
                                                                           borderRadius:
                                                                               BorderRadius.circular(10),
                                                                         ),
-                                                                      ),
-                                                                      isExpanded:
-                                                                          true,
-                                                                      hint:
-                                                                          Text(
-                                                                        expModels[index].unitser ==
-                                                                                '0'
-                                                                            ? 'ไม่ระบุ'
-                                                                            : '${expModels[index].unit}',
-                                                                        maxLines:
-                                                                            1,
-                                                                        style: const TextStyle(
-                                                                            fontSize: 14,
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_drop_down,
-                                                                        color: TextHome_Color
-                                                                            .TextHome_Colors,
-                                                                      ),
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .green
-                                                                            .shade900,
-                                                                      ),
-                                                                      iconSize:
-                                                                          20,
-                                                                      buttonHeight:
-                                                                          50,
-                                                                      // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                                                                      dropdownDecoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(10),
-                                                                      ),
-                                                                      items: unitModels
-                                                                          .map(
-                                                                              (item) {
-                                                                        // if (int.parse(Value_rental_type_3) ==
-                                                                        //     1)
-                                                                        return DropdownMenuItem<
-                                                                            String>(
-                                                                          value:
-                                                                              '${item.ser}:${item.unit}',
-                                                                          child:
-                                                                              Text(
-                                                                            item.unit!,
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                        );
-                                                                        // } else {}
-                                                                        // return dob;
-                                                                      }).toList(),
+                                                                        items: unitModels
+                                                                            .map((item) {
+                                                                          // if (int.parse(Value_rental_type_3) ==
+                                                                          //     1)
+                                                                          return DropdownMenuItem<
+                                                                              String>(
+                                                                            value:
+                                                                                '${item.ser}:${item.unit}',
+                                                                            child:
+                                                                                Text(
+                                                                              item.unit!,
+                                                                              style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          );
+                                                                          // } else {}
+                                                                          // return dob;
+                                                                        }).toList(),
 
-                                                                      onChanged:
-                                                                          (value) async {
-                                                                        var zones =
-                                                                            value!.indexOf(':');
-                                                                        var unitSer = value.substring(
-                                                                            0,
-                                                                            zones);
-                                                                        var unitName =
-                                                                            value.substring(zones +
-                                                                                1);
-                                                                        print(
-                                                                            'mmmmm ${unitSer.toString()} $unitName');
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-                                                                        var vser =
-                                                                            expModels[index].ser;
-
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UpC_exp_unit.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&unitSer=$unitSer&unitName=$unitName';
-
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
+                                                                        onChanged:
+                                                                            (value) async {
+                                                                          var zones =
+                                                                              value!.indexOf(':');
+                                                                          var unitSer = value.substring(
+                                                                              0,
+                                                                              zones);
+                                                                          var unitName =
+                                                                              value.substring(zones + 1);
                                                                           print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            Insert_log.Insert_logs('ตั้งค่า',
-                                                                                'การเช่า>>${expTypeModels[Ser_Sub].bills}(ความถี่$unitName ${expModels[index].expname})');
-                                                                            setState(() {
-                                                                              read_GC_Exp();
-                                                                            });
-                                                                          } else {}
-                                                                        } catch (e) {}
-                                                                      },
-                                                                    ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 3,
-                                                            child: expModels[
-                                                                            index]
-                                                                        .exptser !=
-                                                                    '3'
-                                                                ? Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        Container(
-                                                                      width:
-                                                                          150,
-                                                                      decoration:
-                                                                          const BoxDecoration(
-                                                                        // color: Colors
-                                                                        //     .red,
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topLeft:
-                                                                              Radius.circular(10),
-                                                                          topRight:
-                                                                              Radius.circular(10),
-                                                                          bottomLeft:
-                                                                              Radius.circular(10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10),
-                                                                        ),
-                                                                        // border: Border.all(
-                                                                        //     color: Colors.grey, width: 1),
+                                                                              'mmmmm ${unitSer.toString()} $unitName');
+                                                                          SharedPreferences
+                                                                              preferences =
+                                                                              await SharedPreferences.getInstance();
+                                                                          String?
+                                                                              ren =
+                                                                              preferences.getString('renTalSer');
+                                                                          String?
+                                                                              ser_user =
+                                                                              preferences.getString('ser');
+                                                                          var vser =
+                                                                              expModels[index].ser;
+
+                                                                          String
+                                                                              url =
+                                                                              '${MyConstant().domain}/UpC_exp_unit.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&unitSer=$unitSer&unitName=$unitName';
+
+                                                                          try {
+                                                                            var response =
+                                                                                await http.get(Uri.parse(url));
+
+                                                                            var result =
+                                                                                json.decode(response.body);
+                                                                            print(result);
+                                                                            if (result.toString() ==
+                                                                                'true') {
+                                                                              Insert_log.Insert_logs('ตั้งค่า', 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ความถี่$unitName ${expModels[index].expname})');
+                                                                              setState(() {
+                                                                                read_GC_Exp();
+                                                                              });
+                                                                            } else {}
+                                                                          } catch (e) {}
+                                                                        },
                                                                       ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 3,
+                                                              child: expModels[
+                                                                              index]
+                                                                          .exptser !=
+                                                                      '3'
+                                                                  ? Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Container(
+                                                                        width:
+                                                                            150,
+                                                                        decoration:
+                                                                            const BoxDecoration(
+                                                                          // color: Colors
+                                                                          //     .red,
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            topRight:
+                                                                                Radius.circular(10),
+                                                                            bottomLeft:
+                                                                                Radius.circular(10),
+                                                                            bottomRight:
+                                                                                Radius.circular(10),
+                                                                          ),
+                                                                          // border: Border.all(
+                                                                          //     color: Colors.grey, width: 1),
+                                                                        ),
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                    String? ren = preferences.getString('renTalSer');
+                                                                                    String? ser_user = preferences.getString('ser');
+                                                                                    var vser = expModels[index].ser;
+
+                                                                                    var autox = expModels[index].cal_auto == '1' ? '0' : '1';
+                                                                                    String url = '${MyConstant().domain}/UpC_exp_Auto_cal.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&autox=$autox';
+
+                                                                                    try {
+                                                                                      var response = await http.get(Uri.parse(url));
+
+                                                                                      var result = json.decode(response.body);
+                                                                                      print(result);
+                                                                                      if (result.toString() == 'true') {
+                                                                                        Insert_log.Insert_logs('ตั้งค่า', (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดดึงราคา ${expModels[index].expname})' : 'การเช่า>>${expTypeModels[Ser_Sub].bills}(เปิดดึงราคา ${expModels[index].expname})');
+                                                                                        setState(() {
+                                                                                          read_GC_Exp();
+                                                                                        });
+                                                                                      } else {}
+                                                                                    } catch (e) {}
+                                                                                  },
+                                                                                  child: expModels[index].cal_auto == '1'
+                                                                                      ? const Icon(
+                                                                                          Icons.toggle_on,
+                                                                                          color: Colors.green,
+                                                                                          size: 50.0,
+                                                                                        )
+                                                                                      : const Icon(
+                                                                                          Icons.toggle_off,
+                                                                                          size: 50.0,
+                                                                                        )),
+                                                                            ),
+                                                                            Expanded(
+                                                                                child: expModels[index].cal_auto == '1'
+                                                                                    ? TextFormField(
+                                                                                        textAlign: TextAlign.right,
+                                                                                        initialValue: expModels[index].pri_auto,
+                                                                                        onFieldSubmitted: (value) async {
+                                                                                          SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                          String? ren = preferences.getString('renTalSer');
+                                                                                          String? ser_user = preferences.getString('ser');
+                                                                                          var vser = expModels[index].ser;
+                                                                                          String url = '${MyConstant().domain}/UpC_pri_auto.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                                          try {
+                                                                                            var response = await http.get(Uri.parse(url));
+
+                                                                                            var result = json.decode(response.body);
+                                                                                            print(result);
+                                                                                            Insert_log.Insert_logs('ตั้งค่า', 'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขราคา ${expModels[index].expname})${expModels[index].pri_auto}-->$value');
+                                                                                            if (result.toString() == 'true') {
+                                                                                              setState(() {
+                                                                                                read_GC_Exp();
+                                                                                              });
+                                                                                            } else {}
+                                                                                          } catch (e) {}
+                                                                                        },
+                                                                                        // maxLength: 13,
+                                                                                        cursorColor: Colors.green,
+                                                                                        decoration: InputDecoration(
+                                                                                          fillColor: Colors.white.withOpacity(0.05),
+                                                                                          filled: true,
+                                                                                          // prefixIcon:
+                                                                                          //     const Icon(Icons.key, color: Colors.black),
+                                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                          focusedBorder: const OutlineInputBorder(
+                                                                                            borderRadius: BorderRadius.only(
+                                                                                              topRight: Radius.circular(15),
+                                                                                              topLeft: Radius.circular(15),
+                                                                                              bottomRight: Radius.circular(15),
+                                                                                              bottomLeft: Radius.circular(15),
+                                                                                            ),
+                                                                                            borderSide: BorderSide(
+                                                                                              width: 1,
+                                                                                              color: Colors.grey,
+                                                                                            ),
+                                                                                          ),
+                                                                                          enabledBorder: const OutlineInputBorder(
+                                                                                            borderRadius: BorderRadius.only(
+                                                                                              topRight: Radius.circular(15),
+                                                                                              topLeft: Radius.circular(15),
+                                                                                              bottomRight: Radius.circular(15),
+                                                                                              bottomLeft: Radius.circular(15),
+                                                                                            ),
+                                                                                            borderSide: BorderSide(
+                                                                                              width: 1,
+                                                                                              color: Colors.grey,
+                                                                                            ),
+                                                                                          ),
+                                                                                          // labelText: 'PASSWOED',
+                                                                                          labelStyle: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T),
+                                                                                        ),
+                                                                                        inputFormatters: <TextInputFormatter>[
+                                                                                          // for below version 2 use this
+                                                                                          FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                          // for version 2 and greater youcan also use this
+                                                                                          // FilteringTextInputFormatter
+                                                                                          //     .digitsOnly
+                                                                                        ],
+                                                                                      )
+                                                                                    : const SizedBox())
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  : Padding(
                                                                       padding:
                                                                           const EdgeInsets.all(
                                                                               8.0),
@@ -3648,7 +3787,7 @@ class _RentalState extends State<Rental> {
                                                                                     var result = json.decode(response.body);
                                                                                     print(result);
                                                                                     if (result.toString() == 'true') {
-                                                                                      Insert_log.Insert_logs('ตั้งค่า', (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดดึงราคา ${expModels[index].expname})' : 'การเช่า>>${expTypeModels[Ser_Sub].bills}(เปิดดึงราคา ${expModels[index].expname})');
+                                                                                      Insert_log.Insert_logs('ตั้งค่า', (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดดึงราคา ${expModels[index].expname})' : 'การเช่า>>${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}(เปิดดึงราคา ${expModels[index].expname})');
                                                                                       setState(() {
                                                                                         read_GC_Exp();
                                                                                       });
@@ -3669,6 +3808,7 @@ class _RentalState extends State<Rental> {
                                                                           Expanded(
                                                                               child: expModels[index].cal_auto == '1'
                                                                                   ? TextFormField(
+                                                                                      textAlign: TextAlign.right,
                                                                                       initialValue: expModels[index].pri_auto,
                                                                                       onFieldSubmitted: (value) async {
                                                                                         SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -3735,27 +3875,18 @@ class _RentalState extends State<Rental> {
                                                                                         //     .digitsOnly
                                                                                       ],
                                                                                     )
-                                                                                  : const SizedBox())
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                : Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          child: GestureDetector(
-                                                                              onTap: () async {
+                                                                                  : const SizedBox()),
+                                                                          Expanded(
+                                                                            child:
+                                                                                TextFormField(
+                                                                              textAlign: TextAlign.right,
+                                                                              initialValue: expModels[index].pri,
+                                                                              onFieldSubmitted: (value) async {
                                                                                 SharedPreferences preferences = await SharedPreferences.getInstance();
                                                                                 String? ren = preferences.getString('renTalSer');
                                                                                 String? ser_user = preferences.getString('ser');
                                                                                 var vser = expModels[index].ser;
-
-                                                                                var autox = expModels[index].cal_auto == '1' ? '0' : '1';
-                                                                                String url = '${MyConstant().domain}/UpC_exp_Auto_cal.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&autox=$autox';
+                                                                                String url = '${MyConstant().domain}/UpC_vat_meter.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
                                                                                 try {
                                                                                   var response = await http.get(Uri.parse(url));
@@ -3763,436 +3894,172 @@ class _RentalState extends State<Rental> {
                                                                                   var result = json.decode(response.body);
                                                                                   print(result);
                                                                                   if (result.toString() == 'true') {
-                                                                                    Insert_log.Insert_logs('ตั้งค่า', (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดดึงราคา ${expModels[index].expname})' : 'การเช่า>>${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}(เปิดดึงราคา ${expModels[index].expname})');
                                                                                     setState(() {
                                                                                       read_GC_Exp();
                                                                                     });
                                                                                   } else {}
                                                                                 } catch (e) {}
                                                                               },
-                                                                              child: expModels[index].cal_auto == '1'
-                                                                                  ? const Icon(
-                                                                                      Icons.toggle_on,
-                                                                                      color: Colors.green,
-                                                                                      size: 50.0,
-                                                                                    )
-                                                                                  : const Icon(
-                                                                                      Icons.toggle_off,
-                                                                                      size: 50.0,
-                                                                                    )),
-                                                                        ),
-                                                                        Expanded(
-                                                                            child: expModels[index].cal_auto == '1'
-                                                                                ? TextFormField(
-                                                                                    initialValue: expModels[index].pri_auto,
-                                                                                    onFieldSubmitted: (value) async {
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      String? ren = preferences.getString('renTalSer');
-                                                                                      String? ser_user = preferences.getString('ser');
-                                                                                      var vser = expModels[index].ser;
-                                                                                      String url = '${MyConstant().domain}/UpC_pri_auto.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                                      try {
-                                                                                        var response = await http.get(Uri.parse(url));
-
-                                                                                        var result = json.decode(response.body);
-                                                                                        print(result);
-                                                                                        if (result.toString() == 'true') {
-                                                                                          setState(() {
-                                                                                            read_GC_Exp();
-                                                                                          });
-                                                                                        } else {}
-                                                                                      } catch (e) {}
-                                                                                    },
-                                                                                    // maxLength: 13,
-                                                                                    cursorColor: Colors.green,
-                                                                                    decoration: InputDecoration(
-                                                                                      fillColor: Colors.white.withOpacity(0.05),
-                                                                                      filled: true,
-                                                                                      // prefixIcon:
-                                                                                      //     const Icon(Icons.key, color: Colors.black),
-                                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                      focusedBorder: const OutlineInputBorder(
-                                                                                        borderRadius: BorderRadius.only(
-                                                                                          topRight: Radius.circular(15),
-                                                                                          topLeft: Radius.circular(15),
-                                                                                          bottomRight: Radius.circular(15),
-                                                                                          bottomLeft: Radius.circular(15),
-                                                                                        ),
-                                                                                        borderSide: BorderSide(
-                                                                                          width: 1,
-                                                                                          color: Colors.grey,
-                                                                                        ),
-                                                                                      ),
-                                                                                      enabledBorder: const OutlineInputBorder(
-                                                                                        borderRadius: BorderRadius.only(
-                                                                                          topRight: Radius.circular(15),
-                                                                                          topLeft: Radius.circular(15),
-                                                                                          bottomRight: Radius.circular(15),
-                                                                                          bottomLeft: Radius.circular(15),
-                                                                                        ),
-                                                                                        borderSide: BorderSide(
-                                                                                          width: 1,
-                                                                                          color: Colors.grey,
-                                                                                        ),
-                                                                                      ),
-                                                                                      // labelText: 'PASSWOED',
-                                                                                      labelStyle: const TextStyle(
-                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                          // fontWeight: FontWeight.bold,
-                                                                                          fontFamily: Font_.Fonts_T),
-                                                                                    ),
-                                                                                    inputFormatters: <TextInputFormatter>[
-                                                                                      // for below version 2 use this
-                                                                                      FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
-                                                                                      // for version 2 and greater youcan also use this
-                                                                                      // FilteringTextInputFormatter
-                                                                                      //     .digitsOnly
-                                                                                    ],
-                                                                                  )
-                                                                                : const SizedBox()),
-                                                                        Expanded(
-                                                                          child:
-                                                                              TextFormField(
-                                                                            initialValue:
-                                                                                expModels[index].pri,
-                                                                            onFieldSubmitted:
-                                                                                (value) async {
-                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                              String? ren = preferences.getString('renTalSer');
-                                                                              String? ser_user = preferences.getString('ser');
-                                                                              var vser = expModels[index].ser;
-                                                                              String url = '${MyConstant().domain}/UpC_vat_meter.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                              try {
-                                                                                var response = await http.get(Uri.parse(url));
-
-                                                                                var result = json.decode(response.body);
-                                                                                print(result);
-                                                                                if (result.toString() == 'true') {
-                                                                                  setState(() {
-                                                                                    read_GC_Exp();
-                                                                                  });
-                                                                                } else {}
-                                                                              } catch (e) {}
-                                                                            },
-                                                                            // maxLength: 13,
-                                                                            cursorColor:
-                                                                                Colors.green,
-                                                                            decoration:
-                                                                                InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.05),
-                                                                              filled: true,
-                                                                              // prefixIcon:
-                                                                              //     const Icon(Icons.key, color: Colors.black),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
+                                                                              // maxLength: 13,
+                                                                              cursorColor: Colors.green,
+                                                                              decoration: InputDecoration(
+                                                                                fillColor: Colors.white.withOpacity(0.05),
+                                                                                filled: true,
+                                                                                // prefixIcon:
+                                                                                //     const Icon(Icons.key, color: Colors.black),
+                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                focusedBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
                                                                                 ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
+                                                                                enabledBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
                                                                                 ),
+                                                                                // labelText: 'PASSWOED',
+                                                                                labelStyle: const TextStyle(
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
                                                                               ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              // labelText: 'PASSWOED',
-                                                                              labelStyle: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
+                                                                              inputFormatters: <TextInputFormatter>[
+                                                                                // for below version 2 use this
+                                                                                FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                // for version 2 and greater youcan also use this
+                                                                                // FilteringTextInputFormatter
+                                                                                //     .digitsOnly
+                                                                              ],
                                                                             ),
-                                                                            inputFormatters: <TextInputFormatter>[
-                                                                              // for below version 2 use this
-                                                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
-                                                                              // for version 2 and greater youcan also use this
-                                                                              // FilteringTextInputFormatter
-                                                                              //     .digitsOnly
-                                                                            ],
                                                                           ),
-                                                                        ),
-                                                                      ],
+                                                                        ],
+                                                                      ),
                                                                     ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child:
+                                                                  DropdownButtonFormField2(
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  //Add isDense true and zero Padding.
+                                                                  //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                  isDense: true,
+                                                                  contentPadding:
+                                                                      EdgeInsets
+                                                                          .zero,
+                                                                  border:
+                                                                      OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
                                                                   ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child:
-                                                                DropdownButtonFormField2(
-                                                              decoration:
-                                                                  InputDecoration(
-                                                                //Add isDense true and zero Padding.
-                                                                //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                isDense: true,
-                                                                contentPadding:
-                                                                    EdgeInsets
-                                                                        .zero,
-                                                                border:
-                                                                    OutlineInputBorder(
+                                                                  //Add more decoration as you want here
+                                                                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                ),
+                                                                isExpanded:
+                                                                    true,
+                                                                // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                hint: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      expModels[
+                                                                              index]
+                                                                          .sday
+                                                                          .toString(),
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons
+                                                                      .arrow_drop_down,
+                                                                  color: Colors
+                                                                      .black45,
+                                                                ),
+                                                                iconSize: 30,
+                                                                buttonHeight:
+                                                                    60,
+                                                                buttonPadding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            10,
+                                                                        right:
+                                                                            10),
+                                                                dropdownDecoration:
+                                                                    BoxDecoration(
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
                                                                               15),
                                                                 ),
-                                                                //Add more decoration as you want here
-                                                                //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                              ),
-                                                              isExpanded: true,
-                                                              // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                              hint: Row(
-                                                                children: [
-                                                                  Text(
-                                                                    expModels[
-                                                                            index]
-                                                                        .sday
-                                                                        .toString(),
-                                                                    style: const TextStyle(
-                                                                        fontSize: 14,
-                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily: Font_.Fonts_T),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              icon: const Icon(
-                                                                Icons
-                                                                    .arrow_drop_down,
-                                                                color: Colors
-                                                                    .black45,
-                                                              ),
-                                                              iconSize: 30,
-                                                              buttonHeight: 60,
-                                                              buttonPadding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      left: 10,
-                                                                      right:
-                                                                          10),
-                                                              dropdownDecoration:
-                                                                  BoxDecoration(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            15),
-                                                              ),
-                                                              items: dateselect
-                                                                  .map((item) =>
-                                                                      DropdownMenuItem<
-                                                                          String>(
-                                                                        value:
+                                                                items: dateselect
+                                                                    .map((item) => DropdownMenuItem<String>(
+                                                                          value:
+                                                                              item,
+                                                                          child:
+                                                                              Text(
                                                                             item,
-                                                                        child:
-                                                                            Text(
-                                                                          item,
-                                                                          style: const TextStyle(
-                                                                              fontSize: 14,
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              // fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ))
-                                                                  .toList(),
-                                                              onChanged:
-                                                                  (value) async {
-                                                                // var zones = value!
-                                                                //     .indexOf(
-                                                                //         ':');
-                                                                // var vat_ser = value
-                                                                //     .substring(
-                                                                //         0,
-                                                                //         zones);
-                                                                // var vat_name =
-                                                                //     value.substring(
-                                                                //         zones +
-                                                                //             1);
-                                                                print(
-                                                                    'mmmmm ${value.toString()}');
-
-                                                                String? ldatex =
-                                                                    DateFormat(
-                                                                            'yyyy-MM')
-                                                                        .format(
-                                                                            DateTime.now());
-
-                                                                // String start =
-                                                                //     DateFormat(
-                                                                //             'dd')
-                                                                //         .format(
-                                                                //             newDate);
-
-                                                                String EtDay =
-                                                                    '$value';
-
-                                                                SharedPreferences
-                                                                    preferences =
-                                                                    await SharedPreferences
-                                                                        .getInstance();
-                                                                String? ren =
-                                                                    preferences
-                                                                        .getString(
-                                                                            'renTalSer');
-                                                                String?
-                                                                    ser_user =
-                                                                    preferences
-                                                                        .getString(
-                                                                            'ser');
-                                                                var eser =
-                                                                    expModels[
-                                                                            index]
-                                                                        .ser;
-                                                                String url =
-                                                                    '${MyConstant().domain}/UpC_exp_date.php?isAdd=true&ren=$ren&eser=$eser&end=$EtDay&ser_user=$ser_user';
-
-                                                                try {
-                                                                  var response =
-                                                                      await http.get(
-                                                                          Uri.parse(
-                                                                              url));
-
-                                                                  var result =
-                                                                      json.decode(
-                                                                          response
-                                                                              .body);
-                                                                  print(result);
-                                                                  if (result
-                                                                          .toString() ==
-                                                                      'true') {
-                                                                    Insert_log.Insert_logs(
-                                                                        'ตั้งค่า',
-                                                                        'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขวันเริ่มงวด ${expModels[index].expname}เป็นวันที่$EtDay)');
-                                                                    setState(
-                                                                        () {
-                                                                      read_GC_Exp();
-                                                                    });
-                                                                  } else {}
-                                                                } catch (e) {}
-                                                              },
-                                                              onSaved: (value) {
-                                                                // selectedValue = value.toString();
-                                                              },
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  DropdownButtonFormField2(
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  //Add isDense true and zero Padding.
-                                                                  //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                  isDense: true,
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  border:
-                                                                      OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            15),
-                                                                  ),
-                                                                  //Add more decoration as you want here
-                                                                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                ),
-                                                                isExpanded:
-                                                                    true,
-                                                                // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                hint: Row(
-                                                                  children: [
-                                                                    for (int i =
-                                                                            0;
-                                                                        i <
-                                                                            vatModels
-                                                                                .length;
-                                                                        i++)
-                                                                      expModels[index].vat !=
-                                                                              vatModels[i].ser
-                                                                          ? const SizedBox()
-                                                                          : SizedBox(
-                                                                              child: Text(
-                                                                                vatModels[i].vat.toString(),
-                                                                                style: const TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
-                                                                            ),
-                                                                  ],
-                                                                ),
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .arrow_drop_down,
-                                                                  color: Colors
-                                                                      .black45,
-                                                                ),
-                                                                iconSize: 30,
-                                                                buttonHeight:
-                                                                    60,
-                                                                buttonPadding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10,
-                                                                        right:
-                                                                            10),
-                                                                dropdownDecoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              15),
-                                                                ),
-                                                                items:
-                                                                    vatSeModels
-                                                                        .map((item) =>
-                                                                            DropdownMenuItem<String>(
-                                                                              value: '${item.ser}:${item.vat}',
-                                                                              child: SizedBox(
-                                                                                child: Text(
-                                                                                  item.vat!,
-                                                                                  style: const TextStyle(
-                                                                                      fontSize: 14,
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T),
-                                                                                ),
-                                                                              ),
-                                                                            ))
-                                                                        .toList(),
+                                                                            style: const TextStyle(
+                                                                                fontSize: 14,
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ))
+                                                                    .toList(),
                                                                 onChanged:
                                                                     (value) async {
-                                                                  var zones = value!
-                                                                      .indexOf(
-                                                                          ':');
-                                                                  var vat_ser =
-                                                                      value.substring(
-                                                                          0,
-                                                                          zones);
-                                                                  var vat_name =
-                                                                      value.substring(
-                                                                          zones +
-                                                                              1);
+                                                                  // var zones = value!
+                                                                  //     .indexOf(
+                                                                  //         ':');
+                                                                  // var vat_ser = value
+                                                                  //     .substring(
+                                                                  //         0,
+                                                                  //         zones);
+                                                                  // var vat_name =
+                                                                  //     value.substring(
+                                                                  //         zones +
+                                                                  //             1);
                                                                   print(
-                                                                      'mmmmm ${vat_ser.toString()} $vat_name');
+                                                                      'mmmmm ${value.toString()}');
+
+                                                                  String?
+                                                                      ldatex =
+                                                                      DateFormat(
+                                                                              'yyyy-MM')
+                                                                          .format(
+                                                                              DateTime.now());
+
+                                                                  // String start =
+                                                                  //     DateFormat(
+                                                                  //             'dd')
+                                                                  //         .format(
+                                                                  //             newDate);
+
+                                                                  String EtDay =
+                                                                      '$value';
 
                                                                   SharedPreferences
                                                                       preferences =
@@ -4207,12 +4074,12 @@ class _RentalState extends State<Rental> {
                                                                       preferences
                                                                           .getString(
                                                                               'ser');
-                                                                  var vser =
+                                                                  var eser =
                                                                       expModels[
                                                                               index]
                                                                           .ser;
                                                                   String url =
-                                                                      '${MyConstant().domain}/UpC_vat_exp.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
+                                                                      '${MyConstant().domain}/UpC_exp_date.php?isAdd=true&ren=$ren&eser=$eser&end=$EtDay&ser_user=$ser_user';
 
                                                                   try {
                                                                     var response =
@@ -4229,7 +4096,7 @@ class _RentalState extends State<Rental> {
                                                                         'true') {
                                                                       Insert_log.Insert_logs(
                                                                           'ตั้งค่า',
-                                                                          'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขVat ${expModels[index].expname} เป็น$vat_name)');
+                                                                          'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขวันเริ่มงวด ${expModels[index].expname}เป็นวันที่$EtDay)');
                                                                       setState(
                                                                           () {
                                                                         read_GC_Exp();
@@ -4243,313 +4110,112 @@ class _RentalState extends State<Rental> {
                                                                 },
                                                               ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  DropdownButtonFormField2(
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  //Add isDense true and zero Padding.
-                                                                  //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                  isDense: true,
-                                                                  contentPadding:
-                                                                      EdgeInsets
-                                                                          .zero,
-                                                                  border:
-                                                                      OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            15),
-                                                                  ),
-                                                                  //Add more decoration as you want here
-                                                                  //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                ),
-                                                                isExpanded:
-                                                                    true,
-                                                                // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                hint: Row(
-                                                                  children: [
-                                                                    for (int i =
-                                                                            0;
-                                                                        i <
-                                                                            whtModels
-                                                                                .length;
-                                                                        i++)
-                                                                      expModels[index].wht !=
-                                                                              whtModels[i].ser
-                                                                          ? const SizedBox()
-                                                                          : SizedBox(
-                                                                              child: Text(
-                                                                                whtModels[i].wht.toString(),
-                                                                                style: const TextStyle(
-                                                                                    fontSize: 14,
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
-                                                                            ),
-                                                                  ],
-                                                                ),
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons
-                                                                      .arrow_drop_down,
-                                                                  color: Colors
-                                                                      .black45,
-                                                                ),
-                                                                iconSize: 30,
-                                                                buttonHeight:
-                                                                    60,
-                                                                buttonPadding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10,
-                                                                        right:
-                                                                            10),
-                                                                dropdownDecoration:
-                                                                    BoxDecoration(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              15),
-                                                                ),
-                                                                items:
-                                                                    whtSeModels
-                                                                        .map((item) =>
-                                                                            DropdownMenuItem<String>(
-                                                                              value: '${item.ser}:${item.wht}',
-                                                                              child: SizedBox(
-                                                                                child: Text(
-                                                                                  item.wht!,
-                                                                                  style: const TextStyle(
-                                                                                      fontSize: 14,
-                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                      // fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T),
-                                                                                ),
-                                                                              ),
-                                                                            ))
-                                                                        .toList(),
-                                                                onChanged:
-                                                                    (value) async {
-                                                                  var zones = value!
-                                                                      .indexOf(
-                                                                          ':');
-                                                                  var vat_ser =
-                                                                      value.substring(
-                                                                          0,
-                                                                          zones);
-                                                                  var vat_name =
-                                                                      value.substring(
-                                                                          zones +
-                                                                              1);
-                                                                  print(
-                                                                      'mmmmm ${vat_ser.toString()} $vat_name');
-
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
-                                                                      expModels[
-                                                                              index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_wht_exp.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
-
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
-
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      Insert_log.Insert_logs(
-                                                                          'ตั้งค่า',
-                                                                          'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขWHT ${expModels[index].expname} เป็น$vat_name)');
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                onSaved:
-                                                                    (value) {
-                                                                  // selectedValue = value.toString();
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  // color: Colors
-                                                                  //     .red,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                  ),
-                                                                  // border: Border.all(
-                                                                  //     color: Colors.grey, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: GestureDetector(
-                                                                    onTap: () async {
-                                                                      SharedPreferences
-                                                                          preferences =
-                                                                          await SharedPreferences
-                                                                              .getInstance();
-                                                                      String?
-                                                                          ren =
-                                                                          preferences
-                                                                              .getString('renTalSer');
-                                                                      String?
-                                                                          ser_user =
-                                                                          preferences
-                                                                              .getString('ser');
-                                                                      var vser =
-                                                                          expModels[index]
-                                                                              .ser;
-
-                                                                      var autox = expModels[index].auto ==
-                                                                              '1'
-                                                                          ? '0'
-                                                                          : '1';
-                                                                      String
-                                                                          url =
-                                                                          '${MyConstant().domain}/UpC_exp_Auto.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&autox=$autox';
-
-                                                                      try {
-                                                                        var response =
-                                                                            await http.get(Uri.parse(url));
-
-                                                                        var result =
-                                                                            json.decode(response.body);
-                                                                        print(
-                                                                            result);
-                                                                        if (result.toString() ==
-                                                                            'true') {
-                                                                          Insert_log.Insert_logs(
-                                                                              'ตั้งค่า',
-                                                                              (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดAuto ${expModels[index].expname})' : 'การเช่า>>${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}(เปิดAuto ${expModels[index].expname})');
-                                                                          setState(
-                                                                              () {
-                                                                            read_GC_Exp();
-                                                                          });
-                                                                        } else {}
-                                                                      } catch (e) {}
-                                                                    },
-                                                                    child: expModels[index].auto == '1'
-                                                                        ? const Icon(
-                                                                            Icons.toggle_on,
-                                                                            color:
-                                                                                Colors.green,
-                                                                            size:
-                                                                                50.0,
-                                                                          )
-                                                                        : const Icon(
-                                                                            Icons.toggle_off,
-                                                                            size:
-                                                                                50.0,
-                                                                          )
-                                                                    //     const Text(
-                                                                    //   'X',
-                                                                    //   textAlign:
-                                                                    //       TextAlign
-                                                                    //           .center,
-                                                                    //   style: TextStyle(
-                                                                    //       color: SettingScreen_Color
-                                                                    //           .Colors_Text2_,
-                                                                    //       fontFamily:
-                                                                    //           Font_.Fonts_T),
-                                                                    // ),
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                  ),
-                                                                  // border: Border.all(
-                                                                  //     color: Colors.grey, width: 1),
-                                                                ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .all(
                                                                         8.0),
                                                                 child:
-                                                                    GestureDetector(
-                                                                  onTap:
-                                                                      () async {
+                                                                    DropdownButtonFormField2(
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    //Add isDense true and zero Padding.
+                                                                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                    isDense:
+                                                                        true,
+                                                                    contentPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    //Add more decoration as you want here
+                                                                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                  ),
+                                                                  isExpanded:
+                                                                      true,
+                                                                  // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                  hint: Row(
+                                                                    children: [
+                                                                      for (int i =
+                                                                              0;
+                                                                          i < vatModels.length;
+                                                                          i++)
+                                                                        expModels[index].vat != vatModels[i].ser
+                                                                            ? const SizedBox()
+                                                                            : SizedBox(
+                                                                                child: Text(
+                                                                                  vatModels[i].vat.toString(),
+                                                                                  style: const TextStyle(
+                                                                                      fontSize: 14,
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ),
+                                                                    ],
+                                                                  ),
+                                                                  icon:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .arrow_drop_down,
+                                                                    color: Colors
+                                                                        .black45,
+                                                                  ),
+                                                                  iconSize: 30,
+                                                                  buttonHeight:
+                                                                      60,
+                                                                  buttonPadding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              10,
+                                                                          right:
+                                                                              10),
+                                                                  dropdownDecoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  items: vatSeModels
+                                                                      .map((item) => DropdownMenuItem<String>(
+                                                                            value:
+                                                                                '${item.ser}:${item.vat}',
+                                                                            child:
+                                                                                SizedBox(
+                                                                              child: Text(
+                                                                                item.vat!,
+                                                                                style: const TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                      .toList(),
+                                                                  onChanged:
+                                                                      (value) async {
+                                                                    var zones = value!
+                                                                        .indexOf(
+                                                                            ':');
+                                                                    var vat_ser =
+                                                                        value.substring(
+                                                                            0,
+                                                                            zones);
+                                                                    var vat_name =
+                                                                        value.substring(
+                                                                            zones +
+                                                                                1);
+                                                                    print(
+                                                                        'mmmmm ${vat_ser.toString()} $vat_name');
+
                                                                     SharedPreferences
                                                                         preferences =
                                                                         await SharedPreferences
@@ -4566,7 +4232,7 @@ class _RentalState extends State<Rental> {
                                                                         expModels[index]
                                                                             .ser;
                                                                     String url =
-                                                                        '${MyConstant().domain}/DeC_exp.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
+                                                                        '${MyConstant().domain}/UpC_vat_exp.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
 
                                                                     try {
                                                                       var response =
@@ -4583,7 +4249,7 @@ class _RentalState extends State<Rental> {
                                                                           'true') {
                                                                         Insert_log.Insert_logs(
                                                                             'ตั้งค่า',
-                                                                            'การเช่า>>${expTypeModels[Ser_Sub].bills}(ลบ ${expModels[index].expname})');
+                                                                            'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขVat ${expModels[index].expname} เป็น$vat_name)');
                                                                         setState(
                                                                             () {
                                                                           read_GC_Exp();
@@ -4591,23 +4257,367 @@ class _RentalState extends State<Rental> {
                                                                       } else {}
                                                                     } catch (e) {}
                                                                   },
+                                                                  onSaved:
+                                                                      (value) {
+                                                                    // selectedValue = value.toString();
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    DropdownButtonFormField2(
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    //Add isDense true and zero Padding.
+                                                                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                    isDense:
+                                                                        true,
+                                                                    contentPadding:
+                                                                        EdgeInsets
+                                                                            .zero,
+                                                                    border:
+                                                                        OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              15),
+                                                                    ),
+                                                                    //Add more decoration as you want here
+                                                                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                  ),
+                                                                  isExpanded:
+                                                                      true,
+                                                                  // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                  hint: Row(
+                                                                    children: [
+                                                                      for (int i =
+                                                                              0;
+                                                                          i < whtModels.length;
+                                                                          i++)
+                                                                        expModels[index].wht != whtModels[i].ser
+                                                                            ? const SizedBox()
+                                                                            : SizedBox(
+                                                                                child: Text(
+                                                                                  whtModels[i].wht.toString(),
+                                                                                  style: const TextStyle(
+                                                                                      fontSize: 14,
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ),
+                                                                    ],
+                                                                  ),
+                                                                  icon:
+                                                                      const Icon(
+                                                                    Icons
+                                                                        .arrow_drop_down,
+                                                                    color: Colors
+                                                                        .black45,
+                                                                  ),
+                                                                  iconSize: 30,
+                                                                  buttonHeight:
+                                                                      60,
+                                                                  buttonPadding:
+                                                                      const EdgeInsets
+                                                                              .only(
+                                                                          left:
+                                                                              10,
+                                                                          right:
+                                                                              10),
+                                                                  dropdownDecoration:
+                                                                      BoxDecoration(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15),
+                                                                  ),
+                                                                  items: whtSeModels
+                                                                      .map((item) => DropdownMenuItem<String>(
+                                                                            value:
+                                                                                '${item.ser}:${item.wht}',
+                                                                            child:
+                                                                                SizedBox(
+                                                                              child: Text(
+                                                                                item.wht!,
+                                                                                style: const TextStyle(
+                                                                                    fontSize: 14,
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                      .toList(),
+                                                                  onChanged:
+                                                                      (value) async {
+                                                                    var zones = value!
+                                                                        .indexOf(
+                                                                            ':');
+                                                                    var vat_ser =
+                                                                        value.substring(
+                                                                            0,
+                                                                            zones);
+                                                                    var vat_name =
+                                                                        value.substring(
+                                                                            zones +
+                                                                                1);
+                                                                    print(
+                                                                        'mmmmm ${vat_ser.toString()} $vat_name');
+
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_wht_exp.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user&vat_ser=$vat_ser&vat_name=$vat_name';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        Insert_log.Insert_logs(
+                                                                            'ตั้งค่า',
+                                                                            'การเช่า>>${expTypeModels[Ser_Sub].bills}(แก้ไขWHT ${expModels[index].expname} เป็น$vat_name)');
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  onSaved:
+                                                                      (value) {
+                                                                    // selectedValue = value.toString();
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    // color: Colors
+                                                                    //     .red,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: GestureDetector(
+                                                                      onTap: () async {
+                                                                        SharedPreferences
+                                                                            preferences =
+                                                                            await SharedPreferences.getInstance();
+                                                                        String?
+                                                                            ren =
+                                                                            preferences.getString('renTalSer');
+                                                                        String?
+                                                                            ser_user =
+                                                                            preferences.getString('ser');
+                                                                        var vser =
+                                                                            expModels[index].ser;
+
+                                                                        var autox = expModels[index].auto ==
+                                                                                '1'
+                                                                            ? '0'
+                                                                            : '1';
+                                                                        String
+                                                                            url =
+                                                                            '${MyConstant().domain}/UpC_exp_Auto.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user&autox=$autox';
+
+                                                                        try {
+                                                                          var response =
+                                                                              await http.get(Uri.parse(url));
+
+                                                                          var result =
+                                                                              json.decode(response.body);
+                                                                          print(
+                                                                              result);
+                                                                          if (result.toString() ==
+                                                                              'true') {
+                                                                            Insert_log.Insert_logs('ตั้งค่า',
+                                                                                (autox == '0') ? 'การเช่า>>${expTypeModels[Ser_Sub].bills}(ปิดAuto ${expModels[index].expname})' : 'การเช่า>>${Ser_Sub + 1}.${expTypeModels[Ser_Sub].bills}(เปิดAuto ${expModels[index].expname})');
+                                                                            setState(() {
+                                                                              read_GC_Exp();
+                                                                            });
+                                                                          } else {}
+                                                                        } catch (e) {}
+                                                                      },
+                                                                      child: expModels[index].auto == '1'
+                                                                          ? const Icon(
+                                                                              Icons.toggle_on,
+                                                                              color: Colors.green,
+                                                                              size: 50.0,
+                                                                            )
+                                                                          : const Icon(
+                                                                              Icons.toggle_off,
+                                                                              size: 50.0,
+                                                                            )
+                                                                      //     const Text(
+                                                                      //   'X',
+                                                                      //   textAlign:
+                                                                      //       TextAlign
+                                                                      //           .center,
+                                                                      //   style: TextStyle(
+                                                                      //       color: SettingScreen_Color
+                                                                      //           .Colors_Text2_,
+                                                                      //       fontFamily:
+                                                                      //           Font_.Fonts_T),
+                                                                      // ),
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
                                                                   child:
-                                                                      const Text(
-                                                                    'X',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
+                                                                      GestureDetector(
+                                                                    onTap:
+                                                                        () async {
+                                                                      SharedPreferences
+                                                                          preferences =
+                                                                          await SharedPreferences
+                                                                              .getInstance();
+                                                                      String?
+                                                                          ren =
+                                                                          preferences
+                                                                              .getString('renTalSer');
+                                                                      String?
+                                                                          ser_user =
+                                                                          preferences
+                                                                              .getString('ser');
+                                                                      var vser =
+                                                                          expModels[index]
+                                                                              .ser;
+                                                                      String
+                                                                          url =
+                                                                          '${MyConstant().domain}/DeC_exp.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
+
+                                                                      try {
+                                                                        var response =
+                                                                            await http.get(Uri.parse(url));
+
+                                                                        var result =
+                                                                            json.decode(response.body);
+                                                                        print(
+                                                                            result);
+                                                                        if (result.toString() ==
+                                                                            'true') {
+                                                                          Insert_log.Insert_logs(
+                                                                              'ตั้งค่า',
+                                                                              'การเช่า>>${expTypeModels[Ser_Sub].bills}(ลบ ${expModels[index].expname})');
+                                                                          setState(
+                                                                              () {
+                                                                            read_GC_Exp();
+                                                                          });
+                                                                        } else {}
+                                                                      } catch (e) {}
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                      'X',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          color: SettingScreen_Color
+                                                                              .Colors_Text2_,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   );
@@ -5250,617 +5260,47 @@ class _RentalState extends State<Rental> {
                                             return expTypeModels[Ser_Sub].ser !=
                                                     expModels[index].exptser
                                                 ? const SizedBox()
-                                                : Container(
-                                                    color:
-                                                        tappedIndex_[Ser_Sub] ==
-                                                                index.toString()
-                                                            ? Colors
-                                                                .grey.shade300
-                                                            : null,
-                                                    child: ListTile(
-                                                      onTap: () {
-                                                        setState(() {
-                                                          tappedIndex_[
-                                                                  Ser_Sub] =
-                                                              index.toString();
-                                                        });
-                                                      },
-                                                      title: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                initialValue:
-                                                                    expModels[
-                                                                            index]
-                                                                        .expname,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
-                                                                      expModels[
-                                                                              index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_exp_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
-
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                initialValue:
-                                                                    expModels[
-                                                                            index]
-                                                                        .sday,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
-                                                                      expModels[
-                                                                              index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_exp_date_p.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
-
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
-                                                                ),
-                                                                inputFormatters: <
-                                                                    TextInputFormatter>[
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9]')),
-                                                                  // FilteringTextInputFormatter.digitsOnly
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                initialValue:
-                                                                    expModels[
-                                                                            index]
-                                                                        .fine_cal,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
-                                                                      expModels[
-                                                                              index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_exp_fine_late.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
-
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
-                                                                ),
-                                                                inputFormatters: <
-                                                                    TextInputFormatter>[
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                  // FilteringTextInputFormatter.digitsOnly
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                initialValue:
-                                                                    expModels[
-                                                                            index]
-                                                                        .fine_pri,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  SharedPreferences
-                                                                      preferences =
-                                                                      await SharedPreferences
-                                                                          .getInstance();
-                                                                  String? ren =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'renTalSer');
-                                                                  String?
-                                                                      ser_user =
-                                                                      preferences
-                                                                          .getString(
-                                                                              'ser');
-                                                                  var vser =
-                                                                      expModels[
-                                                                              index]
-                                                                          .ser;
-                                                                  String url =
-                                                                      '${MyConstant().domain}/UpC_exp_fine_pri.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                  try {
-                                                                    var response =
-                                                                        await http
-                                                                            .get(Uri.parse(url));
-
-                                                                    var result =
-                                                                        json.decode(
-                                                                            response.body);
-                                                                    print(
-                                                                        result);
-                                                                    if (result
-                                                                            .toString() ==
-                                                                        'true') {
-                                                                      setState(
-                                                                          () {
-                                                                        read_GC_Exp();
-                                                                      });
-                                                                    } else {}
-                                                                  } catch (e) {}
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.05),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.key, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  // labelText: 'PASSWOED',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T),
-                                                                ),
-                                                                inputFormatters: <
-                                                                    TextInputFormatter>[
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                  // FilteringTextInputFormatter.digitsOnly
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            //  Text(
-                                                            //   '5%',
-                                                            //   maxLines: 2,
-                                                            //   textAlign:
-                                                            //       TextAlign
-                                                            //           .center,
-                                                            //   style: TextStyle(
-                                                            //     color: SettingScreen_Color
-                                                            //         .Colors_Text2_,
-                                                            //     fontFamily: Font_
-                                                            //         .Fonts_T,
-                                                            //     //fontWeight: FontWeight.bold,
-                                                            //     //fontSize: 10.0
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Container(
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  // color: Colors
-                                                                  //     .red,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                  ),
-                                                                  // border: Border.all(
-                                                                  //     color: Colors.grey, width: 1),
-                                                                ),
+                                                : Material(
+                                                    color: tappedIndex_[
+                                                                Ser_Sub] ==
+                                                            index.toString()
+                                                        ? tappedIndex_Color
+                                                            .tappedIndex_Colors
+                                                        : AppbackgroundColor
+                                                            .Sub_Abg_Colors,
+                                                    child: Container(
+                                                      // color:
+                                                      //     tappedIndex_[Ser_Sub] ==
+                                                      //             index.toString()
+                                                      //         ? Colors
+                                                      //             .grey.shade300
+                                                      //         : null,
+                                                      child: ListTile(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            tappedIndex_[
+                                                                    Ser_Sub] =
+                                                                index
+                                                                    .toString();
+                                                          });
+                                                        },
+                                                        title: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 4,
+                                                              child: Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .all(
                                                                         8.0),
                                                                 child:
-                                                                    GestureDetector(
-                                                                  onTap:
-                                                                      () async {
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .expname,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
                                                                     SharedPreferences
                                                                         preferences =
                                                                         await SharedPreferences
@@ -5877,7 +5317,7 @@ class _RentalState extends State<Rental> {
                                                                         expModels[index]
                                                                             .ser;
                                                                     String url =
-                                                                        '${MyConstant().domain}/DeC_exp.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
+                                                                        '${MyConstant().domain}/UpC_exp_name.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
 
                                                                     try {
                                                                       var response =
@@ -5892,9 +5332,6 @@ class _RentalState extends State<Rental> {
                                                                       if (result
                                                                               .toString() ==
                                                                           'true') {
-                                                                        Insert_log.Insert_logs(
-                                                                            'ตั้งค่า',
-                                                                            'การเช่า>>${expTypeModels[Ser_Sub].bills}(ลบ ${expModels[index].expname})');
                                                                         setState(
                                                                             () {
                                                                           read_GC_Exp();
@@ -5902,28 +5339,574 @@ class _RentalState extends State<Rental> {
                                                                       } else {}
                                                                     } catch (e) {}
                                                                   },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .sday,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_date_p.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <
+                                                                      TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .fine_cal,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_fine_late.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <
+                                                                      TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9 .]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  initialValue:
+                                                                      expModels[
+                                                                              index]
+                                                                          .fine_pri,
+                                                                  onFieldSubmitted:
+                                                                      (value) async {
+                                                                    SharedPreferences
+                                                                        preferences =
+                                                                        await SharedPreferences
+                                                                            .getInstance();
+                                                                    String?
+                                                                        ren =
+                                                                        preferences
+                                                                            .getString('renTalSer');
+                                                                    String?
+                                                                        ser_user =
+                                                                        preferences
+                                                                            .getString('ser');
+                                                                    var vser =
+                                                                        expModels[index]
+                                                                            .ser;
+                                                                    String url =
+                                                                        '${MyConstant().domain}/UpC_exp_fine_pri.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                    try {
+                                                                      var response =
+                                                                          await http
+                                                                              .get(Uri.parse(url));
+
+                                                                      var result =
+                                                                          json.decode(
+                                                                              response.body);
+                                                                      print(
+                                                                          result);
+                                                                      if (result
+                                                                              .toString() ==
+                                                                          'true') {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_Exp();
+                                                                        });
+                                                                      } else {}
+                                                                    } catch (e) {}
+                                                                  },
+                                                                  // maxLength: 13,
+                                                                  cursorColor:
+                                                                      Colors
+                                                                          .green,
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    fillColor: Colors
+                                                                        .white
+                                                                        .withOpacity(
+                                                                            0.05),
+                                                                    filled:
+                                                                        true,
+                                                                    // prefixIcon:
+                                                                    //     const Icon(Icons.key, color: Colors.black),
+                                                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                    focusedBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                        width:
+                                                                            1,
+                                                                        color: Colors
+                                                                            .grey,
+                                                                      ),
+                                                                    ),
+                                                                    // labelText: 'PASSWOED',
+                                                                    labelStyle: const TextStyle(
+                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T),
+                                                                  ),
+                                                                  inputFormatters: <
+                                                                      TextInputFormatter>[
+                                                                    FilteringTextInputFormatter
+                                                                        .allow(RegExp(
+                                                                            r'[0-9 .]')),
+                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              //  Text(
+                                                              //   '5%',
+                                                              //   maxLines: 2,
+                                                              //   textAlign:
+                                                              //       TextAlign
+                                                              //           .center,
+                                                              //   style: TextStyle(
+                                                              //     color: SettingScreen_Color
+                                                              //         .Colors_Text2_,
+                                                              //     fontFamily: Font_
+                                                              //         .Fonts_T,
+                                                              //     //fontWeight: FontWeight.bold,
+                                                              //     //fontSize: 10.0
+                                                              //   ),
+                                                              // ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    // color: Colors
+                                                                    //     .red,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
                                                                   child:
-                                                                      const Text(
-                                                                    'X',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      //fontSize: 10.0
+                                                                      GestureDetector(
+                                                                    onTap:
+                                                                        () async {
+                                                                      SharedPreferences
+                                                                          preferences =
+                                                                          await SharedPreferences
+                                                                              .getInstance();
+                                                                      String?
+                                                                          ren =
+                                                                          preferences
+                                                                              .getString('renTalSer');
+                                                                      String?
+                                                                          ser_user =
+                                                                          preferences
+                                                                              .getString('ser');
+                                                                      var vser =
+                                                                          expModels[index]
+                                                                              .ser;
+                                                                      String
+                                                                          url =
+                                                                          '${MyConstant().domain}/DeC_exp.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
+
+                                                                      try {
+                                                                        var response =
+                                                                            await http.get(Uri.parse(url));
+
+                                                                        var result =
+                                                                            json.decode(response.body);
+                                                                        print(
+                                                                            result);
+                                                                        if (result.toString() ==
+                                                                            'true') {
+                                                                          Insert_log.Insert_logs(
+                                                                              'ตั้งค่า',
+                                                                              'การเช่า>>${expTypeModels[Ser_Sub].bills}(ลบ ${expModels[index].expname})');
+                                                                          setState(
+                                                                              () {
+                                                                            read_GC_Exp();
+                                                                          });
+                                                                        } else {}
+                                                                      } catch (e) {}
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                      'X',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: SettingScreen_Color
+                                                                            .Colors_Text2_,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                        //fontWeight: FontWeight.bold,
+                                                                        //fontSize: 10.0
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   );

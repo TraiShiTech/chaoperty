@@ -106,6 +106,13 @@ class TransReBillHistoryModel {
 
   String? ramt;
   String? ramtd;
+  String? room_number;
+  String? sname;
+  String? bno;
+  String? bank;
+  String? cname;
+  String? type;
+  String? ln;
 
   TransReBillHistoryModel({
     this.ser,
@@ -210,6 +217,13 @@ class TransReBillHistoryModel {
     this.disendbillper,
     this.ramt,
     this.ramtd,
+    this.room_number,
+    this.sname,
+    this.bno,
+    this.bank,
+    this.cname,
+    this.type,
+    this.ln,
   });
 
   TransReBillHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -316,6 +330,13 @@ class TransReBillHistoryModel {
     disendbillper = json['disendbillper'];
     ramt = json['ramt'];
     ramtd = json['ramtd'];
+    room_number = json['room_number'];
+    sname = json['sname'];
+    bno = json['bno'];
+    bank = json['bank'];
+    cname = json['cname'];
+    type = json['type'];
+    ln = json['ln'];
   }
 
   Map<String, dynamic> toJson() {
@@ -423,6 +444,13 @@ class TransReBillHistoryModel {
     data['disendbillper'] = this.disendbillper;
     data['ramt'] = this.ramt;
     data['ramtd'] = this.ramtd;
+    data['room_number'] = this.room_number;
+    data['sname'] = this.sname;
+    data['bno'] = this.bno;
+    data['bank'] = this.bank;
+    data['cname'] = this.cname;
+    data['type'] = this.type;
+    data['ln'] = this.ln;
     return data;
   }
 }

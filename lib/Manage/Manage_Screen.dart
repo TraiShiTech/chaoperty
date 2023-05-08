@@ -39,6 +39,7 @@ class ManageScreen extends StatefulWidget {
 }
 
 class _ManageScreenState extends State<ManageScreen> {
+  var nFormat = NumberFormat("#,##0.00", "en_US");
   DateTime datex = DateTime.now();
   int Status_ = 1;
   int Ser_BodySta1 = 0;
@@ -1978,652 +1979,707 @@ class _ManageScreenState extends State<ManageScreen> {
                                   itemCount: transMeterModels.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Container(
+                                    return Material(
                                       color: tappedIndex_ == index.toString()
                                           ? tappedIndex_Color.tappedIndex_Colors
-                                              .withOpacity(0.5)
-                                          : null,
-                                      child: ListTile(
-                                        onTap: () {
-                                          setState(() {
-                                            tappedIndex_ = index.toString();
-                                          });
-                                        },
-                                        contentPadding:
-                                            const EdgeInsets.all(8.0),
-                                        title: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].ln}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  //fontSize: 10.0
+                                          : AppbackgroundColor.Sub_Abg_Colors,
+                                      child: Container(
+                                        // color: tappedIndex_ == index.toString()
+                                        //     ? tappedIndex_Color
+                                        //         .tappedIndex_Colors
+                                        //         .withOpacity(0.5)
+                                        //     : null,
+                                        child: ListTile(
+                                          onTap: () {
+                                            setState(() {
+                                              tappedIndex_ = index.toString();
+                                            });
+                                          },
+                                          contentPadding:
+                                              const EdgeInsets.all(4.0),
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${transMeterModels[index].ln}',
+                                                  textAlign: TextAlign.center,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].refno}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  //fontSize: 10.0
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${transMeterModels[index].refno}',
+                                                  textAlign: TextAlign.center,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].sname}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  //fontSize: 10.0
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${transMeterModels[index].sname}',
+                                                  textAlign: TextAlign.center,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                '${transMeterModels[index].expname}',
-                                                textAlign: TextAlign.center,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  // fontSize: 12.0
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  '${transMeterModels[index].expname}',
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    // fontSize: 12.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                '${transMeterModels[index].num_meter}',
-                                                textAlign: TextAlign.start,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  // fontSize: 12.0
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  '${transMeterModels[index].num_meter}',
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    // fontSize: 12.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                '${transMeterModels[index].ovalue}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                  //fontSize: 12.0
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].ovalue!))}',
+                                                  // '${transMeterModels[index].ovalue}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 12.0
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: TextFormField(
-                                                keyboardType:
-                                                    TextInputType.number,
-                                                // controller: FormMeter_text,
-                                                // validator: (value) {
-                                                //   if (value == null ||
-                                                //       value.isEmpty ||
-                                                //       value.length < 13) {
-                                                //     return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                //   }
-                                                //   // if (int.parse(value.toString()) < 13) {
-                                                //   //   return '< 13';
-                                                //   // }
-                                                //   return null;
-                                                // },
-                                                // maxLength: 13,
-                                                initialValue:
-                                                    transMeterModels[index]
-                                                        .nvalue,
-                                                onChanged: (valuem) async {
-                                                  SharedPreferences
-                                                      preferences =
-                                                      await SharedPreferences
-                                                          .getInstance();
-                                                  String? ren = preferences
-                                                      .getString('renTalSer');
-                                                  String? ser_user = preferences
-                                                      .getString('ser');
+                                              Expanded(
+                                                flex: 2,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(4.0),
+                                                  child: TextFormField(
+                                                    textAlign: TextAlign.right,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    // controller: FormMeter_text,
+                                                    // validator: (value) {
+                                                    //   if (value == null ||
+                                                    //       value.isEmpty ||
+                                                    //       value.length < 13) {
+                                                    //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                    //   }
+                                                    //   // if (int.parse(value.toString()) < 13) {
+                                                    //   //   return '< 13';
+                                                    //   // }
+                                                    //   return null;
+                                                    // },
+                                                    // maxLength: 13,
+                                                    initialValue:
+                                                        transMeterModels[index]
+                                                            .nvalue,
+                                                    onChanged: (valuem) async {
+                                                      SharedPreferences
+                                                          preferences =
+                                                          await SharedPreferences
+                                                              .getInstance();
+                                                      String? ren =
+                                                          preferences.getString(
+                                                              'renTalSer');
+                                                      String? ser_user =
+                                                          preferences
+                                                              .getString('ser');
 
-                                                  var qser_in =
-                                                      transMeterModels[index]
-                                                          .ser_in;
+                                                      var qser_in =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .ser_in;
 
-                                                  var tran_ser =
-                                                      transMeterModels[index]
-                                                          .ser;
-                                                  var ovalue =
-                                                      transMeterModels[index]
-                                                          .ovalue; // ก่อน
-                                                  var nvalue =
-                                                      transMeterModels[index]
-                                                          .nvalue; // หลัง
-                                                  // _celvat; //vat
-                                                  // _cqty_vat; // หน่วย
-                                                  // var qser_inn =
-                                                  //     transMeterModels[
-                                                  //             index + 1]
-                                                  //         .ser_in;
+                                                      var tran_ser =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .ser;
+                                                      var ovalue =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .ovalue; // ก่อน
+                                                      var nvalue =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .nvalue; // หลัง
+                                                      // _celvat; //vat
+                                                      // _cqty_vat; // หน่วย
+                                                      // var qser_inn =
+                                                      //     transMeterModels[
+                                                      //             index + 1]
+                                                      //         .ser_in;
 
-                                                  var tran_expser =
-                                                      transMeterModels[index]
-                                                          .expser;
-                                                  var _celvat =
-                                                      transMeterModels[index]
-                                                          .nvat;
-                                                  var _cser =
-                                                      transMeterModels[index]
-                                                          .ser;
-                                                  var _cqty_vat =
-                                                      transMeterModels[index]
-                                                          .c_qty;
+                                                      var tran_expser =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .expser;
+                                                      var _celvat =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .nvat;
+                                                      var _cser =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .ser;
+                                                      var _cqty_vat =
+                                                          transMeterModels[
+                                                                  index]
+                                                              .c_qty;
 
-                                                  print(
-                                                      'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
-                                                  // var value =
-                                                  //     FormMeter_text.text;
-                                                  var value = valuem;
-                                                  String url =
-                                                      '${MyConstant().domain}/UPC_Invoice_n.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_expser=$tran_expser';
+                                                      print(
+                                                          'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+                                                      // var value =
+                                                      //     FormMeter_text.text;
+                                                      var value = valuem;
+                                                      String url =
+                                                          '${MyConstant().domain}/UPC_Invoice_n.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_expser=$tran_expser';
 
-                                                  try {
-                                                    var response = await http
-                                                        .get(Uri.parse(url));
+                                                      try {
+                                                        var response =
+                                                            await http.get(
+                                                                Uri.parse(url));
 
-                                                    var result = json
-                                                        .decode(response.body);
-                                                    print(result);
+                                                        var result =
+                                                            json.decode(
+                                                                response.body);
+                                                        print(result);
 
-                                                    if (result.toString() !=
-                                                        'null') {
+                                                        if (result.toString() !=
+                                                            'null') {
+                                                          setState(() {
+                                                            // red_Trans_bill();
+                                                            FormMeter_text
+                                                                .clear();
+                                                          });
+                                                          // Navigator.pop(
+                                                          //     context, 'OK');
+                                                        }
+                                                      } catch (e) {}
+                                                    },
+                                                    onFieldSubmitted: (value) {
+                                                      Insert_log.Insert_logs(
+                                                          'จัดการ',
+                                                          'มิเตอร์น้ำไฟฟ้า>>แก้ไขเลขมิเตอร์เดือนนี้(${transMeterModels[index].ln},${transMeterModels[index].expname})');
                                                       setState(() {
-                                                        // red_Trans_bill();
-                                                        FormMeter_text.clear();
+                                                        red_Trans_bill();
+                                                        // FormMeter_text.clear();
                                                       });
-                                                      // Navigator.pop(
-                                                      //     context, 'OK');
-                                                    }
-                                                  } catch (e) {}
-                                                },
-                                                onFieldSubmitted: (value) {
-                                                  Insert_log.Insert_logs(
-                                                      'จัดการ',
-                                                      'มิเตอร์น้ำไฟฟ้า>>แก้ไขเลขมิเตอร์เดือนนี้(${transMeterModels[index].ln},${transMeterModels[index].expname})');
-                                                  setState(() {
-                                                    red_Trans_bill();
-                                                    // FormMeter_text.clear();
-                                                  });
-                                                },
-                                                cursorColor: Colors.green,
-                                                decoration: InputDecoration(
-                                                    fillColor: Colors.white
-                                                        .withOpacity(0.3),
-                                                    filled: true,
-                                                    // prefixIcon: const Icon(
-                                                    //     Icons
-                                                    //         .electrical_services,
-                                                    //     color: Colors.red),
-                                                    focusedBorder:
-                                                        const OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(15),
-                                                        topLeft:
-                                                            Radius.circular(15),
-                                                        bottomRight:
-                                                            Radius.circular(15),
-                                                        bottomLeft:
-                                                            Radius.circular(15),
-                                                      ),
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color: Colors.black,
-                                                      ),
-                                                    ),
-                                                    enabledBorder:
-                                                        const OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topRight:
-                                                            Radius.circular(15),
-                                                        topLeft:
-                                                            Radius.circular(15),
-                                                        bottomRight:
-                                                            Radius.circular(15),
-                                                        bottomLeft:
-                                                            Radius.circular(15),
-                                                      ),
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color: Colors.grey,
-                                                      ),
-                                                    ),
-                                                    labelText: 'เลขมิเตอร์',
-                                                    labelStyle: const TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text2_,
-                                                      // fontWeight:
-                                                      //     FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    )),
-                                                inputFormatters: <
-                                                    TextInputFormatter>[
-                                                  // for below version 2 use this
-                                                  FilteringTextInputFormatter
-                                                      .allow(RegExp(r'[0-9]')),
-                                                  // for version 2 and greater youcan also use this
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly
-                                                ],
+                                                    },
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon: const Icon(
+                                                        //     Icons
+                                                        //         .electrical_services,
+                                                        //     color: Colors.red),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        labelText: 'เลขมิเตอร์',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                          color:
+                                                              ManageScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight:
+                                                          //     FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        )),
+                                                    inputFormatters: <
+                                                        TextInputFormatter>[
+                                                      // for below version 2 use this
+                                                      FilteringTextInputFormatter
+                                                          .allow(
+                                                              RegExp(r'[0-9]')),
+                                                      // for version 2 and greater youcan also use this
+                                                      FilteringTextInputFormatter
+                                                          .digitsOnly
+                                                    ],
+                                                  ),
+                                                ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.center,
+                                                //   children: [
+                                                //     Text(
+                                                //       '${transMeterModels[index].nvalue}',
+                                                //       textAlign: TextAlign.center,
+                                                //       style: const TextStyle(
+                                                //         color: ManageScreen_Color
+                                                //             .Colors_Text2_,
+                                                //         // fontWeight: FontWeight.bold,
+                                                //         fontFamily: Font_.Fonts_T,
+                                                //         //fontSize: 10.0
+                                                //       ),
+                                                //     ),
+                                                //     InkWell(
+                                                //       onTap: () {
+                                                //         showDialog<String>(
+                                                //           barrierDismissible:
+                                                //               false,
+                                                //           context: context,
+                                                //           builder: (BuildContext
+                                                //                   context) =>
+                                                //               AlertDialog(
+                                                //             shape: const RoundedRectangleBorder(
+                                                //                 borderRadius: BorderRadius
+                                                //                     .all(Radius
+                                                //                         .circular(
+                                                //                             20.0))),
+                                                //             title: Center(
+                                                //                 child: Text(
+                                                //               'มิเตอร์ไฟเดือนก่อน ${transMeterModels[index].ovalue}',
+                                                //               style:
+                                                //                   const TextStyle(
+                                                //                 color: ManageScreen_Color
+                                                //                     .Colors_Text1_,
+                                                //                 fontWeight:
+                                                //                     FontWeight
+                                                //                         .bold,
+                                                //                 fontFamily:
+                                                //                     FontWeight_
+                                                //                         .Fonts_T,
+                                                //               ),
+                                                //             )),
+                                                //             content:
+                                                //                 SingleChildScrollView(
+                                                //                     child: Column(
+                                                //                         children: [
+                                                //                   Padding(
+                                                //                     padding:
+                                                //                         const EdgeInsets
+                                                //                                 .all(
+                                                //                             8.0),
+                                                //                     child:
+                                                //                         TextFormField(
+                                                //                       keyboardType:
+                                                //                           TextInputType
+                                                //                               .number,
+                                                //                       controller:
+                                                //                           FormMeter_text,
+                                                //                       // validator: (value) {
+                                                //                       //   if (value == null ||
+                                                //                       //       value.isEmpty ||
+                                                //                       //       value.length < 13) {
+                                                //                       //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                //                       //   }
+                                                //                       //   // if (int.parse(value.toString()) < 13) {
+                                                //                       //   //   return '< 13';
+                                                //                       //   // }
+                                                //                       //   return null;
+                                                //                       // },
+                                                //                       // maxLength: 13,
+                                                //                       cursorColor:
+                                                //                           Colors
+                                                //                               .green,
+                                                //                       decoration: InputDecoration(
+                                                //                           fillColor: Colors.white.withOpacity(0.3),
+                                                //                           filled: true,
+                                                //                           prefixIcon: const Icon(Icons.electrical_services, color: Colors.red),
+                                                //                           // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                //                           focusedBorder: const OutlineInputBorder(
+                                                //                             borderRadius:
+                                                //                                 BorderRadius.only(
+                                                //                               topRight:
+                                                //                                   Radius.circular(15),
+                                                //                               topLeft:
+                                                //                                   Radius.circular(15),
+                                                //                               bottomRight:
+                                                //                                   Radius.circular(15),
+                                                //                               bottomLeft:
+                                                //                                   Radius.circular(15),
+                                                //                             ),
+                                                //                             borderSide:
+                                                //                                 BorderSide(
+                                                //                               width:
+                                                //                                   1,
+                                                //                               color:
+                                                //                                   Colors.black,
+                                                //                             ),
+                                                //                           ),
+                                                //                           enabledBorder: const OutlineInputBorder(
+                                                //                             borderRadius:
+                                                //                                 BorderRadius.only(
+                                                //                               topRight:
+                                                //                                   Radius.circular(15),
+                                                //                               topLeft:
+                                                //                                   Radius.circular(15),
+                                                //                               bottomRight:
+                                                //                                   Radius.circular(15),
+                                                //                               bottomLeft:
+                                                //                                   Radius.circular(15),
+                                                //                             ),
+                                                //                             borderSide:
+                                                //                                 BorderSide(
+                                                //                               width:
+                                                //                                   1,
+                                                //                               color:
+                                                //                                   Colors.grey,
+                                                //                             ),
+                                                //                           ),
+                                                //                           labelText: 'เลขมิเตอร์ไฟ',
+                                                //                           labelStyle: const TextStyle(
+                                                //                             color:
+                                                //                                 ManageScreen_Color.Colors_Text2_,
+                                                //                             // fontWeight:
+                                                //                             //     FontWeight.bold,
+                                                //                             fontFamily:
+                                                //                                 Font_.Fonts_T,
+                                                //                           )),
+                                                //                       inputFormatters: <
+                                                //                           TextInputFormatter>[
+                                                //                         // for below version 2 use this
+                                                //                         FilteringTextInputFormatter
+                                                //                             .allow(
+                                                //                                 RegExp(r'[0-9]')),
+                                                //                         // for version 2 and greater youcan also use this
+                                                //                         FilteringTextInputFormatter
+                                                //                             .digitsOnly
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ])),
+                                                //             actions: <Widget>[
+                                                //               Row(
+                                                //                 children: [
+                                                //                   Padding(
+                                                //                     padding:
+                                                //                         const EdgeInsets
+                                                //                                 .all(
+                                                //                             8.0),
+                                                //                     child: Row(
+                                                //                       mainAxisAlignment:
+                                                //                           MainAxisAlignment
+                                                //                               .center,
+                                                //                       children: [
+                                                //                         Padding(
+                                                //                           padding:
+                                                //                               const EdgeInsets.all(8.0),
+                                                //                           child:
+                                                //                               Container(
+                                                //                             width:
+                                                //                                 100,
+                                                //                             decoration:
+                                                //                                 const BoxDecoration(
+                                                //                               color:
+                                                //                                   Colors.green,
+                                                //                               borderRadius: BorderRadius.only(
+                                                //                                   topLeft: Radius.circular(10),
+                                                //                                   topRight: Radius.circular(10),
+                                                //                                   bottomLeft: Radius.circular(10),
+                                                //                                   bottomRight: Radius.circular(10)),
+                                                //                             ),
+                                                //                             padding:
+                                                //                                 const EdgeInsets.all(8.0),
+                                                //                             child:
+                                                //                                 TextButton(
+                                                //                               onPressed:
+                                                //                                   () async {
+                                                //                                 SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                //                                 String? ren = preferences.getString('renTalSer');
+                                                //                                 String? ser_user = preferences.getString('ser');
+
+                                                //                                 var qser_in = transMeterModels[index].ser_in;
+
+                                                //                                 var tran_ser = transMeterModels[index].ser;
+                                                //                                 var ovalue = transMeterModels[index].ovalue; // ก่อน
+                                                //                                 var nvalue = transMeterModels[index].nvalue; // หลัง
+                                                //                                 // _celvat; //vat
+                                                //                                 // _cqty_vat; // หน่วย
+
+                                                //                                 var _celvat = transMeterModels[index].nvat;
+                                                //                                 var _cser = transMeterModels[index].ser;
+                                                //                                 var _cqty_vat = transMeterModels[index].c_qty;
+
+                                                //                                 print('ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+                                                //                                 var value = FormMeter_text.text;
+                                                //                                 String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser';
+
+                                                //                                 try {
+                                                //                                   var response = await http.get(Uri.parse(url));
+
+                                                //                                   var result = json.decode(response.body);
+                                                //                                   print(result);
+                                                //                                   if (result.toString() != 'null') {
+                                                //                                     setState(() {
+                                                //                                       red_Trans_bill();
+                                                //                                       FormMeter_text.clear();
+                                                //                                     });
+                                                //                                     Navigator.pop(context, 'OK');
+                                                //                                   }
+                                                //                                 } catch (e) {}
+                                                //                                 // Navigator.pop(
+                                                //                                 //       context,
+                                                //                                 //       'OK');
+                                                //                               },
+                                                //                               child:
+                                                //                                   const Text(
+                                                //                                 'บันทึก',
+                                                //                                 style: TextStyle(
+                                                //                                   color: Colors.white,
+                                                //                                   fontWeight: FontWeight.bold,
+                                                //                                   fontFamily: FontWeight_.Fonts_T,
+                                                //                                 ),
+                                                //                               ),
+                                                //                             ),
+                                                //                           ),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                   Padding(
+                                                //                     padding:
+                                                //                         const EdgeInsets
+                                                //                                 .all(
+                                                //                             8.0),
+                                                //                     child: Row(
+                                                //                       mainAxisAlignment:
+                                                //                           MainAxisAlignment
+                                                //                               .center,
+                                                //                       children: [
+                                                //                         Padding(
+                                                //                           padding:
+                                                //                               const EdgeInsets.all(8.0),
+                                                //                           child:
+                                                //                               Container(
+                                                //                             width:
+                                                //                                 100,
+                                                //                             decoration:
+                                                //                                 const BoxDecoration(
+                                                //                               color:
+                                                //                                   Colors.red,
+                                                //                               borderRadius: BorderRadius.only(
+                                                //                                   topLeft: Radius.circular(10),
+                                                //                                   topRight: Radius.circular(10),
+                                                //                                   bottomLeft: Radius.circular(10),
+                                                //                                   bottomRight: Radius.circular(10)),
+                                                //                             ),
+                                                //                             padding:
+                                                //                                 const EdgeInsets.all(8.0),
+                                                //                             child:
+                                                //                                 TextButton(
+                                                //                               onPressed:
+                                                //                                   () {
+                                                //                                 setState(() {
+                                                //                                   FormMeter_text.clear();
+                                                //                                 });
+                                                //                                 Navigator.pop(context, 'OK');
+                                                //                               },
+                                                //                               child:
+                                                //                                   const Text(
+                                                //                                 'ยกเลิก',
+                                                //                                 style: TextStyle(
+                                                //                                   color: Colors.white,
+                                                //                                   fontWeight: FontWeight.bold,
+                                                //                                   fontFamily: FontWeight_.Fonts_T,
+                                                //                                 ),
+                                                //                               ),
+                                                //                             ),
+                                                //                           ),
+                                                //                         ),
+                                                //                       ],
+                                                //                     ),
+                                                //                   ),
+                                                //                 ],
+                                                //               ),
+                                                //             ],
+                                                //           ),
+                                                //         );
+                                                //       },
+                                                //       child: const Icon(
+                                                //         Icons.edit,
+                                                //         color: Colors.black,
+                                                //       ),
+                                                //     )
+                                                //   ],
+                                                // ),
                                               ),
-                                              // Row(
-                                              //   mainAxisAlignment:
-                                              //       MainAxisAlignment.center,
-                                              //   children: [
-                                              //     Text(
-                                              //       '${transMeterModels[index].nvalue}',
-                                              //       textAlign: TextAlign.center,
-                                              //       style: const TextStyle(
-                                              //         color: ManageScreen_Color
-                                              //             .Colors_Text2_,
-                                              //         // fontWeight: FontWeight.bold,
-                                              //         fontFamily: Font_.Fonts_T,
-                                              //         //fontSize: 10.0
-                                              //       ),
-                                              //     ),
-                                              //     InkWell(
-                                              //       onTap: () {
-                                              //         showDialog<String>(
-                                              //           barrierDismissible:
-                                              //               false,
-                                              //           context: context,
-                                              //           builder: (BuildContext
-                                              //                   context) =>
-                                              //               AlertDialog(
-                                              //             shape: const RoundedRectangleBorder(
-                                              //                 borderRadius: BorderRadius
-                                              //                     .all(Radius
-                                              //                         .circular(
-                                              //                             20.0))),
-                                              //             title: Center(
-                                              //                 child: Text(
-                                              //               'มิเตอร์ไฟเดือนก่อน ${transMeterModels[index].ovalue}',
-                                              //               style:
-                                              //                   const TextStyle(
-                                              //                 color: ManageScreen_Color
-                                              //                     .Colors_Text1_,
-                                              //                 fontWeight:
-                                              //                     FontWeight
-                                              //                         .bold,
-                                              //                 fontFamily:
-                                              //                     FontWeight_
-                                              //                         .Fonts_T,
-                                              //               ),
-                                              //             )),
-                                              //             content:
-                                              //                 SingleChildScrollView(
-                                              //                     child: Column(
-                                              //                         children: [
-                                              //                   Padding(
-                                              //                     padding:
-                                              //                         const EdgeInsets
-                                              //                                 .all(
-                                              //                             8.0),
-                                              //                     child:
-                                              //                         TextFormField(
-                                              //                       keyboardType:
-                                              //                           TextInputType
-                                              //                               .number,
-                                              //                       controller:
-                                              //                           FormMeter_text,
-                                              //                       // validator: (value) {
-                                              //                       //   if (value == null ||
-                                              //                       //       value.isEmpty ||
-                                              //                       //       value.length < 13) {
-                                              //                       //     return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                              //                       //   }
-                                              //                       //   // if (int.parse(value.toString()) < 13) {
-                                              //                       //   //   return '< 13';
-                                              //                       //   // }
-                                              //                       //   return null;
-                                              //                       // },
-                                              //                       // maxLength: 13,
-                                              //                       cursorColor:
-                                              //                           Colors
-                                              //                               .green,
-                                              //                       decoration: InputDecoration(
-                                              //                           fillColor: Colors.white.withOpacity(0.3),
-                                              //                           filled: true,
-                                              //                           prefixIcon: const Icon(Icons.electrical_services, color: Colors.red),
-                                              //                           // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                              //                           focusedBorder: const OutlineInputBorder(
-                                              //                             borderRadius:
-                                              //                                 BorderRadius.only(
-                                              //                               topRight:
-                                              //                                   Radius.circular(15),
-                                              //                               topLeft:
-                                              //                                   Radius.circular(15),
-                                              //                               bottomRight:
-                                              //                                   Radius.circular(15),
-                                              //                               bottomLeft:
-                                              //                                   Radius.circular(15),
-                                              //                             ),
-                                              //                             borderSide:
-                                              //                                 BorderSide(
-                                              //                               width:
-                                              //                                   1,
-                                              //                               color:
-                                              //                                   Colors.black,
-                                              //                             ),
-                                              //                           ),
-                                              //                           enabledBorder: const OutlineInputBorder(
-                                              //                             borderRadius:
-                                              //                                 BorderRadius.only(
-                                              //                               topRight:
-                                              //                                   Radius.circular(15),
-                                              //                               topLeft:
-                                              //                                   Radius.circular(15),
-                                              //                               bottomRight:
-                                              //                                   Radius.circular(15),
-                                              //                               bottomLeft:
-                                              //                                   Radius.circular(15),
-                                              //                             ),
-                                              //                             borderSide:
-                                              //                                 BorderSide(
-                                              //                               width:
-                                              //                                   1,
-                                              //                               color:
-                                              //                                   Colors.grey,
-                                              //                             ),
-                                              //                           ),
-                                              //                           labelText: 'เลขมิเตอร์ไฟ',
-                                              //                           labelStyle: const TextStyle(
-                                              //                             color:
-                                              //                                 ManageScreen_Color.Colors_Text2_,
-                                              //                             // fontWeight:
-                                              //                             //     FontWeight.bold,
-                                              //                             fontFamily:
-                                              //                                 Font_.Fonts_T,
-                                              //                           )),
-                                              //                       inputFormatters: <
-                                              //                           TextInputFormatter>[
-                                              //                         // for below version 2 use this
-                                              //                         FilteringTextInputFormatter
-                                              //                             .allow(
-                                              //                                 RegExp(r'[0-9]')),
-                                              //                         // for version 2 and greater youcan also use this
-                                              //                         FilteringTextInputFormatter
-                                              //                             .digitsOnly
-                                              //                       ],
-                                              //                     ),
-                                              //                   ),
-                                              //                 ])),
-                                              //             actions: <Widget>[
-                                              //               Row(
-                                              //                 children: [
-                                              //                   Padding(
-                                              //                     padding:
-                                              //                         const EdgeInsets
-                                              //                                 .all(
-                                              //                             8.0),
-                                              //                     child: Row(
-                                              //                       mainAxisAlignment:
-                                              //                           MainAxisAlignment
-                                              //                               .center,
-                                              //                       children: [
-                                              //                         Padding(
-                                              //                           padding:
-                                              //                               const EdgeInsets.all(8.0),
-                                              //                           child:
-                                              //                               Container(
-                                              //                             width:
-                                              //                                 100,
-                                              //                             decoration:
-                                              //                                 const BoxDecoration(
-                                              //                               color:
-                                              //                                   Colors.green,
-                                              //                               borderRadius: BorderRadius.only(
-                                              //                                   topLeft: Radius.circular(10),
-                                              //                                   topRight: Radius.circular(10),
-                                              //                                   bottomLeft: Radius.circular(10),
-                                              //                                   bottomRight: Radius.circular(10)),
-                                              //                             ),
-                                              //                             padding:
-                                              //                                 const EdgeInsets.all(8.0),
-                                              //                             child:
-                                              //                                 TextButton(
-                                              //                               onPressed:
-                                              //                                   () async {
-                                              //                                 SharedPreferences preferences = await SharedPreferences.getInstance();
-                                              //                                 String? ren = preferences.getString('renTalSer');
-                                              //                                 String? ser_user = preferences.getString('ser');
-
-                                              //                                 var qser_in = transMeterModels[index].ser_in;
-
-                                              //                                 var tran_ser = transMeterModels[index].ser;
-                                              //                                 var ovalue = transMeterModels[index].ovalue; // ก่อน
-                                              //                                 var nvalue = transMeterModels[index].nvalue; // หลัง
-                                              //                                 // _celvat; //vat
-                                              //                                 // _cqty_vat; // หน่วย
-
-                                              //                                 var _celvat = transMeterModels[index].nvat;
-                                              //                                 var _cser = transMeterModels[index].ser;
-                                              //                                 var _cqty_vat = transMeterModels[index].c_qty;
-
-                                              //                                 print('ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
-                                              //                                 var value = FormMeter_text.text;
-                                              //                                 String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser';
-
-                                              //                                 try {
-                                              //                                   var response = await http.get(Uri.parse(url));
-
-                                              //                                   var result = json.decode(response.body);
-                                              //                                   print(result);
-                                              //                                   if (result.toString() != 'null') {
-                                              //                                     setState(() {
-                                              //                                       red_Trans_bill();
-                                              //                                       FormMeter_text.clear();
-                                              //                                     });
-                                              //                                     Navigator.pop(context, 'OK');
-                                              //                                   }
-                                              //                                 } catch (e) {}
-                                              //                                 // Navigator.pop(
-                                              //                                 //       context,
-                                              //                                 //       'OK');
-                                              //                               },
-                                              //                               child:
-                                              //                                   const Text(
-                                              //                                 'บันทึก',
-                                              //                                 style: TextStyle(
-                                              //                                   color: Colors.white,
-                                              //                                   fontWeight: FontWeight.bold,
-                                              //                                   fontFamily: FontWeight_.Fonts_T,
-                                              //                                 ),
-                                              //                               ),
-                                              //                             ),
-                                              //                           ),
-                                              //                         ),
-                                              //                       ],
-                                              //                     ),
-                                              //                   ),
-                                              //                   Padding(
-                                              //                     padding:
-                                              //                         const EdgeInsets
-                                              //                                 .all(
-                                              //                             8.0),
-                                              //                     child: Row(
-                                              //                       mainAxisAlignment:
-                                              //                           MainAxisAlignment
-                                              //                               .center,
-                                              //                       children: [
-                                              //                         Padding(
-                                              //                           padding:
-                                              //                               const EdgeInsets.all(8.0),
-                                              //                           child:
-                                              //                               Container(
-                                              //                             width:
-                                              //                                 100,
-                                              //                             decoration:
-                                              //                                 const BoxDecoration(
-                                              //                               color:
-                                              //                                   Colors.red,
-                                              //                               borderRadius: BorderRadius.only(
-                                              //                                   topLeft: Radius.circular(10),
-                                              //                                   topRight: Radius.circular(10),
-                                              //                                   bottomLeft: Radius.circular(10),
-                                              //                                   bottomRight: Radius.circular(10)),
-                                              //                             ),
-                                              //                             padding:
-                                              //                                 const EdgeInsets.all(8.0),
-                                              //                             child:
-                                              //                                 TextButton(
-                                              //                               onPressed:
-                                              //                                   () {
-                                              //                                 setState(() {
-                                              //                                   FormMeter_text.clear();
-                                              //                                 });
-                                              //                                 Navigator.pop(context, 'OK');
-                                              //                               },
-                                              //                               child:
-                                              //                                   const Text(
-                                              //                                 'ยกเลิก',
-                                              //                                 style: TextStyle(
-                                              //                                   color: Colors.white,
-                                              //                                   fontWeight: FontWeight.bold,
-                                              //                                   fontFamily: FontWeight_.Fonts_T,
-                                              //                                 ),
-                                              //                               ),
-                                              //                             ),
-                                              //                           ),
-                                              //                         ),
-                                              //                       ],
-                                              //                     ),
-                                              //                   ),
-                                              //                 ],
-                                              //               ),
-                                              //             ],
-                                              //           ),
-                                              //         );
-                                              //       },
-                                              //       child: const Icon(
-                                              //         Icons.edit,
-                                              //         color: Colors.black,
-                                              //       ),
-                                              //     )
-                                              //   ],
-                                              // ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].qty}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].qty!))}',
+                                                  //'${transMeterModels[index].qty}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].pri}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].pri!))}',
+                                                  //  '${transMeterModels[index].pri}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].nvat} %',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].nvat!))}',
+                                                  // '${transMeterModels[index].nvat} %',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].c_vat}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].c_vat!))}',
+                                                  //'${transMeterModels[index].c_vat}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].c_pvat}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  // '${transMeterModels[index].c_pvat}',
+                                                  '${nFormat.format(double.parse(transMeterModels[index].c_pvat!))}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                '${transMeterModels[index].c_amt}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
+                                              Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  '${nFormat.format(double.parse(transMeterModels[index].c_amt!))}',
+                                                  //'${transMeterModels[index].c_amt}',
+                                                  textAlign: TextAlign.right,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
@@ -3069,329 +3125,199 @@ class _ManageScreenState extends State<ManageScreen> {
                                   itemCount: maintenanceModels.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    return Container(
+                                    return Material(
                                       color: tappedIndex_ == index.toString()
                                           ? tappedIndex_Color.tappedIndex_Colors
-                                              .withOpacity(0.5)
-                                          : null,
-                                      child: ListTile(
-                                        onTap: () {
-                                          setState(() {
-                                            tappedIndex_ = index.toString();
-                                          });
-                                        },
-                                        contentPadding:
-                                            const EdgeInsets.all(8.0),
-                                        title: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${maintenanceModels[index].lncode}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${maintenanceModels[index].sname}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
-                                                textAlign: TextAlign.center,
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 3,
-                                              child: Text(
-                                                '${maintenanceModels[index].mdescr}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                maintenanceModels[index].mst ==
-                                                        '0'
-                                                    ? ' '
-                                                    : maintenanceModels[index]
-                                                                .mst ==
-                                                            '1'
-                                                        ? 'รอดำเนินการ'
-                                                        : 'เสร็จสิ้น',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                  color: ManageScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight:
-                                                  //     FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: InkWell(
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        maintenanceModels[index]
-                                                                    .mst ==
-                                                                '2'
-                                                            ? Colors.green
-                                                            : Colors.grey[100],
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      topRight:
-                                                          Radius.circular(10),
-                                                      bottomLeft:
-                                                          Radius.circular(10),
-                                                      bottomRight:
-                                                          Radius.circular(10),
-                                                    ),
-                                                    // border: Border.all(
-                                                    //     color: Colors.grey, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text(
-                                                    'เรียกดู',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: ManageScreen_Color
-                                                          .Colors_Text2_,
-                                                      // fontWeight:
-                                                      //     FontWeight.bold,
-                                                      fontFamily: Font_.Fonts_T,
-                                                    ),
+                                          : AppbackgroundColor.Sub_Abg_Colors,
+                                      child: Container(
+                                        // color: tappedIndex_ == index.toString()
+                                        //     ? tappedIndex_Color
+                                        //         .tappedIndex_Colors
+                                        //         .withOpacity(0.5)
+                                        //     : null,
+                                        child: ListTile(
+                                          onTap: () {
+                                            setState(() {
+                                              tappedIndex_ = index.toString();
+                                            });
+                                          },
+                                          contentPadding:
+                                              const EdgeInsets.all(8.0),
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${maintenanceModels[index].lncode}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
                                                   ),
                                                 ),
-                                                onTap: () {
-                                                  if (maintenanceModels[index]
-                                                          .mst
-                                                          .toString() ==
-                                                      '2')
-                                                    showDialog<void>(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false, // user must tap button!
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            title: Text(
-                                                              '${maintenanceModels[index].sname}( ${maintenanceModels[index].lncode})',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: ManageScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Center(
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'วันที่ดำเนินการ : ${maintenanceModels[index].rdate}',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              ManageScreen_Color.Colors_Text2_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  Center(
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Text(
-                                                                        'คำอธิบาย : ${maintenanceModels[index].rdescr}',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          color:
-                                                                              ManageScreen_Color.Colors_Text2_,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                          fontFamily:
-                                                                              Font_.Fonts_T,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${maintenanceModels[index].sname}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${DateFormat('dd-MM').format((DateTime.parse('${maintenanceModels[index].mdate} 00:00:00')))}-${DateTime.parse('${maintenanceModels[index].mdate} 00:00:00').year + 543}',
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 1,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 3,
+                                                child: Text(
+                                                  '${maintenanceModels[index].mdescr}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  maintenanceModels[index]
+                                                              .mst ==
+                                                          '0'
+                                                      ? ' '
+                                                      : maintenanceModels[index]
+                                                                  .mst ==
+                                                              '1'
+                                                          ? 'รอดำเนินการ'
+                                                          : 'เสร็จสิ้น',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                    color: ManageScreen_Color
+                                                        .Colors_Text2_,
+                                                    // fontWeight:
+                                                    //     FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: InkWell(
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: maintenanceModels[
+                                                                      index]
+                                                                  .mst ==
+                                                              '2'
+                                                          ? Colors.green
+                                                          : Colors.grey[100],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: const Text(
+                                                      'เรียกดู',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            ManageScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight:
+                                                        //     FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  onTap: () {
+                                                    if (maintenanceModels[index]
+                                                            .mst
+                                                            .toString() ==
+                                                        '2')
+                                                      showDialog<void>(
+                                                          context: context,
+                                                          barrierDismissible:
+                                                              false, // user must tap button!
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              shape: const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0))),
+                                                              title: Text(
+                                                                '${maintenanceModels[index].sname}( ${maintenanceModels[index].lncode})',
+                                                                textAlign:
+                                                                    TextAlign
                                                                         .center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.redAccent,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              TextButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              red_Trans_c_maintenance();
-                                                                              Navigator.pop(context, 'OK');
-                                                                            },
-                                                                            child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ],
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ManageScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
                                                               ),
-                                                            ],
-                                                          );
-                                                        });
-
-////////////////////-------------------------------------------------------------->
-                                                  if (maintenanceModels[index]
-                                                          .mst
-                                                          .toString() ==
-                                                      '1')
-                                                    showDialog<void>(
-                                                        context: context,
-                                                        barrierDismissible:
-                                                            false, // user must tap button!
-                                                        builder: (BuildContext
-                                                            context) {
-                                                          return AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            title: Text(
-                                                              '${maintenanceModels[index].sname}( ${maintenanceModels[index].lncode})',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: ManageScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T,
-                                                              ),
-                                                            ),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: <
-                                                                    Widget>[
-                                                                  Row(
-                                                                    children: [
-                                                                      //_select_Date
-                                                                      const Padding(
+                                                              content:
+                                                                  SingleChildScrollView(
+                                                                child: ListBody(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Center(
+                                                                      child:
+                                                                          Padding(
                                                                         padding:
-                                                                            EdgeInsets.all(8.0),
+                                                                            const EdgeInsets.all(8.0),
                                                                         child:
                                                                             Text(
-                                                                          'วันที่แก้ไข:',
+                                                                          'วันที่ดำเนินการ : ${maintenanceModels[index].rdate}',
                                                                           textAlign:
                                                                               TextAlign.center,
                                                                           style:
-                                                                              TextStyle(
+                                                                              const TextStyle(
                                                                             color:
                                                                                 ManageScreen_Color.Colors_Text2_,
                                                                             fontWeight:
@@ -3401,286 +3327,392 @@ class _ManageScreenState extends State<ManageScreen> {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      StreamBuilder(
-                                                                          stream: Stream.periodic(const Duration(
-                                                                              seconds:
-                                                                                  0)),
-                                                                          builder:
-                                                                              (context, snapshot) {
-                                                                            return Padding(
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: InkWell(
-                                                                                onTap: () {
-                                                                                  _select_Date(context);
-                                                                                },
-                                                                                child: Container(
-                                                                                    decoration: BoxDecoration(
-                                                                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                                                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      border: Border.all(color: Colors.grey, width: 1),
-                                                                                    ),
-                                                                                    width: 120,
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: Center(
-                                                                                      child: Text(
-                                                                                        (Value_selectDate == null) ? 'เลือก' : '$Value_selectDate',
-                                                                                        style: const TextStyle(
-                                                                                          color: ReportScreen_Color.Colors_Text2_,
-                                                                                          // fontWeight: FontWeight.bold,
-                                                                                          fontFamily: Font_.Fonts_T,
-                                                                                        ),
-                                                                                      ),
-                                                                                    )),
-                                                                              ),
-                                                                            );
-                                                                          }),
-                                                                    ],
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          Formbecause_,
-                                                                      validator:
-                                                                          (value) {
-                                                                        if (value ==
-                                                                                null ||
-                                                                            value.isEmpty) {
-                                                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                        }
-                                                                        // if (int.parse(value.toString()) < 13) {
-                                                                        //   return '< 13';
-                                                                        // }
-                                                                        return null;
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration: InputDecoration(
-                                                                          fillColor: Colors.white.withOpacity(0.3),
-                                                                          filled: true,
-                                                                          // prefixIcon: const Icon(Icons.water,
-                                                                          //     color: Colors.blue),
-                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          focusedBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.black,
-                                                                            ),
-                                                                          ),
-                                                                          enabledBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                          ),
-                                                                          labelText: 'คำอธิบาย',
-                                                                          labelStyle: const TextStyle(
+                                                                    ),
+                                                                    Center(
+                                                                      child:
+                                                                          Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            Text(
+                                                                          'คำอธิบาย : ${maintenanceModels[index].rdescr}',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style:
+                                                                              const TextStyle(
                                                                             color:
                                                                                 ManageScreen_Color.Colors_Text2_,
-                                                                            // fontWeight:
-                                                                            //     FontWeight.bold,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
                                                                             fontFamily:
                                                                                 Font_.Fonts_T,
-                                                                          )),
-                                                                      // inputFormatters: <TextInputFormatter>[
-                                                                      //   // for below version 2 use this
-                                                                      //   FilteringTextInputFormatter.allow(
-                                                                      //       RegExp(r'[0-9]')),
-                                                                      //   // for version 2 and greater youcan also use this
-                                                                      //   FilteringTextInputFormatter.digitsOnly
-                                                                      // ],
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 5.0,
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.green,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
                                                                           ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: Colors.redAccent,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextButton(
+                                                                              onPressed: () {
+                                                                                red_Trans_c_maintenance();
+                                                                                Navigator.pop(context, 'OK');
+                                                                              },
+                                                                              child: const Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            );
+                                                          });
+
+                                                    ////////////////////-------------------------------------------------------------->
+                                                    if (maintenanceModels[index]
+                                                            .mst
+                                                            .toString() ==
+                                                        '1')
+                                                      showDialog<void>(
+                                                          context: context,
+                                                          barrierDismissible:
+                                                              false, // user must tap button!
+                                                          builder: (BuildContext
+                                                              context) {
+                                                            return AlertDialog(
+                                                              shape: const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0))),
+                                                              title: Text(
+                                                                '${maintenanceModels[index].sname}( ${maintenanceModels[index].lncode})',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ManageScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                              content:
+                                                                  SingleChildScrollView(
+                                                                child: ListBody(
+                                                                  children: <
+                                                                      Widget>[
+                                                                    Row(
+                                                                      children: [
+                                                                        //_select_Date
+                                                                        const Padding(
                                                                           padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                              EdgeInsets.all(8.0),
                                                                           child:
-                                                                              TextButton(
-                                                                            onPressed:
-                                                                                () async {
-                                                                              String Ser_ = maintenanceModels[index].ser.toString();
-
-                                                                              String because_ = Formbecause_.text.toString();
-
-                                                                              print(
-                                                                                '$Ser_ //// $because_ //$Value_selectDate',
-                                                                              );
-                                                                              if (Value_selectDate == null && because_ == '') {
-                                                                                showDialog<String>(
-                                                                                  context: context,
-                                                                                  builder: (BuildContext context) => AlertDialog(
-                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                                    title: const Center(
+                                                                              Text(
+                                                                            'วันที่แก้ไข:',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: ManageScreen_Color.Colors_Text2_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        StreamBuilder(
+                                                                            stream:
+                                                                                Stream.periodic(const Duration(seconds: 0)),
+                                                                            builder: (context, snapshot) {
+                                                                              return Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: InkWell(
+                                                                                  onTap: () {
+                                                                                    _select_Date(context);
+                                                                                  },
+                                                                                  child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        border: Border.all(color: Colors.grey, width: 1),
+                                                                                      ),
+                                                                                      width: 120,
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Center(
                                                                                         child: Text(
-                                                                                      'กรุณากรอกคำอธิบายและวันที่ !!',
-                                                                                      style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                    )),
-                                                                                    actions: <Widget>[
-                                                                                      Padding(
-                                                                                        padding: const EdgeInsets.all(8.0),
-                                                                                        child: Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          children: [
-                                                                                            Container(
-                                                                                              width: 100,
-                                                                                              decoration: const BoxDecoration(
-                                                                                                color: Colors.redAccent,
-                                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                              ),
-                                                                                              padding: const EdgeInsets.all(8.0),
-                                                                                              child: TextButton(
-                                                                                                onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                child: const Text(
-                                                                                                  'ปิด',
-                                                                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                          (Value_selectDate == null) ? 'เลือก' : '$Value_selectDate',
+                                                                                          style: const TextStyle(
+                                                                                            color: ReportScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                              );
+                                                                            }),
+                                                                      ],
+                                                                    ),
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        keyboardType:
+                                                                            TextInputType.number,
+                                                                        controller:
+                                                                            Formbecause_,
+                                                                        validator:
+                                                                            (value) {
+                                                                          if (value == null ||
+                                                                              value.isEmpty) {
+                                                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                          }
+                                                                          // if (int.parse(value.toString()) < 13) {
+                                                                          //   return '< 13';
+                                                                          // }
+                                                                          return null;
+                                                                        },
+                                                                        // maxLength: 13,
+                                                                        cursorColor:
+                                                                            Colors.green,
+                                                                        decoration: InputDecoration(
+                                                                            fillColor: Colors.white.withOpacity(0.3),
+                                                                            filled: true,
+                                                                            // prefixIcon: const Icon(Icons.water,
+                                                                            //     color: Colors.blue),
+                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            focusedBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                            enabledBorder: const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                            labelText: 'คำอธิบาย',
+                                                                            labelStyle: const TextStyle(
+                                                                              color: ManageScreen_Color.Colors_Text2_,
+                                                                              // fontWeight:
+                                                                              //     FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            )),
+                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                        //   // for below version 2 use this
+                                                                        //   FilteringTextInputFormatter.allow(
+                                                                        //       RegExp(r'[0-9]')),
+                                                                        //   // for version 2 and greater youcan also use this
+                                                                        //   FilteringTextInputFormatter.digitsOnly
+                                                                        // ],
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                      height:
+                                                                          5.0,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              actions: <Widget>[
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: Colors.green,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextButton(
+                                                                              onPressed: () async {
+                                                                                String Ser_ = maintenanceModels[index].ser.toString();
+
+                                                                                String because_ = Formbecause_.text.toString();
+
+                                                                                print(
+                                                                                  '$Ser_ //// $because_ //$Value_selectDate',
+                                                                                );
+                                                                                if (Value_selectDate == null && because_ == '') {
+                                                                                  showDialog<String>(
+                                                                                    context: context,
+                                                                                    builder: (BuildContext context) => AlertDialog(
+                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                      title: const Center(
+                                                                                          child: Text(
+                                                                                        'กรุณากรอกคำอธิบายและวันที่ !!',
+                                                                                        style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                      )),
+                                                                                      actions: <Widget>[
+                                                                                        Padding(
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: Row(
+                                                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                                                            children: [
+                                                                                              Container(
+                                                                                                width: 100,
+                                                                                                decoration: const BoxDecoration(
+                                                                                                  color: Colors.redAccent,
+                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                ),
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: TextButton(
+                                                                                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                  child: const Text(
+                                                                                                    'ปิด',
+                                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                  ),
                                                                                                 ),
                                                                                               ),
-                                                                                            ),
-                                                                                          ],
+                                                                                            ],
+                                                                                          ),
                                                                                         ),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                );
-                                                                              } else {
-                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                var ren = preferences.getString('renTalSer');
-                                                                                String url = '${MyConstant().domain}/UpC_Sta_maintenance.php?isAdd=true&ren=$ren&Ser=$Ser_&because=$because_&datex=$Value_selectDate';
-                                                                                try {
-                                                                                  var response = await http.get(Uri.parse(url));
-                                                                                  var result = json.decode(response.body);
-                                                                                  print('-------->>>> $result');
-                                                                                  if (result.toString() == 'true') {
-                                                                                    setState(() {
-                                                                                      Formbecause_.clear();
-                                                                                      Value_selectDate = null;
-                                                                                    });
-                                                                                  }
-                                                                                  red_Trans_c_maintenance();
-                                                                                  Navigator.pop(context, 'OK');
-                                                                                } catch (e) {}
-                                                                              }
-                                                                            },
-                                                                            child:
-                                                                                const Text(
-                                                                              'ยืนยัน',
-                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                      ],
+                                                                                    ),
+                                                                                  );
+                                                                                } else {
+                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                  var ren = preferences.getString('renTalSer');
+                                                                                  String url = '${MyConstant().domain}/UpC_Sta_maintenance.php?isAdd=true&ren=$ren&Ser=$Ser_&because=$because_&datex=$Value_selectDate';
+                                                                                  try {
+                                                                                    var response = await http.get(Uri.parse(url));
+                                                                                    var result = json.decode(response.body);
+                                                                                    print('-------->>>> $result');
+                                                                                    if (result.toString() == 'true') {
+                                                                                      setState(() {
+                                                                                        Formbecause_.clear();
+                                                                                        Value_selectDate = null;
+                                                                                      });
+                                                                                    }
+                                                                                    red_Trans_c_maintenance();
+                                                                                    Navigator.pop(context, 'OK');
+                                                                                  } catch (e) {}
+                                                                                }
+                                                                              },
+                                                                              child: const Text(
+                                                                                'ยืนยัน',
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      ],
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: [
-                                                                        Container(
-                                                                          width:
-                                                                              100,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                Colors.redAccent,
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              TextButton(
-                                                                            onPressed:
-                                                                                () {
-                                                                              setState(() {
-                                                                                Value_selectDate = null;
-                                                                              });
-                                                                              red_Trans_c_maintenance();
-                                                                              Navigator.pop(context, 'OK');
-                                                                            },
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: Colors.redAccent,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
                                                                             child:
-                                                                                const Text(
-                                                                              'ปิด',
-                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                TextButton(
+                                                                              onPressed: () {
+                                                                                setState(() {
+                                                                                  Value_selectDate = null;
+                                                                                });
+                                                                                red_Trans_c_maintenance();
+                                                                                Navigator.pop(context, 'OK');
+                                                                              },
+                                                                              child: const Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                              ),
                                                                             ),
                                                                           ),
-                                                                        ),
-                                                                      ],
+                                                                        ],
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          );
-                                                        });
-                                                },
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            );
+                                                          });
+                                                  },
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );
@@ -3856,7 +3888,7 @@ class _ManageScreenState extends State<ManageScreen> {
               // border: Border.all(
               //     color: Colors.grey, width: 1),
             ),
-            height: MediaQuery.of(context).size.height / 1.4,
+            height: MediaQuery.of(context).size.height * 0.7,
             // width: MediaQuery.of(context).size.width / 3,
             child: Column(
               children: [
@@ -3864,9 +3896,9 @@ class _ManageScreenState extends State<ManageScreen> {
                   children: [
                     Expanded(
                       child: Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          color: Colors.blueGrey,
+                        // height: 30,
+                        decoration: BoxDecoration(
+                          color: Colors.red[800],
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -3875,6 +3907,7 @@ class _ManageScreenState extends State<ManageScreen> {
                           // border: Border.all(
                           //     color: Colors.grey, width: 1),
                         ),
+                        padding: const EdgeInsets.all(8.0),
                         child: const Center(
                           child: Text(
                             'แจ้งซ่อมบำรุง',
@@ -3894,7 +3927,8 @@ class _ManageScreenState extends State<ManageScreen> {
                 Container(
                   height: 50,
                   decoration: const BoxDecoration(
-                    color: AppbackgroundColor.TiTile_Colors,
+                    color: AppbackgroundColor.Sub_Abg_Colors,
+
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(0),
                         topRight: Radius.circular(0),
@@ -3939,7 +3973,7 @@ class _ManageScreenState extends State<ManageScreen> {
                             child: Container(
                               width: 100,
                               decoration: BoxDecoration(
-                                color: AppbackgroundColor.TiTile_Colors,
+                                color: AppbackgroundColor.Sub_Abg_Colors,
                                 borderRadius: const BorderRadius.only(
                                     topLeft: Radius.circular(10),
                                     topRight: Radius.circular(10),
@@ -4254,7 +4288,7 @@ class _ManageScreenState extends State<ManageScreen> {
                   ),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height / 1.9,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   decoration: const BoxDecoration(
                     color: AppbackgroundColor.Sub_Abg_Colors,
                     borderRadius: BorderRadius.only(
@@ -4404,7 +4438,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                 //     _Form_nameshop = value.trim(),
                                 //initialValue: _Form_nameshop,
                                 onFieldSubmitted: (value) async {},
-                                maxLines: 10,
+                                maxLines: 9,
                                 // maxLength: 13,
                                 cursorColor: Colors.green,
                                 decoration: InputDecoration(
@@ -4471,16 +4505,16 @@ class _ManageScreenState extends State<ManageScreen> {
                             children: [
                               InkWell(
                                 child: Container(
+                                  width: 100,
                                   decoration: BoxDecoration(
-                                    // color: AppbackgroundColor
-                                    //     .TiTile_Colors,
+                                    color: Colors.redAccent,
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(6),
                                         topRight: Radius.circular(6),
                                         bottomLeft: Radius.circular(6),
                                         bottomRight: Radius.circular(6)),
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
+                                    // border: Border.all(
+                                    //     color: Colors.grey, width: 1),
 
                                     // border: Border.all(
                                     //     color: Colors.grey, width: 1),
@@ -4490,11 +4524,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                     'ยกเลิก',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: ManageScreen_Color.Colors_Text2_,
-                                      // fontWeight:
-                                      //     FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
                                   ),
                                 ),
                                 onTap: () {
@@ -4510,14 +4542,14 @@ class _ManageScreenState extends State<ManageScreen> {
                                 child: Container(
                                   width: 100,
                                   decoration: BoxDecoration(
-                                    color: Colors.greenAccent[100],
+                                    color: Colors.green,
                                     borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(6),
                                         topRight: Radius.circular(6),
                                         bottomLeft: Radius.circular(6),
                                         bottomRight: Radius.circular(6)),
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
+                                    // border: Border.all(
+                                    //     color: Colors.grey, width: 1),
 
                                     // border: Border.all(
                                     //     color: Colors.grey, width: 1),
@@ -4527,11 +4559,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                     'บันทึก',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: ManageScreen_Color.Colors_Text2_,
-                                      // fontWeight:
-                                      //     FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T,
-                                    ),
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T),
                                   ),
                                 ),
                                 onTap: () async {

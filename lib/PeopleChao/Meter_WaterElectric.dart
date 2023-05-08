@@ -74,7 +74,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
   ];
 
   String? _celvat, _cname, _cnamex, _cser, _cunitser, _cqty_vat, _cunit;
-
+  var nFormat = NumberFormat("#,##0.00", "en_US");
   List<TransModel> _TransModels = [];
   List<ContractxModel> _ContractxModels = [];
   int Ser__TapContractx = 0;
@@ -693,446 +693,336 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                         itemBuilder: (BuildContext context,
                                             int indextran) {
                                           // ignore: curly_braces_in_flow_control_structures
-                                          return Container(
+                                          return Material(
                                             color: tappedIndex_1 ==
                                                     indextran.toString()
                                                 ? tappedIndex_Color
                                                     .tappedIndex_Colors
-                                                    .withOpacity(0.5)
-                                                : null,
-                                            child: ListTile(
-                                              onTap: () {
-                                                setState(() {
-                                                  tappedIndex_1 =
-                                                      indextran.toString();
-                                                });
-                                              },
-                                              title: Row(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      // ignore: unnecessary_string_interpolations
-                                                      '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].duedate} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].duedate} 00:00:00').year + 543}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                : AppbackgroundColor
+                                                    .Sub_Abg_Colors,
+                                            child: Container(
+                                              // color: tappedIndex_1 ==
+                                              //         indextran.toString()
+                                              //     ? tappedIndex_Color
+                                              //         .tappedIndex_Colors
+                                              //         .withOpacity(0.5)
+                                              //     : null,
+                                              child: ListTile(
+                                                onTap: () {
+                                                  setState(() {
+                                                    tappedIndex_1 =
+                                                        indextran.toString();
+                                                  });
+                                                },
+                                                title: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        // ignore: unnecessary_string_interpolations
+                                                        '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].duedate} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].duedate} 00:00:00').year + 543}',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: _cunitser != '6'
-                                                        ? Text(
-                                                            '$_cunit',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          )
-                                                        : Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              // color: Colors.green,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        6),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        6),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        6),
-                                                                bottomRight:
-                                                                    Radius
-                                                                        .circular(
-                                                                            6),
-                                                              ),
-                                                              // border: Border.all(color: Colors.grey, width: 1),
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: indextran ==
-                                                                    0
-                                                                ? _TransModels[indextran]
-                                                                            .ovalue !=
-                                                                        null
-                                                                    ? Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          color: Colors
-                                                                              .grey
-                                                                              .shade300,
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          border: Border.all(
-                                                                              color: Colors.grey,
-                                                                              width: 1),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          indextran == 0
-                                                                              ? '${_TransModels[indextran].ovalue}'
-                                                                              : '${_TransModels[indextran - 1].nvalue}',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          style: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              //fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      )
-                                                                    : TextFormField(
-                                                                        keyboardType:
-                                                                            TextInputType.number,
-                                                                        showCursor: indextran ==
-                                                                                0
-                                                                            ? _TransModels[indextran].ovalue == null
-                                                                                ? true
-                                                                                : false
-                                                                            : false,
-                                                                        readOnly: indextran ==
-                                                                                0
-                                                                            ? _TransModels[indextran].ovalue == null
-                                                                                ? false
-                                                                                : true
-                                                                            : true,
-                                                                        initialValue: indextran ==
-                                                                                0
-                                                                            ? _TransModels[indextran].ovalue
-                                                                            : _TransModels[indextran - 1].nvalue,
-                                                                        onFieldSubmitted:
-                                                                            (value) async {
-                                                                          if (indextran ==
-                                                                              0) {
-                                                                            if (_TransModels[indextran].ovalue ==
-                                                                                null) {
-                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                              String? ren = preferences.getString('renTalSer');
-                                                                              String? ser_user = preferences.getString('ser');
-                                                                              var qser = _TransModels[indextran].ser;
-
-                                                                              var oval = '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
-                                                                              String url = '${MyConstant().domain}/InC_Invoice.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user&oval=$oval&con_ser=$_cser';
-
-                                                                              try {
-                                                                                var response = await http.get(Uri.parse(url));
-
-                                                                                var result = json.decode(response.body);
-                                                                                print(result);
-                                                                                if (result.toString() != 'null') {
-                                                                                  setState(() {
-                                                                                    red_Trans(_cser);
-                                                                                  });
-                                                                                }
-                                                                              } catch (e) {}
-                                                                            }
-                                                                          }
-                                                                        },
-                                                                        cursorColor:
-                                                                            Colors.black,
-                                                                        decoration: InputDecoration(
-                                                                            fillColor: Colors.white.withOpacity(0.3),
-                                                                            filled: true,
-                                                                            // prefixIcon:
-                                                                            //     const Icon(Icons.person, color: Colors.black),
-                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                            focusedBorder: const OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topRight: Radius.circular(15),
-                                                                                topLeft: Radius.circular(15),
-                                                                                bottomRight: Radius.circular(15),
-                                                                                bottomLeft: Radius.circular(15),
-                                                                              ),
-                                                                              borderSide: BorderSide(
-                                                                                width: 1,
-                                                                                color: Colors.black,
-                                                                              ),
-                                                                            ),
-                                                                            enabledBorder: const OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topRight: Radius.circular(15),
-                                                                                topLeft: Radius.circular(15),
-                                                                                bottomRight: Radius.circular(15),
-                                                                                bottomLeft: Radius.circular(15),
-                                                                              ),
-                                                                              borderSide: BorderSide(
-                                                                                width: 1,
-                                                                                color: Colors.grey,
-                                                                              ),
-                                                                            ),
-                                                                            // labelText: 'ระบุชื่อร้านค้า',
-                                                                            labelStyle: const TextStyle(color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                                                                        inputFormatters: <
-                                                                            TextInputFormatter>[
-                                                                          // for below version 2 use this
-                                                                          FilteringTextInputFormatter.allow(
-                                                                              RegExp(r'[0-9]')),
-                                                                          // for version 2 and greater youcan also use this
-                                                                          FilteringTextInputFormatter
-                                                                              .digitsOnly
-                                                                        ],
-                                                                      )
-                                                                : Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: Colors
-                                                                          .grey
-                                                                          .shade300,
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(15),
-                                                                        topRight:
-                                                                            Radius.circular(15),
-                                                                        bottomLeft:
-                                                                            Radius.circular(15),
-                                                                        bottomRight:
-                                                                            Radius.circular(15),
-                                                                      ),
-                                                                      border: Border.all(
-                                                                          color: Colors
-                                                                              .grey,
-                                                                          width:
-                                                                              1),
-                                                                    ),
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Text(
-                                                                      indextran ==
-                                                                              0
-                                                                          ? '${_TransModels[indextran].ovalue}'
-                                                                          : _TransModels[indextran - 1].nvalue == null
-                                                                              ? ''
-                                                                              : '${_TransModels[indextran - 1].nvalue}',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                          ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: _cunitser != '6'
-                                                        ? Text(
-                                                            '$_cunit',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    //fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                          )
-                                                        : _TransModels[indextran]
-                                                                        .docno_in ==
-                                                                    null ||
-                                                                _TransModels[
-                                                                            indextran]
-                                                                        .docno_in ==
-                                                                    ''
-                                                            ? Container(
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  // color: Colors.green,
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            6),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            6),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            6),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            6),
-                                                                  ),
-                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: _cunitser != '6'
+                                                          ? Text(
+                                                              '$_cunit',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            )
+                                                          : Container(
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                // color: Colors.green,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          6),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          6),
                                                                 ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    TextFormField(
-                                                                  keyboardType:
-                                                                      TextInputType
-                                                                          .number,
-                                                                  showCursor: _TransModels[indextran].docno_in ==
-                                                                              null ||
-                                                                          _TransModels[indextran].docno_in ==
-                                                                              ''
-                                                                      ? true
-                                                                      : false,
-                                                                  //add this line
-                                                                  readOnly: _TransModels[indextran].docno_in ==
-                                                                              null ||
-                                                                          _TransModels[indextran].docno_in ==
-                                                                              ''
-                                                                      ? false
-                                                                      : true,
+                                                                // border: Border.all(color: Colors.grey, width: 1),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: indextran ==
+                                                                      0
+                                                                  ? _TransModels[indextran]
+                                                                              .ovalue !=
+                                                                          null
+                                                                      ? Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.grey.shade300,
+                                                                            borderRadius:
+                                                                                const BorderRadius.only(
+                                                                              topLeft: Radius.circular(15),
+                                                                              topRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                            ),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            indextran == 0
+                                                                                ? '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                                //'${_TransModels[indextran].ovalue}'
+                                                                                : '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                            // '${_TransModels[indextran - 1].nvalue}',
+                                                                            textAlign:
+                                                                                TextAlign.right,
+                                                                            style: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                //fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        )
+                                                                      : TextFormField(
+                                                                          textAlign:
+                                                                              TextAlign.right,
+                                                                          keyboardType:
+                                                                              TextInputType.number,
+                                                                          showCursor: indextran == 0
+                                                                              ? _TransModels[indextran].ovalue == null
+                                                                                  ? true
+                                                                                  : false
+                                                                              : false,
+                                                                          readOnly: indextran == 0
+                                                                              ? _TransModels[indextran].ovalue == null
+                                                                                  ? false
+                                                                                  : true
+                                                                              : true,
+                                                                          initialValue: indextran == 0
+                                                                              ? _TransModels[indextran].ovalue
+                                                                              : _TransModels[indextran - 1].nvalue,
+                                                                          onFieldSubmitted:
+                                                                              (value) async {
+                                                                            if (indextran ==
+                                                                                0) {
+                                                                              if (_TransModels[indextran].ovalue == null) {
+                                                                                SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                String? ren = preferences.getString('renTalSer');
+                                                                                String? ser_user = preferences.getString('ser');
+                                                                                var qser = _TransModels[indextran].ser;
 
-                                                                  initialValue:
-                                                                      _TransModels[
-                                                                              indextran]
-                                                                          .nvalue,
+                                                                                var oval = '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
+                                                                                String url = '${MyConstant().domain}/InC_Invoice.php?isAdd=true&ren=$ren&qser=$qser&qty=$value&ser_user=$ser_user&oval=$oval&con_ser=$_cser';
 
-                                                                  // controller: Form_nameshop,
-                                                                  onFieldSubmitted:
-                                                                      (value) async {
-                                                                    if (indextran ==
-                                                                        0) {
-                                                                      SharedPreferences
-                                                                          preferences =
-                                                                          await SharedPreferences
-                                                                              .getInstance();
-                                                                      String?
-                                                                          ren =
-                                                                          preferences
-                                                                              .getString('renTalSer');
-                                                                      String?
-                                                                          ser_user =
-                                                                          preferences
-                                                                              .getString('ser');
+                                                                                try {
+                                                                                  var response = await http.get(Uri.parse(url));
 
-                                                                      var qser_in =
-                                                                          _TransModels[indextran]
-                                                                              .ser_in;
-                                                                      var tran_expser =
-                                                                          _TransModels[indextran]
-                                                                              .expser;
-                                                                      var qser_inn =
-                                                                          _TransModels[indextran + 1]
-                                                                              .ser_in;
-
-                                                                      var tran_ser =
-                                                                          _TransModels[indextran]
-                                                                              .ser;
-                                                                      var tran_sern =
-                                                                          _TransModels[indextran + 1]
-                                                                              .ser;
-                                                                      var ovalue =
-                                                                          _TransModels[indextran]
-                                                                              .ovalue; // ก่อน
-                                                                      var nvalue =
-                                                                          _TransModels[indextran]
-                                                                              .nvalue; // หลัง
-                                                                      _celvat; //vat
-                                                                      _cqty_vat; // หน่วย
-
-                                                                      print(
-                                                                          'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
-
-                                                                      String
-                                                                          url =
-                                                                          '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
-
-                                                                      try {
-                                                                        var response =
-                                                                            await http.get(Uri.parse(url));
-
-                                                                        var result =
-                                                                            json.decode(response.body);
-                                                                        print(
-                                                                            result);
-                                                                        if (result.toString() !=
-                                                                            'null') {
-                                                                          setState(
-                                                                              () {
-                                                                            red_Trans(_cser);
-                                                                          });
-                                                                        }
-                                                                      } catch (e) {}
-                                                                    } else {
-                                                                      if (_TransModels[indextran]
-                                                                              .ovalue ==
-                                                                          null) {
-                                                                        if (_TransModels[indextran].ovalue ==
-                                                                            null) {
-                                                                          SharedPreferences
-                                                                              preferences =
-                                                                              await SharedPreferences.getInstance();
-                                                                          String?
-                                                                              ren =
-                                                                              preferences.getString('renTalSer');
-                                                                          String?
-                                                                              ser_user =
-                                                                              preferences.getString('ser');
-
-                                                                          var qser_in =
-                                                                              _TransModels[indextran].ser_in; // ser in
-
-                                                                          var tran_ser =
-                                                                              _TransModels[indextran].ser; // ser tran
-                                                                          var ovalue =
-                                                                              _TransModels[indextran - 1].nvalue; // ก่อน
-                                                                          var nvalue =
-                                                                              _TransModels[indextran].nvalue; // หลัง
-                                                                          _celvat; //vat
-                                                                          _cqty_vat; // หน่วย
-
-                                                                          var oval =
-                                                                              '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
-                                                                          String
-                                                                              url =
-                                                                              '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser';
-
-                                                                          try {
-                                                                            var response =
-                                                                                await http.get(Uri.parse(url));
-
-                                                                            var result =
-                                                                                json.decode(response.body);
-                                                                            print(result);
-                                                                            if (result.toString() !=
-                                                                                'null') {
-                                                                              setState(() {
-                                                                                red_Trans(_cser);
-                                                                              });
+                                                                                  var result = json.decode(response.body);
+                                                                                  print(result);
+                                                                                  if (result.toString() != 'null') {
+                                                                                    setState(() {
+                                                                                      red_Trans(_cser);
+                                                                                    });
+                                                                                  }
+                                                                                } catch (e) {}
+                                                                              }
                                                                             }
-                                                                          } catch (e) {}
-                                                                        }
-                                                                      } else {
+                                                                          },
+                                                                          // cursorColor:
+                                                                          //     Colors.black,
+                                                                          decoration: InputDecoration(
+                                                                              fillColor: Colors.white.withOpacity(0.3),
+                                                                              filled: true,
+                                                                              // prefixIcon:
+                                                                              //     const Icon(Icons.person, color: Colors.black),
+                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.black,
+                                                                                ),
+                                                                              ),
+                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              // labelText: 'ระบุชื่อร้านค้า',
+                                                                              labelStyle: const TextStyle(color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                                                                          inputFormatters: <
+                                                                              TextInputFormatter>[
+                                                                            // for below version 2 use this
+                                                                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                                                            // for version 2 and greater youcan also use this
+                                                                            FilteringTextInputFormatter.digitsOnly
+                                                                          ],
+                                                                        )
+                                                                  : Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .grey
+                                                                            .shade300,
+                                                                        borderRadius:
+                                                                            const BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Text(
+                                                                        indextran ==
+                                                                                0
+                                                                            ? '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                            // '${_TransModels[indextran].ovalue}'
+                                                                            : _TransModels[indextran - 1].nvalue == null
+                                                                                ? ''
+                                                                                : '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                        //'${_TransModels[indextran - 1].nvalue}',
+                                                                        textAlign:
+                                                                            TextAlign.right,
+                                                                        style: const TextStyle(
+                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                            ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: _cunitser != '6'
+                                                          ? Text(
+                                                              '$_cunit',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            )
+                                                          : _TransModels[indextran]
+                                                                          .docno_in ==
+                                                                      null ||
+                                                                  _TransModels[
+                                                                              indextran]
+                                                                          .docno_in ==
+                                                                      ''
+                                                              ? Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    // color: Colors.green,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              6),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              6),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              6),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              6),
+                                                                    ),
+                                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      TextFormField(
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .right,
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .number,
+                                                                    showCursor: _TransModels[indextran].docno_in ==
+                                                                                null ||
+                                                                            _TransModels[indextran].docno_in ==
+                                                                                ''
+                                                                        ? true
+                                                                        : false,
+                                                                    //add this line
+                                                                    readOnly: _TransModels[indextran].docno_in ==
+                                                                                null ||
+                                                                            _TransModels[indextran].docno_in ==
+                                                                                ''
+                                                                        ? false
+                                                                        : true,
+
+                                                                    initialValue:
+                                                                        _TransModels[indextran]
+                                                                            .nvalue,
+
+                                                                    // controller: Form_nameshop,
+                                                                    onFieldSubmitted:
+                                                                        (value) async {
+                                                                      if (indextran ==
+                                                                          0) {
                                                                         SharedPreferences
                                                                             preferences =
                                                                             await SharedPreferences.getInstance();
@@ -1145,14 +1035,15 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
 
                                                                         var qser_in =
                                                                             _TransModels[indextran].ser_in;
-                                                                        var qser_inn =
-                                                                            _TransModels[indextran + 1].ser_in;
                                                                         var tran_expser =
                                                                             _TransModels[indextran].expser;
-                                                                        var tran_sern =
-                                                                            _TransModels[indextran + 1].ser;
+                                                                        var qser_inn =
+                                                                            _TransModels[indextran + 1].ser_in;
+
                                                                         var tran_ser =
                                                                             _TransModels[indextran].ser;
+                                                                        var tran_sern =
+                                                                            _TransModels[indextran + 1].ser;
                                                                         var ovalue =
                                                                             _TransModels[indextran].ovalue; // ก่อน
                                                                         var nvalue =
@@ -1182,150 +1073,256 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                             });
                                                                           }
                                                                         } catch (e) {}
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .black,
-                                                                  decoration: InputDecoration(
-                                                                      fillColor: Colors.white.withOpacity(0.3),
-                                                                      filled: true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      // labelText: 'ระบุชื่อร้านค้า',
-                                                                      labelStyle: const TextStyle(
-                                                                          color: Colors.black54,
+                                                                      } else {
+                                                                        if (_TransModels[indextran].ovalue ==
+                                                                            null) {
+                                                                          if (_TransModels[indextran].ovalue ==
+                                                                              null) {
+                                                                            SharedPreferences
+                                                                                preferences =
+                                                                                await SharedPreferences.getInstance();
+                                                                            String?
+                                                                                ren =
+                                                                                preferences.getString('renTalSer');
+                                                                            String?
+                                                                                ser_user =
+                                                                                preferences.getString('ser');
 
-                                                                          //fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T)),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
-                                                                    // for below version 2 use this
-                                                                    FilteringTextInputFormatter
-                                                                        .allow(RegExp(
-                                                                            r'[0-9]')),
-                                                                    // for version 2 and greater youcan also use this
-                                                                    FilteringTextInputFormatter
-                                                                        .digitsOnly
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            : Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade300,
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            15),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            15),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            15),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            15),
+                                                                            var qser_in =
+                                                                                _TransModels[indextran].ser_in; // ser in
+
+                                                                            var tran_ser =
+                                                                                _TransModels[indextran].ser; // ser tran
+                                                                            var ovalue =
+                                                                                _TransModels[indextran - 1].nvalue; // ก่อน
+                                                                            var nvalue =
+                                                                                _TransModels[indextran].nvalue; // หลัง
+                                                                            _celvat; //vat
+                                                                            _cqty_vat; // หน่วย
+
+                                                                            var oval =
+                                                                                '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
+                                                                            String
+                                                                                url =
+                                                                                '${MyConstant().domain}/InC_InvoiceNew.php?isAdd=true&ren=$ren&tran_ser=$tran_ser&qty=$value&ser_user=$ser_user&oval=$oval&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser';
+
+                                                                            try {
+                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                              var result = json.decode(response.body);
+                                                                              print(result);
+                                                                              if (result.toString() != 'null') {
+                                                                                setState(() {
+                                                                                  red_Trans(_cser);
+                                                                                });
+                                                                              }
+                                                                            } catch (e) {}
+                                                                          }
+                                                                        } else {
+                                                                          SharedPreferences
+                                                                              preferences =
+                                                                              await SharedPreferences.getInstance();
+                                                                          String?
+                                                                              ren =
+                                                                              preferences.getString('renTalSer');
+                                                                          String?
+                                                                              ser_user =
+                                                                              preferences.getString('ser');
+
+                                                                          var qser_in =
+                                                                              _TransModels[indextran].ser_in;
+                                                                          var qser_inn =
+                                                                              _TransModels[indextran + 1].ser_in;
+                                                                          var tran_expser =
+                                                                              _TransModels[indextran].expser;
+                                                                          var tran_sern =
+                                                                              _TransModels[indextran + 1].ser;
+                                                                          var tran_ser =
+                                                                              _TransModels[indextran].ser;
+                                                                          var ovalue =
+                                                                              _TransModels[indextran].ovalue; // ก่อน
+                                                                          var nvalue =
+                                                                              _TransModels[indextran].nvalue; // หลัง
+                                                                          _celvat; //vat
+                                                                          _cqty_vat; // หน่วย
+
+                                                                          print(
+                                                                              'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+
+                                                                          String
+                                                                              url =
+                                                                              '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                          try {
+                                                                            var response =
+                                                                                await http.get(Uri.parse(url));
+
+                                                                            var result =
+                                                                                json.decode(response.body);
+                                                                            print(result);
+                                                                            if (result.toString() !=
+                                                                                'null') {
+                                                                              setState(() {
+                                                                                red_Trans(_cser);
+                                                                              });
+                                                                            }
+                                                                          } catch (e) {}
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    // cursorColor:
+                                                                    //     Colors
+                                                                    //         .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        // labelText: 'ระบุชื่อร้านค้า',
+                                                                        labelStyle: const TextStyle(
+                                                                            color: Colors.black54,
+
+                                                                            //fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T)),
+                                                                    inputFormatters: <
+                                                                        TextInputFormatter>[
+                                                                      // for below version 2 use this
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp(r'[0-9]')),
+                                                                      // for version 2 and greater youcan also use this
+                                                                      FilteringTextInputFormatter
+                                                                          .digitsOnly
+                                                                    ],
                                                                   ),
-                                                                  border: Border.all(
+                                                                )
+                                                              : Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
                                                                       color: Colors
-                                                                          .grey,
-                                                                      width: 1),
+                                                                          .grey
+                                                                          .shade300,
+                                                                      borderRadius:
+                                                                          const BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(15),
+                                                                        topRight:
+                                                                            Radius.circular(15),
+                                                                        bottomLeft:
+                                                                            Radius.circular(15),
+                                                                        bottomRight:
+                                                                            Radius.circular(15),
+                                                                      ),
+                                                                      border: Border.all(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          width:
+                                                                              1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Text(
+                                                                      '${nFormat.format(double.parse(_TransModels[indextran].nvalue!))}',
+                                                                      // '${_TransModels[indextran].nvalue}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .right,
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      style: const TextStyle(
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          //fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
                                                                 ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Text(
-                                                                  '${_TransModels[indextran].nvalue}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T),
-                                                                ),
-                                                              ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      '${_TransModels[indextran].qty5}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
                                                     ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Text(
-                                                      '${_TransModels[indextran].amt}',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${nFormat.format(double.parse(_TransModels[indextran].qty5!))}',
+                                                        // '${_TransModels[indextran].qty5}',
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Text(
+                                                        '${nFormat.format(double.parse(_TransModels[indextran].amt!))}',
+                                                        //  '${_TransModels[indextran].amt}',
+                                                        textAlign:
+                                                            TextAlign.right,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           );

@@ -21,7 +21,14 @@ class Pdfgen_DailyReport {
       _verticalGroupValue_NameFile,
       NameFile_,
       _TransReBillModels,
-      TransReBillModels) async {
+      TransReBillModels,
+      bill_addr,
+      bill_email,
+      bill_tel,
+      bill_tax,
+      bill_name,
+      newValuePDFimg,
+      Value_selectDate) async {
     //final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
     final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
     final ttf = pw.Font.ttf(font.buffer.asByteData());
@@ -29,7 +36,8 @@ class Pdfgen_DailyReport {
     var nFormat = NumberFormat("#,##0.00", "en_US");
     final tableHeaders = [
       'ลำดับ',
-      'กำหนดชำระ',
+      'วันที่',
+      'รูปแบบชำระ',
       'รายการ',
       'Vat%',
       'หน่วย',
@@ -46,6 +54,11 @@ class Pdfgen_DailyReport {
 
     String Tim_ =
         '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
+    List netImage = [];
+
+    for (int i = 0; i < newValuePDFimg.length; i++) {
+      netImage.add(await networkImage('${newValuePDFimg[i]}'));
+    }
     DateTime date = DateTime.now();
     var formatter = new DateFormat.MMMMd('th_TH');
     String thaiDate = formatter.format(date);
@@ -68,21 +81,19 @@ class Pdfgen_DailyReport {
     double Sum_Ramtd_ = 0.0;
     double Sum_Amt_ = 0.0;
     double Sum_Total_ = 0.0;
+
     for (int indexsum1 = 0;
         indexsum1 < _TransReBillModels.length;
         indexsum1++) {
-      for (int indexsum2 = 0;
-          indexsum2 < TransReBillModels[indexsum1].length;
-          indexsum2++) {
-        Sum_Ramt_ = Sum_Ramt_ +
-            double.parse(TransReBillModels[indexsum1][indexsum2].ramt!);
-        Sum_Ramtd_ = Sum_Ramtd_ +
-            double.parse(TransReBillModels[indexsum1][indexsum2].ramtd!);
-        Sum_Amt_ = Sum_Amt_ +
-            double.parse(TransReBillModels[indexsum1][indexsum2].amt!);
-        Sum_Total_ = Sum_Total_ +
-            double.parse(TransReBillModels[indexsum1][indexsum2].total!);
-      }
+      Sum_Ramt_ = Sum_Ramt_ + double.parse(_TransReBillModels[indexsum1].ramt!);
+
+      Sum_Ramtd_ =
+          Sum_Ramtd_ + double.parse(_TransReBillModels[indexsum1].ramtd!);
+
+      Sum_Amt_ = Sum_Amt_ + double.parse(_TransReBillModels[indexsum1].amt!);
+
+      Sum_Total_ =
+          Sum_Total_ + double.parse(_TransReBillModels[indexsum1].total_bill!);
     }
     doc.addPage(
       pw.MultiPage(
@@ -94,56 +105,176 @@ class Pdfgen_DailyReport {
                 PdfPageFormat.a4.height,
                 PdfPageFormat.a4.width,
                 marginAll: 20),
-        // header: (context) {
-        //   return pw.Text(
-        //     'Flutter Approach',
-        //     style: pw.TextStyle(
-        //       fontWeight: pw.FontWeight.bold,
-        //       fontSize: 15.0,
-        //     ),
-        //   );
-        // },
+        header: (context) {
+          return pw.Row(
+            children: [
+              (netImage.isEmpty)
+                  ? pw.Container(
+                      height: 72,
+                      width: 70,
+                      color: PdfColors.grey200,
+                      child: pw.Center(
+                        child: pw.Text(
+                          '$renTal_name ',
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                            fontSize: 8,
+                            font: ttf,
+                            color: PdfColors.grey300,
+                          ),
+                        ),
+                      ))
+
+                  // pw.Image(
+                  //     pw.MemoryImage(iconImage),
+                  //     height: 72,
+                  //     width: 70,
+                  //   )
+                  : pw.Image(
+                      (netImage[0]),
+                      height: 72,
+                      width: 70,
+                    ),
+              pw.SizedBox(width: 1 * PdfPageFormat.mm),
+              pw.Container(
+                width: 200,
+                child: pw.Column(
+                  mainAxisSize: pw.MainAxisSize.min,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(
+                      '$renTal_name',
+                      maxLines: 2,
+                      style: pw.TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: pw.FontWeight.bold,
+                        font: ttf,
+                      ),
+                    ),
+                    pw.Text(
+                      '$bill_addr',
+                      maxLines: 3,
+                      style: pw.TextStyle(
+                        fontSize: 10.0,
+                        color: PdfColors.grey800,
+                        font: ttf,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              pw.Spacer(),
+              pw.Container(
+                width: 180,
+                child: pw.Column(
+                  mainAxisSize: pw.MainAxisSize.min,
+                  crossAxisAlignment: pw.CrossAxisAlignment.end,
+                  children: [
+                    // pw.Text(
+                    //   'ใบเสนอราคา',
+                    //   style: pw.TextStyle(
+                    //     fontSize: 12.00,
+                    //     fontWeight: pw.FontWeight.bold,
+                    //     font: ttf,
+                    //   ),
+                    // ),
+                    // pw.Text(
+                    //   'ที่อยู่,\n1/1-8 ถ.รัตนโกสินทร์ ต.ศรีภูมิ อ.เมือง จ.เชียงใหม่ 50200',
+                    //   textAlign: pw.TextAlign.right,
+                    //   style: pw.TextStyle(
+                    //       fontSize: 10.0, font: ttf, color: PdfColors.grey),
+                    // ),
+                    pw.Text(
+                      'โทรศัพท์: $bill_tel',
+                      textAlign: pw.TextAlign.right,
+                      maxLines: 1,
+                      style: pw.TextStyle(
+                          fontSize: 10.0, font: ttf, color: PdfColors.grey800),
+                    ),
+                    pw.Text(
+                      'อีเมล: $bill_email',
+                      maxLines: 1,
+                      textAlign: pw.TextAlign.right,
+                      style: pw.TextStyle(
+                          fontSize: 10.0, font: ttf, color: PdfColors.grey800),
+                    ),
+                    pw.Text(
+                      'เลขประจำตัวผู้เสียภาษี: $bill_tax',
+                      maxLines: 2,
+                      style: pw.TextStyle(
+                          fontSize: 10.0, font: ttf, color: PdfColors.grey800),
+                    ),
+                    pw.Text(
+                      'วันที่:  $Value_selectDate',
+                      maxLines: 2,
+                      style: pw.TextStyle(
+                          fontSize: 10.0, font: ttf, color: PdfColors.grey800),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
         build: (context) {
           return [
             pw.Column(
               mainAxisAlignment: pw.MainAxisAlignment.start,
               children: [
-                pw.Center(
-                  child: pw.Container(
-                    child: pw.Column(
-                      children: [
-                        pw.Text(
-                          '${Value_Report}',
-                          style: pw.TextStyle(
-                            fontSize: 20.0,
-                            font: ttf,
-                            color: PdfColors.grey900,
-                            fontWeight: pw.FontWeight.bold,
-                          ),
-                          // style: pw.TextStyle(fontSize: 30),
-                        ),
-                        pw.Text(
-                          '${renTal_name}',
-                          style: pw.TextStyle(
-                            fontSize: 14.0,
-                            font: ttf,
-                            color: PdfColors.grey900,
-                            // fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                        pw.Text(
-                          'วันที่:  $thaiDate ${DateTime.now().year + 543}',
-                          style: pw.TextStyle(
-                            fontSize: 12.0,
-                            font: ttf,
-                            color: PdfColors.grey900,
-                            // fontWeight: pw.FontWeight.bold,
-                          ),
-                        ),
-                      ],
+                pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                pw.Divider(),
+                pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                pw.Row(
+                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                  children: [
+                    pw.Text(
+                      'รายงานประจำวัน',
+                      textAlign: pw.TextAlign.center,
+                      style: pw.TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          color: PdfColors.black),
                     ),
-                  ),
+                  ],
                 ),
+                pw.SizedBox(height: 1 * PdfPageFormat.mm),
+                // pw.Center(
+                //   child: pw.Container(
+                //     child: pw.Column(
+                //       children: [
+                //         pw.Text(
+                //           '${Value_Report}',
+                //           style: pw.TextStyle(
+                //             fontSize: 20.0,
+                //             font: ttf,
+                //             color: PdfColors.grey900,
+                //             fontWeight: pw.FontWeight.bold,
+                //           ),
+                //           // style: pw.TextStyle(fontSize: 30),
+                //         ),
+                //         pw.Text(
+                //           '${renTal_name}',
+                //           style: pw.TextStyle(
+                //             fontSize: 14.0,
+                //             font: ttf,
+                //             color: PdfColors.grey900,
+                //             // fontWeight: pw.FontWeight.bold,
+                //           ),
+                //         ),
+                //         pw.Text(
+                //           'วันที่:  $thaiDate ${DateTime.now().year + 543}',
+                //           style: pw.TextStyle(
+                //             fontSize: 12.0,
+                //             font: ttf,
+                //             color: PdfColors.grey900,
+                //             // fontWeight: pw.FontWeight.bold,
+                //           ),
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
                 // pw.Row(
                 //   mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
@@ -533,6 +664,29 @@ class Pdfgen_DailyReport {
                                       child: pw.Center(
                                         child: pw.Text(
                                           '${TransReBillModels[index1][index2].date}',
+                                          maxLines: 2,
+                                          style: pw.TextStyle(
+                                              fontSize: 10.0,
+                                              font: ttf,
+                                              color: PdfColors.grey900),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  pw.Expanded(
+                                    flex: 1,
+                                    child: pw.Container(
+                                      height: 25,
+                                      decoration: const pw.BoxDecoration(
+                                        color: PdfColors.grey100,
+                                        border: pw.Border(
+                                          bottom: pw.BorderSide(
+                                              color: PdfColors.grey300),
+                                        ),
+                                      ),
+                                      child: pw.Center(
+                                        child: pw.Text(
+                                          '${TransReBillModels[index1][index2].type}',
                                           maxLines: 2,
                                           style: pw.TextStyle(
                                               fontSize: 10.0,

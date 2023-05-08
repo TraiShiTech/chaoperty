@@ -1941,173 +1941,193 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               itemBuilder:
                                                   (BuildContext context,
                                                       int index) {
-                                                return Container(
+                                                return Material(
                                                   color: tappedIndex_ ==
                                                           index.toString()
-                                                      ? Colors.grey.shade300
-                                                      : null,
-                                                  padding:
-                                                      const EdgeInsets.all(5),
-                                                  child: ListTile(
-                                                    onTap: () async {
-                                                      String custno_ =
-                                                          customerModels[index]
-                                                                      .custno ==
-                                                                  null
-                                                              ? ''
-                                                              : '${customerModels[index].custno}';
-                                                      setState(() {
-                                                        Total_amtbill = 0;
-                                                        Total_doctax = 0;
-                                                        Total_late_payment = 0;
-                                                        Total_early_payment = 0;
-                                                        Total_ontime_payment =
-                                                            0;
-                                                        addAreaCusto1 = [];
-                                                        addAreaCusto2 = [];
-                                                        addAreaCusto3 = [];
-                                                        addAreaCusto4 = [];
-                                                        addrtname = [];
-                                                      });
-                                                      red_Trans_bill(custno_);
-                                                      read_GC_tenant1(custno_);
-                                                      read_GC_tenant(custno_);
-                                                      read_GC_Contract(custno_);
-                                                      setState(() {
-                                                        tappedIndex_ =
-                                                            index.toString();
-                                                        tappedIndex_2 = '';
-                                                        _Form_Ser =
-                                                            '${customerModels[index].ser}';
-
-                                                        _verticalGroupValue =
-                                                            '${customerModels[index].type}'; // ประเภท
-
-                                                        Form_nameshop_
-                                                            .text = (customerModels[
-                                                                        index]
-                                                                    .scname
-                                                                    .toString() ==
-                                                                'null')
-                                                            ? ''
-                                                            : '${customerModels[index].scname}';
-                                                        Form_typeshop_.text =
-                                                            '${customerModels[index].stype}';
-                                                        Form_bussshop_.text =
-                                                            '${customerModels[index].cname}';
-                                                        Form_bussscontact_
-                                                                .text =
-                                                            '${customerModels[index].attn}';
-                                                        Form_address_.text =
-                                                            '${customerModels[index].addr1}';
-                                                        Form_tel_.text =
-                                                            '${customerModels[index].tel}';
-                                                        Form_email_.text =
-                                                            '${customerModels[index].email}';
-                                                        Form_tax_
-                                                            .text = customerModels[
-                                                                        index]
-                                                                    .tax ==
-                                                                'null'
-                                                            ? "-"
-                                                            : '${customerModels[index].tax}';
-                                                      });
-
-                                                      for (int i = 0;
-                                                          i < typeModels.length;
-                                                          i++) {
-                                                        print(
-                                                            '--------------------------------------');
-                                                        print(customerModels[
-                                                                index]
-                                                            .type
-                                                            .toString());
-                                                        print(typeModels[i]
-                                                            .type
-                                                            .toString());
-                                                        print(
-                                                            '--------------------------------------');
-                                                        if (customerModels[
-                                                                    index]
-                                                                .type
-                                                                .toString() ==
-                                                            typeModels[i]
-                                                                .type
-                                                                .toString()) {
-                                                          setState(() {
-                                                            Value_AreaSer_ =
-                                                                int.parse(typeModels[
-                                                                            i]
-                                                                        .ser
-                                                                        .toString()) -
-                                                                    1;
-                                                          });
-                                                        } else {}
-                                                      }
-
-                                                      // Navigator.pop(context);
-                                                    },
-                                                    title: Row(
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
+                                                      ? tappedIndex_Color
+                                                          .tappedIndex_Colors
+                                                      : AppbackgroundColor
+                                                          .Sub_Abg_Colors,
+                                                  child: Container(
+                                                    // color: tappedIndex_ ==
+                                                    //         index.toString()
+                                                    //     ? tappedIndex_Color
+                                                    //         .tappedIndex_Colors
+                                                    //         .withOpacity(0.5)
+                                                    //     : null,
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    child: ListTile(
+                                                      onTap: () async {
+                                                        String custno_ =
                                                             customerModels[index]
                                                                         .custno ==
                                                                     null
                                                                 ? ''
-                                                                : '${customerModels[index].custno}',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: CustomerScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
+                                                                : '${customerModels[index].custno}';
+                                                        setState(() {
+                                                          Total_amtbill = 0;
+                                                          Total_doctax = 0;
+                                                          Total_late_payment =
+                                                              0;
+                                                          Total_early_payment =
+                                                              0;
+                                                          Total_ontime_payment =
+                                                              0;
+                                                          Total_tenant = 0;
+                                                          addAreaCusto1 = [];
+                                                          addAreaCusto2 = [];
+                                                          addAreaCusto3 = [];
+                                                          addAreaCusto4 = [];
+                                                          addrtname = [];
+                                                        });
+                                                        red_Trans_bill(custno_);
+                                                        read_GC_tenant1(
+                                                            custno_);
+                                                        read_GC_tenant(custno_);
+                                                        read_GC_Contract(
+                                                            custno_);
+                                                        setState(() {
+                                                          tappedIndex_ =
+                                                              index.toString();
+                                                          tappedIndex_2 = '';
+                                                          _Form_Ser =
+                                                              '${customerModels[index].ser}';
+
+                                                          _verticalGroupValue =
+                                                              '${customerModels[index].type}'; // ประเภท
+
+                                                          Form_nameshop_
+                                                              .text = (customerModels[
+                                                                          index]
+                                                                      .scname
+                                                                      .toString() ==
+                                                                  'null')
+                                                              ? ''
+                                                              : '${customerModels[index].scname}';
+                                                          Form_typeshop_.text =
+                                                              '${customerModels[index].stype}';
+                                                          Form_bussshop_.text =
+                                                              '${customerModels[index].cname}';
+                                                          Form_bussscontact_
+                                                                  .text =
+                                                              '${customerModels[index].attn}';
+                                                          Form_address_.text =
+                                                              '${customerModels[index].addr1}';
+                                                          Form_tel_.text =
+                                                              '${customerModels[index].tel}';
+                                                          Form_email_.text =
+                                                              '${customerModels[index].email}';
+                                                          Form_tax_
+                                                              .text = customerModels[
+                                                                          index]
+                                                                      .tax ==
+                                                                  'null'
+                                                              ? "-"
+                                                              : '${customerModels[index].tax}';
+                                                        });
+
+                                                        for (int i = 0;
+                                                            i <
+                                                                typeModels
+                                                                    .length;
+                                                            i++) {
+                                                          print(
+                                                              '--------------------------------------');
+                                                          print(customerModels[
+                                                                  index]
+                                                              .type
+                                                              .toString());
+                                                          print(typeModels[i]
+                                                              .type
+                                                              .toString());
+                                                          print(
+                                                              '--------------------------------------');
+                                                          if (customerModels[
+                                                                      index]
+                                                                  .type
+                                                                  .toString() ==
+                                                              typeModels[i]
+                                                                  .type
+                                                                  .toString()) {
+                                                            setState(() {
+                                                              Value_AreaSer_ =
+                                                                  int.parse(typeModels[
+                                                                              i]
+                                                                          .ser
+                                                                          .toString()) -
+                                                                      1;
+                                                            });
+                                                          } else {}
+                                                        }
+
+                                                        // Navigator.pop(context);
+                                                      },
+                                                      title: Row(
+                                                        children: [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              customerModels[index]
+                                                                          .custno ==
+                                                                      null
+                                                                  ? ''
+                                                                  : '${customerModels[index].custno}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            '${customerModels[index].scname}',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: CustomerScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              '${customerModels[index].scname}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
                                                           ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            '${customerModels[index].cname}',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style:
-                                                                const TextStyle(
-                                                                    color: CustomerScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    // fontWeight: FontWeight.bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              '${customerModels[index].cname}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      color: CustomerScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 );
@@ -5397,6 +5417,23 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                       child: AutoSizeText(
                                         minFontSize: 10,
                                         maxFontSize: 18,
+                                        'รหัสพื้นที่',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: CustomerScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 18,
                                         'จำนวนเงิน',
                                         textAlign: TextAlign.right,
                                         style: TextStyle(
@@ -5480,113 +5517,42 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                           itemCount: _TransReBillModels.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return Container(
-                                              color: tappedIndex_2.toString() ==
+                                            return Material(
+                                              color: tappedIndex_2 ==
                                                       index.toString()
-                                                  ? Colors.grey.shade300
-                                                  : null,
-                                              child: ListTile(
-                                                onTap: () {
-                                                  setState(() {
-                                                    tappedIndex_2 =
-                                                        index.toString();
-                                                  });
-                                                },
-                                                title: Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        _TransReBillModels[
-                                                                        index]
-                                                                    .doctax ==
-                                                                ''
-                                                            ? '${_TransReBillModels[index].docno}'
-                                                            : '${_TransReBillModels[index].doctax}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    // Expanded(
-                                                    //   flex: 1,
-                                                    //   child: AutoSizeText(
-                                                    //     minFontSize: 10,
-                                                    //     maxFontSize: 18,
-                                                    //     '${_TransReBillModels[index].sname}',
-                                                    //     textAlign: TextAlign.center,
-                                                    //     style: const TextStyle(
-                                                    //         color: CustomerScreen_Color
-                                                    //             .Colors_Text2_,
-                                                    //         // fontWeight: FontWeight.bold,
-                                                    //         fontFamily: Font_.Fonts_T
-                                                    //         //fontSize: 10.0
-                                                    //         //fontSize: 10.0
-                                                    //         ),
-                                                    //   ),
-                                                    // ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        '${_TransReBillModels[index].date}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        '${_TransReBillModels[index].pdate}',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                0, 0, 0, 0),
+                                                  ? tappedIndex_Color
+                                                      .tappedIndex_Colors
+                                                  : AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                              child: Container(
+                                                // color: tappedIndex_2 ==
+                                                //         index.toString()
+                                                //     ? tappedIndex_Color
+                                                //         .tappedIndex_Colors
+                                                //         .withOpacity(0.5)
+                                                //     : null,
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      tappedIndex_2 =
+                                                          index.toString();
+                                                    });
+                                                  },
+                                                  title: Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
                                                         child: AutoSizeText(
                                                           minFontSize: 10,
                                                           maxFontSize: 18,
-                                                          '${nFormat.format(double.parse(_TransReBillModels[index].total_bill.toString()))}',
-                                                          // '${_TransReBillModels[index].total_bill}',
+                                                          _TransReBillModels[
+                                                                          index]
+                                                                      .doctax ==
+                                                                  ''
+                                                              ? '${_TransReBillModels[index].docno}'
+                                                              : '${_TransReBillModels[index].doctax}',
                                                           textAlign:
-                                                              TextAlign.right,
+                                                              TextAlign.center,
                                                           style:
                                                               const TextStyle(
                                                                   color: CustomerScreen_Color
@@ -5600,92 +5566,210 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                   ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        (_TransReBillModels[
-                                                                        index]
-                                                                    .doctax ==
-                                                                '')
-                                                            ? '-'
-                                                            : 'ใบกำกับภาษี',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: const TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text2_,
-                                                            // fontWeight: FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: InkWell(
-                                                        child: Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.red,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(4.0),
-                                                          child: const Center(
-                                                            child: Text(
-                                                              'เรียกดู',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                      // Expanded(
+                                                      //   flex: 1,
+                                                      //   child: AutoSizeText(
+                                                      //     minFontSize: 10,
+                                                      //     maxFontSize: 18,
+                                                      //     '${_TransReBillModels[index].sname}',
+                                                      //     textAlign: TextAlign.center,
+                                                      //     style: const TextStyle(
+                                                      //         color: CustomerScreen_Color
+                                                      //             .Colors_Text2_,
+                                                      //         // fontWeight: FontWeight.bold,
+                                                      //         fontFamily: Font_.Fonts_T
+                                                      //         //fontSize: 10.0
+                                                      //         //fontSize: 10.0
+                                                      //         ),
+                                                      //   ),
+                                                      // ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 18,
+                                                          '${_TransReBillModels[index].date}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
                                                                   fontFamily:
-                                                                      FontWeight_
+                                                                      Font_
                                                                           .Fonts_T
                                                                   //fontSize: 10.0
                                                                   //fontSize: 10.0
                                                                   ),
-                                                            ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 18,
+                                                          '${_TransReBillModels[index].pdate}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 18,
+                                                          (_TransReBillModels[
+                                                                          index]
+                                                                      .ln ==
+                                                                  null)
+                                                              ? (_TransReBillModels[
+                                                                              index]
+                                                                          .room_number
+                                                                          .toString() ==
+                                                                      '')
+                                                                  ? 'ไม่ระบุ'
+                                                                  : '${_TransReBillModels[index].room_number}'
+                                                              : '${_TransReBillModels[index].ln}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .fromLTRB(
+                                                                  0, 0, 0, 0),
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 18,
+                                                            '${nFormat.format(double.parse(_TransReBillModels[index].total_bill.toString()))}',
+                                                            // '${_TransReBillModels[index].total_bill}',
+                                                            textAlign:
+                                                                TextAlign.right,
+                                                            style: const TextStyle(
+                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_.Fonts_T
+                                                                //fontSize: 10.0
+                                                                //fontSize: 10.0
+                                                                ),
                                                           ),
                                                         ),
-                                                        onTap: () async {
-                                                          setState(() {
-                                                            tappedIndex_2 =
-                                                                index
-                                                                    .toString();
-                                                            red_Trans_select(
-                                                                index);
-                                                            red_Invoice(index);
-                                                          });
-
-                                                          checkshowDialog(
-                                                              index);
-                                                        },
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 18,
+                                                          (_TransReBillModels[
+                                                                          index]
+                                                                      .doctax ==
+                                                                  '')
+                                                              ? '-'
+                                                              : 'ใบกำกับภาษี',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: InkWell(
+                                                          child: Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color: Colors.red,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                'เรียกดู',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          onTap: () async {
+                                                            setState(() {
+                                                              tappedIndex_2 =
+                                                                  index
+                                                                      .toString();
+                                                              red_Trans_select(
+                                                                  index);
+                                                              red_Invoice(
+                                                                  index);
+                                                            });
+
+                                                            checkshowDialog(
+                                                                index);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             );

@@ -109,6 +109,12 @@ class TransReBillModel {
 
   String? cname;
   String? addr;
+  String? type;
+  String? ramt;
+  String? ramtd;
+  String? bno;
+  String? bank;
+  String? remark1;
 
   TransReBillModel({
     this.ser,
@@ -217,6 +223,12 @@ class TransReBillModel {
     this.room_number,
     this.cname,
     this.addr,
+    this.type,
+    this.ramt,
+    this.ramtd,
+    this.bno,
+    this.bank,
+    this.remark1,
   });
 
   TransReBillModel.fromJson(Map<String, dynamic> json) {
@@ -327,6 +339,12 @@ class TransReBillModel {
     room_number = json['room_number'];
     cname = json['cname'];
     addr = json['addr'];
+    type = json['type'];
+    ramt = json['ramt'];
+    ramtd = json['ramtd'];
+    bno = json['bno'];
+    bank = json['bank'];
+    remark1 = json['remark1'];
   }
 
   Map<String, dynamic> toJson() {
@@ -438,6 +456,12 @@ class TransReBillModel {
     data['room_number'] = this.room_number;
     data['cname'] = this.cname;
     data['addr'] = this.addr;
+    data['type'] = this.type;
+    data['ramt'] = this.ramt;
+    data['ramtd'] = this.ramtd;
+    data['bno'] = this.bno;
+    data['bank'] = this.bank;
+    data['remark1'] = this.remark1;
 
     return data;
   }

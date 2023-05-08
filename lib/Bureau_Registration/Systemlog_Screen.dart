@@ -303,6 +303,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                           child: InkWell(
                                             onTap: () {
                                               setState(() {
+                                                tappedIndex_ = '';
                                                 Status_3_ = i;
                                               });
                                               red_Syslog();
@@ -1067,7 +1068,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                         child: Container(
                                           child: const Center(
                                             child: Text(
-                                              'รายละเอียดบิล',
+                                              'รายละเอียด',
                                               style: TextStyle(
                                                   color: CustomerScreen_Color
                                                       .Colors_Text1_,
@@ -1092,164 +1093,165 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
                                     itemCount: syslogModel.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Container(
+                                      return Material(
                                         color: tappedIndex_ == index.toString()
-                                            ? Colors.grey.shade300
-                                            : null,
-                                        padding: const EdgeInsets.all(5),
-                                        child: ListTile(
-                                          onTap: () {
-                                            setState(() {
-                                              tappedIndex_ = index.toString();
-                                            });
-                                          },
-                                          title: Row(
-                                            children: [
-                                              // Expanded(
-                                              //   flex: 1,
-                                              //   child: Container(
-                                              //     child: Center(
-                                              //       child: Text(
-                                              //         '${syslogModel[index].atype}',
-                                              //         style: const TextStyle(
-                                              //             color:
-                                              //                 CustomerScreen_Color
-                                              //                     .Colors_Text2_,
-                                              //             // fontWeight: FontWeight.bold,
-                                              //             fontFamily:
-                                              //                 Font_.Fonts_T),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].datex}',
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                            ? tappedIndex_Color
+                                                .tappedIndex_Colors
+                                            : AppbackgroundColor.Sub_Abg_Colors,
+                                        child: Container(
+                                          // color:
+                                          //     tappedIndex_ == index.toString()
+                                          //         ? Colors.grey.shade300
+                                          //         : null,
+                                          padding: const EdgeInsets.all(5),
+                                          child: ListTile(
+                                            onTap: () {
+                                              setState(() {
+                                                tappedIndex_ = index.toString();
+                                              });
+                                            },
+                                            title: Row(
+                                              children: [
+                                                // Expanded(
+                                                //   flex: 1,
+                                                //   child: Container(
+                                                //     child: Center(
+                                                //       child: Text(
+                                                //         '${syslogModel[index].atype}',
+                                                //         style: const TextStyle(
+                                                //             color:
+                                                //                 CustomerScreen_Color
+                                                //                     .Colors_Text2_,
+                                                //             // fontWeight: FontWeight.bold,
+                                                //             fontFamily:
+                                                //                 Font_.Fonts_T),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].datex}',
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].timex}',
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].timex}',
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].ip}',
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].ip}',
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              // Expanded(
-                                              //   flex: 1,
-                                              //   child: Container(
-                                              //     child: Center(
-                                              //       child: Text(
-                                              //         '${syslogModel[index].uid}',
-                                              //         style: const TextStyle(
-                                              //             color:
-                                              //                 CustomerScreen_Color
-                                              //                     .Colors_Text2_,
-                                              //             // fontWeight: FontWeight.bold,
-                                              //             fontFamily:
-                                              //                 Font_.Fonts_T),
-                                              //       ),
-                                              //     ),
-                                              //   ),
-                                              // ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].username}',
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                // Expanded(
+                                                //   flex: 1,
+                                                //   child: Container(
+                                                //     child: Center(
+                                                //       child: Text(
+                                                //         '${syslogModel[index].uid}',
+                                                //         style: const TextStyle(
+                                                //             color:
+                                                //                 CustomerScreen_Color
+                                                //                     .Colors_Text2_,
+                                                //             // fontWeight: FontWeight.bold,
+                                                //             fontFamily:
+                                                //                 Font_.Fonts_T),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].username}',
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].frm}',
-                                                      maxLines: 2,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].frm}',
+                                                        maxLines: 2,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 3,
-                                                child: Container(
-                                                  child: Center(
-                                                    child: Text(
-                                                      '${syslogModel[index].fdo}',
-                                                      maxLines: 2,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: const TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: Container(
+                                                    child: Center(
+                                                      child: Text(
+                                                        '${syslogModel[index].fdo}',
+                                                        maxLines: 2,
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

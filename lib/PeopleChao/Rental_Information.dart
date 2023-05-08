@@ -4203,55 +4203,133 @@ class _RentalInformationState extends State<RentalInformation> {
                                     itemCount: quotxSelectModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Container(
+                                      return Material(
                                         color: tappedIndex_1 == index.toString()
                                             ? tappedIndex_Color
                                                 .tappedIndex_Colors
-                                                .withOpacity(0.5)
-                                            : null,
-                                        child: ListTile(
-                                            onTap: () {
-                                              setState(() {
-                                                tappedIndex_1 =
-                                                    index.toString();
-                                              });
-                                            },
-                                            title: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Container(
-                                                        // decoration: BoxDecoration(
-                                                        //   color: Colors.grey.shade300,
-                                                        //   borderRadius:
-                                                        //       const BorderRadius.only(
-                                                        //           topLeft:
-                                                        //               Radius.circular(10),
-                                                        //           topRight:
-                                                        //               Radius.circular(10),
-                                                        //           bottomLeft:
-                                                        //               Radius.circular(10),
-                                                        //           bottomRight:
-                                                        //               Radius.circular(10)),
-                                                        //   // border: Border.all(color: Colors.grey, width: 1),
-                                                        // ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
+                                            : AppbackgroundColor.Sub_Abg_Colors,
+                                        child: Container(
+                                          // color:
+                                          //     tappedIndex_1 == index.toString()
+                                          //         ? tappedIndex_Color
+                                          //             .tappedIndex_Colors
+                                          //             .withOpacity(0.5)
+                                          //         : null,
+                                          child: ListTile(
+                                              onTap: () {
+                                                setState(() {
+                                                  tappedIndex_1 =
+                                                      index.toString();
+                                                });
+                                              },
+                                              title: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                          // decoration: BoxDecoration(
+                                                          //   color: Colors.grey.shade300,
+                                                          //   borderRadius:
+                                                          //       const BorderRadius.only(
+                                                          //           topLeft:
+                                                          //               Radius.circular(10),
+                                                          //           topRight:
+                                                          //               Radius.circular(10),
+                                                          //           bottomLeft:
+                                                          //               Radius.circular(10),
+                                                          //           bottomRight:
+                                                          //               Radius.circular(10)),
+                                                          //   // border: Border.all(color: Colors.grey, width: 1),
+                                                          // ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: AutoSizeText(
+                                                            maxLines: 2,
+                                                            minFontSize: 8,
+                                                            // maxFontSize: 15,
+                                                            '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                            textAlign:
+                                                                TextAlign.start,
+                                                            style:
+                                                                const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: AutoSizeText(
+                                                        maxLines: 2,
+                                                        minFontSize: 8,
+                                                        // maxFontSize: 15,
+                                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: const TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            //fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Tooltip(
+                                                        richMessage: TextSpan(
+                                                          text:
+                                                              '${quotxSelectModels[index].expname}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: HomeScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            //fontSize: 10.0
+                                                          ),
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          color:
+                                                              Colors.grey[200],
+                                                        ),
                                                         child: AutoSizeText(
                                                           maxLines: 2,
                                                           minFontSize: 8,
                                                           // maxFontSize: 15,
-                                                          '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                                          '${quotxSelectModels[index].expname}',
                                                           textAlign:
-                                                              TextAlign.start,
+                                                              TextAlign.center,
                                                           style:
                                                               const TextStyle(
                                                                   color: PeopleChaoScreen_Color
@@ -4261,22 +4339,16 @@ class _RentalInformationState extends State<RentalInformation> {
                                                                       .Fonts_T),
                                                         ),
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                  Expanded(
+                                                    flex: 1,
                                                     child: AutoSizeText(
                                                       maxLines: 2,
                                                       minFontSize: 8,
                                                       // maxFontSize: 15,
-                                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                                      textAlign: TextAlign.end,
                                                       style: const TextStyle(
                                                           color:
                                                               PeopleChaoScreen_Color
@@ -4286,20 +4358,14 @@ class _RentalInformationState extends State<RentalInformation> {
                                                               Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
+                                                  Expanded(
+                                                    flex: 1,
                                                     child: AutoSizeText(
                                                       maxLines: 2,
                                                       minFontSize: 8,
                                                       // maxFontSize: 15,
-                                                      '${quotxSelectModels[index].expname}',
-                                                      textAlign:
-                                                          TextAlign.center,
+                                                      '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                                      textAlign: TextAlign.end,
                                                       style: const TextStyle(
                                                           color:
                                                               PeopleChaoScreen_Color
@@ -4309,43 +4375,9 @@ class _RentalInformationState extends State<RentalInformation> {
                                                               Font_.Fonts_T),
                                                     ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    maxLines: 2,
-                                                    minFontSize: 8,
-                                                    // maxFontSize: 15,
-                                                    '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
-                                                    textAlign: TextAlign.end,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    maxLines: 2,
-                                                    minFontSize: 8,
-                                                    // maxFontSize: 15,
-                                                    '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
-                                                    textAlign: TextAlign.end,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                              ],
-                                            )),
+                                                ],
+                                              )),
+                                        ),
                                       );
                                     },
                                   ),
@@ -4789,226 +4821,240 @@ class _RentalInformationState extends State<RentalInformation> {
                                           itemCount: _TransModels.length,
                                           itemBuilder: (BuildContext context,
                                               int index) {
-                                            return Container(
+                                            return Material(
                                               color: tappedIndex_2 ==
                                                       index.toString()
                                                   ? tappedIndex_Color
                                                       .tappedIndex_Colors
-                                                      .withOpacity(0.5)
-                                                  : null,
-                                              child: ListTile(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      tappedIndex_2 =
-                                                          index.toString();
-                                                    });
-                                                  },
-                                                  title: Column(
-                                                    children: [
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          // Expanded(
-                                                          //   flex: 1,
-                                                          //   child: AutoSizeText(
-                                                          //     maxLines: 1,
-                                                          //     minFontSize: 8,
-                                                          //     maxFontSize: 20,
-                                                          //     '${(index + 1)}',
-                                                          //     textAlign:
-                                                          //         TextAlign.center,
-                                                          //     style: const TextStyle(
-                                                          //       color: TextHome_Color
-                                                          //           .TextHome_Colors,
-                                                          //     ),
-                                                          //   ),
-                                                          // ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].duedate!} 00:00:00'))}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                  : AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                              child: Container(
+                                                // color: tappedIndex_2 ==
+                                                //         index.toString()
+                                                //     ? tappedIndex_Color
+                                                //         .tappedIndex_Colors
+                                                //         .withOpacity(0.5)
+                                                //     : null,
+                                                child: ListTile(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        tappedIndex_2 =
+                                                            index.toString();
+                                                      });
+                                                    },
+                                                    title: Column(
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            // Expanded(
+                                                            //   flex: 1,
+                                                            //   child: AutoSizeText(
+                                                            //     maxLines: 1,
+                                                            //     minFontSize: 8,
+                                                            //     maxFontSize: 20,
+                                                            //     '${(index + 1)}',
+                                                            //     textAlign:
+                                                            //         TextAlign.center,
+                                                            //     style: const TextStyle(
+                                                            //       color: TextHome_Color
+                                                            //           .TextHome_Colors,
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].duedate!} 00:00:00'))}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].name!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Tooltip(
+                                                                richMessage:
+                                                                    TextSpan(
+                                                                  text:
+                                                                      '${_TransModels[index].name!}',
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    color: HomeScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T,
+                                                                    //fontSize: 10.0
+                                                                  ),
+                                                                ),
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              5),
+                                                                  color: Colors
+                                                                          .grey[
+                                                                      200],
+                                                                ),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  maxLines: 1,
+                                                                  minFontSize:
+                                                                      8,
+                                                                  maxFontSize:
+                                                                      20,
+                                                                  '${_TransModels[index].name!}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                       //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].vtype!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${_TransModels[index].vtype!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].nvat!} %',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${_TransModels[index].nvat!} %',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].vat!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${_TransModels[index].vat!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].pvat!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${_TransModels[index].pvat!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].nwht!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${nFormat.format(double.parse(_TransModels[index].nwht!))}',
+                                                                //'${_TransModels[index].nwht!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${_TransModels[index].wht!}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                                                //  '${_TransModels[index].wht!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              maxLines: 1,
-                                                              minFontSize: 8,
-                                                              maxFontSize: 20,
-                                                              '${nFormat.format(double.parse(_TransModels[index].total!))}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      //fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                maxLines: 1,
+                                                                minFontSize: 8,
+                                                                maxFontSize: 20,
+                                                                '${nFormat.format(double.parse(_TransModels[index].total!))}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .right,
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  )),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    )),
+                                              ),
                                             );
                                           },
                                         )

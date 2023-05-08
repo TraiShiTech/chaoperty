@@ -10,6 +10,8 @@ class AreakModel {
   String? sdate;
   String? ldate;
   String? dataUpdate;
+  String? rent;
+  String? area;
 
   AreakModel(
       {this.ser,
@@ -22,7 +24,9 @@ class AreakModel {
       this.type,
       this.sdate,
       this.ldate,
-      this.dataUpdate});
+      this.dataUpdate,
+      this.rent,
+      this.area});
 
   AreakModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -36,6 +40,8 @@ class AreakModel {
     sdate = json['sdate'];
     ldate = json['ldate'];
     dataUpdate = json['data_update'];
+    rent = json['rent'];
+    area= json['area'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +57,10 @@ class AreakModel {
     data['sdate'] = this.sdate;
     data['ldate'] = this.ldate;
     data['data_update'] = this.dataUpdate;
+    data['rent'] = this.rent;
+    data['area'] = this.area;
+    
+    
     return data;
   }
 }

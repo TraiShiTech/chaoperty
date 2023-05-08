@@ -91,6 +91,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   String? email_username, password_username;
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
@@ -487,6 +488,7 @@ class _SignInScreenState extends State<SignInScreen> {
     preferences.setString('utype', userModel.utype.toString());
     preferences.setString('verify', userModel.verify.toString());
     preferences.setString('permission', userModel.permission.toString());
+    preferences.setString('rser', userModel.rser.toString());
     preferences.setString('route', 'หน้าหลัก');
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(

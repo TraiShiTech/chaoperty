@@ -469,7 +469,7 @@ class _PaysState extends State<Pays> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           TransBillModel _TransBillModel = TransBillModel.fromJson(map);
@@ -556,14 +556,34 @@ class _PaysState extends State<Pays> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      // print(result);
+      // print('rr>>>>>> $result');
       if (result.toString() == 'true') {
         setState(() {
           red_Trans_select2();
         });
         print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          red_Trans_select2();
+        });
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
       }
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+      print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   Future<Null> deall_Trans_select() async {
@@ -585,8 +605,22 @@ class _PaysState extends State<Pays> {
           red_Trans_select2();
         });
         print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          red_Trans_select2();
+        });
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
       }
-    } catch (e) {}
+    } catch (e) {
+      print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   Future<Null> red_Trans_select2() async {
@@ -696,13 +730,57 @@ class _PaysState extends State<Pays> {
           });
         }
         print(_TransReBillHistoryModels.length);
+      } else if (result.toString() == 'false') {
+        print('result1111');
+        for (var map in result) {
+          print('result2222');
+          TransReBillHistoryModel _TransReBillHistoryModel =
+              TransReBillHistoryModel.fromJson(map);
+
+          var sum_pvatx = double.parse(_TransReBillHistoryModel.pvat!);
+          var sum_vatx = double.parse(_TransReBillHistoryModel.vat!);
+          var sum_whtx = double.parse(_TransReBillHistoryModel.wht!);
+          var sum_amtx = double.parse(_TransReBillHistoryModel.total!);
+          var sum_disamtx = _TransReBillHistoryModel.disend == null
+              ? 0.00
+              : double.parse(_TransReBillHistoryModel.disend!);
+          var sum_dispx = _TransReBillHistoryModel.disendbillper == null
+              ? 0.00
+              : double.parse(_TransReBillHistoryModel.disendbillper!);
+          print('${_TransReBillHistoryModel.name}');
+          setState(() {
+            sum_pvat = sum_pvat + sum_pvatx;
+            sum_vat = sum_vat + sum_vatx;
+            sum_wht = sum_wht + sum_whtx;
+            sum_amt = sum_amt + sum_amtx;
+            sum_disamt = sum_disamtx;
+            sum_disp = sum_dispx;
+            numinvoice = _TransReBillHistoryModel.docno;
+            _TransReBillHistoryModels.add(_TransReBillHistoryModel);
+          });
+        }
+        print(_TransReBillHistoryModels.length);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
       }
 
       setState(() {
         Form_payment1.text =
             (sum_amt - sum_disamt).toStringAsFixed(2).toString();
       });
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
   }
 
   Future<Null> red_Trans_select(index) async {
@@ -753,13 +831,49 @@ class _PaysState extends State<Pays> {
             _InvoiceHistoryModels.add(_InvoiceHistoryModel);
           });
         }
+      } else if (result.toString() == 'false') {
+        for (var map in result) {
+          InvoiceHistoryModel _InvoiceHistoryModel =
+              InvoiceHistoryModel.fromJson(map);
+
+          var sum_pvatx = double.parse(_InvoiceHistoryModel.pvat_t!);
+          var sum_vatx = double.parse(_InvoiceHistoryModel.vat_t!);
+          var sum_whtx = double.parse(_InvoiceHistoryModel.wht!);
+          var sum_amtx = double.parse(_InvoiceHistoryModel.total_t!);
+          var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
+          var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
+          setState(() {
+            sum_pvat = sum_pvat + sum_pvatx;
+            sum_vat = sum_vat + sum_vatx;
+            sum_wht = sum_wht + sum_whtx;
+            sum_amt = sum_amt + sum_amtx;
+            sum_disamt = sum_disamtx;
+            sum_disp = sum_dispx;
+            numinvoice = _InvoiceHistoryModel.docno;
+            _InvoiceHistoryModels.add(_InvoiceHistoryModel);
+          });
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
       }
 
       setState(() {
         Form_payment1.text =
             (sum_amt - sum_disamt).toStringAsFixed(2).toString();
       });
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
   }
 
   Future<Null> red_Trans_selectde() async {
@@ -961,6 +1075,79 @@ class _PaysState extends State<Pays> {
   //     imageType: ImageType.png,
   //   );
   // }
+  Future<void> _showMyDialogPay_Error(text) {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        '$text',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T
+                            //fontSize: 10.0
+                            ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
 
   ///----------------->
   Widget build(BuildContext context) {
@@ -1140,28 +1327,77 @@ class _PaysState extends State<Pays> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 2,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'เลขตั้งหนี้',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
+                          select_page == 0
+                              ? Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.086,
+                                        color: Colors.brown[200],
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: const Center(
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 25,
+                                            maxLines: 1,
+                                            'เลขตั้งหนี้',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          for (var i = 0;
+                                              i < _TransBillModels.length;
+                                              i++) {
+                                            in_Trans_select(i);
+                                          }
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.027,
+                                          color: Colors.brown[200],
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Center(
+                                              child: Icon(Icons.chevron_right)),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                    height: 50,
+                                    color: Colors.brown[200],
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Center(
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 25,
+                                        maxLines: 1,
+                                        'เลขตั้งหนี้',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                  )),
                         ],
                       ),
                       Container(
@@ -1185,68 +1421,102 @@ class _PaysState extends State<Pays> {
                                 shrinkWrap: true,
                                 itemCount: _TransBillModels.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return InkWell(
-                                    onTap: () {
-                                      print(
-                                          '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
+                                  return Material(
+                                    color: (_TransModels.any((A) =>
+                                                A.docno ==
+                                                _TransBillModels[index]
+                                                    .docno) &&
+                                            _TransModels.any((A) =>
+                                                A.date ==
+                                                _TransBillModels[index].date))
+                                        ? tappedIndex_Color.tappedIndex_Colors
+                                        : null,
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: ListTile(
+                                        onTap: () {
+                                          print(
+                                              '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
 
-                                      in_Trans_select(index);
-                                    },
-                                    child: ListTile(
-                                      title: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              _TransBillModels[index].descr ==
-                                                      null
-                                                  ? '${_TransBillModels[index].expname}'
-                                                  : '${_TransBillModels[index].descr}',
-                                              textAlign: TextAlign.start,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
+                                          in_Trans_select(index);
+                                        },
+                                        title: Container(
+                                          //_TransModelsdocno
+                                          // color: (_TransModels.any((A) =>
+                                          //             A.docno ==
+                                          //             _TransBillModels[index]
+                                          //                 .docno) &&
+                                          //         _TransModels.any((A) =>
+                                          //             A.date ==
+                                          //             _TransBillModels[index]
+                                          //                 .date))
+                                          //     ? tappedIndex_Color
+                                          //         .tappedIndex_Colors
+                                          //     : null,
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  _TransBillModels[index]
+                                                              .descr ==
+                                                          null
+                                                      ? '${_TransBillModels[index].expname}'
+                                                      : '${_TransBillModels[index].descr}',
+                                                  textAlign: TextAlign.start,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 25,
+                                                  maxLines: 1,
+                                                  _TransBillModels[index]
+                                                              .invoice ==
+                                                          null
+                                                      ? '${_TransBillModels[index].docno}'
+                                                      : '${_TransBillModels[index].invoice}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          Expanded(
-                                            flex: 1,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 2,
-                                            child: AutoSizeText(
-                                              minFontSize: 10,
-                                              maxFontSize: 25,
-                                              maxLines: 1,
-                                              _TransBillModels[index].invoice ==
-                                                      null
-                                                  ? '${_TransBillModels[index].docno}'
-                                                  : '${_TransBillModels[index].invoice}',
-                                              textAlign: TextAlign.end,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   );
@@ -1262,68 +1532,89 @@ class _PaysState extends State<Pays> {
                                     itemCount: _InvoiceModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          print(
-                                              '${_InvoiceModels[index].ser} ${_InvoiceModels[index].docno}');
+                                      return Material(
+                                        color: (_InvoiceModels[index]
+                                                    .docno
+                                                    .toString() ==
+                                                numinvoice.toString())
+                                            ? tappedIndex_Color
+                                                .tappedIndex_Colors
+                                            : null,
+                                        child: InkWell(
+                                          onTap: () {},
+                                          child: ListTile(
+                                            onTap: () {
+                                              print(
+                                                  '${_InvoiceModels[index].ser} ${_InvoiceModels[index].docno}');
 
-                                          red_Trans_select(index);
-                                        },
-                                        child: ListTile(
-                                          title: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${_InvoiceModels[index].descr}',
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
+                                              red_Trans_select(index);
+                                            },
+                                            title: Container(
+                                              // color: (_InvoiceModels[index]
+                                              //             .docno
+                                              //             .toString() ==
+                                              //         numinvoice.toString())
+                                              //     ? tappedIndex_Color
+                                              //         .tappedIndex_Colors
+                                              //     : null,
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${_InvoiceModels[index].descr}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${DateFormat('dd-MM').format(DateTime.parse('${_InvoiceModels[index].date} 00:00:00'))}-${DateTime.parse('${_InvoiceModels[index].date} 00:00:00').year + 543}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${_InvoiceModels[index].docno}',
+                                                      textAlign: TextAlign.end,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_InvoiceModels[index].date} 00:00:00'))}-${DateTime.parse('${_InvoiceModels[index].date} 00:00:00').year + 543}',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${_InvoiceModels[index].docno}',
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       );
@@ -1338,68 +1629,89 @@ class _PaysState extends State<Pays> {
                                     itemCount: _TransReBillModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return InkWell(
-                                        onTap: () {
-                                          print(
-                                              '${_TransReBillModels[index].ser} ${_TransReBillModels[index].docno}');
+                                      return Material(
+                                        color: (_TransReBillModels[index]
+                                                    .docno
+                                                    .toString() ==
+                                                numinvoice.toString())
+                                            ? tappedIndex_Color
+                                                .tappedIndex_Colors
+                                            : null,
+                                        child: InkWell(
+                                          onTap: () {},
+                                          child: ListTile(
+                                            onTap: () {
+                                              print(
+                                                  '${_TransReBillModels[index].ser} ${_TransReBillModels[index].docno}');
 
-                                          red_Trans_select_re(index);
-                                        },
-                                        child: ListTile(
-                                          title: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${_TransReBillModels[index].expname}',
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
+                                              red_Trans_select_re(index);
+                                            },
+                                            title: Container(
+                                              color: (_TransReBillModels[index]
+                                                          .docno
+                                                          .toString() ==
+                                                      numinvoice.toString())
+                                                  ? tappedIndex_Color
+                                                      .tappedIndex_Colors
+                                                  : null,
+                                              child: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${_TransReBillModels[index].expname}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${_TransReBillModels[index].date}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 25,
+                                                      maxLines: 1,
+                                                      '${_TransReBillModels[index].docno}',
+                                                      textAlign: TextAlign.end,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${_TransReBillModels[index].date}',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 25,
-                                                  maxLines: 1,
-                                                  '${_TransReBillModels[index].docno}',
-                                                  textAlign: TextAlign.end,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      //fontWeight: FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ),
                                       );
@@ -1871,25 +2183,30 @@ class _PaysState extends State<Pays> {
                                 ),
                                 Expanded(
                                   flex: 1,
-                                  child: Container(
-                                    height: 50,
-                                    color: Colors.brown[200],
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: const Center(
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        maxLines: 1,
-                                        'X',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      deall_Trans_select();
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      color: Colors.brown[200],
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 15,
+                                          maxLines: 1,
+                                          'X',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -1916,138 +2233,146 @@ class _PaysState extends State<Pays> {
                                 shrinkWrap: true,
                                 itemCount: _TransModels.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return ListTile(
-                                    title: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${index + 1}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${_TransModels[index].name}',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${_TransModels[index].tqty}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${_TransModels[index].unit_con}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${_TransModels[index].vat}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${nFormat.format(double.parse(_TransModels[index].wht!))}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            maxLines: 1,
-                                            '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
+                                  return Material(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    child: ListTile(
+                                      onTap: () {},
+                                      title: Row(
+                                        children: [
+                                          Expanded(
                                             flex: 1,
-                                            child: IconButton(
-                                                onPressed: () {
-                                                  de_Trans_select(index);
-                                                },
-                                                icon: const Icon(
-                                                    Icons.remove_circle))),
-                                      ],
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${index + 1}',
+                                              textAlign: TextAlign.center,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}', //${_TransModels[index].date}
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${_TransModels[index].name}',
+                                              textAlign: TextAlign.start,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${_TransModels[index].tqty}',
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${_TransModels[index].unit_con}',
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${_TransModels[index].vat}',
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${nFormat.format(double.parse(_TransModels[index].wht!))}',
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 15,
+                                              maxLines: 1,
+                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Center(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      de_Trans_select(index);
+                                                    },
+                                                    icon: const Icon(
+                                                      Icons.remove_circle,
+                                                      color: Colors.red,
+                                                    )),
+                                              )),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -2904,169 +3229,187 @@ class _PaysState extends State<Pays> {
                                     itemCount: _InvoiceHistoryModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return ListTile(
-                                        title: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${index + 1}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                      return Material(
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        child: ListTile(
+                                          onTap: () {},
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${index + 1}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}', //${_InvoiceHistoryModels[index].date}
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}', //${_InvoiceHistoryModels[index].date}
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${_InvoiceHistoryModels[index].descr}',
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_InvoiceHistoryModels[index].descr}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].wht!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            // Expanded(
-                                            //   flex: 1,
-                                            //   child: AutoSizeText(
-                                            //     minFontSize: 10,
-                                            //     maxFontSize: 15,
-                                            //     maxLines: 1,
-                                            //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                            //     textAlign: TextAlign.end,
-                                            //     style: const TextStyle(
-                                            //         color:
-                                            //             PeopleChaoScreen_Color
-                                            //                 .Colors_Text2_,
-                                            //         //fontWeight: FontWeight.bold,
-                                            //         fontFamily: Font_.Fonts_T),
-                                            //   ),
-                                            // ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              // Expanded(
+                                              //   flex: 1,
+                                              //   child: AutoSizeText(
+                                              //     minFontSize: 10,
+                                              //     maxFontSize: 15,
+                                              //     maxLines: 1,
+                                              //     '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                              //     textAlign: TextAlign.end,
+                                              //     style: const TextStyle(
+                                              //         color:
+                                              //             PeopleChaoScreen_Color
+                                              //                 .Colors_Text2_,
+                                              //         //fontWeight: FontWeight.bold,
+                                              //         fontFamily: Font_.Fonts_T),
+                                              //   ),
+                                              // ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Container(
-                                                  // height: 50,
-                                                  // color: Colors.brown[200],
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: IconButton(
-                                                      onPressed: () {
-                                                        confirmOrderdelete(
-                                                            index);
-                                                      },
-                                                      icon: const Icon(Icons
-                                                          .remove_circle_outline))),
-                                            ),
-                                          ],
+                                              Expanded(
+                                                flex: 1,
+                                                child: Center(
+                                                  child: Container(
+                                                      // height: 50,
+                                                      // color: Colors.brown[200],
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: IconButton(
+                                                          onPressed: () {
+                                                            confirmOrderdelete(
+                                                                index);
+                                                          },
+                                                          icon: const Icon(
+                                                            Icons.remove_circle,
+                                                            color: Colors.red,
+                                                          ))),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     },
@@ -3159,7 +3502,7 @@ class _PaysState extends State<Pays> {
                                                     child: AutoSizeText(
                                                       minFontSize: 10,
                                                       maxFontSize: 15,
-                                                      'รวม(บาท)8',
+                                                      'รวม(บาท)',
                                                       style: TextStyle(
                                                           color:
                                                               PeopleChaoScreen_Color
@@ -3746,152 +4089,165 @@ class _PaysState extends State<Pays> {
                                     itemCount: _TransReBillHistoryModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return ListTile(
-                                        title: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${index + 1}',
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                      return Material(
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        child: ListTile(
+                                          onTap: () {},
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${index + 1}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${_TransReBillHistoryModels[index].date}',
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_TransReBillHistoryModels[index].date}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${_TransReBillHistoryModels[index].expname}',
-                                                textAlign: TextAlign.start,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 2,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${_TransReBillHistoryModels[index].expname}',
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: AutoSizeText(
-                                                minFontSize: 10,
-                                                maxFontSize: 15,
-                                                maxLines: 1,
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    //fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  maxLines: 1,
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
                                               ),
-                                            ),
-                                            // Expanded(
-                                            //   flex: 1,
-                                            //   child: Container(
-                                            //       // height: 50,
-                                            //       // color: Colors.brown[200],
-                                            //       padding:
-                                            //           const EdgeInsets.all(8.0),
-                                            //       child: IconButton(
-                                            //           onPressed: () {
-                                            //             // confirmOrderdelete(index);
-                                            //           },
-                                            //           icon: Icon(Icons
-                                            //               .remove_circle_outline))),
-                                            // ),
-                                          ],
+                                              // Expanded(
+                                              //   flex: 1,
+                                              //   child: Container(
+                                              //       // height: 50,
+                                              //       // color: Colors.brown[200],
+                                              //       padding:
+                                              //           const EdgeInsets.all(8.0),
+                                              //       child: IconButton(
+                                              //           onPressed: () {
+                                              //             // confirmOrderdelete(index);
+                                              //           },
+                                              //           icon: Icon(Icons
+                                              //               .remove_circle_outline))),
+                                              // ),
+                                            ],
+                                          ),
                                         ),
                                       );
                                     },
@@ -4299,14 +4655,20 @@ class _PaysState extends State<Pays> {
                                       IconButton(
                                         onPressed: () {
                                           setState(() {
+                                            Form_payment1.clear();
+                                            Form_payment2.clear();
+                                            Form_payment1.text = '';
+                                            Form_payment2.text = '';
+                                          });
+                                          setState(() {
                                             if (pamentpage == 1) {
                                               pamentpage = 0;
-                                              Form_payment2.clear();
-                                              Form_payment1.text = (sum_amt -
-                                                      double.parse(
-                                                          sum_disamtx.text))
-                                                  .toStringAsFixed(2)
-                                                  .toString();
+                                              // Form_payment2.clear();
+                                              // Form_payment1.text = (sum_amt -
+                                              //         double.parse(
+                                              //             sum_disamtx.text))
+                                              //     .toStringAsFixed(2)
+                                              //     .toString();
                                             } else {
                                               pamentpage = 1;
                                             }
@@ -4318,10 +4680,14 @@ class _PaysState extends State<Pays> {
                                           } else {}
                                         },
                                         icon: pamentpage == 0
-                                            ? const Icon(
-                                                Icons.add_circle_outline)
+                                            ? Icon(
+                                                Icons.add_circle_outline,
+                                                color: Colors.green,
+                                              )
                                             : const Icon(
-                                                Icons.remove_circle_outline),
+                                                Icons.remove_circle_outline,
+                                                color: Colors.red,
+                                              ),
                                       )
                                     ],
                                   ),
@@ -4437,8 +4803,13 @@ class _PaysState extends State<Pays> {
                                           //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                           setState(() {
                                             paymentSer1 = rtnameSer.toString();
-                                            paymentName1 =
-                                                rtnameName.toString();
+
+                                            if (rtnameSer.toString() == '0') {
+                                              paymentName1 = null;
+                                            } else {
+                                              paymentName1 =
+                                                  rtnameName.toString();
+                                            }
                                             if (rtnameSer.toString() == '0') {
                                               Form_payment1.clear();
                                             } else {
@@ -4571,8 +4942,14 @@ class _PaysState extends State<Pays> {
                                                 setState(() {
                                                   paymentSer2 =
                                                       rtnameSer.toString();
-                                                  paymentName2 =
-                                                      rtnameName.toString();
+
+                                                  if (rtnameSer.toString() ==
+                                                      '0') {
+                                                    paymentName2 = null;
+                                                  } else {
+                                                    paymentName2 =
+                                                        rtnameName.toString();
+                                                  }
                                                   if (rtnameSer.toString() ==
                                                       '0') {
                                                     Form_payment2.clear();
@@ -4647,6 +5024,50 @@ class _PaysState extends State<Pays> {
                                         //   setState(() {});
                                         // },
                                         onChanged: (value) {
+                                          // var money1 = double.parse(value);
+                                          // var money2 = (sum_amt - sum_disamt);
+                                          // var money3 = (money2 - money1)
+                                          //     .toStringAsFixed(2)
+                                          //     .toString();
+                                          // setState(() {
+                                          //   if (paymentSer2 == null) {
+                                          //     Form_payment1.text = (money1)
+                                          //         .toStringAsFixed(2)
+                                          //         .toString();
+                                          //   } else {
+                                          //     Form_payment1.text = (money1)
+                                          //         .toStringAsFixed(2)
+                                          //         .toString();
+                                          //     Form_payment2.text = money3;
+                                          //   }
+                                          // });
+                                          // setState(() {
+                                          //   Form_payment1.text = value;
+                                          // });
+                                          final currentCursorPosition =
+                                              Form_payment1.selection.start;
+
+                                          // Update the text of the controller
+                                          if (paymentSer2 != null) {
+                                            setState(() {
+                                              Form_payment2.text =
+                                                  '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                            });
+                                          }
+
+                                          // Set the new cursor position
+                                          final newCursorPosition =
+                                              currentCursorPosition +
+                                                  (value.length -
+                                                      Form_payment1
+                                                          .text.length);
+                                          Form_payment1.selection =
+                                              TextSelection.fromPosition(
+                                                  TextPosition(
+                                                      offset:
+                                                          newCursorPosition));
+                                        },
+                                        onFieldSubmitted: (value) {
                                           var money1 = double.parse(value);
                                           var money2 = (sum_amt - sum_disamt);
                                           var money3 = (money2 - money1)
@@ -4743,6 +5164,55 @@ class _PaysState extends State<Pays> {
                                               //   setState(() {});
                                               // },
                                               onChanged: (value) {
+                                                // var money1 =
+                                                //     double.parse(value);
+                                                // var money2 =
+                                                //     (sum_amt - sum_disamt);
+                                                // var money3 = (money2 - money1)
+                                                //     .toStringAsFixed(2)
+                                                //     .toString();
+                                                // setState(() {
+                                                //   if (paymentSer1 == null) {
+                                                //     Form_payment2.text =
+                                                //         (money1)
+                                                //             .toStringAsFixed(2)
+                                                //             .toString();
+                                                //   } else {
+                                                //     Form_payment2.text =
+                                                //         (money1)
+                                                //             .toStringAsFixed(2)
+                                                //             .toString();
+                                                //     Form_payment1.text = money3;
+                                                //   }
+                                                // });
+                                                // setState(() {
+                                                //   Form_payment2.text = value;
+                                                // });
+                                                final currentCursorPosition =
+                                                    Form_payment2
+                                                        .selection.start;
+
+                                                // Update the text of the controller
+                                                if (paymentSer1 != null) {
+                                                  setState(() {
+                                                    Form_payment1.text =
+                                                        '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                  });
+                                                }
+
+                                                // Set the new cursor position
+                                                final newCursorPosition =
+                                                    currentCursorPosition +
+                                                        (value.length -
+                                                            Form_payment2
+                                                                .text.length);
+                                                Form_payment2.selection =
+                                                    TextSelection.fromPosition(
+                                                        TextPosition(
+                                                            offset:
+                                                                newCursorPosition));
+                                              },
+                                              onFieldSubmitted: (value) {
                                                 var money1 =
                                                     double.parse(value);
                                                 var money2 =
@@ -5624,8 +6094,25 @@ class _PaysState extends State<Pays> {
                               ],
                             ),
                           ),
-                        const SizedBox(
+                        Container(
+                          height: 10,
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                            ),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                        ),
+                        // (double.parse(pay1) +
+                        //                   double.parse(pay2) !=
+                        //               (sum_amt - sum_disamt))
+                        SizedBox(
                           height: 20,
+                          //
                         ),
                         Row(
                           children: [
@@ -5761,6 +6248,22 @@ class _PaysState extends State<Pays> {
                             ),
                           ],
                         ),
+                        Container(
+                          height: 10,
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                            ),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             Expanded(
@@ -5768,7 +6271,9 @@ class _PaysState extends State<Pays> {
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
+                                    var pay1;
+                                    var pay2;
                                     setState(() {
                                       Slip_status = '1';
                                     });
@@ -5784,221 +6289,296 @@ class _PaysState extends State<Pays> {
                                       }
                                     }
                                     print((sum_amt - sum_disamt));
-                                    var pay1 = Form_payment1.text == ''
-                                        ? '0.00'
-                                        : Form_payment1.text;
-                                    var pay2 = Form_payment2.text == ''
-                                        ? '0.00'
-                                        : Form_payment2.text;
-                                    //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
+                                    if (pamentpage == 0) {
+                                      setState(() {
+                                        // Form_payment2.clear();
+                                        Form_payment2.text = '';
+                                      });
+                                    }
+                                    setState(() {
+                                      pay1 = Form_payment1.text == ''
+                                          ? '0.00'
+                                          : Form_payment1.text;
+                                      pay2 = Form_payment2.text == ''
+                                          ? '0.00'
+                                          : Form_payment2.text;
+                                    });
 
-                                    // if ((double.parse(pay1) + double.parse(pay2)) >=
-                                    //     (sum_amt - sum_disamt)) {
-                                    //   if ((sum_amt - sum_disamt) != 0) {
-                                    //     if (select_page == 0) {
-                                    //       // _TransModels
-                                    //       // sum_disamtx sum_dispx
-                                    //       in_Trans_invoice_P();
-                                    //     } else if (select_page == 1) {
-                                    //       //_InvoiceHistoryModels
-                                    //       in_Trans_invoice_refno_p();
-                                    //     } else if (select_page == 2) {
-                                    //       //TransReBillHistoryModel
-                                    //       // in_Trans_re_invoice_refno();
-                                    //       //พิมพ์ซ้ำ
-                                    //     }
-                                    //     PdfgenReceipt.exportPDF_Receipt(context);
-                                    //   } else {
-                                    //     ScaffoldMessenger.of(context).showSnackBar(
-                                    //       SnackBar(
-                                    //           content: Text(
-                                    //               'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
-                                    //               style: TextStyle(
-                                    //                   color: Colors.white,
-                                    //                   fontFamily: Font_.Fonts_T))),
-                                    //     );
-                                    //   }
+                                    //                if (double.parse(pay1) < 0.00 ||
+                                    //     double.parse(pay2) < 0.00) {
+                                    //   print(
+                                    //       '${double.parse(pay1)} ////////////****-////////${double.parse(pay2)}');
+                                    //   ScaffoldMessenger.of(context)
+                                    //       .showSnackBar(
+                                    //     const SnackBar(
+                                    //         content: Text(
+                                    //             'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                    //             style: TextStyle(
+                                    //                 color: Colors.white,
+                                    //                 fontFamily:
+                                    //                     Font_.Fonts_T))),
+                                    //   );
                                     // } else {}
-
-                                    if (select_page == 2) {
-                                      // print('object963');
-                                      PdfgenReceipt.exportPDF_Receipt2(
-                                          context,
-                                          Slip_status,
-                                          _TransReBillHistoryModels,
-                                          '${widget.Get_Value_cid}',
-                                          '${widget.namenew}',
-                                          '${sum_pvat}',
-                                          '${sum_vat}',
-                                          '${sum_wht}',
-                                          '${sum_amt}',
-                                          '$sum_disp',
-                                          '${nFormat.format(sum_disamt)}',
-                                          '${sum_amt - sum_disamt}',
-                                          // '${nFormat.format(sum_amt - sum_disamt)}',
-                                          '${renTal_name.toString()}',
-                                          '${Form_bussshop}',
-                                          '${Form_address}',
-                                          '${Form_tel}',
-                                          '${Form_email}',
-                                          '${Form_tax}',
-                                          ' ${Form_nameshop}',
-                                          ' ${renTalModels[0].bill_addr}',
-                                          ' ${renTalModels[0].bill_email}',
-                                          ' ${renTalModels[0].bill_tel}',
-                                          ' ${renTalModels[0].bill_tax}',
-                                          ' ${renTalModels[0].bill_name}',
-                                          newValuePDFimg,
-                                          pamentpage,
-                                          paymentName1,
-                                          paymentName2,
-                                          Form_payment1.text,
-                                          Form_payment2.text,
-                                          numinvoice,
-                                          cFinn);
+                                    if ((double.parse(pay1) +
+                                            double.parse(pay2) !=
+                                        (sum_amt - sum_disamt))) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง ');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text(
+                                      //           'จำนวนเงินไม่ถูกต้อง ',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    } else if (double.parse(pay1) < 0.00 ||
+                                        double.parse(pay2) < 0.00) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง ');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
                                     } else {
-                                      if (paymentSer1 != '0' &&
-                                          paymentSer1 != null) {
-                                        if ((double.parse(pay1) +
-                                                double.parse(pay2)) >=
-                                            (sum_amt - sum_disamt)) {
-                                          if ((sum_amt - sum_disamt) != 0) {
-                                            if (select_page == 0) {
-                                              print(
-                                                  '(select_page == 0n_Trans_invoice_P)');
-                                              // _TransModels
-                                              // sum_disamtx sum_dispx
-                                              in_Trans_invoice_P(
-                                                  newValuePDFimg);
-                                            } else if (select_page == 1) {
-                                              final tableData00 = [
-                                                for (int index = 0;
-                                                    index <
-                                                        _InvoiceHistoryModels
-                                                            .length;
-                                                    index++)
-                                                  [
-                                                    '${index + 1}',
-                                                    '${_InvoiceHistoryModels[index].date}',
-                                                    '${_InvoiceHistoryModels[index].descr}',
-                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                  ],
-                                              ];
-                                              //_InvoiceHistoryModels
-                                              in_Trans_invoice_refno_p();
-                                              PdfgenReceipt.exportPDF_Receipt1(
-                                                  numinvoice,
-                                                  tableData00,
-                                                  context,
-                                                  Slip_status,
-                                                  _InvoiceHistoryModels,
-                                                  '${widget.Get_Value_cid}',
-                                                  '${widget.namenew}',
-                                                  '${sum_pvat}',
-                                                  '${sum_vat}',
-                                                  '${sum_wht}',
-                                                  '${sum_amt}',
-                                                  '$sum_disp',
-                                                  '${nFormat.format(sum_disamt)}',
-                                                  '${sum_amt - sum_disamt}',
-                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                  '${renTal_name.toString()}',
-                                                  '${Form_bussshop}',
-                                                  '${Form_address}',
-                                                  '${Form_tel}',
-                                                  '${Form_email}',
-                                                  '${Form_tax}',
-                                                  ' ${Form_nameshop}',
-                                                  ' ${renTalModels[0].bill_addr}',
-                                                  ' ${renTalModels[0].bill_email}',
-                                                  ' ${renTalModels[0].bill_tel}',
-                                                  ' ${renTalModels[0].bill_tax}',
-                                                  ' ${renTalModels[0].bill_name}',
-                                                  newValuePDFimg,
-                                                  pamentpage,
-                                                  paymentName1,
-                                                  paymentName2,
-                                                  Form_payment1.text,
-                                                  Form_payment2.text);
-                                            } else if (select_page == 2) {
-                                              //TransReBillHistoryModel
-                                              // in_Trans_re_invoice_refno();
-                                              //พิมพ์ซ้ำ
-                                              PdfgenReceipt.exportPDF_Receipt2(
-                                                  context,
-                                                  Slip_status,
-                                                  _TransModels,
-                                                  '${widget.Get_Value_cid}',
-                                                  '${widget.namenew}',
-                                                  '${sum_pvat}',
-                                                  '${sum_vat}',
-                                                  '${sum_wht}',
-                                                  '${sum_amt}',
-                                                  '$sum_disp',
-                                                  '${nFormat.format(sum_disamt)}',
-                                                  '${sum_amt - sum_disamt}',
-                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                  '${renTal_name.toString()}',
-                                                  '${Form_bussshop}',
-                                                  '${Form_address}',
-                                                  '${Form_tel}',
-                                                  '${Form_email}',
-                                                  '${Form_tax}',
-                                                  '${Form_nameshop}',
-                                                  '${renTalModels[0].bill_addr}',
-                                                  '${renTalModels[0].bill_email}',
-                                                  '${renTalModels[0].bill_tel}',
-                                                  '${renTalModels[0].bill_tax}',
-                                                  '${renTalModels[0].bill_name}',
-                                                  newValuePDFimg,
-                                                  pamentpage,
-                                                  paymentName1,
-                                                  paymentName2,
-                                                  Form_payment1.text,
-                                                  Form_payment2.text,
-                                                  numinvoice,
-                                                  cFinn);
-                                            }
-                                            // PdfgenReceipt.exportPDF_Receipt(context);
-                                          } else {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T))),
-                                            );
-                                          }
-                                        } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            Font_.Fonts_T))),
-                                          );
-                                        }
+                                      if (pamentpage == 0 &&
+                                          // Form_payment1.text == '' ||
+                                          paymentName1 == null) {
+                                        _showMyDialogPay_Error(
+                                            'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   const SnackBar(
+                                        //       content: Text(
+                                        //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                        //           style: TextStyle(
+                                        //               color: Colors.white,
+                                        //               fontFamily:
+                                        //                   Font_.Fonts_T))),
+                                        // );
+                                      } else if (pamentpage == 1 &&
+                                              // Form_payment2.text ==
+                                              //     '' ||
+                                              paymentName2 == null ||
+                                          paymentName1 == null) {
+                                        _showMyDialogPay_Error((paymentName1 ==
+                                                null)
+                                            ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                            : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   SnackBar(
+                                        //       content: (paymentName1 == null)
+                                        //           ?
+                                        //           Text(
+                                        //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                        //               style: TextStyle(
+                                        //                   color: Colors.white,
+                                        //                   fontFamily:
+                                        //                       Font_.Fonts_T))
+                                        //           : Text(
+                                        //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+                                        //               style: TextStyle(
+                                        //                   color: Colors.white,
+                                        //                   fontFamily:
+                                        //                       Font_.Fonts_T))),
+                                        // );
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'กรุณาเลือกรูปแบบการชำระ!',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          Font_.Fonts_T))),
-                                        );
+                                        if (select_page == 2) {
+                                          // print('object963');
+                                          PdfgenReceipt.exportPDF_Receipt2(
+                                              context,
+                                              Slip_status,
+                                              _TransReBillHistoryModels,
+                                              '${widget.Get_Value_cid}',
+                                              '${widget.namenew}',
+                                              '${sum_pvat}',
+                                              '${sum_vat}',
+                                              '${sum_wht}',
+                                              '${sum_amt}',
+                                              '$sum_disp',
+                                              '${nFormat.format(sum_disamt)}',
+                                              '${sum_amt - sum_disamt}',
+                                              // '${nFormat.format(sum_amt - sum_disamt)}',
+                                              '${renTal_name.toString()}',
+                                              '${Form_bussshop}',
+                                              '${Form_address}',
+                                              '${Form_tel}',
+                                              '${Form_email}',
+                                              '${Form_tax}',
+                                              ' ${Form_nameshop}',
+                                              ' ${renTalModels[0].bill_addr}',
+                                              ' ${renTalModels[0].bill_email}',
+                                              ' ${renTalModels[0].bill_tel}',
+                                              ' ${renTalModels[0].bill_tax}',
+                                              ' ${renTalModels[0].bill_name}',
+                                              newValuePDFimg,
+                                              pamentpage,
+                                              paymentName1,
+                                              paymentName2,
+                                              Form_payment1.text,
+                                              Form_payment2.text,
+                                              numinvoice,
+                                              cFinn);
+                                        } else {
+                                          if (paymentSer1 != '0' &&
+                                              paymentSer1 != null) {
+                                            if ((double.parse(pay1) +
+                                                    double.parse(pay2)) >=
+                                                (sum_amt - sum_disamt)) {
+                                              if ((sum_amt - sum_disamt) != 0) {
+                                                if (select_page == 0) {
+                                                  // print(
+                                                  //     '(select_page == 0n_Trans_invoice_P)');
+                                                  // _TransModels
+                                                  // sum_disamtx sum_dispx
+                                                  in_Trans_invoice_P(
+                                                      newValuePDFimg);
+                                                } else if (select_page == 1) {
+                                                  final tableData00 = [
+                                                    for (int index = 0;
+                                                        index <
+                                                            _InvoiceHistoryModels
+                                                                .length;
+                                                        index++)
+                                                      [
+                                                        '${index + 1}',
+                                                        '${_InvoiceHistoryModels[index].date}',
+                                                        '${_InvoiceHistoryModels[index].descr}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                      ],
+                                                  ];
+                                                  //_InvoiceHistoryModels
+                                                  in_Trans_invoice_refno_p();
+                                                  PdfgenReceipt.exportPDF_Receipt1(
+                                                      numinvoice,
+                                                      tableData00,
+                                                      context,
+                                                      Slip_status,
+                                                      _InvoiceHistoryModels,
+                                                      '${widget.Get_Value_cid}',
+                                                      '${widget.namenew}',
+                                                      '${sum_pvat}',
+                                                      '${sum_vat}',
+                                                      '${sum_wht}',
+                                                      '${sum_amt}',
+                                                      '$sum_disp',
+                                                      '${nFormat.format(sum_disamt)}',
+                                                      '${sum_amt - sum_disamt}',
+                                                      // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                      '${renTal_name.toString()}',
+                                                      '${Form_bussshop}',
+                                                      '${Form_address}',
+                                                      '${Form_tel}',
+                                                      '${Form_email}',
+                                                      '${Form_tax}',
+                                                      ' ${Form_nameshop}',
+                                                      ' ${renTalModels[0].bill_addr}',
+                                                      ' ${renTalModels[0].bill_email}',
+                                                      ' ${renTalModels[0].bill_tel}',
+                                                      ' ${renTalModels[0].bill_tax}',
+                                                      ' ${renTalModels[0].bill_name}',
+                                                      newValuePDFimg,
+                                                      pamentpage,
+                                                      paymentName1,
+                                                      paymentName2,
+                                                      Form_payment1.text,
+                                                      Form_payment2.text);
+                                                } else if (select_page == 2) {
+                                                  //TransReBillHistoryModel
+                                                  // in_Trans_re_invoice_refno();
+                                                  //พิมพ์ซ้ำ
+                                                  PdfgenReceipt.exportPDF_Receipt2(
+                                                      context,
+                                                      Slip_status,
+                                                      _TransModels,
+                                                      '${widget.Get_Value_cid}',
+                                                      '${widget.namenew}',
+                                                      '${sum_pvat}',
+                                                      '${sum_vat}',
+                                                      '${sum_wht}',
+                                                      '${sum_amt}',
+                                                      '$sum_disp',
+                                                      '${nFormat.format(sum_disamt)}',
+                                                      '${sum_amt - sum_disamt}',
+                                                      // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                      '${renTal_name.toString()}',
+                                                      '${Form_bussshop}',
+                                                      '${Form_address}',
+                                                      '${Form_tel}',
+                                                      '${Form_email}',
+                                                      '${Form_tax}',
+                                                      '${Form_nameshop}',
+                                                      '${renTalModels[0].bill_addr}',
+                                                      '${renTalModels[0].bill_email}',
+                                                      '${renTalModels[0].bill_tel}',
+                                                      '${renTalModels[0].bill_tax}',
+                                                      '${renTalModels[0].bill_name}',
+                                                      newValuePDFimg,
+                                                      pamentpage,
+                                                      paymentName1,
+                                                      paymentName2,
+                                                      Form_payment1.text,
+                                                      Form_payment2.text,
+                                                      numinvoice,
+                                                      cFinn);
+                                                }
+                                                // PdfgenReceipt.exportPDF_Receipt(context);
+                                              } else {
+                                                _showMyDialogPay_Error(
+                                                    'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                                //           style: TextStyle(
+                                                //               color:
+                                                //                   Colors.white,
+                                                //               fontFamily: Font_
+                                                //                   .Fonts_T))),
+                                                // );
+                                              }
+                                            } else {
+                                              _showMyDialogPay_Error(
+                                                  'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                              // ScaffoldMessenger.of(context)
+                                              //     .showSnackBar(
+                                              //   const SnackBar(
+                                              //       content: Text(
+                                              //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                              //           style: TextStyle(
+                                              //               color: Colors.white,
+                                              //               fontFamily: Font_
+                                              //                   .Fonts_T))),
+                                              // );
+                                            }
+                                          } else {
+                                            _showMyDialogPay_Error(
+                                                'กรุณาเลือกรูปแบบการชำระ!');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text(
+                                            //           'กรุณาเลือกรูปแบบการชำระ!',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
+                                          }
+                                        }
                                       }
                                     }
                                   },
@@ -6078,6 +6658,9 @@ class _PaysState extends State<Pays> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: InkWell(
                                   onTap: () async {
+                                    var pay1;
+                                    var pay2;
+
                                     setState(() {
                                       Slip_status = '2';
                                     });
@@ -6092,252 +6675,490 @@ class _PaysState extends State<Pays> {
                                             '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                       }
                                     }
+                                    if (pamentpage == 0) {
+                                      setState(() {
+                                        // Form_payment2.clear();
+                                        Form_payment2.text = '';
+                                      });
+                                    }
+
                                     //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
-                                    var pay1 = Form_payment1.text == ''
-                                        ? '0.00'
-                                        : Form_payment1.text;
-                                    var pay2 = Form_payment2.text == ''
-                                        ? '0.00'
-                                        : Form_payment2.text;
-                                    print('>>1>  ${Form_payment1.text}');
-                                    print('>>2>  ${Form_payment2.text}  $pay2');
+                                    setState(() {
+                                      pay1 = Form_payment1.text == ''
+                                          ? '0.00'
+                                          : Form_payment1.text;
+                                      pay2 = Form_payment2.text == ''
+                                          ? '0.00'
+                                          : Form_payment2.text;
+                                    });
+
                                     print(
-                                        '${(double.parse(pay1) + double.parse(pay2))}');
+                                        '${double.parse(pay1) + double.parse(pay2)} /// ${(sum_amt - sum_disamt)}****${Form_payment1.text}***${Form_payment2.text}');
+                                    print(
+                                        '************************************++++');
+                                    print(
+                                        '>>1>  ${Form_payment1.text} //// $pay1//***${double.parse(pay1)}');
+                                    print(
+                                        '>>2>  ${Form_payment2.text} //// $pay2 //***${double.parse(pay2)}');
 
-                                    if (paymentSer1 != '0' &&
-                                        paymentSer1 != null) {
-                                      if ((double.parse(pay1) +
-                                                  double.parse(pay2)) >=
-                                              (sum_amt - sum_disamt) ||
-                                          (double.parse(pay1) +
-                                                  double.parse(pay2)) <
-                                              (sum_amt - sum_disamt)) {
-                                        if ((sum_amt - sum_disamt) != 0) {
-                                          if (select_page == 0) {
-                                            print('(select_page == 0)');
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
-                                                try {
-                                                  OKuploadFile_Slip();
-                                                  // _TransModels
-                                                  // sum_disamtx sum_dispx
-
-                                                  await in_Trans_invoice(
-                                                      newValuePDFimg);
-                                                } catch (e) {}
+                                    print(
+                                        '${(sum_amt - sum_disamt)}//****${double.parse(pay1) + double.parse(pay2)}');
+                                    print(
+                                        '************************************++++');
+                                    if (double.parse(pay1) < 0.00 ||
+                                        double.parse(pay2) < 0.00) {
+                                      _showMyDialogPay_Error(
+                                          'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                      // print(
+                                      //     '${double.parse(pay1)} ////////////****-////////${double.parse(pay2)}');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text(
+                                      //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    }
+                                    if ((double.parse(pay1) +
+                                            double.parse(pay2) !=
+                                        (sum_amt - sum_disamt))) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง ');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text(
+                                      //           'จำนวนเงินไม่ถูกต้อง ',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    } else if (double.parse(pay1) < 0.00 ||
+                                        double.parse(pay2) < 0.00) {
+                                      _showMyDialogPay_Error(
+                                          'จำนวนเงินไม่ถูกต้อง');
+                                      // ScaffoldMessenger.of(context)
+                                      //     .showSnackBar(
+                                      //   const SnackBar(
+                                      //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                      //           style: TextStyle(
+                                      //               color: Colors.white,
+                                      //               fontFamily:
+                                      //                   Font_.Fonts_T))),
+                                      // );
+                                    } else {
+                                      if (paymentSer1 != '0' &&
+                                          paymentSer1 != null) {
+                                        if ((double.parse(pay1) +
+                                                    double.parse(pay2)) >=
+                                                (sum_amt - sum_disamt) ||
+                                            (double.parse(pay1) +
+                                                    double.parse(pay2)) <
+                                                (sum_amt - sum_disamt)) {
+                                          if ((sum_amt - sum_disamt) != 0) {
+                                            if (select_page == 0) {
+                                              print('(select_page == 0)');
+                                              if ((double.parse(pay1) +
+                                                      double.parse(pay2) !=
+                                                  (sum_amt - sum_disamt))) {
+                                                _showMyDialogPay_Error(
+                                                    'จำนวนเงินไม่ถูกต้อง ');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'จำนวนเงินไม่ถูกต้อง ',
+                                                //           style: TextStyle(
+                                                //               color:
+                                                //                   Colors.white,
+                                                //               fontFamily: Font_
+                                                //                   .Fonts_T))),
+                                                // );
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
-                                              }
-                                            } else {
-                                              try {
-                                                // OKuploadFile_Slip();
-                                                // _TransModels
-                                                // sum_disamtx sum_dispx
+                                                if (pamentpage == 0 &&
+                                                    // Form_payment1.text ==
+                                                    //     '' ||
+                                                    paymentName1 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors
+                                                  //                   .white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                } else if (pamentpage == 1 &&
+                                                    // Form_payment2.text ==
+                                                    //     '' ||
+                                                    paymentName2 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors
+                                                  //                   .white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                } else {
+                                                  if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน') {
+                                                    if (base64_Slip != null) {
+                                                      try {
+                                                        OKuploadFile_Slip();
+                                                        // _TransModels
+                                                        // sum_disamtx sum_dispx
 
-                                                await in_Trans_invoice(
-                                                    newValuePDFimg);
-                                              } catch (e) {}
-                                            }
-                                          } else if (select_page == 1) {
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
-                                                try {
-                                                  final tableData00 = [
-                                                    for (int index = 0;
-                                                        index <
-                                                            _InvoiceHistoryModels
-                                                                .length;
-                                                        index++)
-                                                      [
-                                                        '${index + 1}',
-                                                        '${_InvoiceHistoryModels[index].date}',
-                                                        '${_InvoiceHistoryModels[index].descr}',
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                      ],
-                                                  ];
-                                                  OKuploadFile_Slip();
-                                                  //_InvoiceHistoryModels
-                                                  // PdfgenReceipt.exportPDF_Receipt1(
-                                                  //     numinvoice,
-                                                  //     tableData00,
-                                                  //     context,
-                                                  //     Slip_status,
-                                                  //     _TransModels,
-                                                  //     '${widget.Get_Value_cid}',
-                                                  //     '${widget.namenew}',
-                                                  //     '${sum_pvat}',
-                                                  //     '${sum_vat}',
-                                                  //     '${sum_wht}',
-                                                  //     '${sum_amt}',
-                                                  //     '$sum_disp',
-                                                  //     '${nFormat.format(sum_disamt)}',
-                                                  //     '${sum_amt - sum_disamt}',
-                                                  //     // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                  //     '${renTal_name.toString()}',
-                                                  //     '${Form_bussshop}',
-                                                  //     '${Form_address}',
-                                                  //     '${Form_tel}',
-                                                  //     '${Form_email}',
-                                                  //     '${Form_tax}',
-                                                  //     '${Form_nameshop}',
-                                                  //     '${renTalModels[0].bill_addr}',
-                                                  //     '${renTalModels[0].bill_email}',
-                                                  //     '${renTalModels[0].bill_tel}',
-                                                  //     '${renTalModels[0].bill_tax}',
-                                                  //     '${renTalModels[0].bill_name}',
-                                                  //     newValuePDFimg,
-                                                  //     pamentpage,
-                                                  //     paymentName1,
-                                                  //     paymentName2,
-                                                  //     Form_payment1.text,
-                                                  //     Form_payment2.text);
-                                                  in_Trans_invoice_refno(
-                                                      tableData00,
-                                                      newValuePDFimg);
-                                                } catch (e) {}
+                                                        await in_Trans_invoice(
+                                                            newValuePDFimg);
+                                                      } catch (e) {}
+                                                    } else {
+                                                      _showMyDialogPay_Error(
+                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                      // ScaffoldMessenger.of(
+                                                      //         context)
+                                                      //     .showSnackBar(
+                                                      //   const SnackBar(
+                                                      //       content: Text(
+                                                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                      //           style: TextStyle(
+                                                      //               color: Colors
+                                                      //                   .white,
+                                                      //               fontFamily:
+                                                      //                   Font_
+                                                      //                       .Fonts_T))),
+                                                      // );
+                                                    }
+                                                  } else {
+                                                    try {
+                                                      // OKuploadFile_Slip();
+                                                      // _TransModels
+                                                      // sum_disamtx sum_dispx
+
+                                                      await in_Trans_invoice(
+                                                          newValuePDFimg);
+                                                    } catch (e) {}
+                                                  }
+                                                }
+                                              }
+                                            } else if (select_page == 1) {
+                                              if ((double.parse(pay1) +
+                                                      double.parse(pay2) !=
+                                                  (sum_amt - sum_disamt))) {
+                                                _showMyDialogPay_Error(
+                                                    'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ',
+                                                //           style: TextStyle(
+                                                //               color:
+                                                //                   Colors.white,
+                                                //               fontFamily: Font_
+                                                //                   .Fonts_T))),
+                                                // );
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
+                                                if (pamentpage == 0 &&
+                                                    // Form_payment1.text ==
+                                                    //     '' ||
+                                                    paymentName1 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors
+                                                  //                   .white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                } else if (pamentpage == 1 &&
+                                                        // Form_payment2.text ==
+                                                        //     '' ||
+                                                        paymentName2 == null ||
+                                                    paymentName1 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      (paymentName1 == null)
+                                                          ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                          : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   SnackBar(
+                                                  //       content:
+                                                  //(paymentName1 ==
+                                                  //               null)
+                                                  //           ? Text(
+                                                  //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                  //               style: TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .white,
+                                                  //                   fontFamily: Font_
+                                                  //                       .Fonts_T))
+                                                  //           : Text(
+                                                  //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+                                                  //               style: TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .white,
+                                                  //                   fontFamily:
+                                                  //                       Font_
+                                                  //                           .Fonts_T))),
+                                                  // );
+                                                } else {
+                                                  if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน') {
+                                                    if (base64_Slip != null) {
+                                                      try {
+                                                        final tableData00 = [
+                                                          for (int index = 0;
+                                                              index <
+                                                                  _InvoiceHistoryModels
+                                                                      .length;
+                                                              index++)
+                                                            [
+                                                              '${index + 1}',
+                                                              '${_InvoiceHistoryModels[index].date}',
+                                                              '${_InvoiceHistoryModels[index].descr}',
+                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                            ],
+                                                        ];
+                                                        OKuploadFile_Slip();
+
+                                                        in_Trans_invoice_refno(
+                                                            tableData00,
+                                                            newValuePDFimg);
+                                                      } catch (e) {}
+                                                    } else {
+                                                      _showMyDialogPay_Error(
+                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                      // ScaffoldMessenger.of(
+                                                      //         context)
+                                                      //     .showSnackBar(
+                                                      //   const SnackBar(
+                                                      //       content: Text(
+                                                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                      //           style: TextStyle(
+                                                      //               color: Colors
+                                                      //                   .white,
+                                                      //               fontFamily:
+                                                      //                   Font_
+                                                      //                       .Fonts_T))),
+                                                      // );
+                                                    }
+                                                  } else {
+                                                    try {
+                                                      final tableData00 = [
+                                                        for (int index = 0;
+                                                            index <
+                                                                _InvoiceHistoryModels
+                                                                    .length;
+                                                            index++)
+                                                          [
+                                                            '${index + 1}',
+                                                            '${_InvoiceHistoryModels[index].date}',
+                                                            '${_InvoiceHistoryModels[index].descr}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                          ],
+                                                      ];
+                                                      // OKuploadFile_Slip();
+                                                      //_InvoiceHistoryModels
+
+                                                      in_Trans_invoice_refno(
+                                                          tableData00,
+                                                          newValuePDFimg);
+                                                    } catch (e) {}
+                                                  }
+                                                }
                                               }
-                                            } else {
-                                              try {
-                                                final tableData00 = [
-                                                  for (int index = 0;
-                                                      index <
-                                                          _InvoiceHistoryModels
-                                                              .length;
-                                                      index++)
-                                                    [
-                                                      '${index + 1}',
-                                                      '${_InvoiceHistoryModels[index].date}',
-                                                      '${_InvoiceHistoryModels[index].descr}',
-                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                    ],
-                                                ];
-                                                // OKuploadFile_Slip();
-                                                //_InvoiceHistoryModels
-
-                                                in_Trans_invoice_refno(
-                                                    tableData00,
-                                                    newValuePDFimg);
-                                              } catch (e) {}
-                                            }
-                                          } else if (select_page == 2) {
-                                            if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน' ||
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'เงินโอน') {
-                                              if (base64_Slip != null) {
-                                                try {
-                                                  OKuploadFile_Slip();
-                                                  //TransReBillHistoryModel
-
-                                                  await in_Trans_re_invoice_refno(
-                                                      newValuePDFimg);
-                                                } catch (e) {}
+                                            } else if (select_page == 2) {
+                                              if ((double.parse(pay1) +
+                                                      double.parse(pay2) !=
+                                                  (sum_amt - sum_disamt))) {
+                                                _showMyDialogPay_Error(
+                                                    'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! ');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ! 789',
+                                                //           style: TextStyle(
+                                                //               color:
+                                                //                   Colors.white,
+                                                //               fontFamily: Font_
+                                                //                   .Fonts_T))),
+                                                // );
                                               } else {
-                                                ScaffoldMessenger.of(context)
-                                                    .showSnackBar(
-                                                  const SnackBar(
-                                                      content: Text(
-                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T))),
-                                                );
-                                              }
-                                            } else {
-                                              try {
-                                                // OKuploadFile_Slip();
-                                                //TransReBillHistoryModel
+                                                if (pamentpage == 0 &&
+                                                    // Form_payment1.text ==
+                                                    //     '' ||
+                                                    paymentName1 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      'กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors
+                                                  //                   .white,
+                                                  //               fontFamily: Font_
+                                                  //                   .Fonts_T))),
+                                                  // );
+                                                } else if (pamentpage == 1 &&
+                                                        // Form_payment2.text ==
+                                                        //     '' ||
+                                                        paymentName2 == null ||
+                                                    paymentName1 == null) {
+                                                  _showMyDialogPay_Error(
+                                                      (paymentName1 == null)
+                                                          ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                          : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   SnackBar(
+                                                  //       content: (paymentName1 ==
+                                                  //               null)
+                                                  //           ? Text(
+                                                  //               'กรุณาเลือกรูปแบบชำระ! ที่ 1',
+                                                  //               style: TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .white,
+                                                  //                   fontFamily: Font_
+                                                  //                       .Fonts_T))
+                                                  //           : Text(
+                                                  //               'กรุณาเลือกรูปแบบชำระ! ที่ 2',
+                                                  //               style: TextStyle(
+                                                  //                   color: Colors
+                                                  //                       .white,
+                                                  //                   fontFamily:
+                                                  //                       Font_
+                                                  //                           .Fonts_T))),
+                                                  // );
+                                                } else {
+                                                  if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'เงินโอน') {
+                                                    if (base64_Slip != null) {
+                                                      try {
+                                                        OKuploadFile_Slip();
+                                                        //TransReBillHistoryModel
 
-                                                await in_Trans_re_invoice_refno(
-                                                    newValuePDFimg);
-                                              } catch (e) {}
+                                                        await in_Trans_re_invoice_refno(
+                                                            newValuePDFimg);
+                                                      } catch (e) {}
+                                                    } else {
+                                                      _showMyDialogPay_Error(
+                                                          'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                      // ScaffoldMessenger.of(
+                                                      //         context)
+                                                      //     .showSnackBar(
+                                                      //   const SnackBar(
+                                                      //       content: Text(
+                                                      //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                      //           style: TextStyle(
+                                                      //               color: Colors
+                                                      //                   .white,
+                                                      //               fontFamily:
+                                                      //                   Font_
+                                                      //                       .Fonts_T))),
+                                                      // );
+                                                    }
+                                                  } else {
+                                                    try {
+                                                      // OKuploadFile_Slip();
+                                                      //TransReBillHistoryModel
+
+                                                      await in_Trans_re_invoice_refno(
+                                                          newValuePDFimg);
+                                                    } catch (e) {}
+                                                  }
+                                                }
+                                              }
                                             }
+                                          } else {
+                                            _showMyDialogPay_Error(
+                                                'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text(
+                                            //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
                                           }
                                         } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
-                                            const SnackBar(
-                                                content: Text(
-                                                    'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
-                                                    style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            Font_.Fonts_T))),
-                                          );
+                                          _showMyDialogPay_Error(
+                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                          // ScaffoldMessenger.of(context)
+                                          //     .showSnackBar(
+                                          //   const SnackBar(
+                                          //       content: Text(
+                                          //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                          //           style: TextStyle(
+                                          //               color: Colors.white,
+                                          //               fontFamily:
+                                          //                   Font_.Fonts_T))),
+                                          // );
                                         }
                                       } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                              content: Text(
-                                                  'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontFamily:
-                                                          Font_.Fonts_T))),
-                                        );
+                                        _showMyDialogPay_Error(
+                                            'กรุณาเลือกรูปแบบการชำระ!');
+                                        // ScaffoldMessenger.of(context)
+                                        //     .showSnackBar(
+                                        //   const SnackBar(
+                                        //       content: Text(
+                                        //           'กรุณาเลือกรูปแบบการชำระ!',
+                                        //           style: TextStyle(
+                                        //               color: Colors.white,
+                                        //               fontFamily:
+                                        //                   Font_.Fonts_T))),
+                                        // );
                                       }
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'กรุณาเลือกรูปแบบการชำระ!',
-                                                style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        Font_.Fonts_T))),
-                                      );
                                     }
                                   },
                                   child: Container(
@@ -6352,7 +7173,7 @@ class _PaysState extends State<Pays> {
                                         // border: Border.all(color: Colors.white, width: 1),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
+                                      child: Center(
                                           child: Text(
                                         'รับชำระ',
                                         style: TextStyle(

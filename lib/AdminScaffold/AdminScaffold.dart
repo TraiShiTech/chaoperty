@@ -88,13 +88,12 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   }
 
   Future<Null> read_GC_areak() async {
-    if (renTalModels.isNotEmpty) {
-      renTalModels.clear();
+    if (areakModels.isNotEmpty) {
+      areakModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
-    String url =
-        '${MyConstant().domain}/In_c_areak.php?isAdd=true&ren=$ren';
+    String url = '${MyConstant().domain}/In_c_areak.php?isAdd=true&ren=$ren';
 
     try {
       var response = await http.get(Uri.parse(url));
@@ -104,7 +103,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       if (result != null) {
         for (var map in result) {
           AreakModel areakModel = AreakModel.fromJson(map);
-        
+
           setState(() {
             areakModels.add(areakModel);
           });
@@ -142,6 +141,9 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           var img = renTalModel.img;
           var imglogo = renTalModel.imglogo;
           setState(() {
+            preferences.setString(
+                'renTalName', renTalModel.pn!.trim().toString());
+            renTal_name = preferences.getString('renTalName');
             foder = foderx;
             rtname = rtnamex;
             type = typexs;
@@ -317,10 +319,22 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
 
   Future<Null> checkPreferance() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      renTal_user = preferences.getString('renTalSer');
-      renTal_name = preferences.getString('renTalName');
-    });
+    var rser = preferences.getString('rser');
+    if (rser == '0') {
+      setState(() {
+        renTal_user = preferences.getString('renTalSer');
+        renTal_name = preferences.getString('renTalName');
+      });
+    } else {
+      setState(() {
+        preferences.setString('renTalSer', rser.toString());
+        renTal_user = preferences.getString('renTalSer');
+      });
+    }
+    // setState(() {
+    //   renTal_user = preferences.getString('renTalSer');
+    //   renTal_name = preferences.getString('renTalName');
+    // });
   }
 
   // List MenuList_ = [

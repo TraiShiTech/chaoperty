@@ -477,12 +477,13 @@ class _BillsHistoryState extends State<BillsHistory> {
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(0),
                           topRight: Radius.circular(0),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
                         // border: Border.all(
                         //     color: Colors.grey, width: 1),
                       ),
+                      padding: const EdgeInsets.all(8.0),
                       child: ListView.builder(
                         controller: _scrollController1,
                         // itemExtent: 50,
@@ -490,62 +491,110 @@ class _BillsHistoryState extends State<BillsHistory> {
                         shrinkWrap: true,
                         itemCount: _InvoiceModels.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return InkWell(
-                            onTap: () {
-                              print(
-                                  '${_InvoiceModels[index].ser} ${_InvoiceModels[index].docno}');
-
-                              red_Trans_select(index);
-                            },
+                          return Material(
+                            color: (numinvoice.toString() ==
+                                    _InvoiceModels[index].docno.toString())
+                                ? tappedIndex_Color.tappedIndex_Colors
+                                : AppbackgroundColor.Sub_Abg_Colors,
                             child: ListTile(
-                              title: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 25,
-                                      maxLines: 1,
-                                      '${_InvoiceModels[index].descr}',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          //fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
+                              onTap: () {
+                                print(
+                                    '${_InvoiceModels[index].ser} ${_InvoiceModels[index].docno}');
+
+                                red_Trans_select(index);
+                              },
+                              title: Container(
+                                // color: (numinvoice.toString() ==
+                                //         _InvoiceModels[index]
+                                //             .docno
+                                //             .toString())
+                                //     ? tappedIndex_Color.tappedIndex_Colors
+                                //     : null,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Tooltip(
+                                        richMessage: TextSpan(
+                                          text:
+                                              '${_InvoiceModels[index].descr}',
+                                          style: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            //fontSize: 10.0
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          '${_InvoiceModels[index].descr}',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 25,
-                                      maxLines: 1,
-                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceModels[index].daterec} 00:00:00'))}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          //fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
+                                    Expanded(
+                                      flex: 1,
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 25,
+                                        maxLines: 1,
+                                        '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceModels[index].daterec} 00:00:00'))}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            //fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 2,
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 25,
-                                      maxLines: 1,
-                                      '${_InvoiceModels[index].docno}',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          //fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Tooltip(
+                                        richMessage: TextSpan(
+                                          text:
+                                              '${_InvoiceModels[index].docno}',
+                                          style: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            //fontSize: 10.0
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          '${_InvoiceModels[index].docno}',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -852,130 +901,134 @@ class _BillsHistoryState extends State<BillsHistory> {
                         shrinkWrap: true,
                         itemCount: _InvoiceHistoryModels.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${index + 1}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                          return Material(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            child: ListTile(
+                              onTap: () {},
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${index + 1}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}',
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_InvoiceHistoryModels[index].date} 00:00:00'))}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].descr}',
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].descr}',
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].qty}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].qty}',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].nvat}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].nvat}',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].vat}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].vat}',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].pvat}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].pvat}',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_InvoiceHistoryModels[index].amt}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_InvoiceHistoryModels[index].amt}',
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -1281,7 +1334,14 @@ class _BillsHistoryState extends State<BillsHistory> {
                     flex: 2,
                     child: Container(
                       height: 50,
-                      color: AppbackgroundColor.Sub_Abg_Colors,
+                      decoration: BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
                         decoration: BoxDecoration(

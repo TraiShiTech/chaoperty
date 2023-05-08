@@ -382,8 +382,27 @@ class _BillsState extends State<Bills> {
           red_Trans_select();
         });
         print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          red_Trans_select();
+        });
+        print('rrrrrrrrrrrrrr');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('ผู้ใช้อื่นกำลังเลือกทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
       }
-    } catch (e) {}
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                style:
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      );
+    }
   }
 
   Future<Null> de_Trans_select(index) async {
@@ -708,24 +727,49 @@ class _BillsState extends State<Bills> {
                               ),
                               Expanded(
                                 flex: 2,
-                                child: Container(
-                                  height: 50,
-                                  color: Colors.brown[200],
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Center(
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 25,
-                                      maxLines: 1,
-                                      'เลขตั้งหนี้',
-                                      textAlign: TextAlign.end,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.086,
+                                      color: Colors.brown[200],
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          'เลขตั้งหนี้',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        for (var i = 0;
+                                            i < _TransBillModels.length;
+                                            i++) {
+                                          in_Trans_select(i);
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 50,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.027,
+                                        color: Colors.brown[200],
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: const Center(
+                                            child: Icon(Icons.chevron_right)),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -750,62 +794,126 @@ class _BillsState extends State<Bills> {
                               shrinkWrap: true,
                               itemCount: _TransBillModels.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return InkWell(
-                                  onTap: () {
-                                    print(
-                                        '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
-
-                                    in_Trans_select(index);
-                                  },
+                                return Material(
+                                  color: (_TransModels.any((A) =>
+                                              A.docno ==
+                                              _TransBillModels[index].docno) &&
+                                          _TransModels.any((A) =>
+                                              A.date ==
+                                              _TransBillModels[index].date))
+                                      ? tappedIndex_Color.tappedIndex_Colors
+                                      : AppbackgroundColor.Sub_Abg_Colors,
                                   child: ListTile(
-                                    title: Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 25,
-                                            maxLines: 1,
-                                            '${_TransBillModels[index].expname}',
-                                            textAlign: TextAlign.start,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
+                                    onTap: () {
+                                      print(
+                                          '${_TransBillModels[index].ser} ${_TransBillModels[index].docno}');
+
+                                      in_Trans_select(index);
+                                    },
+                                    title: Container(
+                                      // color: (_TransModels.any((A) =>
+                                      //             A.docno ==
+                                      //             _TransBillModels[index]
+                                      //                 .docno) &&
+                                      //         _TransModels.any((A) =>
+                                      //             A.date ==
+                                      //             _TransBillModels[index].date))
+                                      //     ? tappedIndex_Color.tappedIndex_Colors
+                                      //     : null,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${_TransBillModels[index].expname}',
+                                                style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                '${_TransBillModels[index].expname}',
+                                                textAlign: TextAlign.start,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 25,
-                                            maxLines: 1,
-                                            '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                              textAlign: TextAlign.center,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T),
+                                            ),
                                           ),
-                                        ),
-                                        Expanded(
-                                          flex: 2,
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 25,
-                                            maxLines: 1,
-                                            '${_TransBillModels[index].docno}',
-                                            textAlign: TextAlign.end,
-                                            style: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
+                                          Expanded(
+                                            flex: 2,
+                                            child: Tooltip(
+                                              richMessage: TextSpan(
+                                                text:
+                                                    '${_TransBillModels[index].docno}',
+                                                style: const TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T,
+                                                  //fontSize: 10.0
+                                                ),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                color: Colors.grey[200],
+                                              ),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 25,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                '${_TransBillModels[index].docno}',
+                                                textAlign: TextAlign.end,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );
@@ -1036,6 +1144,7 @@ class _BillsState extends State<Bills> {
                                     child: Text(
                                       'รายละเอียดบิล',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1065,6 +1174,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'ลำดับ',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1090,6 +1200,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'กำหนดชำระ',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1115,6 +1226,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'รายการ',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1140,6 +1252,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'จำนวน',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1165,6 +1278,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'หน่วย',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1190,6 +1304,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'ราคาต่อหน่วย',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1215,6 +1330,7 @@ class _BillsState extends State<Bills> {
                                       maxLines: 1,
                                       'ราคารวม',
                                       textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
                                               .Colors_Text1_,
@@ -1229,25 +1345,31 @@ class _BillsState extends State<Bills> {
                               ),
                               Expanded(
                                 flex: 1,
-                                child: Container(
-                                  height: 50,
-                                  color: Colors.brown[200],
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Center(
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 15,
-                                      maxLines: 1,
-                                      'X',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T
-                                          //fontSize: 10.0
-                                          //fontSize: 10.0
-                                          ),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    deall_Trans_select();
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    color: Colors.brown[200],
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Center(
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 15,
+                                        maxLines: 1,
+                                        'X',
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1274,125 +1396,145 @@ class _BillsState extends State<Bills> {
                               shrinkWrap: true,
                               itemCount: _TransModels.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                  title: Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${index + 1}',
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 2,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${_TransModels[index].name}',
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${_TransModels[index].tqty}',
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${_TransModels[index].unit_con}',
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          _TransModels[index].qty_con == '0.00'
-                                              ? '${_TransModels[index].amt_con}'
-                                              : '${_TransModels[index].qty_con}',
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 15,
-                                          maxLines: 1,
-                                          '${_TransModels[index].pvat}',
-                                          textAlign: TextAlign.end,
-                                          style: const TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              //fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ),
-                                      Expanded(
+                                return Material(
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  child: ListTile(
+                                    onTap: () {},
+                                    title: Row(
+                                      children: [
+                                        Expanded(
                                           flex: 1,
-                                          child: IconButton(
-                                              onPressed: () {
-                                                de_Trans_select(index);
-                                              },
-                                              icon: const Icon(
-                                                  Icons.remove_circle))),
-                                    ],
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${index + 1}',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 2,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${_TransModels[index].name}',
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${nFormat.format(double.parse(_TransModels[index].tqty!))}',
+                                            //'${_TransModels[index].tqty}',
+                                            textAlign: TextAlign.end,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${_TransModels[index].unit_con}',
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.end,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            _TransModels[index].qty_con ==
+                                                    '0.00'
+                                                ? '${nFormat.format(double.parse(_TransModels[index].amt_con!))}'
+                                                //'${_TransModels[index].amt_con}'
+                                                : '${nFormat.format(double.parse(_TransModels[index].qty_con!))}',
+                                            //'${_TransModels[index].qty_con}',
+                                            textAlign: TextAlign.end,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            maxLines: 1,
+                                            '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                            // '${_TransModels[index].pvat}',
+                                            textAlign: TextAlign.end,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                //fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T),
+                                          ),
+                                        ),
+                                        Expanded(
+                                            flex: 1,
+                                            child: Center(
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    de_Trans_select(index);
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.remove_circle,
+                                                    color: Colors.red,
+                                                  )),
+                                            )),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
@@ -1903,7 +2045,14 @@ class _BillsState extends State<Bills> {
                           flex: 2,
                           child: Container(
                             height: 50,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            decoration: BoxDecoration(
+                              color: AppbackgroundColor.Sub_Abg_Colors,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
                               decoration: BoxDecoration(
@@ -2047,6 +2196,32 @@ class _BillsState extends State<Bills> {
               )
             ],
           );
+  }
+
+  Future<Null> deall_Trans_select() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = widget.Get_Value_NameShop_index;
+
+    String url =
+        '${MyConstant().domain}/D_tran_select.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() == 'true') {
+        setState(() {
+          red_Trans_bill();
+          red_Trans_select();
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {
+      print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   Future<Null> in_Trans_invoice() async {

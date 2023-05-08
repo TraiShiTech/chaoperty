@@ -675,34 +675,62 @@ class _HistoryBillsState extends State<HistoryBills> {
                           shrinkWrap: true,
                           itemCount: _TransReBillModels.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return InkWell(
-                              onTap: () {
-                                print(
-                                    '${_TransReBillModels[index].ser} ${_TransReBillModels[index].docno}');
-                                red_Trans_select(index);
-                                red_Invoice(index);
-
-                                //  setState(() {
-
-                                // });
-                                // in_Trans_select(index);
-                              },
+                            return Material(
+                              color:
+                                  (_TransReBillModels[index].docno.toString() ==
+                                              numinvoice.toString() ||
+                                          _TransReBillModels[index]
+                                                  .doctax
+                                                  .toString() ==
+                                              numinvoice.toString())
+                                      ? tappedIndex_Color.tappedIndex_Colors
+                                      : AppbackgroundColor.Sub_Abg_Colors,
                               child: ListTile(
+                                onTap: () {
+                                  print(
+                                      '${_TransReBillModels[index].ser} ${_TransReBillModels[index].docno}');
+                                  red_Trans_select(index);
+                                  red_Invoice(index);
+
+                                  //  setState(() {
+
+                                  // });
+                                  // in_Trans_select(index);
+                                },
                                 title: Row(
                                   children: [
                                     Expanded(
                                       flex: 2,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 25,
-                                        maxLines: 1,
-                                        '${_TransReBillModels[index].expname}',
-                                        textAlign: TextAlign.start,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            //fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T),
+                                      child: Tooltip(
+                                        richMessage: TextSpan(
+                                          text:
+                                              '${_TransReBillModels[index].expname}',
+                                          style: const TextStyle(
+                                            color:
+                                                HomeScreen_Color.Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            //fontSize: 10.0
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          '${_TransReBillModels[index].expname}',
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
                                       ),
                                     ),
                                     Expanded(
@@ -713,6 +741,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                         maxLines: 1,
                                         '${_TransReBillModels[index].daterec}',
                                         textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
                                                 .Colors_Text2_,
@@ -722,19 +751,41 @@ class _HistoryBillsState extends State<HistoryBills> {
                                     ),
                                     Expanded(
                                       flex: 2,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 25,
-                                        maxLines: 1,
-                                        _TransReBillModels[index].doctax == ''
-                                            ? '${_TransReBillModels[index].docno}'
-                                            : '${_TransReBillModels[index].doctax}',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text2_,
-                                            //fontWeight: FontWeight.bold,
-                                            fontFamily: Font_.Fonts_T),
+                                      child: Tooltip(
+                                        richMessage: TextSpan(
+                                          text: _TransReBillModels[index]
+                                                      .doctax ==
+                                                  ''
+                                              ? '${_TransReBillModels[index].docno}'
+                                              : '${_TransReBillModels[index].doctax}',
+                                          style: const TextStyle(
+                                            color:
+                                                HomeScreen_Color.Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            //fontSize: 10.0
+                                          ),
+                                        ),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: AutoSizeText(
+                                          minFontSize: 10,
+                                          maxFontSize: 25,
+                                          maxLines: 1,
+                                          _TransReBillModels[index].doctax == ''
+                                              ? '${_TransReBillModels[index].docno}'
+                                              : '${_TransReBillModels[index].doctax}',
+                                          textAlign: TextAlign.end,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -1161,7 +1212,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                         //   ),
                         // ),
                         Expanded(
-                          flex: 1,
+                          flex: 2,
                           child: Container(
                             height: 50,
                             color: Colors.brown[200],
@@ -1206,175 +1257,189 @@ class _HistoryBillsState extends State<HistoryBills> {
                         shrinkWrap: true,
                         itemCount: _TransReBillHistoryModels.length,
                         itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${index + 1}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                          return Material(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            child: ListTile(
+                              onTap: () {},
+                              title: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${index + 1}',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].daterec}',
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_TransReBillHistoryModels[index].daterec}',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].date}',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_TransReBillHistoryModels[index].date}',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].docno}',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_TransReBillHistoryModels[index].docno}',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 2,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].expname}',
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${_TransReBillHistoryModels[index].expname}',
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].nvat}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+                                      // '${_TransReBillHistoryModels[index].nvat}',
+                                      textAlign: TextAlign.right,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${_TransReBillHistoryModels[index].wht}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
+                                      // '${_TransReBillHistoryModels[index].wht}',
+                                      textAlign: TextAlign.end,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                                // Expanded(
-                                //   flex: 1,
-                                //   child: AutoSizeText(
-                                //     minFontSize: 10,
-                                //     maxFontSize: 15,
-                                //     maxLines: 1,
-                                //     '${_TransReBillHistoryModels[index].vtype}',
-                                //     textAlign: TextAlign.end,
-                                //     style: const TextStyle(
-                                //         color: PeopleChaoScreen_Color
-                                //             .Colors_Text2_,
-                                //         //fontWeight: FontWeight.bold,
-                                //         fontFamily: Font_.Fonts_T),
-                                //   ),
-                                // ),
-                                // Expanded(
-                                //   flex: 1,
-                                //   child: AutoSizeText(
-                                //     minFontSize: 10,
-                                //     maxFontSize: 15,
-                                //     maxLines: 1,
-                                //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-                                //     textAlign: TextAlign.end,
-                                //     style: const TextStyle(
-                                //         color: PeopleChaoScreen_Color
-                                //             .Colors_Text2_,
-                                //         //fontWeight: FontWeight.bold,
-                                //         fontFamily: Font_.Fonts_T),
-                                //   ),
-                                // ),
-                                // Expanded(
-                                //   flex: 1,
-                                //   child: AutoSizeText(
-                                //     minFontSize: 10,
-                                //     maxFontSize: 15,
-                                //     maxLines: 1,
-                                //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
-                                //     textAlign: TextAlign.end,
-                                //     style: const TextStyle(
-                                //         color: PeopleChaoScreen_Color
-                                //             .Colors_Text2_,
-                                //         //fontWeight: FontWeight.bold,
-                                //         fontFamily: Font_.Fonts_T),
-                                //   ),
-                                // ),
-                                Expanded(
-                                  flex: 1,
-                                  child: AutoSizeText(
-                                    minFontSize: 10,
-                                    maxFontSize: 15,
-                                    maxLines: 1,
-                                    '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-                                    textAlign: TextAlign.end,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        //fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T),
+                                  // Expanded(
+                                  //   flex: 1,
+                                  //   child: AutoSizeText(
+                                  //     minFontSize: 10,
+                                  //     maxFontSize: 15,
+                                  //     maxLines: 1,
+                                  //     '${_TransReBillHistoryModels[index].vtype}',
+                                  //     textAlign: TextAlign.end,
+                                  //     style: const TextStyle(
+                                  //         color: PeopleChaoScreen_Color
+                                  //             .Colors_Text2_,
+                                  //         //fontWeight: FontWeight.bold,
+                                  //         fontFamily: Font_.Fonts_T),
+                                  //   ),
+                                  // ),
+                                  // Expanded(
+                                  //   flex: 1,
+                                  //   child: AutoSizeText(
+                                  //     minFontSize: 10,
+                                  //     maxFontSize: 15,
+                                  //     maxLines: 1,
+                                  //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+                                  //     textAlign: TextAlign.end,
+                                  //     style: const TextStyle(
+                                  //         color: PeopleChaoScreen_Color
+                                  //             .Colors_Text2_,
+                                  //         //fontWeight: FontWeight.bold,
+                                  //         fontFamily: Font_.Fonts_T),
+                                  //   ),
+                                  // ),
+                                  // Expanded(
+                                  //   flex: 1,
+                                  //   child: AutoSizeText(
+                                  //     minFontSize: 10,
+                                  //     maxFontSize: 15,
+                                  //     maxLines: 1,
+                                  //     '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
+                                  //     textAlign: TextAlign.end,
+                                  //     style: const TextStyle(
+                                  //         color: PeopleChaoScreen_Color
+                                  //             .Colors_Text2_,
+                                  //         //fontWeight: FontWeight.bold,
+                                  //         fontFamily: Font_.Fonts_T),
+                                  //   ),
+                                  // ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: AutoSizeText(
+                                      minFontSize: 10,
+                                      maxFontSize: 15,
+                                      maxLines: 1,
+                                      '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                      textAlign: TextAlign.end,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },
@@ -2256,22 +2321,37 @@ class _HistoryBillsState extends State<HistoryBills> {
                     Row(
                       children: [
                         Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 50,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                          ),
-                        ),
+                            flex: 1,
+                            child: Container(
+                              height: 50,
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                                // border: Border.all(color: Colors.grey, width: 1),
+                              ),
+                            )),
                         Expanded(
-                          flex: 4,
-                          child: Container(
-                            width: 100,
-                            height: 50,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                          ),
-                        ),
+                            flex: 4,
+                            child: Container(
+                              height: 50,
+                              // width: MediaQuery.of(context).size.width,
+                              decoration: const BoxDecoration(
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  topRight: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(10),
+                                ),
+                                // border: Border.all(color: Colors.grey, width: 1),
+                              ),
+                            )),
                       ],
                     ),
                     const SizedBox(

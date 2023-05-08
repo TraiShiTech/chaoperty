@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account/Account_Screen.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
+import '../ChaoArea/ChaoRe_contact.dart';
 import '../Constant/Myconstant.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
@@ -32,11 +33,13 @@ import 'package:http/http.dart' as http;
 class PeopleChaoScreen2 extends StatefulWidget {
   final Get_Value_NameShop_index;
   final Get_Value_cid;
+  final Get_Value_status;
   final updateMessage;
   const PeopleChaoScreen2({
     super.key,
     this.Get_Value_NameShop_index,
     this.Get_Value_cid,
+    this.Get_Value_status,
     this.updateMessage,
   });
 
@@ -61,7 +64,8 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
     Colors.green, //ซ่อมบำรุง
   ];
   /////------------------------------------------------>()
-  int ser_tabbarview_2 = 0;
+  int ser_tabbarview_2 = 0, contact_new = 0;
+
   List tabbarview_2 = [
     'ข้อมูลการเช่า',
     'มิเตอร์น้ำไฟฟ้า',
@@ -142,6 +146,20 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'สถานะ : ${widget.Get_Value_status}',
+                            style: TextStyle(
+                                color: AdminScafScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T),
+                          )
+                        ],
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
@@ -523,316 +541,417 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                           child: const Text(
                             'ยกเลิกสัญญา',
                             style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15.0),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              // fontSize: 15.0,
+                            ),
                           ),
                         ),
                       ),
-                    )
+                    ),
+                    widget.Get_Value_status == 'ใกล้หมดสัญญา' ||
+                            widget.Get_Value_status == 'หมดสัญญา'
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (contact_new == 1) {
+                                    contact_new = 0;
+                                  } else {
+                                    contact_new = 1;
+                                  }
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green[600],
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  contact_new == 1
+                                      ? 'ยกเลิกต่อสัญญา'
+                                      : 'ต่อสัญญา',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    // fontSize: 15.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 ),
               ),
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white30,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(0),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10)),
-              // border: Border.all(color: Colors.grey, width: 1),
-            ),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          border: Border.all(color: Colors.grey, width: 1),
-                        ),
-                        child: Column(
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: AutoSizeText(
-                                minFontSize: 10,
-                                maxFontSize: 15,
-                                'รหัสพื้นที่ : ',
-                                style: TextStyle(
-                                  color: TextHome_Color.TextHome_Colors,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                  border:
-                                      Border.all(color: Colors.grey, width: 1),
-                                ),
-                                padding: const EdgeInsets.all(8.0),
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 15,
-                                  '$areanew',
-                                  maxLines: 2,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+        contact_new == 1
+            ? ChaoReContact(
+                Value_cid: widget.Get_Value_cid,
+              )
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: Colors.white30,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          border: Border.all(color: Colors.grey, width: 1),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              child: Column(
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(4.0),
-                                    child: AutoSizeText(
-                                      minFontSize: 10,
-                                      maxFontSize: 15,
-                                      'ชื่อผู้เช่า : ',
-                                      style: TextStyle(
-                                        color: TextHome_Color.TextHome_Colors,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(4.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        border: Border.all(
-                                            color: Colors.grey, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        '$namenew',
-                                        maxLines: 2,
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 15,
-                                        widget.Get_Value_NameShop_index
-                                                    .toString() ==
-                                                '1'
-                                            ? 'เลขที่ใบสัญญา : '
-                                            : 'เลขที่ใบเสนอราคา : ',
-                                        style: const TextStyle(
-                                          color: TextHome_Color.TextHome_Colors,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                          border: Border.all(
-                                              color: Colors.grey, width: 1),
-                                        ),
-                                        padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.all(4.0),
                                         child: AutoSizeText(
                                           minFontSize: 10,
                                           maxFontSize: 15,
-                                          '${widget.Get_Value_cid}',
-                                          maxLines: 2,
-                                          style: const TextStyle(
-                                            color: Colors.black,
+                                          'รหัสพื้นที่ : ',
+                                          style: TextStyle(
+                                            color:
+                                                TextHome_Color.TextHome_Colors,
                                             fontWeight: FontWeight.bold,
-                                            //0953873075
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.845,
-                    decoration: const BoxDecoration(
-                      // color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    child: Center(
-                      child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                        }),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          dragStartBehavior: DragStartBehavior.start,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              for (var index = 0;
-                                  index < tabbarview_2.length;
-                                  index++)
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        ser_tabbarview_2 = index;
-                                      });
-                                    },
-                                    child: Container(
-                                      width: 200,
-                                      decoration: BoxDecoration(
-                                        color: (ser_tabbarview_2 == index)
-                                            ? tabbarview_color_2[index][600]
-                                            : tabbarview_color_2[index][200],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        border: (ser_tabbarview_2 == index)
-                                            ? Border.all(
-                                                color: Colors.white, width: 1)
-                                            : null,
+                                      Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: AutoSizeText(
+                                            minFontSize: 10,
+                                            maxFontSize: 15,
+                                            '$areanew',
+                                            maxLines: 2,
+                                            style: const TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '${tabbarview_2[index]}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: (ser_tabbarview_2 == index)
-                                                ? Colors.white
-                                                : Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 15.0),
-                                      ),
-                                    ),
+                                    ],
                                   ),
-                                )
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        child: Column(
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.all(4.0),
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                'ชื่อผู้เช่า : ',
+                                                style: TextStyle(
+                                                  color: TextHome_Color
+                                                      .TextHome_Colors,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  '$namenew',
+                                                  maxLines: 2,
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Row(
+                                        children: [
+                                          Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  widget.Get_Value_NameShop_index
+                                                              .toString() ==
+                                                          '1'
+                                                      ? 'เลขที่ใบสัญญา : '
+                                                      : 'เลขที่ใบเสนอราคา : ',
+                                                  style: const TextStyle(
+                                                    color: TextHome_Color
+                                                        .TextHome_Colors,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    '${widget.Get_Value_cid}',
+                                                    maxLines: 2,
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      //0953873075
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.845,
+                              decoration: const BoxDecoration(
+                                // color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              child: Center(
+                                child: ScrollConfiguration(
+                                  behavior: ScrollConfiguration.of(context)
+                                      .copyWith(dragDevices: {
+                                    PointerDeviceKind.touch,
+                                    PointerDeviceKind.mouse,
+                                  }),
+                                  child: SingleChildScrollView(
+                                    scrollDirection: Axis.horizontal,
+                                    dragStartBehavior: DragStartBehavior.start,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        for (var index = 0;
+                                            index < tabbarview_2.length;
+                                            index++)
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: InkWell(
+                                              onTap: () {
+                                                setState(() {
+                                                  ser_tabbarview_2 = index;
+                                                });
+                                              },
+                                              child: Container(
+                                                width: 200,
+                                                decoration: BoxDecoration(
+                                                  color: (ser_tabbarview_2 ==
+                                                          index)
+                                                      ? tabbarview_color_2[
+                                                          index][600]
+                                                      : tabbarview_color_2[
+                                                          index][200],
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  border: (ser_tabbarview_2 ==
+                                                          index)
+                                                      ? Border.all(
+                                                          color: Colors.white,
+                                                          width: 1)
+                                                      : null,
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  '${tabbarview_2[index]}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color:
+                                                          (ser_tabbarview_2 ==
+                                                                  index)
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15.0),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        (ser_tabbarview_2 == 0)
-            ? RentalInformation(
-                Get_Value_cid: widget.Get_Value_cid,
-                Get_Value_NameShop_index: widget.Get_Value_NameShop_index)
-            : (ser_tabbarview_2 == 1)
-                ? MeterWaterElectric(
-                    Get_Value_cid: widget.Get_Value_cid,
-                    Get_Value_NameShop_index: widget.Get_Value_NameShop_index)
-                : (ser_tabbarview_2 == 2)
-                    ? Bills(
-                        Get_Value_cid: widget.Get_Value_cid,
-                        Get_Value_NameShop_index:
-                            widget.Get_Value_NameShop_index,
-                        namenew: namenew)
-                    // : (ser_tabbarview_2 == 3)
-                    //     ? BillsHistory(
-                    //         Get_Value_cid: widget.Get_Value_cid,
-                    //         Get_Value_NameShop_index:
-                    //             widget.Get_Value_NameShop_index)
-                    : (ser_tabbarview_2 == 3)
-                        ? Pays(
-                            Get_Value_cid: widget.Get_Value_cid,
-                            Get_Value_NameShop_index:
-                                widget.Get_Value_NameShop_index,
-                            namenew: namenew)
-                        // : (ser_tabbarview_2 == 5)
-                        //     ? PaysHistory(
-                        //         Get_Value_cid: widget.Get_Value_cid,
-                        //         Get_Value_NameShop_index:
-                        //             widget.Get_Value_NameShop_index)
-                        : HistoryBills(
-                            Get_Value_cid: widget.Get_Value_cid,
-                            Get_Value_NameShop_index:
-                                widget.Get_Value_NameShop_index),
+                  (ser_tabbarview_2 == 0)
+                      ? RentalInformation(
+                          Get_Value_cid: widget.Get_Value_cid,
+                          Get_Value_NameShop_index:
+                              widget.Get_Value_NameShop_index)
+                      : (ser_tabbarview_2 == 1)
+                          ? MeterWaterElectric(
+                              Get_Value_cid: widget.Get_Value_cid,
+                              Get_Value_NameShop_index:
+                                  widget.Get_Value_NameShop_index)
+                          : (ser_tabbarview_2 == 2)
+                              ? Bills(
+                                  Get_Value_cid: widget.Get_Value_cid,
+                                  Get_Value_NameShop_index:
+                                      widget.Get_Value_NameShop_index,
+                                  namenew: namenew)
+                              // : (ser_tabbarview_2 == 3)
+                              //     ? BillsHistory(
+                              //         Get_Value_cid: widget.Get_Value_cid,
+                              //         Get_Value_NameShop_index:
+                              //             widget.Get_Value_NameShop_index)
+                              : (ser_tabbarview_2 == 3)
+                                  ? Pays(
+                                      Get_Value_cid: widget.Get_Value_cid,
+                                      Get_Value_NameShop_index:
+                                          widget.Get_Value_NameShop_index,
+                                      namenew: namenew)
+                                  // : (ser_tabbarview_2 == 5)
+                                  //     ? PaysHistory(
+                                  //         Get_Value_cid: widget.Get_Value_cid,
+                                  //         Get_Value_NameShop_index:
+                                  //             widget.Get_Value_NameShop_index)
+                                  : HistoryBills(
+                                      Get_Value_cid: widget.Get_Value_cid,
+                                      Get_Value_NameShop_index:
+                                          widget.Get_Value_NameShop_index),
+                ],
+              ),
       ],
     );
   }

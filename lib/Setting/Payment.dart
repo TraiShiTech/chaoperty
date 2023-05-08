@@ -1567,91 +1567,207 @@ class _PaymentState extends State<Payment> {
                                     itemCount: payMentModels.length,
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return Container(
+                                      return Material(
                                         color: tappedIndex_ == index.toString()
                                             ? tappedIndex_Color
                                                 .tappedIndex_Colors
-                                            : null,
-                                        child: ListTile(
-                                          onTap: () {
-                                            setState(() {
-                                              tappedIndex_ = index.toString();
-                                            });
-                                          },
-                                          title: Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Text(
-                                                  '${payMentModels[index].ptname}',
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                            : AppbackgroundColor.Sub_Abg_Colors,
+                                        child: Container(
+                                          // color:
+                                          //     tappedIndex_ == index.toString()
+                                          //         ? tappedIndex_Color
+                                          //             .tappedIndex_Colors
+                                          //         : null,
+                                          child: ListTile(
+                                            onTap: () {
+                                              setState(() {
+                                                tappedIndex_ = index.toString();
+                                              });
+                                            },
+                                            title: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${payMentModels[index].ptname}',
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${payMentModels[index].bname}',
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 4,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    '${payMentModels[index].bname}',
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 4,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${payMentModels[index].bsaka}',
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 4,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    '${payMentModels[index].bsaka}',
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 4,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 2,
-                                                child: Text(
-                                                  '${payMentModels[index].bank} ${payMentModels[index].bno}',
-                                                  textAlign: TextAlign.center,
-                                                  maxLines: 4,
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontWeight: FontWeight.bold,
-                                                      //fontSize: 10.0
-                                                      ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Text(
+                                                    '${payMentModels[index].bank} ${payMentModels[index].bno}',
+                                                    textAlign: TextAlign.center,
+                                                    maxLines: 4,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontWeight: FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            // color: Colors.grey.shade300,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10),
+                                                            ),
+                                                            // border: Border.all(
+                                                            //     color: Colors.grey, width: 1),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: payMentModels[
+                                                                          index]
+                                                                      .auto ==
+                                                                  '1'
+                                                              ? const Icon(
+                                                                  Icons
+                                                                      .toggle_on,
+                                                                  color: Colors
+                                                                      .green,
+                                                                  size: 50,
+                                                                )
+                                                              : const Icon(
+                                                                  Icons
+                                                                      .toggle_off,
+                                                                  size: 50,
+                                                                )),
+                                                      onTap: () async {
+                                                        var serx =
+                                                            payMentModels[index]
+                                                                .ser;
+                                                        var autox =
+                                                            payMentModels[index]
+                                                                        .auto ==
+                                                                    '1'
+                                                                ? '0'
+                                                                : '1';
+
+                                                        SharedPreferences
+                                                            preferences =
+                                                            await SharedPreferences
+                                                                .getInstance();
+                                                        var ren = preferences
+                                                            .getString(
+                                                                'renTalSer');
+                                                        var user = preferences
+                                                            .getString('ser');
+
+                                                        String url =
+                                                            '${MyConstant().domain}/Up_Payment_auto.php?isAdd=true&ren=$ren&serx=$serx&autox=$autox&user=$user';
+                                                        try {
+                                                          var response =
+                                                              await http.get(
+                                                                  Uri.parse(
+                                                                      url));
+
+                                                          var result = json
+                                                              .decode(response
+                                                                  .body);
+                                                          // print(result);
+                                                          if (result
+                                                                  .toString() ==
+                                                              'true') {
+                                                            Insert_log.Insert_logs(
+                                                                'ตั้งค่า',
+                                                                (autox == '0')
+                                                                    ? 'การรับชำระ>>ปรับการรับชำระ(ปิดAuto ${payMentModels[index].ptname})'
+                                                                    : 'การรับชำระ>>ปรับการรับชำระ(เปิดAuto ${payMentModels[index].ptname})');
+                                                            setState(() {
+                                                              read_GC_PayMentModel();
+                                                            });
+                                                            print(
+                                                                'rrrrrrrrrrrrrr');
+                                                          }
+                                                        } catch (e) {}
+                                                      },
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      child: Container(
                                                         decoration:
-                                                            const BoxDecoration(
-                                                          // color: Colors.grey.shade300,
+                                                            BoxDecoration(
+                                                          color: Colors
+                                                              .grey.shade300,
                                                           borderRadius:
-                                                              BorderRadius.only(
+                                                              const BorderRadius
+                                                                  .only(
                                                             topLeft:
                                                                 Radius.circular(
                                                                     10),
@@ -1671,1031 +1787,694 @@ class _PaymentState extends State<Payment> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child:
-                                                            payMentModels[index]
-                                                                        .auto ==
-                                                                    '1'
-                                                                ? const Icon(
-                                                                    Icons
-                                                                        .toggle_on,
-                                                                    color: Colors
-                                                                        .green,
-                                                                    size: 50,
-                                                                  )
-                                                                : const Icon(
-                                                                    Icons
-                                                                        .toggle_off,
-                                                                    size: 50,
-                                                                  )),
-                                                    onTap: () async {
-                                                      var serx =
-                                                          payMentModels[index]
-                                                              .ser;
-                                                      var autox =
-                                                          payMentModels[index]
-                                                                      .auto ==
-                                                                  '1'
-                                                              ? '0'
-                                                              : '1';
-
-                                                      SharedPreferences
-                                                          preferences =
-                                                          await SharedPreferences
-                                                              .getInstance();
-                                                      var ren =
-                                                          preferences.getString(
-                                                              'renTalSer');
-                                                      var user = preferences
-                                                          .getString('ser');
-
-                                                      String url =
-                                                          '${MyConstant().domain}/Up_Payment_auto.php?isAdd=true&ren=$ren&serx=$serx&autox=$autox&user=$user';
-                                                      try {
-                                                        var response =
-                                                            await http.get(
-                                                                Uri.parse(url));
-
-                                                        var result =
-                                                            json.decode(
-                                                                response.body);
-                                                        // print(result);
-                                                        if (result.toString() ==
-                                                            'true') {
-                                                          Insert_log.Insert_logs(
-                                                              'ตั้งค่า',
-                                                              (autox == '0')
-                                                                  ? 'การรับชำระ>>ปรับการรับชำระ(ปิดAuto ${payMentModels[index].ptname})'
-                                                                  : 'การรับชำระ>>ปรับการรับชำระ(เปิดAuto ${payMentModels[index].ptname})');
-                                                          setState(() {
-                                                            read_GC_PayMentModel();
-                                                          });
-                                                          print(
-                                                              'rrrrrrrrrrrrrr');
-                                                        }
-                                                      } catch (e) {}
-                                                    },
-                                                  ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .grey.shade300,
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
+                                                        child: const Text(
+                                                          'แก้ไข',
+                                                          maxLines: 2,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T
+                                                              //fontWeight: FontWeight.bold,
+                                                              //fontSize: 10.0
+                                                              ),
                                                         ),
-                                                        // border: Border.all(
-                                                        //     color: Colors.grey, width: 1),
                                                       ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Text(
-                                                        'แก้ไข',
-                                                        maxLines: 2,
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontWeight: FontWeight.bold,
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        bname_bank.text =
-                                                            payMentModels[index]
-                                                                .bname!;
-                                                        bank_bank.text =
-                                                            payMentModels[index]
-                                                                .bank!;
-                                                        bno_bank.text =
-                                                            payMentModels[index]
-                                                                .bno!;
-                                                        bsaka_bank.text =
-                                                            payMentModels[index]
-                                                                .bsaka!;
-                                                        btype_bank.text =
-                                                            payMentModels[index]
-                                                                .btype!;
-                                                        ser_typepay =
-                                                            payMentModels[index]
-                                                                .ptser;
-                                                        name_typepay =
-                                                            payMentModels[index]
-                                                                .ptname;
+                                                      onTap: () {
+                                                        setState(() {
+                                                          bname_bank.text =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bname!;
+                                                          bank_bank.text =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bank!;
+                                                          bno_bank.text =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bno!;
+                                                          bsaka_bank.text =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bsaka!;
+                                                          btype_bank.text =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .btype!;
+                                                          ser_typepay =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .ptser;
+                                                          name_typepay =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .ptname;
 
-                                                        ser_bank =
-                                                            payMentModels[index]
-                                                                .bser;
+                                                          ser_bank =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bser;
 
-                                                        name_bank =
-                                                            payMentModels[index]
-                                                                .bank;
+                                                          name_bank =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .bank;
 
-                                                        ser_bank_type =
-                                                            payMentModels[index]
-                                                                .btser;
+                                                          ser_bank_type =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .btser;
 
-                                                        name_bank_type =
-                                                            payMentModels[index]
-                                                                .btype;
-                                                      });
+                                                          name_bank_type =
+                                                              payMentModels[
+                                                                      index]
+                                                                  .btype;
+                                                        });
 
-                                                      showDialog<String>(
-                                                        barrierDismissible:
-                                                            false,
-                                                        context: context,
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            Form(
-                                                          key: _formKey,
-                                                          child: AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            20.0))),
-                                                            title: const Center(
-                                                                child: Text(
-                                                              'แก้ไขการชำระ',
-                                                              style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            )),
-                                                            content: Container(
-                                                              // height: MediaQuery.of(context).size.height / 1.5,
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width /
-                                                                  1.5,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.grey[300],
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                                // border: Border.all(color: Colors.white, width: 1),
-                                                              ),
-                                                              child:
-                                                                  SingleChildScrollView(
-                                                                child: Column(
-                                                                  // mainAxisAlignment: MainAxisAlignment.center,
-                                                                  children: [
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
+                                                        showDialog<String>(
+                                                          barrierDismissible:
+                                                              false,
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              Form(
+                                                            key: _formKey,
+                                                            child: AlertDialog(
+                                                              shape: const RoundedRectangleBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
+                                                                              20.0))),
+                                                              title:
+                                                                  const Center(
                                                                       child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'ชื่อบัญชี(*${payMentModels[index].bname})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-                                                                        child:
-                                                                            TextFormField(
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          controller:
-                                                                              bname_bank,
-
-                                                                          // maxLength: 13,
-                                                                          cursorColor:
-                                                                              Colors.green,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon:
-                                                                              //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              labelText: 'แก้ไขชื่อบัญชี',
-                                                                              labelStyle: const TextStyle(
-                                                                                color: Colors.black54,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              )),
-                                                                          // inputFormatters: <TextInputFormatter>[
-                                                                          //   // for below version 2 use this
-                                                                          //   // FilteringTextInputFormatter.allow(
-                                                                          //   //     RegExp(r'[0-9]')),
-                                                                          //   // for version 2 and greater youcan also use this
-                                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                                          // ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'ธนาคาร(*${payMentModels[index].bank})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-                                                                        child:
-                                                                            DropdownButtonFormField2(
-                                                                          decoration:
-                                                                              InputDecoration(
-                                                                            //Add isDense true and zero Padding.
-                                                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                            isDense:
-                                                                                true,
-                                                                            contentPadding:
-                                                                                EdgeInsets.zero,
-                                                                            border:
-                                                                                OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.circular(15),
-                                                                            ),
-                                                                            //Add more decoration as you want here
-                                                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                          ),
-                                                                          isExpanded:
-                                                                              true,
-                                                                          // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                          hint:
-                                                                              Text(
-                                                                            payMentModels[index].bank == null
-                                                                                ? 'เลือก'
-                                                                                : '${payMentModels[index].bank}',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.arrow_drop_down,
-                                                                            color:
-                                                                                Colors.black45,
-                                                                          ),
-                                                                          iconSize:
-                                                                              25,
-                                                                          buttonHeight:
-                                                                              42,
-                                                                          buttonPadding: const EdgeInsets.only(
-                                                                              left: 10,
-                                                                              right: 10),
-                                                                          dropdownDecoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                          items: getBankModels
-                                                                              .map((item) => DropdownMenuItem<String>(
-                                                                                    value: '${item.ser}:${item.bname}',
-                                                                                    child: Row(
-                                                                                      children: [
-                                                                                        Expanded(
-                                                                                          child: Text(
-                                                                                            '${item.bname}',
-                                                                                            textAlign: TextAlign.start,
-                                                                                            style: const TextStyle(
-                                                                                                fontSize: 14,
-                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ))
-                                                                              .toList(),
-                                                                          onChanged:
-                                                                              (value) async {
-                                                                            // Do something when changing the item if you want.
-
-                                                                            var zones =
-                                                                                value!.indexOf(':');
-                                                                            var rtnameSer =
-                                                                                value.substring(0, zones);
-                                                                            var rtnameName =
-                                                                                value.substring(zones + 1);
-                                                                            print('mmmmm ${rtnameSer.toString()} $rtnameName');
-
-                                                                            setState(() {
-                                                                              ser_bank = rtnameSer;
-                                                                              name_bank = rtnameName;
-                                                                            });
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'ประเภทบัญชี(*${payMentModels[index].btype})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-                                                                        child:
-                                                                            DropdownButtonFormField2(
-                                                                          decoration:
-                                                                              InputDecoration(
-                                                                            //Add isDense true and zero Padding.
-                                                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                            isDense:
-                                                                                true,
-                                                                            contentPadding:
-                                                                                EdgeInsets.zero,
-                                                                            border:
-                                                                                OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.circular(15),
-                                                                            ),
-                                                                            //Add more decoration as you want here
-                                                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                          ),
-                                                                          isExpanded:
-                                                                              true,
-                                                                          // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                          hint:
-                                                                              Text(
-                                                                            payMentModels[index].btype == null
-                                                                                ? 'เลือก'
-                                                                                : '${payMentModels[index].btype}',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.arrow_drop_down,
-                                                                            color:
-                                                                                Colors.black45,
-                                                                          ),
-                                                                          iconSize:
-                                                                              25,
-                                                                          buttonHeight:
-                                                                              42,
-                                                                          buttonPadding: const EdgeInsets.only(
-                                                                              left: 10,
-                                                                              right: 10),
-                                                                          dropdownDecoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                          items: banktypeModels
-                                                                              .map((item) => DropdownMenuItem<String>(
-                                                                                    value: '${item.ser}:${item.btype}',
-                                                                                    child: Row(
-                                                                                      children: [
-                                                                                        Expanded(
-                                                                                          child: Text(
-                                                                                            '${item.btype}',
-                                                                                            textAlign: TextAlign.start,
-                                                                                            style: const TextStyle(
-                                                                                                fontSize: 14,
-                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ))
-                                                                              .toList(),
-                                                                          onChanged:
-                                                                              (value) async {
-                                                                            // Do something when changing the item if you want.
-
-                                                                            var zones =
-                                                                                value!.indexOf(':');
-                                                                            var rtnameSer =
-                                                                                value.substring(0, zones);
-                                                                            var rtnameName =
-                                                                                value.substring(zones + 1);
-                                                                            print('mmmmm ${rtnameSer.toString()} $rtnameName');
-
-                                                                            setState(() {
-                                                                              ser_bank_type = rtnameSer;
-                                                                              name_bank_type = rtnameName;
-                                                                            });
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'เลขบัญชีธนาคาร(*${payMentModels[index].bno})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-                                                                        child:
-                                                                            TextFormField(
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          controller:
-                                                                              bno_bank,
-
-                                                                          // maxLength: 13,
-                                                                          cursorColor:
-                                                                              Colors.green,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon:
-                                                                              //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              labelText: 'แก้ไขเลขบัญชีธนาคาร',
-                                                                              labelStyle: const TextStyle(
-                                                                                color: Colors.black54,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              )),
-                                                                          // inputFormatters: <TextInputFormatter>[
-                                                                          //   // for below version 2 use this
-                                                                          //   // FilteringTextInputFormatter.allow(
-                                                                          //   //     RegExp(r'[0-9]')),
-                                                                          //   // for version 2 and greater youcan also use this
-                                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                                          // ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'สาขา(*${payMentModels[index].bsaka})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-                                                                        child:
-                                                                            TextFormField(
-                                                                          keyboardType:
-                                                                              TextInputType.number,
-                                                                          controller:
-                                                                              bsaka_bank,
-
-                                                                          // maxLength: 13,
-                                                                          cursorColor:
-                                                                              Colors.green,
-                                                                          decoration: InputDecoration(
-                                                                              fillColor: Colors.white.withOpacity(0.3),
-                                                                              filled: true,
-                                                                              // prefixIcon:
-                                                                              //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                              focusedBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.black,
-                                                                                ),
-                                                                              ),
-                                                                              enabledBorder: const OutlineInputBorder(
-                                                                                borderRadius: BorderRadius.only(
-                                                                                  topRight: Radius.circular(15),
-                                                                                  topLeft: Radius.circular(15),
-                                                                                  bottomRight: Radius.circular(15),
-                                                                                  bottomLeft: Radius.circular(15),
-                                                                                ),
-                                                                                borderSide: BorderSide(
-                                                                                  width: 1,
-                                                                                  color: Colors.grey,
-                                                                                ),
-                                                                              ),
-                                                                              labelText: 'แก้ไขสาขา',
-                                                                              labelStyle: const TextStyle(
-                                                                                color: Colors.black54,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              )),
-                                                                          // inputFormatters: <TextInputFormatter>[
-                                                                          //   // for below version 2 use this
-                                                                          //   // FilteringTextInputFormatter.allow(
-                                                                          //   //     RegExp(r'[0-9]')),
-                                                                          //   // for version 2 and greater youcan also use this
-                                                                          //   FilteringTextInputFormatter.digitsOnly
-                                                                          // ],
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Align(
-                                                                      alignment:
-                                                                          Alignment
-                                                                              .centerLeft,
-                                                                      child:
-                                                                          Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            Text(
-                                                                          'รูปแบบชำระ(*${payMentModels[index].ptname})',
-                                                                          textAlign:
-                                                                              TextAlign.left,
-                                                                          style:
-                                                                              const TextStyle(
-                                                                            color:
-                                                                                SettingScreen_Color.Colors_Text1_,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          SizedBox(
-                                                                        // width: 200,
-
-                                                                        child:
-                                                                            DropdownButtonFormField2(
-                                                                          decoration:
-                                                                              InputDecoration(
-                                                                            //Add isDense true and zero Padding.
-                                                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                            isDense:
-                                                                                true,
-                                                                            contentPadding:
-                                                                                EdgeInsets.zero,
-                                                                            border:
-                                                                                OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.circular(15),
-                                                                            ),
-                                                                            //Add more decoration as you want here
-                                                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                          ),
-                                                                          isExpanded:
-                                                                              true,
-                                                                          // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                          hint:
-                                                                              Text(
-                                                                            payMentModels[index].ptname == null
-                                                                                ? 'เลือก'
-                                                                                : '${payMentModels[index].ptname}',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                          icon:
-                                                                              const Icon(
-                                                                            Icons.arrow_drop_down,
-                                                                            color:
-                                                                                Colors.black45,
-                                                                          ),
-                                                                          iconSize:
-                                                                              25,
-                                                                          buttonHeight:
-                                                                              42,
-                                                                          buttonPadding: const EdgeInsets.only(
-                                                                              left: 10,
-                                                                              right: 10),
-                                                                          dropdownDecoration:
-                                                                              BoxDecoration(
-                                                                            borderRadius:
-                                                                                BorderRadius.circular(15),
-                                                                          ),
-                                                                          items: payTypeModels
-                                                                              .map((item) => DropdownMenuItem<String>(
-                                                                                    value: '${item.ser}:${item.ptname}',
-                                                                                    child: Row(
-                                                                                      children: [
-                                                                                        Expanded(
-                                                                                          child: Text(
-                                                                                            '${item.ptname}',
-                                                                                            textAlign: TextAlign.start,
-                                                                                            style: const TextStyle(
-                                                                                                fontSize: 14,
-                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ))
-                                                                              .toList(),
-                                                                          onChanged:
-                                                                              (value) async {
-                                                                            // Do something when changing the item if you want.
-
-                                                                            var zones =
-                                                                                value!.indexOf(':');
-                                                                            var rtnameSer =
-                                                                                value.substring(0, zones);
-                                                                            var rtnameName =
-                                                                                value.substring(zones + 1);
-                                                                            print('mmmmm ${rtnameSer.toString()} $rtnameName');
-
-                                                                            setState(() {
-                                                                              ser_typepay = rtnameSer;
-                                                                              name_typepay = rtnameName;
-                                                                            });
-                                                                          },
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                          Text(
+                                                                'แก้ไขการชำระ',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: SettingScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            actions: <Widget>[
-                                                              ScrollConfiguration(
-                                                                behavior: ScrollConfiguration.of(
-                                                                        context)
-                                                                    .copyWith(
-                                                                        dragDevices: {
-                                                                      PointerDeviceKind
-                                                                          .touch,
-                                                                      PointerDeviceKind
-                                                                          .mouse,
-                                                                    }),
+                                                              )),
+                                                              content:
+                                                                  Container(
+                                                                // height: MediaQuery.of(context).size.height / 1.5,
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width /
+                                                                    1.5,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  // color: Colors.grey[300],
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                                ),
                                                                 child:
                                                                     SingleChildScrollView(
-                                                                  scrollDirection:
-                                                                      Axis.horizontal,
-                                                                  child: Row(
+                                                                  child: Column(
+                                                                    // mainAxisAlignment: MainAxisAlignment.center,
                                                                     children: [
-                                                                      Container(
-                                                                        width: (!Responsive.isDesktop(context))
-                                                                            ? MediaQuery.of(context)
-                                                                                .size
-                                                                                .width
-                                                                            : MediaQuery.of(context).size.width *
-                                                                                0.85,
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
                                                                         child:
                                                                             Padding(
                                                                           padding:
                                                                               const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.center,
-                                                                            children: [
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Container(
-                                                                                  width: 100,
-                                                                                  decoration: const BoxDecoration(
-                                                                                    color: Colors.red,
-                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                              Text(
+                                                                            'ชื่อบัญชี(*${payMentModels[index].bname})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+                                                                          child:
+                                                                              TextFormField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            controller:
+                                                                                bname_bank,
+
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration: InputDecoration(
+                                                                                fillColor: Colors.white.withOpacity(0.3),
+                                                                                filled: true,
+                                                                                // prefixIcon:
+                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                focusedBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
                                                                                   ),
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: TextButton(
-                                                                                    onPressed: () async {
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      String? ren = preferences.getString('renTalSer');
-                                                                                      String? ser_user = preferences.getString('ser');
-                                                                                      var ser_pay = payMentModels[index].ser;
-                                                                                      String url = '${MyConstant().domain}/Dec_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user';
-
-                                                                                      try {
-                                                                                        var response = await http.get(Uri.parse(url));
-
-                                                                                        var result = json.decode(response.body);
-                                                                                        print(result);
-                                                                                        if (result.toString() == 'true') {
-                                                                                          Insert_log.Insert_logs('ตั้งค่า', 'การรับชำระ>>ลบ(*${payMentModels[index].bname})');
-                                                                                          setState(() {
-                                                                                            bname_bank.clear();
-                                                                                            bank_bank.clear();
-                                                                                            bno_bank.clear();
-                                                                                            bsaka_bank.clear();
-                                                                                            btype_bank.clear();
-                                                                                            ser_typepay = null;
-                                                                                            name_typepay = null;
-                                                                                            ser_bank = null;
-                                                                                            name_bank = null;
-                                                                                            ser_bank_type = null;
-                                                                                            name_bank_type = null;
-                                                                                            read_GC_PayMentModel();
-                                                                                          });
-                                                                                          Navigator.pop(context);
-                                                                                        } else {}
-                                                                                      } catch (e) {}
-                                                                                    },
-                                                                                    child: const Text(
-                                                                                      'ลบ',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                        fontFamily: FontWeight_.Fonts_T,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Expanded(child: Container()),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Container(
-                                                                                  width: 100,
-                                                                                  decoration: const BoxDecoration(
-                                                                                    color: Colors.green,
-                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                  ),
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: TextButton(
-                                                                                    onPressed: () async {
-                                                                                      // if (_formKey
-                                                                                      //     .currentState!
-                                                                                      //     .validate()) {
-
-                                                                                      //     }
-
-                                                                                      var name_name = bname_bank.text;
-                                                                                      // var name_bank =
-                                                                                      //     bank_bank.text;
-                                                                                      var name_num = bno_bank.text;
-                                                                                      var name_sub = bsaka_bank.text;
-                                                                                      var name_btype = btype_bank.text;
-                                                                                      var name_type = ser_typepay;
-                                                                                      var name_tpname = name_typepay;
-
-                                                                                      var ser_banks = ser_bank;
-                                                                                      var name_banks = name_bank;
-
-                                                                                      var ser_bank_types = ser_bank_type;
-                                                                                      var name_bank_types = name_bank_type;
-                                                                                      print('$name_name\n$name_num\n$name_sub\n$name_btype\n$name_type\n$name_tpname\n$ser_banks\n$name_banks\n$ser_bank_types\n$name_bank_types');
-                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                      String? ren = preferences.getString('renTalSer');
-                                                                                      String? ser_user = preferences.getString('ser');
-                                                                                      var ser_pay = payMentModels[index].ser;
-                                                                                      String url = '${MyConstant().domain}/UpC_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user&name_name=$name_name&ser_banks=$ser_banks&name_banks=$name_banks&name_num=$name_num&name_sub=$name_sub&name_btype=$name_btype&name_tpname=$name_tpname&name_type=$name_type&ser_bank_types=$ser_bank_types&name_bank_types=$name_bank_types';
-
-                                                                                      try {
-                                                                                        var response = await http.get(Uri.parse(url));
-
-                                                                                        var result = json.decode(response.body);
-                                                                                        print(result);
-                                                                                        if (result.toString() == 'true') {
-                                                                                          Insert_log.Insert_logs('ตั้งค่า', 'การรับชำระ>>แก้ไข(*${payMentModels[index].bname})');
-                                                                                          setState(() {
-                                                                                            bname_bank.clear();
-                                                                                            bank_bank.clear();
-                                                                                            bno_bank.clear();
-                                                                                            bsaka_bank.clear();
-                                                                                            btype_bank.clear();
-                                                                                            ser_typepay = null;
-                                                                                            name_typepay = null;
-                                                                                            ser_bank = null;
-                                                                                            name_bank = null;
-                                                                                            ser_bank_type = null;
-                                                                                            name_bank_type = null;
-                                                                                            read_GC_PayMentModel();
-                                                                                          });
-                                                                                          Navigator.pop(context);
-                                                                                        } else {}
-                                                                                      } catch (e) {}
-                                                                                    },
-                                                                                    child: const Text(
-                                                                                      'บันทึก',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                        fontFamily: FontWeight_.Fonts_T,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Container(
-                                                                                  width: 100,
-                                                                                  decoration: const BoxDecoration(
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
                                                                                     color: Colors.black,
-                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                  ),
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: TextButton(
-                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                    child: const Text(
-                                                                                      'ยกเลิก',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                        fontFamily: FontWeight_.Fonts_T,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                      ),
-                                                                                    ),
                                                                                   ),
                                                                                 ),
+                                                                                enabledBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
+                                                                                ),
+                                                                                labelText: 'แก้ไขชื่อบัญชี',
+                                                                                labelStyle: const TextStyle(
+                                                                                  color: Colors.black54,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                )),
+                                                                            // inputFormatters: <TextInputFormatter>[
+                                                                            //   // for below version 2 use this
+                                                                            //   // FilteringTextInputFormatter.allow(
+                                                                            //   //     RegExp(r'[0-9]')),
+                                                                            //   // for version 2 and greater youcan also use this
+                                                                            //   FilteringTextInputFormatter.digitsOnly
+                                                                            // ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'ธนาคาร(*${payMentModels[index].bank})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+                                                                          child:
+                                                                              DropdownButtonFormField2(
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              //Add isDense true and zero Padding.
+                                                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                              isDense: true,
+                                                                              contentPadding: EdgeInsets.zero,
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.circular(15),
                                                                               ),
-                                                                            ],
+                                                                              //Add more decoration as you want here
+                                                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                            ),
+                                                                            isExpanded:
+                                                                                true,
+                                                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                            hint:
+                                                                                Text(
+                                                                              payMentModels[index].bank == null ? 'เลือก' : '${payMentModels[index].bank}',
+                                                                              style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                            icon:
+                                                                                const Icon(
+                                                                              Icons.arrow_drop_down,
+                                                                              color: Colors.black45,
+                                                                            ),
+                                                                            iconSize:
+                                                                                25,
+                                                                            buttonHeight:
+                                                                                42,
+                                                                            buttonPadding:
+                                                                                const EdgeInsets.only(left: 10, right: 10),
+                                                                            dropdownDecoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(15),
+                                                                            ),
+                                                                            items: getBankModels
+                                                                                .map((item) => DropdownMenuItem<String>(
+                                                                                      value: '${item.ser}:${item.bname}',
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${item.bname}',
+                                                                                              textAlign: TextAlign.start,
+                                                                                              style: const TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ))
+                                                                                .toList(),
+                                                                            onChanged:
+                                                                                (value) async {
+                                                                              // Do something when changing the item if you want.
+
+                                                                              var zones = value!.indexOf(':');
+                                                                              var rtnameSer = value.substring(0, zones);
+                                                                              var rtnameName = value.substring(zones + 1);
+                                                                              print('mmmmm ${rtnameSer.toString()} $rtnameName');
+
+                                                                              setState(() {
+                                                                                ser_bank = rtnameSer;
+                                                                                name_bank = rtnameName;
+                                                                              });
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'ประเภทบัญชี(*${payMentModels[index].btype})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+                                                                          child:
+                                                                              DropdownButtonFormField2(
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              //Add isDense true and zero Padding.
+                                                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                              isDense: true,
+                                                                              contentPadding: EdgeInsets.zero,
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.circular(15),
+                                                                              ),
+                                                                              //Add more decoration as you want here
+                                                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                            ),
+                                                                            isExpanded:
+                                                                                true,
+                                                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                            hint:
+                                                                                Text(
+                                                                              payMentModels[index].btype == null ? 'เลือก' : '${payMentModels[index].btype}',
+                                                                              style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                            icon:
+                                                                                const Icon(
+                                                                              Icons.arrow_drop_down,
+                                                                              color: Colors.black45,
+                                                                            ),
+                                                                            iconSize:
+                                                                                25,
+                                                                            buttonHeight:
+                                                                                42,
+                                                                            buttonPadding:
+                                                                                const EdgeInsets.only(left: 10, right: 10),
+                                                                            dropdownDecoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(15),
+                                                                            ),
+                                                                            items: banktypeModels
+                                                                                .map((item) => DropdownMenuItem<String>(
+                                                                                      value: '${item.ser}:${item.btype}',
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${item.btype}',
+                                                                                              textAlign: TextAlign.start,
+                                                                                              style: const TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ))
+                                                                                .toList(),
+                                                                            onChanged:
+                                                                                (value) async {
+                                                                              // Do something when changing the item if you want.
+
+                                                                              var zones = value!.indexOf(':');
+                                                                              var rtnameSer = value.substring(0, zones);
+                                                                              var rtnameName = value.substring(zones + 1);
+                                                                              print('mmmmm ${rtnameSer.toString()} $rtnameName');
+
+                                                                              setState(() {
+                                                                                ser_bank_type = rtnameSer;
+                                                                                name_bank_type = rtnameName;
+                                                                              });
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'เลขบัญชีธนาคาร(*${payMentModels[index].bno})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+                                                                          child:
+                                                                              TextFormField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            controller:
+                                                                                bno_bank,
+
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration: InputDecoration(
+                                                                                fillColor: Colors.white.withOpacity(0.3),
+                                                                                filled: true,
+                                                                                // prefixIcon:
+                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                focusedBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.black,
+                                                                                  ),
+                                                                                ),
+                                                                                enabledBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
+                                                                                ),
+                                                                                labelText: 'แก้ไขเลขบัญชีธนาคาร',
+                                                                                labelStyle: const TextStyle(
+                                                                                  color: Colors.black54,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                )),
+                                                                            // inputFormatters: <TextInputFormatter>[
+                                                                            //   // for below version 2 use this
+                                                                            //   // FilteringTextInputFormatter.allow(
+                                                                            //   //     RegExp(r'[0-9]')),
+                                                                            //   // for version 2 and greater youcan also use this
+                                                                            //   FilteringTextInputFormatter.digitsOnly
+                                                                            // ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'สาขา(*${payMentModels[index].bsaka})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+                                                                          child:
+                                                                              TextFormField(
+                                                                            keyboardType:
+                                                                                TextInputType.number,
+                                                                            controller:
+                                                                                bsaka_bank,
+
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration: InputDecoration(
+                                                                                fillColor: Colors.white.withOpacity(0.3),
+                                                                                filled: true,
+                                                                                // prefixIcon:
+                                                                                //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                focusedBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.black,
+                                                                                  ),
+                                                                                ),
+                                                                                enabledBorder: const OutlineInputBorder(
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topRight: Radius.circular(15),
+                                                                                    topLeft: Radius.circular(15),
+                                                                                    bottomRight: Radius.circular(15),
+                                                                                    bottomLeft: Radius.circular(15),
+                                                                                  ),
+                                                                                  borderSide: BorderSide(
+                                                                                    width: 1,
+                                                                                    color: Colors.grey,
+                                                                                  ),
+                                                                                ),
+                                                                                labelText: 'แก้ไขสาขา',
+                                                                                labelStyle: const TextStyle(
+                                                                                  color: Colors.black54,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                )),
+                                                                            // inputFormatters: <TextInputFormatter>[
+                                                                            //   // for below version 2 use this
+                                                                            //   // FilteringTextInputFormatter.allow(
+                                                                            //   //     RegExp(r'[0-9]')),
+                                                                            //   // for version 2 and greater youcan also use this
+                                                                            //   FilteringTextInputFormatter.digitsOnly
+                                                                            // ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Text(
+                                                                            'รูปแบบชำระ(*${payMentModels[index].ptname})',
+                                                                            textAlign:
+                                                                                TextAlign.left,
+                                                                            style:
+                                                                                const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text1_,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                              fontWeight: FontWeight.bold,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            SizedBox(
+                                                                          // width: 200,
+
+                                                                          child:
+                                                                              DropdownButtonFormField2(
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              //Add isDense true and zero Padding.
+                                                                              //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                              isDense: true,
+                                                                              contentPadding: EdgeInsets.zero,
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.circular(15),
+                                                                              ),
+                                                                              //Add more decoration as you want here
+                                                                              //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                            ),
+                                                                            isExpanded:
+                                                                                true,
+                                                                            // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                            hint:
+                                                                                Text(
+                                                                              payMentModels[index].ptname == null ? 'เลือก' : '${payMentModels[index].ptname}',
+                                                                              style: const TextStyle(
+                                                                                  fontSize: 14,
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                            icon:
+                                                                                const Icon(
+                                                                              Icons.arrow_drop_down,
+                                                                              color: Colors.black45,
+                                                                            ),
+                                                                            iconSize:
+                                                                                25,
+                                                                            buttonHeight:
+                                                                                42,
+                                                                            buttonPadding:
+                                                                                const EdgeInsets.only(left: 10, right: 10),
+                                                                            dropdownDecoration:
+                                                                                BoxDecoration(
+                                                                              borderRadius: BorderRadius.circular(15),
+                                                                            ),
+                                                                            items: payTypeModels
+                                                                                .map((item) => DropdownMenuItem<String>(
+                                                                                      value: '${item.ser}:${item.ptname}',
+                                                                                      child: Row(
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Text(
+                                                                                              '${item.ptname}',
+                                                                                              textAlign: TextAlign.start,
+                                                                                              style: const TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ))
+                                                                                .toList(),
+                                                                            onChanged:
+                                                                                (value) async {
+                                                                              // Do something when changing the item if you want.
+
+                                                                              var zones = value!.indexOf(':');
+                                                                              var rtnameSer = value.substring(0, zones);
+                                                                              var rtnameName = value.substring(zones + 1);
+                                                                              print('mmmmm ${rtnameSer.toString()} $rtnameName');
+
+                                                                              setState(() {
+                                                                                ser_typepay = rtnameSer;
+                                                                                name_typepay = rtnameName;
+                                                                              });
+                                                                            },
                                                                           ),
                                                                         ),
                                                                       ),
@@ -2703,15 +2482,203 @@ class _PaymentState extends State<Payment> {
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ],
+                                                              actions: <Widget>[
+                                                                ScrollConfiguration(
+                                                                  behavior: ScrollConfiguration.of(
+                                                                          context)
+                                                                      .copyWith(
+                                                                          dragDevices: {
+                                                                        PointerDeviceKind
+                                                                            .touch,
+                                                                        PointerDeviceKind
+                                                                            .mouse,
+                                                                      }),
+                                                                  child:
+                                                                      SingleChildScrollView(
+                                                                    scrollDirection:
+                                                                        Axis.horizontal,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          width: (!Responsive.isDesktop(context))
+                                                                              ? MediaQuery.of(context).size.width
+                                                                              : MediaQuery.of(context).size.width * 0.85,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    width: 100,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.red,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () async {
+                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                        var ser_pay = payMentModels[index].ser;
+                                                                                        String url = '${MyConstant().domain}/Dec_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user';
+
+                                                                                        try {
+                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                          var result = json.decode(response.body);
+                                                                                          print(result);
+                                                                                          if (result.toString() == 'true') {
+                                                                                            Insert_log.Insert_logs('ตั้งค่า', 'การรับชำระ>>ลบ(*${payMentModels[index].bname})');
+                                                                                            setState(() {
+                                                                                              bname_bank.clear();
+                                                                                              bank_bank.clear();
+                                                                                              bno_bank.clear();
+                                                                                              bsaka_bank.clear();
+                                                                                              btype_bank.clear();
+                                                                                              ser_typepay = null;
+                                                                                              name_typepay = null;
+                                                                                              ser_bank = null;
+                                                                                              name_bank = null;
+                                                                                              ser_bank_type = null;
+                                                                                              name_bank_type = null;
+                                                                                              read_GC_PayMentModel();
+                                                                                            });
+                                                                                            Navigator.pop(context);
+                                                                                          } else {}
+                                                                                        } catch (e) {}
+                                                                                      },
+                                                                                      child: const Text(
+                                                                                        'ลบ',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.white,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(child: Container()),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    width: 100,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.green,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () async {
+                                                                                        // if (_formKey
+                                                                                        //     .currentState!
+                                                                                        //     .validate()) {
+
+                                                                                        //     }
+
+                                                                                        var name_name = bname_bank.text;
+                                                                                        // var name_bank =
+                                                                                        //     bank_bank.text;
+                                                                                        var name_num = bno_bank.text;
+                                                                                        var name_sub = bsaka_bank.text;
+                                                                                        var name_btype = btype_bank.text;
+                                                                                        var name_type = ser_typepay;
+                                                                                        var name_tpname = name_typepay;
+
+                                                                                        var ser_banks = ser_bank;
+                                                                                        var name_banks = name_bank;
+
+                                                                                        var ser_bank_types = ser_bank_type;
+                                                                                        var name_bank_types = name_bank_type;
+                                                                                        print('$name_name\n$name_num\n$name_sub\n$name_btype\n$name_type\n$name_tpname\n$ser_banks\n$name_banks\n$ser_bank_types\n$name_bank_types');
+                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                        var ser_pay = payMentModels[index].ser;
+                                                                                        String url = '${MyConstant().domain}/UpC_payment.php?isAdd=true&ren=$ren&ser_pay=$ser_pay&ser_user=$ser_user&name_name=$name_name&ser_banks=$ser_banks&name_banks=$name_banks&name_num=$name_num&name_sub=$name_sub&name_btype=$name_btype&name_tpname=$name_tpname&name_type=$name_type&ser_bank_types=$ser_bank_types&name_bank_types=$name_bank_types';
+
+                                                                                        try {
+                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                          var result = json.decode(response.body);
+                                                                                          print(result);
+                                                                                          if (result.toString() == 'true') {
+                                                                                            Insert_log.Insert_logs('ตั้งค่า', 'การรับชำระ>>แก้ไข(*${payMentModels[index].bname})');
+                                                                                            setState(() {
+                                                                                              bname_bank.clear();
+                                                                                              bank_bank.clear();
+                                                                                              bno_bank.clear();
+                                                                                              bsaka_bank.clear();
+                                                                                              btype_bank.clear();
+                                                                                              ser_typepay = null;
+                                                                                              name_typepay = null;
+                                                                                              ser_bank = null;
+                                                                                              name_bank = null;
+                                                                                              ser_bank_type = null;
+                                                                                              name_bank_type = null;
+                                                                                              read_GC_PayMentModel();
+                                                                                            });
+                                                                                            Navigator.pop(context);
+                                                                                          } else {}
+                                                                                        } catch (e) {}
+                                                                                      },
+                                                                                      child: const Text(
+                                                                                        'บันทึก',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.white,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                Padding(
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    width: 100,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                      child: const Text(
+                                                                                        'ยกเลิก',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.white,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
                                                           ),
-                                                        ),
-                                                      );
-                                                    },
+                                                        );
+                                                      },
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

@@ -1380,133 +1380,148 @@ class _BillDocumentState extends State<BillDocument> {
                                             ],
                                           ),
                                         )
-                                      : Container(
+                                      : Material(
                                           color:
                                               tappedIndex_1 == index.toString()
-                                                  ? Colors.grey.shade300
-                                                  : null,
-                                          child: ListTile(
-                                            onTap: () {
-                                              setState(() {
-                                                tappedIndex_1 =
-                                                    index.toString();
-                                              });
-                                            },
-                                            title: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Text(
-                                                    '${doctypeOneModels[index].bills}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  ? tappedIndex_Color
+                                                      .tappedIndex_Colors
+                                                  : AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                          child: Container(
+                                            // color: tappedIndex_1 ==
+                                            //         index.toString()
+                                            //     ? Colors.grey.shade300
+                                            //     : null,
+                                            child: ListTile(
+                                              onTap: () {
+                                                setState(() {
+                                                  tappedIndex_1 =
+                                                      index.toString();
+                                                });
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${doctypeOneModels[index].bills}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '${doctypeOneModels[index].doccode}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '${doctypeOneModels[index].doccode}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Text(
-                                                    '${doctypeOneModels[index].startbill}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${doctypeOneModels[index].startbill}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          DialogEdit(
-                                                            index,
-                                                            '${doctypeOneModels[index].bills}',
-                                                            '${doctypeOneModels[index].doccode}',
-                                                            '${doctypeOneModels[index].startbill}',
-                                                            '${doctypeOneModels[index].ser}',
-                                                          );
-                                                          print(
-                                                              'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors
-                                                                .blueGrey
-                                                                .shade100,
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            DialogEdit(
+                                                              index,
+                                                              '${doctypeOneModels[index].bills}',
+                                                              '${doctypeOneModels[index].doccode}',
+                                                              '${doctypeOneModels[index].startbill}',
+                                                              '${doctypeOneModels[index].ser}',
+                                                            );
+                                                            print(
+                                                                'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .blueGrey
+                                                                  .shade100,
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              // border: Border.all(
+                                                              //     color: Colors.grey, width: 1),
                                                             ),
-                                                            // border: Border.all(
-                                                            //     color: Colors.grey, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Text(
-                                                            'แก้ไข',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                //fontWeight: FontWeight.bold,
-                                                                //fontSize: 10.0
-                                                                ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: const Text(
+                                                              'แก้ไข',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: SettingScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );
@@ -1682,133 +1697,148 @@ class _BillDocumentState extends State<BillDocument> {
                                             ],
                                           ),
                                         )
-                                      : Container(
+                                      : Material(
                                           color:
                                               tappedIndex_2 == index.toString()
-                                                  ? Colors.grey.shade300
-                                                  : null,
-                                          child: ListTile(
-                                            onTap: () {
-                                              setState(() {
-                                                tappedIndex_2 =
-                                                    index.toString();
-                                              });
-                                            },
-                                            title: Row(
-                                              children: [
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Text(
-                                                    '${doctypeTwoModels[index].bills}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  ? tappedIndex_Color
+                                                      .tappedIndex_Colors
+                                                  : AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                          child: Container(
+                                            // color: tappedIndex_2 ==
+                                            //         index.toString()
+                                            //     ? Colors.grey.shade300
+                                            //     : null,
+                                            child: ListTile(
+                                              onTap: () {
+                                                setState(() {
+                                                  tappedIndex_2 =
+                                                      index.toString();
+                                                });
+                                              },
+                                              title: Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${doctypeTwoModels[index].bills}',
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Text(
-                                                    '${doctypeTwoModels[index].doccode}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Text(
+                                                      '${doctypeTwoModels[index].doccode}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 2,
-                                                  child: Text(
-                                                    '${doctypeTwoModels[index].startbill}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T
-                                                        //fontWeight: FontWeight.bold,
-                                                        //fontSize: 10.0
-                                                        ),
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Text(
+                                                      '${doctypeTwoModels[index].startbill}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          //fontWeight: FontWeight.bold,
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 1,
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          DialogEdit(
-                                                            index,
-                                                            '${doctypeTwoModels[index].bills}',
-                                                            '${doctypeTwoModels[index].doccode}',
-                                                            '${doctypeTwoModels[index].startbill}',
-                                                            '${doctypeTwoModels[index].ser}',
-                                                          );
-                                                          print(
-                                                              'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
-                                                        },
-                                                        child: Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Colors
-                                                                .blueGrey
-                                                                .shade100,
-                                                            borderRadius:
-                                                                const BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            DialogEdit(
+                                                              index,
+                                                              '${doctypeTwoModels[index].bills}',
+                                                              '${doctypeTwoModels[index].doccode}',
+                                                              '${doctypeTwoModels[index].startbill}',
+                                                              '${doctypeTwoModels[index].ser}',
+                                                            );
+                                                            print(
+                                                                'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                                          },
+                                                          child: Container(
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .blueGrey
+                                                                  .shade100,
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            10),
+                                                              ),
+                                                              // border: Border.all(
+                                                              //     color: Colors.grey, width: 1),
                                                             ),
-                                                            // border: Border.all(
-                                                            //     color: Colors.grey, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Text(
-                                                            'แก้ไข',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: TextStyle(
-                                                                color: SettingScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                //fontWeight: FontWeight.bold,
-                                                                //fontSize: 10.0
-                                                                ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: const Text(
+                                                              'แก้ไข',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: SettingScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  fontFamily:
+                                                                      Font_
+                                                                          .Fonts_T
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         );
@@ -2391,6 +2421,8 @@ class _BillDocumentState extends State<BillDocument> {
                                             child: Text(
                                               item,
                                               style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text1_,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -2401,6 +2433,8 @@ class _BillDocumentState extends State<BillDocument> {
                                             child: Text(
                                               item,
                                               style: const TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text1_,
                                                 fontSize: 14,
                                               ),
                                             ),
@@ -2654,111 +2688,120 @@ class _BillDocumentState extends State<BillDocument> {
                                 ],
                               ),
                             )
-                          : Container(
+                          : Material(
                               color: tappedIndex_1 == index.toString()
-                                  ? Colors.grey.shade300
-                                  : null,
-                              child: ListTile(
-                                onTap: () {
-                                  setState(() {
-                                    tappedIndex_1 = index.toString();
-                                  });
-                                },
-                                title: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '${doctypeOneModels[index].bills}',
-                                        textAlign: TextAlign.start,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                  ? tappedIndex_Color.tappedIndex_Colors
+                                  : AppbackgroundColor.Sub_Abg_Colors,
+                              child: Container(
+                                // color: tappedIndex_1 == index.toString()
+                                //     ? Colors.grey.shade300
+                                //     : null,
+                                child: ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      tappedIndex_1 = index.toString();
+                                    });
+                                  },
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          '${doctypeOneModels[index].bills}',
+                                          textAlign: TextAlign.start,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        '${doctypeOneModels[index].doccode}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          '${doctypeOneModels[index].doccode}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '${doctypeOneModels[index].startbill}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          '${doctypeOneModels[index].startbill}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              DialogEdit(
-                                                index,
-                                                '${doctypeOneModels[index].bills}',
-                                                '${doctypeOneModels[index].doccode}',
-                                                '${doctypeOneModels[index].startbill}',
-                                                '${doctypeOneModels[index].ser}',
-                                              );
-                                              print(
-                                                  'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
-                                            },
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                color: Colors.blueGrey,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                DialogEdit(
+                                                  index,
+                                                  '${doctypeOneModels[index].bills}',
+                                                  '${doctypeOneModels[index].doccode}',
+                                                  '${doctypeOneModels[index].startbill}',
+                                                  '${doctypeOneModels[index].ser}',
+                                                );
+                                                print(
+                                                    'แก้ไข${doctypeOneModels[index].bills} // ser : ${doctypeOneModels[index].ser}');
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      Colors.blueGrey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                  // border: Border.all(
+                                                  //     color: Colors.grey, width: 1),
                                                 ),
-                                                // border: Border.all(
-                                                //     color: Colors.grey, width: 1),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                'แก้ไข',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: const Text(
+                                                  'แก้ไข',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
@@ -2923,111 +2966,120 @@ class _BillDocumentState extends State<BillDocument> {
                                 ],
                               ),
                             )
-                          : Container(
+                          : Material(
                               color: tappedIndex_2 == index.toString()
-                                  ? Colors.grey.shade300
-                                  : null,
-                              child: ListTile(
-                                onTap: () {
-                                  setState(() {
-                                    tappedIndex_2 = index.toString();
-                                  });
-                                },
-                                title: Row(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '${doctypeTwoModels[index].bills}',
-                                        textAlign: TextAlign.start,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                  ? tappedIndex_Color.tappedIndex_Colors
+                                  : AppbackgroundColor.Sub_Abg_Colors,
+                              child: Container(
+                                // color: tappedIndex_2 == index.toString()
+                                //     ? Colors.grey.shade300
+                                //     : null,
+                                child: ListTile(
+                                  onTap: () {
+                                    setState(() {
+                                      tappedIndex_2 = index.toString();
+                                    });
+                                  },
+                                  title: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          '${doctypeTwoModels[index].bills}',
+                                          textAlign: TextAlign.start,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Text(
-                                        '${doctypeTwoModels[index].doccode}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Text(
+                                          '${doctypeTwoModels[index].doccode}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 2,
-                                      child: Text(
-                                        '${doctypeTwoModels[index].startbill}',
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text2_,
-                                            fontFamily: Font_.Fonts_T
-                                            //fontWeight: FontWeight.bold,
-                                            //fontSize: 10.0
-                                            ),
+                                      Expanded(
+                                        flex: 2,
+                                        child: Text(
+                                          '${doctypeTwoModels[index].startbill}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text2_,
+                                              fontFamily: Font_.Fonts_T
+                                              //fontWeight: FontWeight.bold,
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              DialogEdit(
-                                                index,
-                                                '${doctypeTwoModels[index].bills}',
-                                                '${doctypeTwoModels[index].doccode}',
-                                                '${doctypeTwoModels[index].startbill}',
-                                                '${doctypeTwoModels[index].ser}',
-                                              );
-                                              print(
-                                                  'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
-                                            },
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                color: Colors.blueGrey,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                DialogEdit(
+                                                  index,
+                                                  '${doctypeTwoModels[index].bills}',
+                                                  '${doctypeTwoModels[index].doccode}',
+                                                  '${doctypeTwoModels[index].startbill}',
+                                                  '${doctypeTwoModels[index].ser}',
+                                                );
+                                                print(
+                                                    'แก้ไข${doctypeTwoModels[index].bills}// ser : ${doctypeTwoModels[index].ser}');
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      Colors.blueGrey.shade100,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10),
+                                                  ),
+                                                  // border: Border.all(
+                                                  //     color: Colors.grey, width: 1),
                                                 ),
-                                                // border: Border.all(
-                                                //     color: Colors.grey, width: 1),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                'แก้ไข',
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: const Text(
+                                                  'แก้ไข',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );

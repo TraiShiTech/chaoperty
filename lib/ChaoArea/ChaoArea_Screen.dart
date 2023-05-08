@@ -1723,275 +1723,345 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   var date2 = DateTime.now();
                                   var difference = daysBetween(birthday, date2);
 
-                                  return Container(
+                                  return Material(
                                     color: tappedIndex_ == index.toString()
-                                        ? Colors.grey.shade300
-                                        : null,
-                                    child: ListTile(
-                                        onTap: () {
-                                          setState(() {
-                                            tappedIndex_ = index.toString();
-                                          });
-                                        },
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            // Expanded(
-                                            //   flex: 1,
-                                            //   child: Row(
-                                            //     mainAxisAlignment:
-                                            //         MainAxisAlignment.center,
-                                            //     children: [
-                                            //       Container(
-                                            //         decoration: BoxDecoration(
-                                            //           color:
-                                            //               Colors.grey.shade300,
-                                            //           borderRadius:
-                                            //               BorderRadius.only(
-                                            //                   topLeft: Radius
-                                            //                       .circular(10),
-                                            //                   topRight: Radius
-                                            //                       .circular(10),
-                                            //                   bottomLeft: Radius
-                                            //                       .circular(10),
-                                            //                   bottomRight:
-                                            //                       Radius
-                                            //                           .circular(
-                                            //                               10)),
-                                            //           // border: Border.all(color: Colors.grey, width: 1),
-                                            //         ),
-                                            //         padding:
-                                            //             EdgeInsets.all(8.0),
-                                            //         child: PopupMenuButton(
-                                            //           child: Center(
-                                            //               child: Row(
-                                            //             children: const [
-                                            //               Text(
-                                            //                 'เรียกดู',
-                                            //                 style: TextStyle(
-                                            //                   color: TextHome_Color
-                                            //                       .TextHome_Colors,
+                                        ? tappedIndex_Color.tappedIndex_Colors
+                                        : AppbackgroundColor.Sub_Abg_Colors,
+                                    child: Container(
+                                      // color: tappedIndex_ == index.toString()
+                                      //     ? Colors.grey.shade300
+                                      //     : null,
+                                      child: ListTile(
+                                          onTap: () {
+                                            setState(() {
+                                              tappedIndex_ = index.toString();
+                                            });
+                                          },
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              // Expanded(
+                                              //   flex: 1,
+                                              //   child: Row(
+                                              //     mainAxisAlignment:
+                                              //         MainAxisAlignment.center,
+                                              //     children: [
+                                              //       Container(
+                                              //         decoration: BoxDecoration(
+                                              //           color:
+                                              //               Colors.grey.shade300,
+                                              //           borderRadius:
+                                              //               BorderRadius.only(
+                                              //                   topLeft: Radius
+                                              //                       .circular(10),
+                                              //                   topRight: Radius
+                                              //                       .circular(10),
+                                              //                   bottomLeft: Radius
+                                              //                       .circular(10),
+                                              //                   bottomRight:
+                                              //                       Radius
+                                              //                           .circular(
+                                              //                               10)),
+                                              //           // border: Border.all(color: Colors.grey, width: 1),
+                                              //         ),
+                                              //         padding:
+                                              //             EdgeInsets.all(8.0),
+                                              //         child: PopupMenuButton(
+                                              //           child: Center(
+                                              //               child: Row(
+                                              //             children: const [
+                                              //               Text(
+                                              //                 'เรียกดู',
+                                              //                 style: TextStyle(
+                                              //                   color: TextHome_Color
+                                              //                       .TextHome_Colors,
 
-                                            //                   //fontSize: 10.0
-                                            //                 ),
-                                            //               ),
-                                            //               Icon(
-                                            //                 Icons.navigate_next,
-                                            //                 color: TextHome_Color
-                                            //                     .TextHome_Colors,
-                                            //               )
-                                            //             ],
-                                            //           )),
-                                            //           itemBuilder: (context) {
-                                            //             return List.generate(
-                                            //                 buttonview_.length,
-                                            //                 (index) {
-                                            //               return PopupMenuItem(
-                                            //                 child: Text(
-                                            //                   buttonview_[
-                                            //                       index],
-                                            //                   style:
-                                            //                       const TextStyle(
-                                            //                     color: Colors
-                                            //                         .black,
+                                              //                   //fontSize: 10.0
+                                              //                 ),
+                                              //               ),
+                                              //               Icon(
+                                              //                 Icons.navigate_next,
+                                              //                 color: TextHome_Color
+                                              //                     .TextHome_Colors,
+                                              //               )
+                                              //             ],
+                                              //           )),
+                                              //           itemBuilder: (context) {
+                                              //             return List.generate(
+                                              //                 buttonview_.length,
+                                              //                 (index) {
+                                              //               return PopupMenuItem(
+                                              //                 child: Text(
+                                              //                   buttonview_[
+                                              //                       index],
+                                              //                   style:
+                                              //                       const TextStyle(
+                                              //                     color: Colors
+                                              //                         .black,
 
-                                            //                     //fontSize: 10.0
-                                            //                   ),
-                                            //                 ),
-                                            //               );
-                                            //             });
-                                            //           },
-                                            //         ),
-                                            //       ),
-                                            //     ],
-                                            //   ),
-                                            // ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  '${areaModels[index].zn}',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  areaModels[index].ln_c == null
-                                                      ? areaModels[index]
-                                                                  .ln_q ==
-                                                              null
-                                                          ? '${areaModels[index].lncode}'
-                                                          : '${areaModels[index].ln_q}'
-                                                      : '${areaModels[index].ln_c}',
-                                                  textAlign: TextAlign.center,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text2_,
-                                                      fontFamily: Font_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                areaModels[index].area_c == null
-                                                    ? areaModels[index].ln_q ==
-                                                            null
-                                                        ? nFormat.format(
-                                                            double.parse(
-                                                                areaModels[
-                                                                        index]
-                                                                    .area!))
-                                                        : nFormat.format(
-                                                            double.parse(
-                                                                areaModels[
-                                                                        index]
-                                                                    .area_q!))
-                                                    : nFormat.format(
-                                                        double.parse(
-                                                            areaModels[index]
-                                                                .area_c!)),
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                areaModels[index].total == null
-                                                    ? areaModels[index]
-                                                                .total_q ==
-                                                            null
-                                                        ? nFormat.format(
-                                                            double.parse(
-                                                                areaModels[index]
-                                                                    .rent!))
-                                                        : nFormat.format(
-                                                            double.parse(
-                                                                areaModels[
-                                                                        index]
-                                                                    .total_q!))
-                                                    : nFormat.format(double
-                                                        .parse(areaModels[index]
-                                                            .total!)),
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
+                                              //                     //fontSize: 10.0
+                                              //                   ),
+                                              //                 ),
+                                              //               );
+                                              //             });
+                                              //           },
+                                              //         ),
+                                              //       ),
+                                              //     ],
+                                              //   ),
+                                              // ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    areaModels[index].cid ==
-                                                            null
-                                                        ? ''
-                                                        : '${areaModels[index].cid}',
-                                                    maxLines: 1,
-                                                    textAlign: TextAlign.end,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                    '${areaModels[index].zn}',
+                                                    textAlign: TextAlign.center,
                                                     style: const TextStyle(
                                                         color:
                                                             PeopleChaoScreen_Color
                                                                 .Colors_Text2_,
                                                         fontFamily:
-                                                            Font_.Fonts_T),
-                                                  )),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
                                                   child: Text(
-                                                    areaModels[index].docno ==
+                                                    areaModels[index].ln_c ==
                                                             null
-                                                        ? ''
-                                                        : '${areaModels[index].docno}',
+                                                        ? areaModels[index]
+                                                                    .ln_q ==
+                                                                null
+                                                            ? '${areaModels[index].lncode}'
+                                                            : '${areaModels[index].ln_q}'
+                                                        : '${areaModels[index].ln_c}',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  areaModels[index].area_c ==
+                                                          null
+                                                      ? areaModels[index].ln_q ==
+                                                              null
+                                                          ? nFormat.format(
+                                                              double.parse(
+                                                                  areaModels[index]
+                                                                      .area!))
+                                                          : nFormat.format(
+                                                              double.parse(
+                                                                  areaModels[
+                                                                          index]
+                                                                      .area_q!))
+                                                      : nFormat.format(
+                                                          double.parse(
+                                                              areaModels[index]
+                                                                  .area_c!)),
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  areaModels[index].total ==
+                                                          null
+                                                      ? areaModels[index]
+                                                                  .total_q ==
+                                                              null
+                                                          ? nFormat.format(
+                                                              double.parse(
+                                                                  areaModels[index]
+                                                                      .rent!))
+                                                          : nFormat.format(
+                                                              double.parse(
+                                                                  areaModels[index]
+                                                                      .total_q!))
+                                                      : nFormat.format(
+                                                          double.parse(
+                                                              areaModels[index]
+                                                                  .total!)),
+                                                  textAlign: TextAlign.end,
+                                                  style: const TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      areaModels[index].cid ==
+                                                              null
+                                                          ? ''
+                                                          : '${areaModels[index].cid}',
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.end,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    )),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      areaModels[index].docno ==
+                                                              null
+                                                          ? ''
+                                                          : '${areaModels[index].docno}',
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.end,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                          color: areaModels[
+                                                                          index]
+                                                                      .docno !=
+                                                                  null
+                                                              ? Colors.blue
+                                                              : PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    )),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    areaModels[index].ldate ==
+                                                            null
+                                                        ? areaModels[index]
+                                                                    .ldate_q ==
+                                                                null
+                                                            ? ''
+                                                            : DateFormat(
+                                                                    'dd-MM-yyyy')
+                                                                .format(DateTime
+                                                                    .parse(
+                                                                        '${areaModels[index].ldate_q} 00:00:00'))
+                                                                .toString()
+                                                        : DateFormat(
+                                                                'dd-MM-yyyy')
+                                                            .format(DateTime.parse(
+                                                                '${areaModels[index].ldate} 00:00:00'))
+                                                            .toString(),
                                                     maxLines: 1,
                                                     textAlign: TextAlign.end,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                         color: areaModels[index]
-                                                                    .docno !=
-                                                                null
-                                                            ? Colors.blue
-                                                            : PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  )),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                                    .quantity ==
+                                                                '1'
+                                                            ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                                        const Duration(
+                                                                            days:
+                                                                                0))) ==
+                                                                    true
+                                                                ? Colors.red
+                                                                : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                        true
+                                                                    ? Colors
+                                                                        .orange
+                                                                        .shade900
+                                                                    : Colors
+                                                                        .black
+                                                            : areaModels[index]
+                                                                        .quantity ==
+                                                                    '2'
+                                                                ? Colors.blue
+                                                                : areaModels[index]
+                                                                            .quantity ==
+                                                                        '3'
+                                                                    ? Colors.blue
+                                                                    : Colors.green,
+                                                        fontFamily: Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
                                                 child: Text(
-                                                  areaModels[index].ldate ==
-                                                          null
-                                                      ? areaModels[index]
-                                                                  .ldate_q ==
-                                                              null
-                                                          ? ''
-                                                          : DateFormat(
-                                                                  'dd-MM-yyyy')
-                                                              .format(DateTime
-                                                                  .parse(
-                                                                      '${areaModels[index].ldate_q} 00:00:00'))
-                                                              .toString()
-                                                      : DateFormat('dd-MM-yyyy')
-                                                          .format(DateTime.parse(
-                                                              '${areaModels[index].ldate} 00:00:00'))
-                                                          .toString(),
-                                                  maxLines: 1,
+                                                  areaModels[index].quantity ==
+                                                          '1'
+                                                      ? datex.isAfter(DateTime.parse(
+                                                                      '${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000')
+                                                                  .subtract(const Duration(
+                                                                      days:
+                                                                          0))) ==
+                                                              true
+                                                          ? 'หมดสัญญา'
+                                                          : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
+                                                                      const Duration(
+                                                                          days:
+                                                                              30))) ==
+                                                                  true
+                                                              ? 'ใกล้หมดสัญญา'
+                                                              : 'เช่าอยู่'
+                                                      : areaModels[index].quantity ==
+                                                              '2'
+                                                          ? 'เสนอราคา'
+                                                          : areaModels[index]
+                                                                      .quantity ==
+                                                                  '3'
+                                                              ? 'เสนอราคา(มัดจำ)'
+                                                              : 'ว่าง',
                                                   textAlign: TextAlign.end,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                       color: areaModels[index]
                                                                   .quantity ==
                                                               '1'
-                                                          ? datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(
+                                                          ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(
                                                                       const Duration(
                                                                           days:
                                                                               0))) ==
                                                                   true
                                                               ? Colors.red
-                                                              : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                              : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
                                                                       true
                                                                   ? Colors
                                                                       .orange
@@ -2005,72 +2075,16 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                           .quantity ==
                                                                       '3'
                                                                   ? Colors.blue
-                                                                  : Colors.green,
-                                                      fontFamily: Font_.Fonts_T),
+                                                                  : Colors
+                                                                      .green,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
                                                 ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                areaModels[index].quantity ==
-                                                        '1'
-                                                    ? datex.isAfter(DateTime.parse(
-                                                                    '${areaModels[index].ldate} 00:00:00.000')
-                                                                .subtract(const Duration(
-                                                                    days:
-                                                                        0))) ==
-                                                            true
-                                                        ? 'หมดสัญญา'
-                                                        : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(
-                                                                    const Duration(
-                                                                        days:
-                                                                            30))) ==
-                                                                true
-                                                            ? 'ใกล้หมดสัญญา'
-                                                            : 'เช่าอยู่'
-                                                    : areaModels[index].quantity ==
-                                                            '2'
-                                                        ? 'เสนอราคา'
-                                                        : areaModels[index]
-                                                                    .quantity ==
-                                                                '3'
-                                                            ? 'เสนอราคา(มัดจำ)'
-                                                            : 'ว่าง',
-                                                textAlign: TextAlign.end,
-                                                style: TextStyle(
-                                                    color: areaModels[index]
-                                                                .quantity ==
-                                                            '1'
-                                                        ? datex.isAfter(DateTime.parse(
-                                                                        '${areaModels[index].ldate} 00:00:00.000')
-                                                                    .subtract(
-                                                                        const Duration(
-                                                                            days:
-                                                                                0))) ==
-                                                                true
-                                                            ? Colors.red
-                                                            : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
-                                                                    true
-                                                                ? Colors.orange
-                                                                    .shade900
-                                                                : Colors.black
-                                                        : areaModels[index]
-                                                                    .quantity ==
-                                                                '2'
-                                                            ? Colors.blue
-                                                            : areaModels[index]
-                                                                        .quantity ==
-                                                                    '3'
-                                                                ? Colors.blue
-                                                                : Colors.green,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontSize: 10.0
-                                                    ),
-                                              ),
-                                            ),
-                                          ],
-                                        )),
+                                            ],
+                                          )),
+                                    ),
                                   );
                                 })),
                     Container(
@@ -2837,11 +2851,11 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                   color: areaModels[index]
                                                                               .quantity ==
                                                                           '1'
-                                                                      ? datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+                                                                      ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
                                                                               true
                                                                           ? Colors
                                                                               .red
-                                                                          : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                          : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
                                                                                   true
                                                                               ? Colors
                                                                                   .orange.shade900
@@ -2868,12 +2882,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                             areaModels[index]
                                                                         .quantity ==
                                                                     '1'
-                                                                ? datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(
+                                                                ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(
                                                                             days:
                                                                                 0))) ==
                                                                         true
                                                                     ? 'หมดสัญญา'
-                                                                    : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+                                                                    : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
                                                                             true
                                                                         ? 'ใกล้หมดสัญญา'
                                                                         : 'เช่าอยู่'

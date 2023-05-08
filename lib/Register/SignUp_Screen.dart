@@ -1339,12 +1339,12 @@ class _SingUpScreenState extends State<SingUpScreen> {
               ? const SnackBar(
                   content: Text('ส่งรหัสยืนยันตัวตนไปยัง Email ของท่านแล้ว!!',
                       style: TextStyle(
-                          color: Colors.black, fontFamily: Font_.Fonts_T)),
+                          color: Colors.white, fontFamily: Font_.Fonts_T)),
                   backgroundColor: Colors.green)
               : const SnackBar(
                   content: Text('Failed to send message!',
                       style: TextStyle(
-                          color: Colors.black, fontFamily: Font_.Fonts_T)),
+                          color: Colors.white, fontFamily: Font_.Fonts_T)),
                   backgroundColor: Colors.red),
         );
       } else {
@@ -1352,7 +1352,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
           const SnackBar(
               content: Text('Email ของคุณเคยสมัครการใช้งานแล้ว!!',
                   style: TextStyle(
-                      color: Colors.black, fontFamily: Font_.Fonts_T))),
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
         );
       }
     } catch (e) {
@@ -1360,7 +1360,7 @@ class _SingUpScreenState extends State<SingUpScreen> {
         const SnackBar(
             content: Text('Email ของคุณเคยสมัครการใช้งานแล้ว!!',
                 style:
-                    TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
+                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
       );
     }
   }

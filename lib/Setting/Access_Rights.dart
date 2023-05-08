@@ -2393,138 +2393,144 @@ class _AccessrightsState extends State<Accessrights> {
                                     //     newValue = newValue + value[i - 1] + ',';
                                     //   }
                                     // }
-                                    return Container(
+                                    return Material(
                                       color: tappedIndex_ == index.toString()
-                                          ? Colors.grey.shade300
-                                          : null,
-                                      child: ListTile(
-                                        onTap: () {
-                                          setState(() {
-                                            tappedIndex_ = index.toString();
-                                          });
-                                        },
-                                        title: Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${userModels[index].fname} ${userModels[index].lname}',
-                                                textAlign: TextAlign.center,
-                                                maxLines: 2,
-                                                style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                          ? tappedIndex_Color.tappedIndex_Colors
+                                          : AppbackgroundColor.Sub_Abg_Colors,
+                                      child: Container(
+                                        // color: tappedIndex_ == index.toString()
+                                        //     ? Colors.grey.shade300
+                                        //     : null,
+                                        child: ListTile(
+                                          onTap: () {
+                                            setState(() {
+                                              tappedIndex_ = index.toString();
+                                            });
+                                          },
+                                          title: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${userModels[index].fname} ${userModels[index].lname}',
+                                                  textAlign: TextAlign.center,
+                                                  maxLines: 2,
+                                                  style: const TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${userModels[index].email} ',
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${userModels[index].email} ',
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Text(
-                                                '${userModels[index].position} ',
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Text(
+                                                  '${userModels[index].position} ',
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: const TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            const Expanded(
-                                              flex: 2,
-                                              child: Text(
-                                                // (newValue.endsWith(','))
-                                                //     ? '${newValue.substring(0, newValue.length - 1)}'
-                                                //     : '${newValue}',
-                                                'ผู้เช่า',
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: SettingScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T
-                                                    //fontWeight: FontWeight.bold,
-                                                    //fontSize: 10.0
-                                                    ),
+                                              const Expanded(
+                                                flex: 2,
+                                                child: Text(
+                                                  // (newValue.endsWith(','))
+                                                  //     ? '${newValue.substring(0, newValue.length - 1)}'
+                                                  //     : '${newValue}',
+                                                  'ผู้เช่า',
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text2_,
+                                                      fontFamily: Font_.Fonts_T
+                                                      //fontWeight: FontWeight.bold,
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Center(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: InkWell(
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Center(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                          ),
+                                                          // border: Border.all(
+                                                          //     color: Colors.grey, width: 1),
                                                         ),
-                                                        // border: Border.all(
-                                                        //     color: Colors.grey, width: 1),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: const Text(
+                                                          '>',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: SettingScreen_Color
+                                                                  .Colors_Text2_,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T
+                                                              //fontWeight: FontWeight.bold,
+                                                              //fontSize: 10.0
+                                                              ),
+                                                        ),
                                                       ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Text(
-                                                        '>',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: SettingScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            //fontWeight: FontWeight.bold,
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
+                                                      onTap: () {
+                                                        Edit_userAcess(index);
+                                                        // Edit_userAcess(index,
+                                                        //     '${newValue.substring(0, newValue.length - 1)}');
+                                                      },
                                                     ),
-                                                    onTap: () {
-                                                      Edit_userAcess(index);
-                                                      // Edit_userAcess(index,
-                                                      //     '${newValue.substring(0, newValue.length - 1)}');
-                                                    },
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     );

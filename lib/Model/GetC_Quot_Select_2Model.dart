@@ -1,20 +1,20 @@
-class ContractxModel {
+class QuotxSelect2Model {
   String? ser;
   String? datex;
-  String? timex;
-  String? cser;
-  String? cid;
+  String? qser;
+  String? docno;
   String? expser;
-  String? exptser;
   String? expname;
-  String? unitser;
+  String? exptser;
+  String? sunit;
   String? unit;
-  String? term;
+  String? day;
   String? sday;
+  String? term;
   String? sdate;
-  String? ldate;
   String? meter;
   String? qty;
+  String? ldate;
   String? amt;
   String? vtype;
   String? nvat;
@@ -22,28 +22,33 @@ class ContractxModel {
   String? pvat;
   String? nwht;
   String? wht;
-  String? total;
+  String? fine;
+  String? fineUnit;
+  String? fineLate;
+  String? fineCal;
+  String? finePri;
   String? st;
+  String? total;
   String? dataUpdate;
-  String? sum_total;
+  String? dtype;
 
-  ContractxModel(
+  QuotxSelect2Model(
       {this.ser,
       this.datex,
-      this.timex,
-      this.cser,
-      this.cid,
+      this.qser,
+      this.docno,
       this.expser,
-      this.exptser,
       this.expname,
-      this.unitser,
+      this.exptser,
+      this.sunit,
       this.unit,
-      this.term,
+      this.day,
       this.sday,
+      this.term,
       this.sdate,
-      this.ldate,
       this.meter,
       this.qty,
+      this.ldate,
       this.amt,
       this.vtype,
       this.nvat,
@@ -51,28 +56,33 @@ class ContractxModel {
       this.pvat,
       this.nwht,
       this.wht,
-      this.total,
+      this.fine,
+      this.fineUnit,
+      this.fineLate,
+      this.fineCal,
+      this.finePri,
       this.st,
-      this.sum_total,
-      this.dataUpdate});
+      this.total,
+      this.dataUpdate,
+      this.dtype});
 
-  ContractxModel.fromJson(Map<String, dynamic> json) {
+  QuotxSelect2Model.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     datex = json['datex'];
-    timex = json['timex'];
-    cser = json['cser'];
-    cid = json['cid'];
+    qser = json['qser'];
+    docno = json['docno'];
     expser = json['expser'];
-    exptser = json['exptser'];
     expname = json['expname'];
-    unitser = json['unitser'];
+    exptser = json['exptser'];
+    sunit = json['sunit'];
     unit = json['unit'];
-    term = json['term'];
+    day = json['day'];
     sday = json['sday'];
+    term = json['term'];
     sdate = json['sdate'];
-    ldate = json['ldate'];
     meter = json['meter'];
     qty = json['qty'];
+    ldate = json['ldate'];
     amt = json['amt'];
     vtype = json['vtype'];
     nvat = json['nvat'];
@@ -80,30 +90,35 @@ class ContractxModel {
     pvat = json['pvat'];
     nwht = json['nwht'];
     wht = json['wht'];
-    total = json['total'];
+    fine = json['fine'];
+    fineUnit = json['fine_unit'];
+    fineLate = json['fine_late'];
+    fineCal = json['fine_cal'];
+    finePri = json['fine_pri'];
     st = json['st'];
+    total = json['total'];
     dataUpdate = json['data_update'];
-    sum_total = json['sum_total'];
+    dtype = json['dtype'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ser'] = this.ser;
     data['datex'] = this.datex;
-    data['timex'] = this.timex;
-    data['cser'] = this.cser;
-    data['cid'] = this.cid;
+    data['qser'] = this.qser;
+    data['docno'] = this.docno;
     data['expser'] = this.expser;
-    data['exptser'] = this.exptser;
     data['expname'] = this.expname;
-    data['unitser'] = this.unitser;
+    data['exptser'] = this.exptser;
+    data['sunit'] = this.sunit;
     data['unit'] = this.unit;
-    data['term'] = this.term;
+    data['day'] = this.day;
     data['sday'] = this.sday;
+    data['term'] = this.term;
     data['sdate'] = this.sdate;
-    data['ldate'] = this.ldate;
     data['meter'] = this.meter;
     data['qty'] = this.qty;
+    data['ldate'] = this.ldate;
     data['amt'] = this.amt;
     data['vtype'] = this.vtype;
     data['nvat'] = this.nvat;
@@ -111,10 +126,15 @@ class ContractxModel {
     data['pvat'] = this.pvat;
     data['nwht'] = this.nwht;
     data['wht'] = this.wht;
-    data['total'] = this.total;
+    data['fine'] = this.fine;
+    data['fine_unit'] = this.fineUnit;
+    data['fine_late'] = this.fineLate;
+    data['fine_cal'] = this.fineCal;
+    data['fine_pri'] = this.finePri;
     data['st'] = this.st;
+    data['total'] = this.total;
     data['data_update'] = this.dataUpdate;
-    data['sum_total'] = this.sum_total;
+    data['dtype'] = this.dtype;
     return data;
   }
 }

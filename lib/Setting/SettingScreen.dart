@@ -31,6 +31,7 @@ import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'Access_Rights.dart';
 import 'Bill_Document.dart';
+import 'Edit_web.dart';
 import 'OtherScreen.dart';
 import 'Payment.dart';
 import 'Rental.dart';
@@ -70,6 +71,7 @@ class _SettingScreenState extends State<SettingScreen> {
     'เอกสาร',
     'การรับชำระ',
     'สิทธิการเข้าถึง',
+    'ตั้งค่าหน้าเว็ปไซต์',
     // 'ข้อมูลผู้ใช้งาน',
     // '📍ติดต่อเรา',
   ];
@@ -777,7 +779,7 @@ class _SettingScreenState extends State<SettingScreen> {
                 child: InkWell(
                   onTap: () {
                     setState(() {
-                      Status_ = 7;
+                      Status_ = 8;
                     });
                   },
                   child: Container(
@@ -809,7 +811,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           style: TextStyle(
                               // decoration: TextDecoration.underline,
                               color:
-                                  (Status_ == 7) ? Colors.black : Colors.black,
+                                  (Status_ == 8) ? Colors.black : Colors.black,
                               fontFamily: FontWeight_.Fonts_T),
                         ),
                       ],
@@ -890,7 +892,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Center(
                                           child: Text(
-                                            Status[i],
+                                            '${Status[i]}',
                                             style: TextStyle(
                                                 color: (Status_ == i + 1)
                                                     ? Colors.white
@@ -910,7 +912,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          Status_ = 6;
+                          Status_ = 7;
                         });
                       },
                       child: Container(
@@ -932,7 +934,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           child: Text(
                             'ข้อมูลผู้ใช้งาน',
                             style: TextStyle(
-                                color: (Status_ == 6)
+                                color: (Status_ == 7)
                                     ? Colors.white
                                     : Colors.black,
                                 fontFamily: FontWeight_.Fonts_T),
@@ -966,7 +968,9 @@ class _SettingScreenState extends State<SettingScreen> {
                             ? Status5_Web()
                             : (Status_ == 6)
                                 ? Status6_Web()
-                                : Status7_Web()
+                                : (Status_ == 7)
+                                    ? Status7_Web()
+                                    : Status8_Web()
       ],
     );
   }
@@ -6138,10 +6142,15 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Widget Status6_Web() {
-    return const USerInformation();
+    return const EditwebScreen();
+    // return const OtherScreen();
   }
 
   Widget Status7_Web() {
+    return const USerInformation();
+  }
+
+  Widget Status8_Web() {
     return const WebViewXPage();
     // return const OtherScreen();
   }
@@ -6160,8 +6169,10 @@ class _SettingScreenState extends State<SettingScreen> {
                         : (Status_ == 5)
                             ? const Accessrights()
                             : (Status_ == 6)
-                                ? const USerInformation()
-                                : const WebViewXPage()
+                                ? const EditwebScreen()
+                                : (Status_ == 7)
+                                    ? const USerInformation()
+                                    : const WebViewXPage()
       ],
     );
   }

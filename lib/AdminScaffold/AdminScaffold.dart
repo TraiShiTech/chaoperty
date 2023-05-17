@@ -29,6 +29,7 @@ import '../Register/SignIn_Screen.dart';
 import '../Register/SignUp_Screen.dart';
 import '../Report/Report_Screen.dart';
 import 'package:http/http.dart' as http;
+import '../Report_cm/Report_cm_Screen.dart';
 import '../Responsive/responsive.dart';
 
 import '../Setting/SettingScreen.dart';
@@ -65,6 +66,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   List<RenTalModel> renTalModels = [];
   List<PerMissionModel> perMissionModels = [];
   List<AreakModel> areakModels = [];
+  List<UserModel> userModels = [];
   int? timeoutper = null;
   DateTime? alert;
   Timer? timer;
@@ -85,6 +87,78 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     readTime();
     read_GC_rental();
     read_GC_areak();
+  }
+
+  String? connected_Minutes;
+  void startTimer() {
+    Check_connected();
+    connected_User();
+    // Create a timer that runs the read_connected function every 1 minute
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      connected_User();
+      Check_connected();
+    });
+  }
+
+  Future<Null> Check_connected() async {
+    if (userModels.isNotEmpty) {
+      userModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/Connected_User.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          UserModel userModel = UserModel.fromJson(map);
+          String connected_ = '${userModel.connected}';
+
+          DateTime connectedTime = DateTime.parse(connected_);
+
+          DateTime currentTime = DateTime.now();
+
+          Duration difference = currentTime.difference(connectedTime);
+
+          int minutesPassed = difference.inMinutes;
+          if (minutesPassed > 1) {
+          } else {
+            setState(() {
+              userModels.add(userModel);
+            });
+          }
+        }
+      } else {}
+    } catch (e) {}
+    print('name>>>>>  $renname');
+  }
+
+  Future<void> connected_User() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+
+    DateTime currentTime = DateTime.now();
+    var formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
+    String url =
+        '${MyConstant().domain}/UP_Connected_User.php?isAdd=true&ren=$ren&email=$email_user&seruser=$ser_user&value=$formattedTime';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      try {
+        var result = json.decode(response.body);
+        print(result);
+      } catch (e) {
+        print('Invalid JSON response: ${response.body}');
+      }
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<Null> read_GC_areak() async {
@@ -260,6 +334,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
           fname_user = userModel.fname;
           lname_user = userModel.lname;
           email_user = userModel.email;
+          ser_user = userModel.ser;
           utype_user = userModel.utype;
           permission_user = userModel.permission;
         });
@@ -267,6 +342,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       setState(() {
         read_GC_permission();
       });
+      startTimer();
     } catch (e) {}
   }
 
@@ -568,6 +644,411 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               children: [
                 Row(
                   children: [
+                    StreamBuilder(
+                        stream: Stream.periodic(const Duration(seconds: 0)),
+                        builder: (context, snapshot) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                                onTap: () async {
+                                  startTimer();
+                                  showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                      shape: const RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(20.0))),
+                                      title: const Center(
+                                          child: Text(
+                                        'ผู้ใช้งานระบบขณะนี้',
+                                        style: TextStyle(
+                                            color: AdminScafScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T),
+                                      )),
+                                      content: StreamBuilder(
+                                          stream: Stream.periodic(
+                                              const Duration(seconds: 0)),
+                                          builder: (context, snapshot) {
+                                            return Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      'ทั้งหมด : ${userModels.length} คน',
+                                                      style: TextStyle(
+                                                          color:
+                                                              AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .TiTile_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(0),
+                                                    ),
+                                                    // border: Border.all(
+                                                    //     color: Colors.grey, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    children: const [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          '...',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          'Email',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          'ชื่อ',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          'ตำแหน่ง',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
+                                                          'เวลาอัพเดตล่าสุด',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Container(
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.4,
+                                                    width: (Responsive
+                                                            .isDesktop(context))
+                                                        ? MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.85
+                                                        : 1200,
+                                                    child: ListView.builder(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8),
+                                                        itemCount:
+                                                            userModels.length,
+                                                        itemBuilder:
+                                                            (BuildContext
+                                                                    context,
+                                                                int index) {
+                                                          String email =
+                                                              '${userModels[index].email}';
+                                                          int emailLength =
+                                                              email.length;
+                                                          String
+                                                              firstTwoCharacters =
+                                                              email.substring(
+                                                                  0, 2);
+                                                          String
+                                                              lastFourCharacters =
+                                                              email.substring(
+                                                                  emailLength -
+                                                                      4);
+                                                          String censoredEmail =
+                                                              '$firstTwoCharacters${'*' * (emailLength - 6)}$lastFourCharacters';
+                                                          return Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${index + 1}',
+                                                                  style: TextStyle(
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${censoredEmail} ',
+                                                                  style: TextStyle(
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${userModels[index].fname} ${userModels[index].lname}',
+                                                                  style: TextStyle(
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  '${userModels[index].position}',
+                                                                  style: TextStyle(
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                flex: 1,
+                                                                child: Text(
+                                                                  ' ${userModels[index].connected}',
+                                                                  style: TextStyle(
+                                                                      color: AdminScafScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        })),
+                                              ],
+                                            );
+                                          }),
+                                      actions: <Widget>[
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Row(
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    '*** หมายเหตู : รายชื่อที่แสดงคือ รายชื่อผู้ใช้งานล่าสุดไม่เกิน 1 นาที',
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const Divider(
+                                              color: Colors.grey,
+                                              height: 4.0,
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors
+                                                                .redAccent,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'OK'),
+                                                            child: const Text(
+                                                              'ปิด',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.people,
+                                        color: Colors.red,
+                                        size: 16,
+                                      ),
+                                    ),
+                                    Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        child: Container(
+                                          // decoration: const BoxDecoration(
+                                          //   color: Colors.white,
+                                          //   borderRadius: BorderRadius.only(
+                                          //       topLeft: Radius.circular(20),
+                                          //       topRight: Radius.circular(20),
+                                          //       bottomLeft: Radius.circular(20),
+                                          //       bottomRight: Radius.circular(20)),
+                                          // ),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            '${userModels.length}',
+                                            // '${userModels.length}***/$connected_Minutes/$ser_user/$email_user',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                                fontFamily:
+                                                    FontWeight_.Fonts_T),
+                                          ),
+                                        ))
+                                  ],
+                                )),
+                          );
+                        }),
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: StreamBuilder(
@@ -986,11 +1467,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                         ? const AccountScreen()
                         : (Value_Route == 'จัดการ')
                             ? const ManageScreen()
-                            : (Value_Route == 'รายงาน')
-                                ? const ReportScreen()
-                                : (Value_Route == 'ทะเบียน')
-                                    ? const BureauScreen()
-                                    : const SettingScreen());
+                            : (Value_Route == 'รายงาน' &&
+                                    renTal_user.toString() == '65')
+                                ? const Report_cm_Screen()
+                                : (Value_Route == 'รายงาน' &&
+                                        renTal_user.toString() != '65')
+                                    ? ReportScreen()
+                                    : (Value_Route == 'ทะเบียน')
+                                        ? const BureauScreen()
+                                        : const SettingScreen());
   }
 
   void routToService(Widget myWidget) {

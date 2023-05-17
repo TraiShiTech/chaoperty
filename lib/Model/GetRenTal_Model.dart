@@ -28,6 +28,7 @@ class RenTalModel {
   String? bill_default;
   String? data_update;
   String? imglogo;
+  String? province;
 
   RenTalModel(
       {this.ser,
@@ -58,6 +59,7 @@ class RenTalModel {
       this.pkuser,
       this.bill_default,
       this.data_update,
+      this.province,
       this.imglogo});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
@@ -90,6 +92,7 @@ class RenTalModel {
     bill_default = json['bill_default'];
     data_update = json['data_update'];
     imglogo = json['imglogo'];
+    province = json['province'];
   }
 
   Map<String, dynamic> toJson() {
@@ -123,6 +126,7 @@ class RenTalModel {
     data['bill_default'] = this.bill_default;
     data['data_update'] = this.data_update;
     data['imglogo'] = this.imglogo;
+    data['province'] = this.province;
     return data;
   }
 }

@@ -24,6 +24,7 @@ import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetArea_IMG_model.dart';
 import '../Model/GetArea_Model.dart';
 import '../Model/GetC_Quot_Model.dart';
+import '../Model/GetC_Quot_Select_2Model.dart';
 import '../Model/GetC_Quot_Select_Model.dart';
 import '../Model/GetContractf_Model.dart';
 import '../Model/GetCustomer_Model.dart';
@@ -92,6 +93,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
   List<ExpModel> expModels = [];
   List<AreaIMGModel> areaIMGModels = [];
   List<QuotxSelectModel> quotxSelectModels = [];
+  List<QuotxSelect2Model> quotxSelect2Models = [];
   List<UnitModel> unitModels = [];
   List<UnitxModel> unitxModels = [];
   List<VatModel> vatModels = [];
@@ -1045,8 +1047,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                         maxLines: 5,
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
+                                          color: Colors.white,
+                                          // PeopleChaoScreen_Color
+                                          //     .Colors_Text1_
                                           // fontWeight: FontWeight.bold,
                                           fontFamily: FontWeight_.Fonts_T,
                                           fontWeight: FontWeight.bold,
@@ -1346,10 +1349,10 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                               TableCell(
                                                   child: GestureDetector(
                                                 onTap: () async {
-                                                  print('view $index');
+                                                  print(
+                                                      'view ${cQuotModels[index].ser}');
 
-                                                  var CQuotModels =
-                                                      cQuotModels[index];
+                                                  viewQuot(index);
 
                                                   // _displayPdf(CQuotModels);
                                                   // generatePdf();
@@ -1427,6 +1430,513 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                   ],
                 ),
         ),
+      ),
+    );
+  }
+
+  Future<Null> red_report(int index) async {
+    if (quotxSelect2Models.length != 0) {
+      setState(() {
+        quotxSelect2Models.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var ciddoc = cQuotModels[index].docno;
+    var qutser = '0';
+    var v = cQuotModels[index].ser;
+
+    String url =
+        '${MyConstant().domain}/GC_quot_conx.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result.toString() != 'null') {
+        if (quotxSelect2Models.isNotEmpty) {
+          setState(() {
+            quotxSelect2Models.clear();
+          });
+        }
+        for (var map in result) {
+          QuotxSelect2Model quotxSelect2Model = QuotxSelect2Model.fromJson(map);
+          setState(() {
+            quotxSelect2Models.add(quotxSelect2Model);
+          });
+        }
+      } else {
+        setState(() {
+          quotxSelect2Models.clear();
+        });
+      }
+    } catch (e) {}
+  }
+
+  Future<String?> viewQuot(int index) {
+    setState(() {
+      red_report(index);
+    });
+
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Center(
+            child: Text(
+          'เลขที่ใบเสนอราคา ${cQuotModels[index].docno}',
+          style: TextStyle(
+              color: AdminScafScreen_Color.Colors_Text1_,
+              fontFamily: Font_.Fonts_T),
+        )),
+        actions: <Widget>[
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'ร้านค้า:  ${cQuotModels[index].sname}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'ชื่อผู้ติดต่อ:  ${cQuotModels[index].cname}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'เบอร์โทร:  ${cQuotModels[index].tel}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'ประเภท:  ${cQuotModels[index].ctype}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'โซน:  ${cQuotModels[index].zn}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'พื้นที่:  ${cQuotModels[index].ln}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'ระยะเวลา:  ${cQuotModels[index].period}  ${cQuotModels[index].rtname}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'เริ่ม - สิ้นสุด:  ${cQuotModels[index].sdate} - ${cQuotModels[index].ldate}',
+                                style: const TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            color: Colors.lightGreenAccent.shade100,
+                            height: 30,
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: ListTile(
+                              title: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'ลำดับ',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'ค่าบริการ',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'จำนวน',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'ความถี่',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'VAT',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'WHT',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: AutoSizeText(
+                                      maxLines: 1,
+                                      minFontSize: 8,
+                                      maxFontSize: 20,
+                                      'ยอดสุทธิ',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        //fontSize: 10.0
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          StreamBuilder(
+                              stream:
+                                  Stream.periodic(const Duration(seconds: 0)),
+                              builder: (context, snapshot) {
+                                return Container(
+                                  height:
+                                      MediaQuery.of(context).size.height / 2,
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  child: ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: quotxSelect2Models.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return ListTile(
+                                          title: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${index + 1}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].expname}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].term}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].unit}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].vat}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].wht}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: AutoSizeText(
+                                                  maxLines: 1,
+                                                  minFontSize: 8,
+                                                  maxFontSize: 20,
+                                                  '${quotxSelect2Models[index].total}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T,
+                                                    //fontSize: 10.0
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                );
+                              })
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 5.0,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {});
+                                Navigator.pop(context, 'OK');
+                              },
+                              child: const Text(
+                                'ปิด',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

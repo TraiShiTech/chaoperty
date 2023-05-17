@@ -624,7 +624,7 @@ class _PaysState extends State<Pays> {
   }
 
   Future<Null> red_Trans_select2() async {
-    if (_TransModels.length != 0) {
+    if (_TransModels.isNotEmpty) {
       setState(() {
         _TransModels.clear();
         sum_pvat = 0;
@@ -647,6 +647,13 @@ class _PaysState extends State<Pays> {
       var result = json.decode(response.body);
       // print(result);
       if (result.toString() != 'null') {
+        setState(() {
+          _TransModels.clear();
+          sum_pvat = 0;
+          sum_vat = 0;
+          sum_wht = 0;
+          sum_amt = 0;
+        });
         for (var map in result) {
           TransModel _TransModel = TransModel.fromJson(map);
 
@@ -1415,7 +1422,7 @@ class _PaysState extends State<Pays> {
                         ),
                         child: select_page == 0
                             ? ListView.builder(
-                                controller: _scrollController1,
+                                // controller: _scrollController1,
                                 // itemExtent: 50,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -1524,7 +1531,7 @@ class _PaysState extends State<Pays> {
                               )
                             : select_page == 1
                                 ? ListView.builder(
-                                    controller: _scrollController1,
+                                    // controller: _scrollController1,
                                     // itemExtent: 50,
                                     physics:
                                         const AlwaysScrollableScrollPhysics(),
@@ -1621,7 +1628,7 @@ class _PaysState extends State<Pays> {
                                     },
                                   )
                                 : ListView.builder(
-                                    controller: _scrollController1,
+                                    // controller: _scrollController1,
                                     // itemExtent: 50,
                                     physics:
                                         const AlwaysScrollableScrollPhysics(),
@@ -2227,7 +2234,7 @@ class _PaysState extends State<Pays> {
                                 //     color: Colors.grey, width: 1),
                               ),
                               child: ListView.builder(
-                                controller: _scrollController2,
+                                // controller: _scrollController2,
                                 // itemExtent: 50,
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 shrinkWrap: true,
@@ -2350,7 +2357,7 @@ class _PaysState extends State<Pays> {
                                               minFontSize: 10,
                                               maxFontSize: 15,
                                               maxLines: 1,
-                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}',
+                                              '${nFormat.format(double.parse(_TransModels[index].total!))}',
                                               textAlign: TextAlign.end,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
@@ -3221,7 +3228,7 @@ class _PaysState extends State<Pays> {
                                     //     color: Colors.grey, width: 1),
                                   ),
                                   child: ListView.builder(
-                                    controller: _scrollController2,
+                                    // controller: _scrollController2,
                                     // itemExtent: 50,
                                     physics:
                                         const AlwaysScrollableScrollPhysics(),
@@ -4081,7 +4088,7 @@ class _PaysState extends State<Pays> {
                                     //     color: Colors.grey, width: 1),
                                   ),
                                   child: ListView.builder(
-                                    controller: _scrollController2,
+                                    // controller: _scrollController2,
                                     // itemExtent: 50,
                                     physics:
                                         const AlwaysScrollableScrollPhysics(),

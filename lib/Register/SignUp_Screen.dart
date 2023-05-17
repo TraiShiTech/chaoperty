@@ -240,832 +240,821 @@ class _SingUpScreenState extends State<SingUpScreen> {
     }
   }
 
+  final _formKeyBody1 = GlobalKey<FormState>();
+  bool _isObscure = true;
+  // bool _validate = false;
+  final Form1_text = TextEditingController();
+  final Form2_text = TextEditingController();
+  final Form3_text = TextEditingController();
+  final Form4_text = TextEditingController();
+  final Form5_text = TextEditingController();
+  final Form6_text = TextEditingController();
 ////////////////------------------------------------------------>(Stepper 3)
   Widget Body1() {
-    final _formKeyBody1 = GlobalKey<FormState>();
-    bool _isObscure = true;
-    // bool _validate = false;
-    final Form1_text = TextEditingController();
-    final Form2_text = TextEditingController();
-    final Form3_text = TextEditingController();
-    final Form4_text = TextEditingController();
-    final Form5_text = TextEditingController();
-    final Form6_text = TextEditingController();
     return Container(
+      width: MediaQuery.of(context).size.width / 1.1,
       child: Form(
         key: _formKeyBody1,
-        child: Container(
-          // color: Colors.grey[100],
-          // height: MediaQuery.of(context).size.height / 1.5,
-          width: MediaQuery.of(context).size.width / 1.05,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        controller: Form1_text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                          }
-                          // if (int.parse(value.toString()) < 13) {
-                          //   return '< 13';
-                          // }
-                          return null;
-                        },
-                        // maxLength: 13,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            prefixIcon:
-                                const Icon(Icons.person, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.text,
+                      controller: Form1_text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                        }
+                        // if (int.parse(value.toString()) < 13) {
+                        //   return '< 13';
+                        // }
+                        return null;
+                      },
+                      // maxLength: 13,
+                      cursorColor: Colors.green,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.3),
+                          filled: true,
+                          prefixIcon:
+                              const Icon(Icons.person, color: Colors.black),
+                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
                             ),
-                            errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black,
                             ),
-                            labelText: 'ชื่อ',
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter(
-                              RegExp("[1-9@.!#%&'*+/=?^_`{|}~-]"),
-                              allow: false),
-                          FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                          // for below version 2 use this
-                          // FilteringTextInputFormatter.deny(
-                          //     RegExp("[ก-ฮ ' ']")),
-                          // for version 2 and greater youcan also use this
-                          // FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
+                          ),
+                          errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          labelText: 'ชื่อ',
+                          labelStyle: const TextStyle(
+                              color: Colors.black54,
+                              fontFamily: Font_.Fonts_T)),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter(
+                            RegExp("[1-9@.!#%&'*+/=?^_`{|}~-]"),
+                            allow: false),
+                        FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                        // for below version 2 use this
+                        // FilteringTextInputFormatter.deny(
+                        //     RegExp("[ก-ฮ ' ']")),
+                        // for version 2 and greater youcan also use this
+                        // FilteringTextInputFormatter.digitsOnly
+                      ],
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2.1,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: Form2_text,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'ใส่ข้อมูลให้ครบถ้วน ';
-                          }
-                          // if (int.parse(value.toString()) < 13) {
-                          //   return '< 13';
-                          // }
-                          return null;
-                        },
-                        // maxLength: 13,
-                        cursorColor: Colors.green,
-                        decoration: InputDecoration(
-                            fillColor: Colors.white.withOpacity(0.3),
-                            filled: true,
-                            // prefixIcon:
-                            //     const Icon(Icons.person_pin, color: Colors.black),
-                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                            focusedBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black,
-                              ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      keyboardType: TextInputType.number,
+                      controller: Form2_text,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                        }
+                        // if (int.parse(value.toString()) < 13) {
+                        //   return '< 13';
+                        // }
+                        return null;
+                      },
+                      // maxLength: 13,
+                      cursorColor: Colors.green,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.3),
+                          filled: true,
+                          // prefixIcon:
+                          //     const Icon(Icons.person_pin, color: Colors.black),
+                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                          focusedBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
                             ),
-                            errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                            enabledBorder: const OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(15),
-                                topLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
-                                bottomLeft: Radius.circular(15),
-                              ),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black,
                             ),
-                            labelText: 'นามสกุล',
-                            labelStyle: const TextStyle(
-                                color: Colors.black54,
-                                fontFamily: Font_.Fonts_T)),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter(
-                              RegExp("[1-9@.!#%&'*+/=?^_`{|}~-]"),
-                              allow: false),
-                          // for below version 2 use this
-                          FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                          // for version 2 and greater youcan also use this
-                          // FilteringTextInputFormatter.digitsOnly
-                        ],
-                      ),
+                          ),
+                          errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                          enabledBorder: const OutlineInputBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15),
+                              bottomLeft: Radius.circular(15),
+                            ),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.grey,
+                            ),
+                          ),
+                          labelText: 'นามสกุล',
+                          labelStyle: const TextStyle(
+                              color: Colors.black54,
+                              fontFamily: Font_.Fonts_T)),
+                      inputFormatters: <TextInputFormatter>[
+                        FilteringTextInputFormatter(
+                            RegExp("[1-9@.!#%&'*+/=?^_`{|}~-]"),
+                            allow: false),
+                        // for below version 2 use this
+                        FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                        // for version 2 and greater youcan also use this
+                        // FilteringTextInputFormatter.digitsOnly
+                      ],
                     ),
                   ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: Form3_text,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 10) {
+                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                  }
+                  // if (int.parse(value.toString()) < 13) {
+                  //   return '< 13';
+                  // }
+                  return null;
+                },
+                maxLength: 10,
+                cursorColor: Colors.green,
+                decoration: InputDecoration(
+                    fillColor: Colors.white.withOpacity(0.3),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.phone, color: Colors.black),
+                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.black,
+                      ),
+                    ),
+                    errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    labelText: 'เบอร์ติดต่อ',
+                    labelStyle: const TextStyle(
+                        color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                inputFormatters: <TextInputFormatter>[
+                  // for below version 2 use this
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                  // for version 2 and greater youcan also use this
+                  FilteringTextInputFormatter.digitsOnly
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: Form3_text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 10) {
-                      return 'ใส่ข้อมูลให้ครบถ้วน ';
-                    }
-                    // if (int.parse(value.toString()) < 13) {
-                    //   return '< 13';
-                    // }
-                    return null;
-                  },
-                  maxLength: 10,
-                  cursorColor: Colors.green,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white.withOpacity(0.3),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.phone, color: Colors.black),
-                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.black,
-                        ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: Form4_text,
+                validator: (value) {
+                  // String pattern =
+                  //     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                  //     r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
+                  //     r"{0,253}[a-zA-Z0-9])?)*$";
+                  // RegExp regex = RegExp(pattern);
+                  if (value == null || value.isEmpty || value.length < 4) {
+                    return 'ตย. เช่น "abc@gmail.com"และไม่มีอัษรพิเศษ';
+                  }
+                  return null;
+                },
+                // maxLength: 13,
+                cursorColor: Colors.green,
+                decoration: InputDecoration(
+                    fillColor: Colors.white.withOpacity(0.3),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
+                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
                       ),
-                      errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.grey,
-                        ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.black,
                       ),
-                      labelText: 'เบอร์ติดต่อ',
-                      labelStyle: const TextStyle(
-                          color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                  inputFormatters: <TextInputFormatter>[
-                    // for below version 2 use this
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                    // for version 2 and greater youcan also use this
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: Form4_text,
-                  validator: (value) {
-                    // String pattern =
-                    //     r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-                    //     r"{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]"
-                    //     r"{0,253}[a-zA-Z0-9])?)*$";
-                    // RegExp regex = RegExp(pattern);
-                    if (value == null || value.isEmpty || value.length < 4) {
-                      return 'ตย. เช่น "abc@gmail.com"และไม่มีอัษรพิเศษ';
-                    }
-                    return null;
-                  },
-                  // maxLength: 13,
-                  cursorColor: Colors.green,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white.withOpacity(0.3),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.email, color: Colors.black),
-                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.black,
-                        ),
+                    ),
+                    errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
                       ),
-                      errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.grey,
-                        ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey,
                       ),
-                      labelText: 'อีเมล',
-                      labelStyle: const TextStyle(
-                          color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                  inputFormatters: <TextInputFormatter>[
-                    // FilteringTextInputFormatter(RegExp("[' ']"), allow: false),
-                    // for below version 2 use this
-                    FilteringTextInputFormatter.deny(RegExp("[ก-ฮ ' ']")),
+                    ),
+                    labelText: 'อีเมล',
+                    labelStyle: const TextStyle(
+                        color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                inputFormatters: <TextInputFormatter>[
+                  // FilteringTextInputFormatter(RegExp("[' ']"), allow: false),
+                  // for below version 2 use this
+                  FilteringTextInputFormatter.deny(RegExp("[ก-ฮ ' ']")),
 
-                    // for version 2 and greater youcan also use this
-                    // FilteringTextInputFormatter.digitsOnly
-                  ],
-                ),
+                  // for version 2 and greater youcan also use this
+                  // FilteringTextInputFormatter.digitsOnly
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child:
-                    //  TextFormField(
-                    //   decoration: const InputDecoration(
-                    //       labelText: 'Password',
-                    //       icon: const Padding(
-                    //           padding: const EdgeInsets.only(top: 15.0),
-                    //           child: const Icon(Icons.lock))),
-                    //   obscureText: _obscured,
-                    // )
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child:
+                  //  TextFormField(
+                  //   decoration: const InputDecoration(
+                  //       labelText: 'Password',
+                  //       icon: const Padding(
+                  //           padding: const EdgeInsets.only(top: 15.0),
+                  //           child: const Icon(Icons.lock))),
+                  //   obscureText: _obscured,
+                  // )
 
-                    TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: Form5_text,
-                  validator: (value) {
-                    if (value == null || value.isEmpty || value.length < 6) {
-                      return 'ใส่ข้อมูลให้ครบถ้วน ตัวเลข6หลักขึ้นไป ';
-                    }
-                    // if (int.parse(value.toString()) < 13) {
-                    //   return '< 13';
-                    // }
-                    return null;
-                  },
-                  obscureText: _obscured,
-                  // maxLength: 13,
-                  cursorColor: Colors.green,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white.withOpacity(0.3),
-                      filled: true,
-                      prefixIcon: const Icon(Icons.key, color: Colors.black),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
-                        child: GestureDetector(
-                          onTap: _toggleObscured,
-                          child: Icon(
-                            _obscured
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
-                            size: 24,
-                            color: Colors.green,
-                          ),
+                  TextFormField(
+                keyboardType: TextInputType.number,
+                controller: Form5_text,
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 6) {
+                    return 'ใส่ข้อมูลให้ครบถ้วน ตัวเลข6หลักขึ้นไป ';
+                  }
+                  // if (int.parse(value.toString()) < 13) {
+                  //   return '< 13';
+                  // }
+                  return null;
+                },
+                obscureText: _obscured,
+                // maxLength: 13,
+                cursorColor: Colors.green,
+                decoration: InputDecoration(
+                    fillColor: Colors.white.withOpacity(0.3),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.key, color: Colors.black),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                      child: GestureDetector(
+                        onTap: _toggleObscured,
+                        child: Icon(
+                          _obscured
+                              ? Icons.visibility_off_rounded
+                              : Icons.visibility_rounded,
+                          size: 24,
+                          color: Colors.green,
                         ),
                       ),
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.black,
-                        ),
+                    ),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
                       ),
-                      errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.grey,
-                        ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.black,
                       ),
-                      labelText: 'รหัสผ่าน',
-                      labelStyle: const TextStyle(
-                          color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                  // inputFormatters: <TextInputFormatter>[
-                  //   // for below version 2 use this
-                  //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  //   // for version 2 and greater youcan also use this
-                  //   FilteringTextInputFormatter.digitsOnly
-                  // ],
-                ),
+                    ),
+                    errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    labelText: 'รหัสผ่าน',
+                    labelStyle: const TextStyle(
+                        color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                // inputFormatters: <TextInputFormatter>[
+                //   // for below version 2 use this
+                //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                //   // for version 2 and greater youcan also use this
+                //   FilteringTextInputFormatter.digitsOnly
+                // ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: Form6_text,
-                  validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        value.length < 6 ||
-                        Form6_text.text != Form5_text.text) {
-                      return (Form6_text.text != Form5_text.text)
-                          ? 'รหัสไม่ตรงกัน'
-                          : 'ใส่ข้อมูลให้ครบถ้วน ตัวเลข6หลักขึ้นไป ';
-                    }
-                    // if (int.parse(value.toString()) < 13) {
-                    //   return '< 13';
-                    // }
-                    return null;
-                  },
-                  obscureText: _obscured,
-                  // maxLength: 13,
-                  cursorColor: Colors.green,
-                  decoration: InputDecoration(
-                      fillColor: Colors.white.withOpacity(0.3),
-                      filled: true,
-                      prefixIcon:
-                          const Icon(Icons.password, color: Colors.black),
-                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                      focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.black,
-                        ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                keyboardType: TextInputType.number,
+                controller: Form6_text,
+                validator: (value) {
+                  if (value == null ||
+                      value.isEmpty ||
+                      value.length < 6 ||
+                      Form6_text.text != Form5_text.text) {
+                    return (Form6_text.text != Form5_text.text)
+                        ? 'รหัสไม่ตรงกัน'
+                        : 'ใส่ข้อมูลให้ครบถ้วน ตัวเลข6หลักขึ้นไป ';
+                  }
+                  // if (int.parse(value.toString()) < 13) {
+                  //   return '< 13';
+                  // }
+                  return null;
+                },
+                obscureText: _obscured,
+                // maxLength: 13,
+                cursorColor: Colors.green,
+                decoration: InputDecoration(
+                    fillColor: Colors.white.withOpacity(0.3),
+                    filled: true,
+                    prefixIcon: const Icon(Icons.password, color: Colors.black),
+                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                    focusedBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
                       ),
-                      errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
-                      enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(15),
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15),
-                          bottomLeft: Radius.circular(15),
-                        ),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.grey,
-                        ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.black,
                       ),
-                      labelText: 'รหัสผ่านอีกครั้ง',
-                      labelStyle: const TextStyle(
-                          color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                  // inputFormatters: <TextInputFormatter>[
-                  //   // for below version 2 use this
-                  //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  //   // for version 2 and greater youcan also use this
-                  //   FilteringTextInputFormatter.digitsOnly
-                  // ],
-                ),
+                    ),
+                    errorStyle: TextStyle(fontFamily: Font_.Fonts_T),
+                    enabledBorder: const OutlineInputBorder(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(15),
+                        topLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                      ),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    labelText: 'รหัสผ่านอีกครั้ง',
+                    labelStyle: const TextStyle(
+                        color: Colors.black54, fontFamily: Font_.Fonts_T)),
+                // inputFormatters: <TextInputFormatter>[
+                //   // for below version 2 use this
+                //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                //   // for version 2 and greater youcan also use this
+                //   FilteringTextInputFormatter.digitsOnly
+                // ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        (accept_ != 'true')
-                            ? InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    accept_ = 'true';
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.check_box_outline_blank,
-                                  color: Colors.black,
-                                ))
-                            : InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    accept_ = 'false';
-                                  });
-                                },
-                                child: const Icon(
-                                  Icons.check_box,
-                                  color: Colors.green,
-                                )),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 1.2,
-                          decoration: const BoxDecoration(
-                            // color: Colors.lightGreen[600],
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0)),
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            child: const Text(
-                                'คุณได้อ่านและยอมรับ เงื่อนไขการใช้บริการ และ นโยบายความเป็นส่วนตัว ( ดูคลิก📝) ',
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                softWrap: false,
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: SingupScreen_Color.Colors_Text2_,
-                                    fontFamily: Font_.Fonts_T)),
-                            onTap: () async {
-                              final data = await SideSheet.right(
-                                  width: 350,
-                                  body: Container(
-                                    height: MediaQuery.of(context).size.height,
-                                    color: Colors.white,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(4.0),
-                                              child: Row(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Container(
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: const Icon(
-                                                        Icons.arrow_back,
-                                                        color: Colors.white,
-                                                      ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      (accept_ != 'true')
+                          ? InkWell(
+                              onTap: () {
+                                setState(() {
+                                  accept_ = 'true';
+                                });
+                              },
+                              child: const Icon(
+                                Icons.check_box_outline_blank,
+                                color: Colors.black,
+                              ))
+                          : InkWell(
+                              onTap: () {
+                                setState(() {
+                                  accept_ = 'false';
+                                });
+                              },
+                              child: const Icon(
+                                Icons.check_box,
+                                color: Colors.green,
+                              )),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.2,
+                        decoration: const BoxDecoration(
+                          // color: Colors.lightGreen[600],
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(0),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0)),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: const Text(
+                              'คุณได้อ่านและยอมรับ เงื่อนไขการใช้บริการ และ นโยบายความเป็นส่วนตัว ( ดูคลิก📝) ',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: SingupScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T)),
+                          onTap: () async {
+                            final data = await SideSheet.right(
+                                width: 350,
+                                body: Container(
+                                  height: MediaQuery.of(context).size.height,
+                                  color: Colors.white,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(4.0),
+                                            child: Row(
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.black,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
-                                          child: Text(
-                                            'เงื่อนไขการใช้บริการ',
-                                            style: TextStyle(
-                                                color: SingupScreen_Color
-                                                    .Colors_Text1_,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              children: const [
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        '1 วัตถุประสงค์',
-                                                        maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 20,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        softWrap: false,
-                                                        style: TextStyle(
-                                                            // fontSize: 20,
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T)),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        'เว็บไซต์ Chaoperty Property Manager มีวัตถุประสงค์เพื่อเป็นผู้ให้บริการระบบบริหารจัดการพื้นที่เช่าเท่านั้น โดยข้อมูลส่วนตัวของผู้ใช้งาน และ พื้นที่เช่าที่ลงทะเบียน จะเป็นข้อมูลเฉพาะบุคคลที่ไม่เชื่อมต่อกับข้อมูลพื้นที่เช่าอื่นๆ หรือผู้ใช้งานอื่นๆที่ไม่มีความเกี่ยวข้อง ผู้ใช้บริการจะต้องลงทะเบียนและสร้างโปรไฟล์ของตนเองเพื่อใช้บริการของระบบจัดการพื้นที่เช่า โดยต้องระบุข้อมูลส่วนบุคคล และ พื้นที่เช่าให้ครบถ้วน ชัดเจน และถูกต้อง ทางบริษัท ดีเซ็นทริค จำกัด จะไม่รับผิดชอบ หรือมีส่วนเกี่ยวข้องในความผิดพลาดในการลงข้อมูลผิดพลาด',
-                                                        //  maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 15,
-                                                        // overflow: TextOverflow.ellipsis,
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                            // fontSize: 20,
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            // fontWeight: FontWeight.bold,
-                                                            )),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        '2 สงวนสิทธิ์',
-                                                        maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 20,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        softWrap: false,
-                                                        style: TextStyle(
-                                                            // fontSize: 20,
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T)),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        'Dzentric  Co.,Ltd. สงวนสิทธิ์ในการพิจารณาไม่อนุญาตให้ผู้ใช้งานใช้งานเว็บไซต์นี้รวมถึงสงวนสิทธิ์ในการเปลี่ยนแปลงหรือระงับการให้บริการเว็บไซต์ไม่ว่าบางส่วนหรือทั้งหมดและไม่ว่าในเวลาใดๆแก่ผู้ใช้งานโดยไม่จำเป็นต้องบอกกล่าวล่วงหน้าหรือระบุเหตุผลในการดำเนินการนั้น',
-                                                        //  maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 15,
-                                                        // overflow: TextOverflow.ellipsis,
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                            // fontSize: 20,
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            // fontWeight: FontWeight.bold,
-                                                            )),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        '3 ในการใช้งานเว็บไซต์',
-                                                        maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 20,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        softWrap: false,
-                                                        style: TextStyle(
-                                                            // fontSize: 20,
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T)),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.all(8.0),
-                                                  child: Align(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: AutoSizeText(
-                                                        '	ในการใช้งานเว็บไซต์ด้วยการเข้าสู่ระบบ         (Login) สมาชิกผู้ใช้งานจะต้องมีรหัสประจำตัว(Username)และรหัสผ่าน(Password)ของตนเองโดยผู้ใช้งานจะต้องเก็บรักษารหัสประจำตัวและรหัสผ่านของตนเองไว้เป็นความลับการเข้าใช้งานและทำรายการใดๆที่เกิดขึ้นจากการLoginผ่านรหัสประจำตัวและรหัสผ่านของผู้ใช้งานในเว็บไซต์นี้ให้ถือว่าการกระทำดังกล่าวถูกต้องสมบูรณ์และเป็นการกระทำของผู้ใช้งานเองหากมีความเสียหายใดๆเกิดขึ้นไม่ว่าจะด้วยเหตุใดก็ตามผู้ใช้งานจะต้องรับผิดชอบในการกระทำดังกล่าวทุกประการและผู้ใช้งานตกลงจะไม่โต้แย้งหรือเรียกร้องให้ออนไลน์จะไม่รับผิดชอบชดใช้ค่าเสียหายแทนผู้ใช้งานทุกกรณี',
-
-                                                        //  maxLines: 1,
-                                                        minFontSize: 10,
-                                                        maxFontSize: 15,
-                                                        // overflow: TextOverflow.ellipsis,
-                                                        softWrap: true,
-                                                        style: TextStyle(
-                                                            color: SingupScreen_Color
-                                                                .Colors_Text2_,
-                                                            fontFamily:
-                                                                Font_.Fonts_T
-                                                            // fontWeight: FontWeight.bold,
-                                                            )),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: const Icon(
+                                                      Icons.arrow_back,
+                                                      color: Colors.white,
+                                                    ),
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'เงื่อนไขการใช้บริการ',
+                                          style: TextStyle(
+                                              color: SingupScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T),
                                         ),
-                                        Container(
-                                          // height: 40,
-                                          decoration: const BoxDecoration(
-                                            color: AppBarColors.ABar_Colors,
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(0),
-                                                bottomRight:
-                                                    Radius.circular(0)),
-                                          ),
-                                          child: const Center(
-                                            child: Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: Text(
-                                                '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                softWrap: false,
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: SingupScreen_Color
-                                                        .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontSize: 10.0),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: const [
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      '1 วัตถุประสงค์',
+                                                      maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 20,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                      style: TextStyle(
+                                                          // fontSize: 20,
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T)),
+                                                ),
                                               ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      'เว็บไซต์ Chaoperty Property Manager มีวัตถุประสงค์เพื่อเป็นผู้ให้บริการระบบบริหารจัดการพื้นที่เช่าเท่านั้น โดยข้อมูลส่วนตัวของผู้ใช้งาน และ พื้นที่เช่าที่ลงทะเบียน จะเป็นข้อมูลเฉพาะบุคคลที่ไม่เชื่อมต่อกับข้อมูลพื้นที่เช่าอื่นๆ หรือผู้ใช้งานอื่นๆที่ไม่มีความเกี่ยวข้อง ผู้ใช้บริการจะต้องลงทะเบียนและสร้างโปรไฟล์ของตนเองเพื่อใช้บริการของระบบจัดการพื้นที่เช่า โดยต้องระบุข้อมูลส่วนบุคคล และ พื้นที่เช่าให้ครบถ้วน ชัดเจน และถูกต้อง ทางบริษัท ดีเซ็นทริค จำกัด จะไม่รับผิดชอบ หรือมีส่วนเกี่ยวข้องในความผิดพลาดในการลงข้อมูลผิดพลาด',
+                                                      //  maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      // overflow: TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          // fontSize: 20,
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          // fontWeight: FontWeight.bold,
+                                                          )),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      '2 สงวนสิทธิ์',
+                                                      maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 20,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                      style: TextStyle(
+                                                          // fontSize: 20,
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T)),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      'Dzentric  Co.,Ltd. สงวนสิทธิ์ในการพิจารณาไม่อนุญาตให้ผู้ใช้งานใช้งานเว็บไซต์นี้รวมถึงสงวนสิทธิ์ในการเปลี่ยนแปลงหรือระงับการให้บริการเว็บไซต์ไม่ว่าบางส่วนหรือทั้งหมดและไม่ว่าในเวลาใดๆแก่ผู้ใช้งานโดยไม่จำเป็นต้องบอกกล่าวล่วงหน้าหรือระบุเหตุผลในการดำเนินการนั้น',
+                                                      //  maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      // overflow: TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          // fontSize: 20,
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          // fontWeight: FontWeight.bold,
+                                                          )),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      '3 ในการใช้งานเว็บไซต์',
+                                                      maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 20,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      softWrap: false,
+                                                      style: TextStyle(
+                                                          // fontSize: 20,
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T)),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: AutoSizeText(
+                                                      '	ในการใช้งานเว็บไซต์ด้วยการเข้าสู่ระบบ         (Login) สมาชิกผู้ใช้งานจะต้องมีรหัสประจำตัว(Username)และรหัสผ่าน(Password)ของตนเองโดยผู้ใช้งานจะต้องเก็บรักษารหัสประจำตัวและรหัสผ่านของตนเองไว้เป็นความลับการเข้าใช้งานและทำรายการใดๆที่เกิดขึ้นจากการLoginผ่านรหัสประจำตัวและรหัสผ่านของผู้ใช้งานในเว็บไซต์นี้ให้ถือว่าการกระทำดังกล่าวถูกต้องสมบูรณ์และเป็นการกระทำของผู้ใช้งานเองหากมีความเสียหายใดๆเกิดขึ้นไม่ว่าจะด้วยเหตุใดก็ตามผู้ใช้งานจะต้องรับผิดชอบในการกระทำดังกล่าวทุกประการและผู้ใช้งานตกลงจะไม่โต้แย้งหรือเรียกร้องให้ออนไลน์จะไม่รับผิดชอบชดใช้ค่าเสียหายแทนผู้ใช้งานทุกกรณี',
+
+                                                      //  maxLines: 1,
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      // overflow: TextOverflow.ellipsis,
+                                                      softWrap: true,
+                                                      style: TextStyle(
+                                                          color:
+                                                              SingupScreen_Color
+                                                                  .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T
+                                                          // fontWeight: FontWeight.bold,
+                                                          )),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        // height: 40,
+                                        decoration: const BoxDecoration(
+                                          color: AppBarColors.ABar_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0)),
+                                        ),
+                                        child: const Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Text(
+                                              '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              softWrap: false,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: SingupScreen_Color
+                                                      .Colors_Text2_,
+                                                  fontFamily: Font_.Fonts_T,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontSize: 10.0),
                                             ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
-                                  context: context);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-
-              // nextButton(),
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width / 1.05,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        Random random = Random();
-
-                        // setState(() {
-                        //   activeStep++;
-                        // });
-
-                        if (_formKeyBody1.currentState!.validate()) {
-                          if (Value_PassW1_ != Value_PassW2_) {
-                          } else if (accept_ != 'true') {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                backgroundColor: Colors.red.withOpacity(0.5),
-                                content: const Text(
-                                    '** กรุณายอมรับเงื่อนไขการใช้บริการ !! ',
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                        fontFamily: Font_.Fonts_T
-                                        // fontWeight: FontWeight.bold,
-                                        )),
-                              ),
-                            );
-                          } else {
-                            // for (int i = 0; i < 4; i++) {
-                            //   Value_randomNumber = Value_randomNumber +
-                            //       random.nextInt(9).toString();
-                            // }
-                            Random random = Random();
-                            int c = random.nextInt(9000) + 1000;
-
-                            print('/////----- Data Step 1  ------- >');
-                            print(Form1_text.text); //ชื่อ
-                            print(Form2_text.text); //นามสกุล
-                            print(Form3_text.text); //เบอร์
-                            print(Form4_text.text); //อีเมล
-                            print(Form5_text.text); //รหัส
-                            print(Form6_text.text); //ยืนยันรหัส
-                            print(' ----------------------------->');
-                            setState(() {
-                              Value_randomNumber = c.toString();
-                              Value_SerName_ = Form1_text.text;
-                              Value_lastName_ = Form2_text.text;
-                              Value_Number_ = Form3_text.text;
-                              Value_Email_ = Form4_text.text;
-                              Value_PassW1_ = Form5_text.text;
-                              Value_PassW2_ = Form6_text.text;
-                              // Value_randomNumber = '$randomNumber';
-                            });
-
-                            upUser();
-                          }
-                        }
-                      },
-                      child: Container(
-                        width: 130,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.lime[800],
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                              bottomLeft: Radius.circular(20),
-                              bottomRight: Radius.circular(20)),
-                        ),
-                        child: const Center(
-                          child: Text('Continue',
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
-                              style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T)),
+                                ),
+                                context: context);
+                          },
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+
+            // nextButton(),
+            Container(
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width / 1.05,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      Random random = Random();
+
+                      // setState(() {
+                      //   activeStep++;
+                      // });
+
+                      if (_formKeyBody1.currentState!.validate()) {
+                        if (Value_PassW1_ != Value_PassW2_) {
+                        } else if (accept_ != 'true') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.red.withOpacity(0.5),
+                              content: const Text(
+                                  '** กรุณายอมรับเงื่อนไขการใช้บริการ !! ',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.white,
+                                      fontFamily: Font_.Fonts_T
+                                      // fontWeight: FontWeight.bold,
+                                      )),
+                            ),
+                          );
+                        } else {
+                          // for (int i = 0; i < 4; i++) {
+                          //   Value_randomNumber = Value_randomNumber +
+                          //       random.nextInt(9).toString();
+                          // }
+                          Random random = Random();
+                          int c = random.nextInt(9000) + 1000;
+
+                          print('/////----- Data Step 1  ------- >');
+                          print(Form1_text.text); //ชื่อ
+                          print(Form2_text.text); //นามสกุล
+                          print(Form3_text.text); //เบอร์
+                          print(Form4_text.text); //อีเมล
+                          print(Form5_text.text); //รหัส
+                          print(Form6_text.text); //ยืนยันรหัส
+                          print(' ----------------------------->');
+                          setState(() {
+                            Value_randomNumber = c.toString();
+                            Value_SerName_ = Form1_text.text;
+                            Value_lastName_ = Form2_text.text;
+                            Value_Number_ = Form3_text.text;
+                            Value_Email_ = Form4_text.text;
+                            Value_PassW1_ = Form5_text.text;
+                            Value_PassW2_ = Form6_text.text;
+                            // Value_randomNumber = '$randomNumber';
+                          });
+
+                          upUser();
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: 130,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.lime[800],
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20),
+                            bottomLeft: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                      ),
+                      child: const Center(
+                        child: Text('Continue',
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T)),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
         ),
       ),
     );

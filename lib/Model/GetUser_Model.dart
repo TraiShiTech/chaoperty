@@ -16,6 +16,7 @@ class UserModel {
   String? otp;
   String? modeclor;
   String? data_update;
+  String? connected;
 
   UserModel(
       {this.ser,
@@ -34,6 +35,7 @@ class UserModel {
       this.verify,
       this.otp,
       this.modeclor,
+      this.connected,
       this.data_update});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class UserModel {
     verify = json['verify'];
     otp = json['otp'];
     modeclor = json['modeclor'];
+    connected = json['connected'];
     data_update = json['data_update'];
   }
 
@@ -75,6 +78,7 @@ class UserModel {
     data['otp'] = this.otp;
     data['modeclor'] = this.modeclor;
     data['data_update'] = this.data_update;
+    data['connected'] = this.connected;
     return data;
   }
 }

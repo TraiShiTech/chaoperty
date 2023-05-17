@@ -230,7 +230,7 @@ class _BillsState extends State<Bills> {
   }
 
   Future<Null> red_Trans_select() async {
-    if (_TransModels.length != 0) {
+    if (_TransModels.isNotEmpty) {
       setState(() {
         _TransModels.clear();
         sum_pvat = 0;
@@ -253,6 +253,13 @@ class _BillsState extends State<Bills> {
       var result = json.decode(response.body);
       print(result);
       if (result.toString() != 'null') {
+        setState(() {
+          _TransModels.clear();
+          sum_pvat = 0;
+          sum_vat = 0;
+          sum_wht = 0;
+          sum_amt = 0;
+        });
         for (var map in result) {
           TransModel _TransModel = TransModel.fromJson(map);
 
@@ -788,7 +795,7 @@ class _BillsState extends State<Bills> {
                               //     color: Colors.grey, width: 1),
                             ),
                             child: ListView.builder(
-                              controller: _scrollController1,
+                              // controller: _scrollController1,
                               // itemExtent: 50,
                               physics: const AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -1390,7 +1397,7 @@ class _BillsState extends State<Bills> {
                               //     color: Colors.grey, width: 1),
                             ),
                             child: ListView.builder(
-                              controller: _scrollController2,
+                              // controller: _scrollController2,
                               // itemExtent: 50,
                               physics: const AlwaysScrollableScrollPhysics(),
                               shrinkWrap: true,

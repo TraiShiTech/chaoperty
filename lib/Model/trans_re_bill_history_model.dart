@@ -113,6 +113,12 @@ class TransReBillHistoryModel {
   String? cname;
   String? type;
   String? ln;
+  String? total_sum;
+  String? total_sumramt;
+  String? total_sumramtd;
+  String? total_sumamt;
+  String? total_sumvat;
+  String? total_sumnvat;
 
   TransReBillHistoryModel({
     this.ser,
@@ -224,6 +230,12 @@ class TransReBillHistoryModel {
     this.cname,
     this.type,
     this.ln,
+    this.total_sum,
+    this.total_sumramt,
+    this.total_sumramtd,
+    this.total_sumamt,
+    this.total_sumvat,
+    this.total_sumnvat,
   });
 
   TransReBillHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -337,6 +349,13 @@ class TransReBillHistoryModel {
     cname = json['cname'];
     type = json['type'];
     ln = json['ln'];
+
+    total_sum = json['total_sum'];
+    total_sumramt = json['total_sumramt'];
+    total_sumramtd = json['total_sumramtd'];
+    total_sumamt = json['total_sumamt'];
+    total_sumvat = json['total_sumvat'];
+    total_sumnvat = json['total_sumnvat'];
   }
 
   Map<String, dynamic> toJson() {
@@ -451,6 +470,12 @@ class TransReBillHistoryModel {
     data['cname'] = this.cname;
     data['type'] = this.type;
     data['ln'] = this.ln;
+    data['total_sum'] = this.total_sum;
+    data['total_sumramt'] = this.total_sumramt;
+    data['total_sumramtd'] = this.total_sumramtd;
+    data['total_sumamt'] = this.total_sumamt;
+    data['total_sumvat'] = this.total_sumvat;
+    data['total_sumnvat'] = this.total_sumnvat;
     return data;
   }
 }

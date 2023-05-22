@@ -63,7 +63,7 @@ class _HistoryBillsState extends State<HistoryBills> {
       sum_disp = 0;
   int select_page = 0,
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
-
+  String? dtypeselect;
   String? numinvoice,
       numdoctax,
       paymentSer1,
@@ -684,7 +684,9 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                   .toString() ==
                                               numinvoice.toString())
                                       ? tappedIndex_Color.tappedIndex_Colors
-                                      : AppbackgroundColor.Sub_Abg_Colors,
+                                      : _TransReBillModels[index].dtype == '!Z'
+                                          ? Colors.red.shade100
+                                          : AppbackgroundColor.Sub_Abg_Colors,
                               child: ListTile(
                                 onTap: () {
                                   print(
@@ -692,9 +694,10 @@ class _HistoryBillsState extends State<HistoryBills> {
                                   red_Trans_select(index);
                                   red_Invoice(index);
 
-                                  //  setState(() {
-
-                                  // });
+                                  setState(() {
+                                    dtypeselect =
+                                        _TransReBillModels[index].dtype;
+                                  });
                                   // in_Trans_select(index);
                                 },
                                 title: Row(
@@ -703,8 +706,11 @@ class _HistoryBillsState extends State<HistoryBills> {
                                       flex: 2,
                                       child: Tooltip(
                                         richMessage: TextSpan(
-                                          text:
-                                              '${_TransReBillModels[index].expname}',
+                                          text: _TransReBillModels[index]
+                                                      .dtype ==
+                                                  '!Z'
+                                              ? '${_TransReBillModels[index].expname} (ยกเลิก)'
+                                              : '${_TransReBillModels[index].expname}',
                                           style: const TextStyle(
                                             color:
                                                 HomeScreen_Color.Colors_Text1_,
@@ -722,7 +728,10 @@ class _HistoryBillsState extends State<HistoryBills> {
                                           minFontSize: 10,
                                           maxFontSize: 25,
                                           maxLines: 1,
-                                          '${_TransReBillModels[index].expname}',
+                                          _TransReBillModels[index].dtype ==
+                                                  '!Z'
+                                              ? '${_TransReBillModels[index].expname} (ยกเลิก)'
+                                              : '${_TransReBillModels[index].expname}',
                                           textAlign: TextAlign.start,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
@@ -906,9 +915,11 @@ class _HistoryBillsState extends State<HistoryBills> {
                               //     color: Colors.grey, width: 1),
                             ),
                             // padding: const EdgeInsets.all(8.0),
-                            child: const Center(
+                            child: Center(
                               child: Text(
-                                'รายละเอียดบิล', //numinvoice
+                                dtypeselect == '!Z'
+                                    ? 'รายละเอียดบิล (ยกเลิก)'
+                                    : 'รายละเอียดบิล', //numinvoice
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: PeopleChaoScreen_Color.Colors_Text1_,
@@ -1693,298 +1704,66 @@ class _HistoryBillsState extends State<HistoryBills> {
             )
           ],
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 800,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            height: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.green[200],
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                              // border: Border.all(
-                              //     color: Colors.grey, width: 1),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(
-                                numinvoice == null
-                                    ? 'บิลเลขที่'
-                                    : numdoctax == ''
-                                        ? 'บิลเลขที่ $numinvoice'
-                                        : 'บิลเลขที่ $numdoctax',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T
-                                    //fontSize: 10.0
+        dtypeselect == '!Z'
+            ? SizedBox()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 800,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: Container(
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.green[200],
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0),
                                     ),
+                                    // border: Border.all(
+                                    //     color: Colors.grey, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Text(
+                                      numinvoice == null
+                                          ? 'บิลเลขที่'
+                                          : numdoctax == ''
+                                              ? 'บิลเลขที่ $numinvoice'
+                                              : 'บิลเลขที่ $numdoctax',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text1_,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T
+                                          //fontSize: 10.0
+                                          ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'รวม(บาท)',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${nFormat.format(sum_pvat)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'ภาษีมูลค่าเพิ่ม(vat)',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${nFormat.format(sum_vat)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'หัก ณ ที่จ่าย',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${nFormat.format(sum_wht)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'ยอดรวม',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${nFormat.format(sum_amt)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    'ส่วนลด',
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'รวม(บาท)',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
@@ -1994,12 +1773,362 @@ class _HistoryBillsState extends State<HistoryBills> {
                                         //fontSize: 10.0
                                         ),
                                   ),
-                                  SizedBox(
-                                    width: 10,
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${nFormat.format(sum_pvat)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
                                   ),
-                                  Text(
-                                    '$sum_disp  %',
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ภาษีมูลค่าเพิ่ม(vat)',
                                     textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${nFormat.format(sum_vat)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'หัก ณ ที่จ่าย',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${nFormat.format(sum_wht)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ยอดรวม',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${nFormat.format(sum_amt)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'ส่วนลด',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(
+                                          '$sum_disp  %',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '${nFormat.format(sum_disamt)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        // fontWeight: FontWeight.bold,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 2,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'ยอดชำระรวม',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    // '${nFormat.format(sum_amt - sum_disamt)}',
+                                    '${nFormat.format(sum_amt - sum_disamt)}',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                        color: PeopleChaoScreen_Color
+                                            .Colors_Text1_,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: FontWeight_.Fonts_T
+                                        //fontSize: 10.0
+                                        ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 40,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    'บาท',
+                                    textAlign: TextAlign.end,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text1_,
@@ -2008,401 +2137,375 @@ class _HistoryBillsState extends State<HistoryBills> {
                                         //fontSize: 10.0
                                         ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              '${nFormat.format(sum_disamt)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: Font_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'ยอดชำระรวม',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 4,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              // '${nFormat.format(sum_amt - sum_disamt)}',
-                              '${nFormat.format(sum_amt - sum_disamt)}',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 40,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'บาท',
-                              textAlign: TextAlign.end,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text1_,
-                                  // fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          height: 40,
-                          color: AppbackgroundColor.Sub_Abg_Colors,
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: Row(
-                              children: [
-                                Text(
-                                  'รูปแบบการชำระ',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text1_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: FontWeight_.Fonts_T
-                                      //fontSize: 10.0
-                                      ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                    ]),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 50,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                children: [],
+                          Row(children: [
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                height: 40,
+                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Center(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        'รูปแบบการชำระ',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        for (var i = 0; i < finnancetransModels.length; i++)
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              height: 50,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
+                          ]),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 50,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Row(
+                                      children: [],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              for (var i = 0;
+                                  i < finnancetransModels.length;
+                                  i++)
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    height: 50,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: 50,
 
-                                          // width: MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(6),
-                                              topRight: Radius.circular(6),
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
+                                                // width: MediaQuery.of(context).size.width,
+                                                decoration: const BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(6),
+                                                    topRight:
+                                                        Radius.circular(6),
+                                                    bottomLeft:
+                                                        Radius.circular(6),
+                                                    bottomRight:
+                                                        Radius.circular(6),
+                                                  ),
+                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  finnancetransModels[i].type ==
+                                                          'CASH'
+                                                      ? '${finnancetransModels[i].type} (เงินสด)'
+                                                      : '${finnancetransModels[i].type} (เงินโอน)',
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
                                             ),
-                                            // border: Border.all(color: Colors.grey, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            finnancetransModels[i].type ==
-                                                    'CASH'
-                                                ? '${finnancetransModels[i].type} (เงินสด)'
-                                                : '${finnancetransModels[i].type} (เงินโอน)',
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
+                                ),
+                            ],
                           ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Container(
-                            height: 50,
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Row(
-                                children: [],
-                              ),
-                            ),
-                          ),
-                        ),
-                        for (var i = 0; i < finnancetransModels.length; i++)
-                          Expanded(
-                            flex: 4,
-                            child: Container(
-                              height: 50,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          // width: MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(6),
-                                              topRight: Radius.circular(6),
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                            ),
-                                            // border: Border.all(color: Colors.grey, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            'จำนวน',
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          // width: MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(6),
-                                              topRight: Radius.circular(6),
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                            ),
-                                            // border: Border.all(color: Colors.grey, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            '${nFormat.format(double.parse(finnancetransModels[i].amt!))}',
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Container(
-                                          height: 50,
-                                          // width: MediaQuery.of(context).size.width,
-                                          decoration: const BoxDecoration(
-                                            color: AppbackgroundColor
-                                                .Sub_Abg_Colors,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(6),
-                                              topRight: Radius.circular(6),
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(6),
-                                            ),
-                                            // border: Border.all(color: Colors.grey, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: AutoSizeText(
-                                            minFontSize: 10,
-                                            maxFontSize: 15,
-                                            'บาท',
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                //fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: Container(
+                                  height: 50,
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Center(
+                                    child: Row(
+                                      children: [],
+                                    ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              // width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(0),
                                 ),
-                                // border: Border.all(color: Colors.grey, width: 1),
                               ),
-                            )),
-                        Expanded(
-                            flex: 4,
-                            child: Container(
-                              height: 50,
-                              // width: MediaQuery.of(context).size.width,
-                              decoration: const BoxDecoration(
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(10),
+                              for (var i = 0;
+                                  i < finnancetransModels.length;
+                                  i++)
+                                Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    height: 50,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: 50,
+                                                // width: MediaQuery.of(context).size.width,
+                                                decoration: const BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(6),
+                                                    topRight:
+                                                        Radius.circular(6),
+                                                    bottomLeft:
+                                                        Radius.circular(6),
+                                                    bottomRight:
+                                                        Radius.circular(6),
+                                                  ),
+                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  'จำนวน',
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 50,
+                                                // width: MediaQuery.of(context).size.width,
+                                                decoration: const BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(6),
+                                                    topRight:
+                                                        Radius.circular(6),
+                                                    bottomLeft:
+                                                        Radius.circular(6),
+                                                    bottomRight:
+                                                        Radius.circular(6),
+                                                  ),
+                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  '${nFormat.format(double.parse(finnancetransModels[i].amt!))}',
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Container(
+                                                height: 50,
+                                                // width: MediaQuery.of(context).size.width,
+                                                decoration: const BoxDecoration(
+                                                  color: AppbackgroundColor
+                                                      .Sub_Abg_Colors,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(6),
+                                                    topRight:
+                                                        Radius.circular(6),
+                                                    bottomLeft:
+                                                        Radius.circular(6),
+                                                    bottomRight:
+                                                        Radius.circular(6),
+                                                  ),
+                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: AutoSizeText(
+                                                  minFontSize: 10,
+                                                  maxFontSize: 15,
+                                                  'บาท',
+                                                  style: TextStyle(
+                                                      color:
+                                                          PeopleChaoScreen_Color
+                                                              .Colors_Text2_,
+                                                      //fontWeight: FontWeight.bold,
+                                                      fontFamily:
+                                                          Font_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                                // border: Border.all(color: Colors.grey, width: 1),
-                              ),
-                            )),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            // child: InkWell(
-                            //   onTap: () {},
-                            //   child: Container(
-                            //       height: 50,
-                            //       decoration: const BoxDecoration(
-                            //         color: Colors.orange,
-                            //         borderRadius: BorderRadius.only(
-                            //             topLeft: Radius.circular(10),
-                            //             topRight: Radius.circular(10),
-                            //             bottomLeft: Radius.circular(10),
-                            //             bottomRight: Radius.circular(10)),
-                            //         // border: Border.all(color: Colors.white, width: 1),
-                            //       ),
-                            //       padding: EdgeInsets.all(8.0),
-                            //       child: Center(
-                            //           child: Text(
-                            //         'ลดหนี้',
-                            //         style: TextStyle(
-                            //             color: PeopleChaoScreen_Color
-                            //                 .Colors_Text1_,
-                            //             fontWeight: FontWeight.bold,
-                            //             fontFamily: FontWeight_.Fonts_T),
-                            //       ))),
-                            // ),
+                            ],
                           ),
-                        ),
-                        numdoctax != ''
-                            ? SizedBox()
-                            : Expanded(
-                                flex: 2,
+                          Row(
+                            children: [
+                              Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    // width: MediaQuery.of(context).size.width,
+                                    decoration: const BoxDecoration(
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(0),
+                                        topRight: Radius.circular(0),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(0),
+                                      ),
+                                      // border: Border.all(color: Colors.grey, width: 1),
+                                    ),
+                                  )),
+                              Expanded(
+                                  flex: 4,
+                                  child: Container(
+                                    height: 50,
+                                    // width: MediaQuery.of(context).size.width,
+                                    decoration: const BoxDecoration(
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(0),
+                                        topRight: Radius.circular(0),
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(10),
+                                      ),
+                                      // border: Border.all(color: Colors.grey, width: 1),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 4,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  // child: InkWell(
+                                  //   onTap: () {},
+                                  //   child: Container(
+                                  //       height: 50,
+                                  //       decoration: const BoxDecoration(
+                                  //         color: Colors.orange,
+                                  //         borderRadius: BorderRadius.only(
+                                  //             topLeft: Radius.circular(10),
+                                  //             topRight: Radius.circular(10),
+                                  //             bottomLeft: Radius.circular(10),
+                                  //             bottomRight: Radius.circular(10)),
+                                  //         // border: Border.all(color: Colors.white, width: 1),
+                                  //       ),
+                                  //       padding: EdgeInsets.all(8.0),
+                                  //       child: Center(
+                                  //           child: Text(
+                                  //         'ลดหนี้',
+                                  //         style: TextStyle(
+                                  //             color: PeopleChaoScreen_Color
+                                  //                 .Colors_Text1_,
+                                  //             fontWeight: FontWeight.bold,
+                                  //             fontFamily: FontWeight_.Fonts_T),
+                                  //       ))),
+                                  // ),
+                                ),
+                              ),
+                              numdoctax != ''
+                                  ? SizedBox()
+                                  : Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                          onTap: () {
+                                            pPC_finantIbillREbill();
+                                          },
+                                          child: Container(
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: Colors.green[200],
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: const Center(
+                                                  child: Text(
+                                                'เปลี่ยนสถานะบิล',
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
+                                              ))),
+                                        ),
+                                      ),
+                                    ),
+                              Expanded(
+                                flex: 4,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: InkWell(
                                     onTap: () {
-                                      pPC_finantIbillREbill();
+                                      pPC_finantIbill();
                                     },
                                     child: Container(
                                         height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.green[200],
+                                        decoration: const BoxDecoration(
+                                          color: Colors.red,
                                           borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(10),
                                               topRight: Radius.circular(10),
@@ -2413,7 +2516,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: const Center(
                                             child: Text(
-                                          'เปลี่ยนสถานะบิล',
+                                          'ยกเลิกรับชำระ',
                                           style: TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text1_,
@@ -2423,46 +2526,14 @@ class _HistoryBillsState extends State<HistoryBills> {
                                   ),
                                 ),
                               ),
-                        Expanded(
-                          flex: 4,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              onTap: () {
-                                pPC_finantIbill();
-                              },
-                              child: Container(
-                                  height: 50,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10)),
-                                    // border: Border.all(color: Colors.white, width: 1),
-                                  ),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Center(
-                                      child: Text(
-                                    'ยกเลิกรับชำระ',
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T),
-                                  ))),
-                            ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
         SizedBox(
           height: 50,
         )

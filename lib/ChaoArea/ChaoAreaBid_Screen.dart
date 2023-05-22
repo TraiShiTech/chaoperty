@@ -44,7 +44,20 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class ChaoAreaBidScreen extends StatefulWidget {
-  const ChaoAreaBidScreen({super.key});
+  final Get_Value_area_index;
+  final Get_Value_area_ln;
+  final Get_Value_area_sum;
+  final Get_Value_rent_sum;
+  final Get_Value_page;
+
+  const ChaoAreaBidScreen({
+    super.key,
+    this.Get_Value_area_index,
+    this.Get_Value_area_ln,
+    this.Get_Value_area_sum,
+    this.Get_Value_rent_sum,
+    this.Get_Value_page,
+  });
 
   @override
   State<ChaoAreaBidScreen> createState() => _ChaoAreaBidScreenState();
@@ -131,6 +144,15 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
     for (int i = 0; i < dates.length; i++) {
       dateselect.add(dates[i]);
     }
+    if (widget.Get_Value_page == '1') {
+      _area_sum = _area_sum + double.parse(widget.Get_Value_area_sum);
+      _area_rent_sum = _area_rent_sum + double.parse(widget.Get_Value_rent_sum);
+      _selecteSer.add('${widget.Get_Value_area_index}');
+      _selecteSerbool.add('${widget.Get_Value_area_ln}');
+    }
+    print('ssss>>>> $_area_sum    $_area_rent_sum');
+    print(
+        'aaaa>>>> ${_selecteSerbool.map((e) => e)}    ${_selecteSer.map((e) => e)} ');
   }
 
   Future<Null> read_GC_ExpAuto() async {
@@ -5273,7 +5295,6 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
           var cser_;
           for (var i = 0; i < _selecteSer.length; i++) {
             var serAx = _selecteSer[i];
-            
 
             String url =
                 '${MyConstant().domain}/Inc_areax.php?isAdd=true&ren=$ren&serAx=$serAx&qser=$qser';
@@ -5526,7 +5547,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
       'valut_D_count': valut_D_count.toString(),
       'area_sum': area_sum.toString(),
       'area_rent_sum': area_rent_sum.toString(),
-      'ser_expt': ser_expt.toString(),
+      'ser_expt': serex.toString(),
     }).then(
       (value) async {
         print(value);

@@ -74,6 +74,7 @@ class TransReBillModel {
   String? total;
   String? disendbill;
   String? diffx;
+  String? dtype;
   String? dtypex;
   String? paid;
   String? refund;
@@ -194,6 +195,7 @@ class TransReBillModel {
     this.total,
     this.disendbill,
     this.diffx,
+    this.dtype,
     this.dtypex,
     this.paid,
     this.refund,
@@ -311,6 +313,7 @@ class TransReBillModel {
     total = json['total'];
     disendbill = json['disendbill'];
     diffx = json['diffx'];
+    dtype = json['dtype'];
     dtypex = json['dtypex'];
     paid = json['paid'];
     refund = json['refund'];
@@ -430,6 +433,7 @@ class TransReBillModel {
     data['total'] = this.total;
     data['disendbill'] = this.disendbill;
     data['diffx'] = this.diffx;
+    data['dtype'] = this.dtype;
     data['dtypex'] = this.dtypex;
     data['paid'] = this.paid;
     data['refund'] = this.refund;

@@ -240,6 +240,8 @@ class _SingUpScreenState extends State<SingUpScreen> {
     }
   }
 
+////////////////------------------------------------------------>(Stepper 3)
+
   final _formKeyBody1 = GlobalKey<FormState>();
   bool _isObscure = true;
   // bool _validate = false;
@@ -249,7 +251,6 @@ class _SingUpScreenState extends State<SingUpScreen> {
   final Form4_text = TextEditingController();
   final Form5_text = TextEditingController();
   final Form6_text = TextEditingController();
-////////////////------------------------------------------------>(Stepper 3)
   Widget Body1() {
     return Container(
       width: MediaQuery.of(context).size.width / 1.1,

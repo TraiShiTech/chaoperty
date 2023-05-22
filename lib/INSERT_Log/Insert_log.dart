@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:dart_ipify/dart_ipify.dart';
+import 'package:device_marketing_names/device_marketing_names.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,10 +37,24 @@ class Insert_log {
     print('Region: ${data['region']}');
     print('Country: ${data['country_name']}');
     final ipv4 = await Ipify.ipv4();
+    String singleDeviceName = "Unknown";
+    String singleDeviceNameFromModel = "Unknown";
+    String deviceNames = "Unknown";
+    String deviceNamesFromModel = "Unknown";
+    const model = "Device : ";
+    final deviceMarketingNames = DeviceMarketingNames();
+    final currentSingleDeviceName = await deviceMarketingNames.getSingleName();
+    final currentDeviceNames = await deviceMarketingNames.getNames();
+    singleDeviceName = currentSingleDeviceName;
+    deviceNames = currentDeviceNames;
+    singleDeviceNameFromModel =
+        deviceMarketingNames.getSingleNameFromModel(DeviceType.android, model);
+    deviceNamesFromModel =
+        deviceMarketingNames.getNamesFromModel(DeviceType.android, model);
     String? atype = '0';
     String datex = '$day_';
     String? timex = '$Tim_';
-    String? ip = '$ipv4';
+    String? ip = '$singleDeviceName:$ipv4';
     String? uid = '0';
     String? username = '$email';
     String? frm = '$frm_';

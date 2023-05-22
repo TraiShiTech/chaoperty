@@ -2151,7 +2151,7 @@ class _BillsState extends State<Bills> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: const Center(
                                       child: Text(
-                                    'พิมพ์',
+                                    'พิมพ์/บันทึก',
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
                                             .Colors_Text3_,
@@ -2265,6 +2265,12 @@ class _BillsState extends State<Bills> {
           sum_disamt.text = '0.00';
           sum_disp.clear();
         });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('บันทึกรายการวางบิลสำเร็จ',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
         print('rrrrrrrrrrrrrr');
       }
     } catch (e) {}

@@ -41,14 +41,14 @@ import 'dart:html' as html;
 
 import 'Webview.dart';
 
-class SettingScreen extends StatefulWidget {
-  const SettingScreen({super.key});
+class SettingUserScreen extends StatefulWidget {
+  const SettingUserScreen({super.key});
 
   @override
-  State<SettingScreen> createState() => _SettingScreenState();
+  State<SettingUserScreen> createState() => _SettingUserScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingUserScreenState extends State<SettingUserScreen> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
   DateTime datex = DateTime.now();
   int Status_ = 1;
@@ -65,16 +65,7 @@ class _SettingScreenState extends State<SettingScreen> {
   List<RenTalModel> renTalModels = [];
   List<PackageModel> packageModels = [];
   ///////---------------------------------------------------->
-  List Status = [
-    'พื้นที่',
-    'การเช่า',
-    'เอกสาร',
-    'การรับชำระ',
-    'สิทธิการเข้าถึง',
-    'ตั้งค่าหน้าเว็ปไซต์',
-    // 'ข้อมูลผู้ใช้งาน',
-    // '📍ติดต่อเรา',
-  ];
+  List Status = ['สิทธิการเข้าถึง'];
   List Style_Area_thi = [
     'คอมมูนิตี้มอลล์',
     'ออฟฟิศให้เช่า',
@@ -732,7 +723,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
                       child: Container(
-                        width: 100,
+                        width: 150,
                         decoration: BoxDecoration(
                           color: AppbackgroundColor.TiTile_Colors,
                           borderRadius: const BorderRadius.only(
@@ -748,7 +739,7 @@ class _SettingScreenState extends State<SettingScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             AutoSizeText(
-                              'ตั้งค่า',
+                              'สิทธิการเข้าถึง',
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 8,
                               maxFontSize: 20,
@@ -959,21 +950,22 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget BodyHome_Web() {
     return Column(
       children: [
-        (Status_ == 1)
-            ? Status1_Web()
-            : (Status_ == 2)
-                ? Status2_Web()
-                : (Status_ == 3)
-                    ? Status3_Web()
-                    : (Status_ == 4)
-                        ? Status4_Web()
-                        : (Status_ == 5)
-                            ? Status5_Web()
-                            : (Status_ == 6)
-                                ? Status6_Web()
-                                : (Status_ == 7)
-                                    ? Status7_Web()
-                                    : Status8_Web()
+        (Status_ == 1) ? Status5_Web() : Status7_Web()
+        // (Status_ == 1)
+        //     ? Status1_Web()
+        //     : (Status_ == 2)
+        //         ? Status2_Web()
+        //         : (Status_ == 3)
+        //             ? Status3_Web()
+        //             : (Status_ == 4)
+        //                 ? Status4_Web()
+        //                 : (Status_ == 5)
+        //                     ? Status5_Web()
+        //                     : (Status_ == 6)
+        //                         ? Status6_Web()
+        //                         : (Status_ == 7)
+        //                             ? Status7_Web()
+        //                             : Status8_Web()
       ],
     );
   }

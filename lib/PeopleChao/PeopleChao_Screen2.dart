@@ -10,6 +10,7 @@ import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Account/Account_Screen.dart';
+import '../AdminScaffold/AdminScaffold.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../ChaoArea/ChaoRe_contact.dart';
 import '../Constant/Myconstant.dart';
@@ -35,12 +36,14 @@ class PeopleChaoScreen2 extends StatefulWidget {
   final Get_Value_cid;
   final Get_Value_status;
   final updateMessage;
+  final Get_Value_indexpage;
   const PeopleChaoScreen2({
     super.key,
     this.Get_Value_NameShop_index,
     this.Get_Value_cid,
     this.Get_Value_status,
     this.updateMessage,
+    this.Get_Value_indexpage,
   });
 
   @override
@@ -86,6 +89,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
     super.initState();
     read_GC_teNant();
     print(tabbarview_2.length);
+    ser_tabbarview_2 = int.parse(widget.Get_Value_indexpage);
   }
 
   Future<Null> read_GC_teNant() async {
@@ -118,7 +122,15 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
             teNantModels.add(teNantModel);
           });
         }
-      } else {}
+      } else {
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+
+        String? _route = preferences.getString('route');
+        MaterialPageRoute materialPageRoute = MaterialPageRoute(
+            builder: (BuildContext context) => AdminScafScreen(route: _route));
+        Navigator.pushAndRemoveUntil(
+            context, materialPageRoute, (route) => false);
+      }
     } catch (e) {}
   }
 
@@ -144,6 +156,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
               alignment: Alignment.centerLeft,
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
+                physics: AlwaysScrollableScrollPhysics(),
                 child: Row(
                   children: [
                     Padding(

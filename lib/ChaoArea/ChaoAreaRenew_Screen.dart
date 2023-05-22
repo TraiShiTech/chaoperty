@@ -62,7 +62,18 @@ import 'dart:js' as js;
 import 'dart:html' as html;
 
 class ChaoAreaRenewScreen extends StatefulWidget {
-  const ChaoAreaRenewScreen({super.key});
+  final Get_Value_area_index;
+  final Get_Value_area_ln;
+  final Get_Value_area_sum;
+  final Get_Value_rent_sum;
+  final Get_Value_page;
+
+  const ChaoAreaRenewScreen({super.key,
+    this.Get_Value_area_index,
+    this.Get_Value_area_ln,
+    this.Get_Value_area_sum,
+    this.Get_Value_rent_sum,
+    this.Get_Value_page,});
 
   @override
   State<ChaoAreaRenewScreen> createState() => _ChaoAreaRenewScreenState();
@@ -131,6 +142,17 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     for (int i = 0; i < dates.length; i++) {
       dateselect.add(dates[i]);
     }
+
+     if (widget.Get_Value_page == '1') {
+      _area_sum = _area_sum + double.parse(widget.Get_Value_area_sum);
+      _area_rent_sum = _area_rent_sum + double.parse(widget.Get_Value_rent_sum);
+      _selecteSer.add('${widget.Get_Value_area_index}');
+      _selecteSerbool.add('${widget.Get_Value_area_ln}');
+    }
+    print('ssss>>>> $_area_sum    $_area_rent_sum');
+    print(
+        'aaaa>>>> ${_selecteSerbool.map((e) => e)}    ${_selecteSer.map((e) => e)} ');
+        
   }
 
   Future<Null> read_GC_ExpAuto() async {
@@ -9169,6 +9191,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                             QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
                                                                                             setState(() {
                                                                                               quotxSelectModels.add(quotxSelectModel);
+                                                                                              
                                                                                             });
                                                                                           }
                                                                                         } else {

@@ -253,8 +253,12 @@ class _ReportScreenState extends State<ReportScreen> {
               SCReportTotalModel.fromJson(map);
 
           setState(() {
-            total1_ = sCReportTotalModel.total.toString();
-            sCReportTotalModels.add(sCReportTotalModel);
+            total1_ = (sCReportTotalModel.total == null)
+                ? '0.00'
+                : sCReportTotalModel.total.toString();
+            if (sCReportTotalModel != null) {
+              sCReportTotalModels.add(sCReportTotalModel);
+            }
 
             // _TransBillModels.add(_TransBillModel);
           });
@@ -290,9 +294,14 @@ class _ReportScreenState extends State<ReportScreen> {
         for (var map in result) {
           SCReportTotalModel sCReportTotalModel =
               SCReportTotalModel.fromJson(map);
+
           setState(() {
-            total2_ = sCReportTotalModel.total.toString();
-            sCReportTotalModels2.add(sCReportTotalModel);
+            total2_ = (sCReportTotalModel.total == null)
+                ? '0.00'
+                : sCReportTotalModel.total.toString();
+            if (sCReportTotalModel != null) {
+              sCReportTotalModels2.add(sCReportTotalModel);
+            }
 
             // _TransBillModels.add(_TransBillModel);
           });
@@ -390,12 +399,22 @@ class _ReportScreenState extends State<ReportScreen> {
             TransReBillHistoryModel _TransReBillHistoryModels_Incomes =
                 TransReBillHistoryModel.fromJson(map);
 
-            var sum_pvatx =
-                double.parse(_TransReBillHistoryModels_Incomes.pvat!);
-            var sum_vatx = double.parse(_TransReBillHistoryModels_Incomes.vat!);
-            var sum_whtx = double.parse(_TransReBillHistoryModels_Incomes.wht!);
-            var sum_amtx =
-                double.parse(_TransReBillHistoryModels_Incomes.total!);
+            var sum_pvatx = double.parse(
+                (_TransReBillHistoryModels_Incomes.pvat == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Incomes.pvat!);
+            var sum_vatx = double.parse(
+                (_TransReBillHistoryModels_Incomes.vat == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Incomes.vat!);
+            var sum_whtx = double.parse(
+                (_TransReBillHistoryModels_Incomes.wht == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Incomes.wht!);
+            var sum_amtx = double.parse(
+                (_TransReBillHistoryModels_Incomes.total == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Incomes.total!);
             // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
             // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
             var numinvoiceent = _TransReBillHistoryModels_Incomes.docno;
@@ -511,14 +530,22 @@ class _ReportScreenState extends State<ReportScreen> {
             TransReBillHistoryModel _TransReBillHistoryModels_Bankmovemens =
                 TransReBillHistoryModel.fromJson(map);
 
-            var sum_pvatx =
-                double.parse(_TransReBillHistoryModels_Bankmovemens.pvat!);
-            var sum_vatx =
-                double.parse(_TransReBillHistoryModels_Bankmovemens.vat!);
-            var sum_whtx =
-                double.parse(_TransReBillHistoryModels_Bankmovemens.wht!);
-            var sum_amtx =
-                double.parse(_TransReBillHistoryModels_Bankmovemens.total!);
+            var sum_pvatx = double.parse(
+                (_TransReBillHistoryModels_Bankmovemens.pvat == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Bankmovemens.pvat!);
+            var sum_vatx = double.parse(
+                (_TransReBillHistoryModels_Bankmovemens.vat == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Bankmovemens.vat!);
+            var sum_whtx = double.parse(
+                (_TransReBillHistoryModels_Bankmovemens.wht == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Bankmovemens.wht!);
+            var sum_amtx = double.parse(
+                (_TransReBillHistoryModels_Bankmovemens.total == null)
+                    ? '0.00'
+                    : _TransReBillHistoryModels_Bankmovemens.total!);
             // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
             // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
             var numinvoiceent = _TransReBillHistoryModels_Bankmovemens.docno;
@@ -672,10 +699,18 @@ class _ReportScreenState extends State<ReportScreen> {
             TransReBillHistoryModel _TransReBillHistoryModel =
                 TransReBillHistoryModel.fromJson(map);
 
-            var sum_pvatx = double.parse(_TransReBillHistoryModel.pvat!);
-            var sum_vatx = double.parse(_TransReBillHistoryModel.vat!);
-            var sum_whtx = double.parse(_TransReBillHistoryModel.wht!);
-            var sum_amtx = double.parse(_TransReBillHistoryModel.total!);
+            var sum_pvatx = double.parse((_TransReBillHistoryModel.pvat == null)
+                ? '0.00'
+                : _TransReBillHistoryModel.pvat!);
+            var sum_vatx = double.parse((_TransReBillHistoryModel.vat == null)
+                ? '0.00'
+                : _TransReBillHistoryModel.vat!);
+            var sum_whtx = double.parse((_TransReBillHistoryModel.wht == null)
+                ? '0.00'
+                : _TransReBillHistoryModel.wht!);
+            var sum_amtx = double.parse((_TransReBillHistoryModel.total == null)
+                ? '0.00'
+                : _TransReBillHistoryModel.total!);
             // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
             // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
             var numinvoiceent = _TransReBillHistoryModel.docno;
@@ -1714,27 +1749,47 @@ class _ReportScreenState extends State<ReportScreen> {
                                             indexsum1++) {
                                           Sum_Ramt_ = Sum_Ramt_ +
                                               double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .ramt!);
+                                                  (_TransReBillModels_Income[
+                                                                  indexsum1]
+                                                              .ramt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .ramt!);
 
                                           Sum_Ramtd_ = Sum_Ramtd_ +
                                               double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .ramtd!);
+                                                  (_TransReBillModels_Income[
+                                                                  indexsum1]
+                                                              .ramtd ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .ramtd!);
 
                                           Sum_Amt_ = Sum_Amt_ +
                                               double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .amt!);
+                                                  (_TransReBillModels_Income[
+                                                                  indexsum1]
+                                                              .amt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .amt!);
 
                                           Sum_Total_ = Sum_Total_ +
                                               double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .total!);
+                                                  (_TransReBillModels_Income[
+                                                                  indexsum1]
+                                                              .total ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .total!);
                                           // for (int indexsum2 = 0;
                                           //     indexsum2 <
                                           //         TransReBillModels[indexsum1].length;
@@ -2202,7 +2257,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                         flex: 1,
                                                                                                         child: Text(
                                                                                                           //'ttt',
-                                                                                                          '${nFormat2.format(double.parse(TransReBillModels_Income[index1].length.toString()))}',
+                                                                                                          (TransReBillModels_Income[index1].length == null || TransReBillModels_Income.isEmpty) ? '' : '${nFormat2.format(double.parse(TransReBillModels_Income[index1].length.toString()))}',
                                                                                                           // '${TransReBillModels[index1].length}',
                                                                                                           textAlign: TextAlign.center,
                                                                                                           style: const TextStyle(
@@ -2244,7 +2299,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels_Income[index1].total!))}',
+                                                                                                          (_TransReBillModels_Income[index1].total == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Income[index1].total!))}',
                                                                                                           // '${_TransReBillModels[index1].total_bill}',
                                                                                                           textAlign: TextAlign.right,
                                                                                                           style: const TextStyle(
@@ -2522,7 +2577,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].vat!))}',
+                                                                                                                (TransReBillModels_Income[index1][index2].vat == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].vat!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -2561,7 +2616,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].amt!))}',
+                                                                                                                (TransReBillModels_Income[index1][index2].amt == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].amt!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -2574,7 +2629,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].total!))}',
+                                                                                                                (TransReBillModels_Income[index1][index2].total == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].total!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -2705,7 +2760,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Ramt_)}',
+                                                                                    (Sum_Ramt_ == null) ? '0.00' : '${nFormat.format(Sum_Ramt_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -2742,7 +2797,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Ramtd_)}',
+                                                                                    (Sum_Ramtd_ == null) ? '0.00' : '${nFormat.format(Sum_Ramtd_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -2850,7 +2905,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Total_)}',
+                                                                                    (Sum_Total_ == null) ? '0.00' : '${nFormat.format(Sum_Total_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -4017,27 +4072,47 @@ class _ReportScreenState extends State<ReportScreen> {
                                             indexsum1++) {
                                           Sum_Ramt_ = Sum_Ramt_ +
                                               double.parse(
-                                                  _TransReBillModels_Bankmovemen[
-                                                          indexsum1]
-                                                      .ramt!);
+                                                  (_TransReBillModels_Bankmovemen[
+                                                                  indexsum1]
+                                                              .ramt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Bankmovemen[
+                                                              indexsum1]
+                                                          .ramt!);
 
                                           Sum_Ramtd_ = Sum_Ramtd_ +
                                               double.parse(
-                                                  _TransReBillModels_Bankmovemen[
-                                                          indexsum1]
-                                                      .ramtd!);
+                                                  (_TransReBillModels_Bankmovemen[
+                                                                  indexsum1]
+                                                              .ramtd ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Bankmovemen[
+                                                              indexsum1]
+                                                          .ramtd!);
 
                                           Sum_Amt_ = Sum_Amt_ +
                                               double.parse(
-                                                  _TransReBillModels_Bankmovemen[
-                                                          indexsum1]
-                                                      .amt!);
+                                                  (_TransReBillModels_Bankmovemen[
+                                                                  indexsum1]
+                                                              .amt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Bankmovemen[
+                                                              indexsum1]
+                                                          .amt!);
 
                                           Sum_Total_ = Sum_Total_ +
                                               double.parse(
-                                                  _TransReBillModels_Bankmovemen[
-                                                          indexsum1]
-                                                      .total!);
+                                                  (_TransReBillModels_Bankmovemen[
+                                                                  indexsum1]
+                                                              .total ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels_Bankmovemen[
+                                                              indexsum1]
+                                                          .total!);
                                           // for (int indexsum2 = 0;
                                           //     indexsum2 <
                                           //         TransReBillModels[indexsum1].length;
@@ -4506,7 +4581,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                         flex: 1,
                                                                                                         child: Text(
                                                                                                           //'ttt',
-                                                                                                          '${nFormat2.format(double.parse(TransReBillModels_Bankmovemen[index1].length.toString()))}',
+                                                                                                          (TransReBillModels_Bankmovemen[index1].length == null) ? '' : '${nFormat2.format(double.parse(TransReBillModels_Bankmovemen[index1].length.toString()))}',
                                                                                                           // '${TransReBillModels[index1].length}',
                                                                                                           textAlign: TextAlign.center,
                                                                                                           style: const TextStyle(
@@ -4548,7 +4623,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels_Bankmovemen[index1].total!))}',
+                                                                                                          (_TransReBillModels_Bankmovemen[index1].total == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Bankmovemen[index1].total!))}',
                                                                                                           // '${_TransReBillModels[index1].total_bill}',
                                                                                                           textAlign: TextAlign.right,
                                                                                                           style: const TextStyle(
@@ -4828,7 +4903,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].vat!))}',
+                                                                                                                (TransReBillModels_Bankmovemen[index1][index2].vat == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].vat!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -4867,7 +4942,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].amt!))}',
+                                                                                                                (TransReBillModels_Bankmovemen[index1][index2].amt == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].amt!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -4880,7 +4955,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].total!))}',
+                                                                                                                (TransReBillModels_Bankmovemen[index1][index2].total == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels_Bankmovemen[index1][index2].total!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -5011,7 +5086,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Ramt_)}',
+                                                                                    (Sum_Ramt_ == null) ? '0.00' : '${nFormat.format(Sum_Ramt_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -5048,7 +5123,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Ramtd_)}',
+                                                                                    (Sum_Ramtd_ == null) ? '0.00' : '${nFormat.format(Sum_Ramtd_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -5156,7 +5231,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                               child: Container(
                                                                                   color: Colors.grey[200],
                                                                                   child: Text(
-                                                                                    '${nFormat.format(Sum_Total_)}',
+                                                                                    (Sum_Total_ == null) ? '0.00' : '${nFormat.format(Sum_Total_)}',
                                                                                     maxLines: 1,
                                                                                     textAlign: TextAlign.end,
                                                                                     style: const TextStyle(
@@ -6405,23 +6480,43 @@ class _ReportScreenState extends State<ReportScreen> {
                                             indexsum1++) {
                                           Sum_Ramt_ = Sum_Ramt_ +
                                               double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .ramt!);
+                                                  (_TransReBillModels[indexsum1]
+                                                              .ramt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels[
+                                                              indexsum1]
+                                                          .ramt!);
 
                                           Sum_Ramtd_ = Sum_Ramtd_ +
                                               double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .ramtd!);
+                                                  (_TransReBillModels[indexsum1]
+                                                              .ramtd ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels[
+                                                              indexsum1]
+                                                          .ramtd!);
 
                                           Sum_Amt_ = Sum_Amt_ +
                                               double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .amt!);
+                                                  (_TransReBillModels[indexsum1]
+                                                              .amt ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels[
+                                                              indexsum1]
+                                                          .amt!);
 
                                           Sum_Total_ = Sum_Total_ +
                                               double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .total_bill!);
+                                                  (_TransReBillModels[indexsum1]
+                                                              .total_bill ==
+                                                          null)
+                                                      ? '0.00'
+                                                      : _TransReBillModels[
+                                                              indexsum1]
+                                                          .total_bill!);
                                           // for (int indexsum2 = 0;
                                           //     indexsum2 <
                                           //         TransReBillModels[indexsum1].length;
@@ -6845,7 +6940,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat2.format(double.parse(TransReBillModels[index1].length.toString()))}',
+                                                                                                          (TransReBillModels[index1].length == null) ? '0.00' : '${nFormat2.format(double.parse(TransReBillModels[index1].length.toString()))}',
                                                                                                           // '${TransReBillModels[index1].length}',
                                                                                                           textAlign: TextAlign.center,
                                                                                                           style: const TextStyle(
@@ -6858,7 +6953,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels[index1].ramt!))}',
+                                                                                                          (_TransReBillModels[index1].ramt == null) ? '0.00' : '${nFormat.format(double.parse(_TransReBillModels[index1].ramt!))}',
                                                                                                           // '${_TransReBillModels[index1].ramt}',
                                                                                                           textAlign: TextAlign.right,
                                                                                                           style: const TextStyle(
@@ -6871,7 +6966,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                          (_TransReBillModels[index1].ramtd == null) ? '0.00' : '${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
                                                                                                           //  '${_TransReBillModels[index1].ramtd}',
                                                                                                           textAlign: TextAlign.right,
                                                                                                           style: const TextStyle(
@@ -6884,7 +6979,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                       Expanded(
                                                                                                         flex: 1,
                                                                                                         child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels[index1].total_bill!))}',
+                                                                                                          (_TransReBillModels[index1].total_bill == null) ? '0.00' : '${nFormat.format(double.parse(_TransReBillModels[index1].total_bill!))}',
                                                                                                           // '${_TransReBillModels[index1].total_bill}',
                                                                                                           textAlign: TextAlign.right,
                                                                                                           style: const TextStyle(
@@ -7161,7 +7256,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].vat!))}',
+                                                                                                                (TransReBillModels[index1][index2].vat == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].vat!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -7200,7 +7295,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].amt!))}',
+                                                                                                                (TransReBillModels[index1][index2].amt == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].amt!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -7213,7 +7308,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                                                                                             Expanded(
                                                                                                               flex: 1,
                                                                                                               child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].total!))}',
+                                                                                                                (TransReBillModels[index1][index2].total == null) ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].total!))}',
                                                                                                                 textAlign: TextAlign.right,
                                                                                                                 style: const TextStyle(
                                                                                                                   color: ReportScreen_Color.Colors_Text2_,
@@ -7915,8 +8010,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   if (!snapshot.hasData)
                                                     return const Text('');
                                                   double elapsed = double.parse(
-                                                          snapshot.data
-                                                              .toString()) *
+                                                          (snapshot.data ==
+                                                                  null)
+                                                              ? '0.00'
+                                                              : snapshot.data
+                                                                  .toString()) *
                                                       0.05;
                                                   return Padding(
                                                     padding:
@@ -8052,8 +8150,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   if (!snapshot.hasData)
                                                     return const Text('');
                                                   double elapsed = double.parse(
-                                                          snapshot.data
-                                                              .toString()) *
+                                                          (snapshot.data ==
+                                                                  null)
+                                                              ? '0.00'
+                                                              : snapshot.data
+                                                                  .toString()) *
                                                       0.05;
                                                   return Padding(
                                                     padding:
@@ -8233,8 +8334,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   if (!snapshot.hasData)
                                                     return const Text('');
                                                   double elapsed = double.parse(
-                                                          snapshot.data
-                                                              .toString()) *
+                                                          (snapshot.data ==
+                                                                  null)
+                                                              ? '0.00'
+                                                              : snapshot.data
+                                                                  .toString()) *
                                                       0.05;
                                                   return Padding(
                                                     padding:
@@ -8282,7 +8386,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                                 padding:
                                                     const EdgeInsets.all(4.0),
                                                 child: Text(
-                                                  '${nFormat.format(double.parse(total1_.toString()))}',
+                                                  (total1_ == null)
+                                                      ? '0.00'
+                                                      : '${nFormat.format(double.parse(total1_.toString()))}',
                                                   maxLines: 1,
                                                   overflow:
                                                       TextOverflow.ellipsis,
@@ -8370,8 +8476,11 @@ class _ReportScreenState extends State<ReportScreen> {
                                                   if (!snapshot.hasData)
                                                     return const Text('');
                                                   double elapsed = double.parse(
-                                                          snapshot.data
-                                                              .toString()) *
+                                                          (snapshot.data ==
+                                                                  null)
+                                                              ? '0.00'
+                                                              : snapshot.data
+                                                                  .toString()) *
                                                       0.05;
                                                   return Padding(
                                                     padding:
@@ -8419,7 +8528,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                                 padding:
                                                     const EdgeInsets.all(4.0),
                                                 child: Text(
-                                                  '${nFormat.format(double.parse(total2_.toString()))}',
+                                                  (total2_ == null)
+                                                      ? '0.00'
+                                                      : '${nFormat.format(double.parse(total2_.toString()))}',
                                                   // '${sCReportTotalModels[0].total}',
                                                   maxLines: 1,
                                                   overflow:
@@ -8572,7 +8683,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                           if (!snapshot.hasData)
                                             return const Text('');
                                           double elapsed = double.parse(
-                                                  snapshot.data.toString()) *
+                                                  (snapshot.data == null)
+                                                      ? '0.00'
+                                                      : snapshot.data
+                                                          .toString()) *
                                               0.05;
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -8699,7 +8813,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                           if (!snapshot.hasData)
                                             return const Text('');
                                           double elapsed = double.parse(
-                                                  snapshot.data.toString()) *
+                                                  (snapshot.data == null)
+                                                      ? '0.00'
+                                                      : snapshot.data
+                                                          .toString()) *
                                               0.05;
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -8850,7 +8967,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                           if (!snapshot.hasData)
                                             return const Text('');
                                           double elapsed = double.parse(
-                                                  snapshot.data.toString()) *
+                                                  (snapshot.data == null)
+                                                      ? '0.00'
+                                                      : snapshot.data
+                                                          .toString()) *
                                               0.05;
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -8894,7 +9014,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                       Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Text(
-                                          '${nFormat.format(double.parse(total1_.toString()))}',
+                                          (total1_ == null)
+                                              ? '0.00'
+                                              : '${nFormat.format(double.parse(total1_.toString()))}',
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(
@@ -8977,7 +9099,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                           if (!snapshot.hasData)
                                             return const Text('');
                                           double elapsed = double.parse(
-                                                  snapshot.data.toString()) *
+                                                  (snapshot.data == null)
+                                                      ? '0.00'
+                                                      : snapshot.data
+                                                          .toString()) *
                                               0.05;
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
@@ -9021,7 +9146,9 @@ class _ReportScreenState extends State<ReportScreen> {
                                       Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Text(
-                                          '${nFormat.format(double.parse(total2_.toString()))}',
+                                          (total2_ == null)
+                                              ? '0.00'
+                                              : '${nFormat.format(double.parse(total2_.toString()))}',
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: const TextStyle(

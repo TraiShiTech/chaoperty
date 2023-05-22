@@ -171,6 +171,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
   final Form_payment1 = TextEditingController();
   final Form_payment2 = TextEditingController();
   final Form_time = TextEditingController();
+  final Form_note = TextEditingController();
 
   int select_page = 0,
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
@@ -1748,6 +1749,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                       () async {
                                                                     setState(
                                                                         () {
+                                                                      read_GC_areak();
                                                                       No_Area_ =
                                                                           'ไม่ระบุพื้นที่';
                                                                       _selecteSer =
@@ -2618,12 +2620,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                   child: TextFormField(
                                     // keyboardType: TextInputType.name,
                                     controller: Status4Form_nameshop,
-                                    onChanged: (value) =>
-                                        (Value_AreaSer_ + 1) == 1
-                                            ? Status4Form_bussshop.text =
-                                                value.trim()
-                                            : Status4Form_bussscontact.text =
-                                                value.trim(),
+                                    // onChanged: (value) {
+                                    //   // Status4Form_nameshop.text = value.trim();
+                                    //   (Value_AreaSer_ + 1) == 1
+                                    //       ? Status4Form_bussshop.text =
+                                    //           value.trim()
+                                    //       : Status4Form_bussscontact.text =
+                                    //           value.trim();
+                                    // },
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return 'กรอกข้อมูลให้ครบถ้วน ';
@@ -2633,6 +2637,22 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                       // }
                                       return null;
                                     },
+//  controller: (Value_AreaSer_ + 1) == 1
+//                                         ? Status4Form_bussshop
+//                                         : Status4Form_bussscontact,
+//                                     onChanged: (value) {
+//                                       Status4Form_nameshop.text = value.trim();
+//                                       if ((Value_AreaSer_ + 1) == 1) {
+//                                         _Form_bussshop = value.trim();
+//                                         Status4Form_bussshop.text =
+//                                                 value.trim()
+//                                       } else {
+//                                         _Form_bussscontact = value.trim();
+//                                         Status4Form_bussscontact.text =
+//                                                 value.trim()
+//                                       }
+//                                     },
+
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -2715,15 +2735,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     //     _Form_typeshop =
                                     //         value.trim(),
                                     //initialValue: _Form_typeshop,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -2821,15 +2841,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     },
 
                                     //initialValue: _Form_bussshop,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -2914,15 +2934,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             value.trim();
                                       } else {}
                                     },
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -3012,15 +3032,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     //     _Form_address =
                                     //         value.trim(),
                                     //initialValue: _Form_address,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -3110,15 +3130,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     //     _Form_tel =
                                     //         value.trim(),
                                     //initialValue: _Form_tel,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -3201,15 +3221,15 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                     //     _Form_email =
                                     //         value.trim(),
                                     //initialValue: _Form_email,
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'กรอกข้อมูลให้ครบถ้วน ';
-                                      }
-                                      // if (int.parse(value.toString()) < 13) {
-                                      //   return '< 13';
-                                      // }
-                                      return null;
-                                    },
+                                    // validator: (value) {
+                                    //   if (value == null || value.isEmpty) {
+                                    //     return 'กรอกข้อมูลให้ครบถ้วน ';
+                                    //   }
+                                    //   // if (int.parse(value.toString()) < 13) {
+                                    //   //   return '< 13';
+                                    //   // }
+                                    //   return null;
+                                    // },
                                     // maxLength: 13,
                                     cursorColor: Colors.green,
                                     decoration: InputDecoration(
@@ -6171,6 +6191,83 @@ class _LockpayScreenState extends State<LockpayScreen> {
                         //     ),
                         //   ],
                         // ),
+
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                color: Colors.white,
+                                // height: 100,
+                                width: MediaQuery.of(context).size.width * 0.33,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'หมายเหตุ',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ],
+                                    ),
+                                    TextFormField(
+                                      // keyboardType: TextInputType.name,
+                                      controller: Form_note,
+
+                                      maxLines: 2,
+                                      // maxLength: 13,
+                                      cursorColor: Colors.green,
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Colors.white.withOpacity(0.3),
+                                        filled: true,
+                                        // prefixIcon:
+                                        //     const Icon(Icons.person, color: Colors.black),
+                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        // labelText: 'ระบุชื่อร้านค้า',
+                                        labelStyle: const TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                         Row(
                           children: [
                             const Expanded(
@@ -6748,6 +6845,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
     var pSer1 = paymentSer1;
     var pSer2 = paymentSer2;
     var sum_whta = sum_wht.toString();
+    var comment = Form_note.text.toString();
     print('in_Trans_invoice()///$fileName_Slip_');
     print('in_Trans_invoice>>> $payment1  $payment2 $bill');
     print('$sumdis  $pSer1  $pSer2 $time');
@@ -6787,6 +6885,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
           .trim()
           .toString(),
       'area_rent_sum': _area_rent_sum.toString(),
+      'comment': comment.toString(),
     }).then((value) async {
       print('$value');
       var result = json.decode(value.body);
@@ -6856,6 +6955,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
           Form_payment1.clear();
           Form_payment2.clear();
           Form_time.clear();
+          Form_note.clear();
           // Value_newDateY = null;
           pamentpage = 0;
           bills_name_ = 'บิลธรรมดา';

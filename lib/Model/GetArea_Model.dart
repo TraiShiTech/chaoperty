@@ -22,6 +22,8 @@ class AreaModel {
   String? total_q;
   String? sname;
   String? sname_q;
+  String? cname;
+  String? cname_q;
   String? custno;
   String? zn;
 
@@ -49,6 +51,8 @@ class AreaModel {
       this.total_q,
       this.sname,
       this.sname_q,
+      this.cname,
+      this.cname_q,
       this.custno,
       this.zn});
 
@@ -76,6 +80,8 @@ class AreaModel {
     total_q = json['total_q'];
     sname = json['sname'];
     sname_q = json['sname_q'];
+    cname = json['cname'];
+    cname_q = json['cname_q'];
     custno = json['custno'];
     zn= json['zn'];
   }
@@ -105,6 +111,8 @@ class AreaModel {
     data['total_q'] = this.total_q;
     data['sname'] = this.sname;
     data['sname_q'] = this.sname_q;
+    data['cname'] = this.cname;
+    data['cname_q'] = this.cname_q;
     data['custno'] = this.custno;
     data['zn'] = this.zn;
     return data;

@@ -475,197 +475,350 @@ class Excgen_Custo_cm {
       sheet.getRangeByName('I${indextotol + 5 - 1}').rowHeight = 30;
       sheet.getRangeByName('J${indextotol + 5 - 1}').rowHeight = 30;
       sheet.getRangeByName('K${indextotol + 5 - 1}').rowHeight = 30;
+      for (int indax1 = 0;
+          indax1 < custo_TransReBillHistoryModels[index].length;
+          indax1++) {
+        sheet
+            .getRangeByName('L${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    1)
+                ? globalStyle88
+                : globalStyle77;
+        sheet
+            .getRangeByName('M${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    2)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('L${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  0 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('N${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    3)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('M${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  1 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('O${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    4)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  2 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('P${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    5)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  3 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('Q${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    6)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  4 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('R${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    7)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  5 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('S${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    8)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('R${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  6 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('T${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    9)
+                ? globalStyle88
+                : globalStyle77;
+        sheet
+            .getRangeByName('U${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    10)
+                ? globalStyle88
+                : globalStyle77;
+        sheet
+            .getRangeByName('V${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    11)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('S${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  7 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('W${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    12)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('T${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  8 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('X${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    13)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('U${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  9 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-      sheet.getRangeByName('V${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  10 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('Y${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    14)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('W${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  11 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('Z${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    15)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('X${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  12 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AA${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    16)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('Y${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  13 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AB${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    17)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('Z${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  14 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AC${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    18)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AA${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  15 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AD${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    19)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AB${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  16 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AE${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    20)
+                ? globalStyle88
+                : globalStyle77;
+        sheet
+            .getRangeByName('AF${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    21)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AC${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  17 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AG${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    22)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AD${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  18 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AH${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    23)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AE${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  19 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AI${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    24)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AF${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  20 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AJ${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    25)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AG${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  21 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AK${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    26)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AH${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty)
-              ? globalStyle88
-              : (22 >= custo_TransReBillHistoryModels[index].length)
-                  ? globalStyle88
-                  : globalStyle77;
+        sheet
+            .getRangeByName('AL${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    27)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AI${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  23 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AM${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    28)
+                ? globalStyle88
+                : globalStyle77;
+        sheet
+            .getRangeByName('AN${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    29)
+                ? globalStyle88
+                : globalStyle77;
 
-      sheet.getRangeByName('AJ${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  24 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AO${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    30)
+                ? globalStyle88
+                : globalStyle77;
+        // sheet.getRangeByName('AD${indextotol + 5 - 1}').cellStyle =
+        //     (custo_TransReBillHistoryModels[index].isEmpty ||
+        //             29 >= custo_TransReBillHistoryModels[index].length)
+        //         ? globalStyle88
+        //         : globalStyle77;
 
-      sheet.getRangeByName('AK${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  25 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-
-      sheet.getRangeByName('AL${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  26 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-
-      sheet.getRangeByName('AM${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  27 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-
-      sheet.getRangeByName('AN${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  28 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-
-      sheet.getRangeByName('AO${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  29 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
-      // sheet.getRangeByName('AD${indextotol + 5 - 1}').cellStyle =
-      //     (custo_TransReBillHistoryModels[index].isEmpty ||
-      //             29 >= custo_TransReBillHistoryModels[index].length)
-      //         ? globalStyle88
-      //         : globalStyle77;
-
-      sheet.getRangeByName('AP${indextotol + 5 - 1}').cellStyle =
-          (custo_TransReBillHistoryModels[index].isEmpty ||
-                  30 >= custo_TransReBillHistoryModels[index].length)
-              ? globalStyle88
-              : globalStyle77;
+        sheet
+            .getRangeByName('AP${indextotol + 5 - 1}')
+            .cellStyle = (custo_TransReBillHistoryModels[index].isEmpty ||
+                custo_TransReBillHistoryModels[index].length == 0)
+            ? globalStyle88
+            : (int.parse(
+                        '${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                    31)
+                ? globalStyle88
+                : globalStyle77;
+      }
 
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${index + 1}');
 
@@ -717,224 +870,416 @@ class Excgen_Custo_cm {
           : '${nFormat.format(double.parse(teNantModels[index].rent!) + double.parse(coutumer_total_sum_CM[index][0]!))}');
       sheet.getRangeByName('K${indextotol + 5 - 1}').setText('-');
 
-      sheet
-          .getRangeByName('L${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (0 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('M${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (1 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('N${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (2 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('O${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (3 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('P${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (4 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('Q${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (5 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('R${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (6 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('S${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (7 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('T${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (8 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('U${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (9 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('V${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (10 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('W${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (11 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('X${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (12 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('Y${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (13 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('Z${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (14 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
+      for (int indax1 = 0;
+          indax1 < custo_TransReBillHistoryModels[index].length;
+          indax1++) {
+        sheet.getRangeByName('L${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        1)
+                    ? '❌'
+                    : '✔️');
 
-      sheet
-          .getRangeByName('AA${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (15 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AB${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (16 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AC${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (17 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AD${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (18 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AE${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (19 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AF${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (20 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AG${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (21 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AH${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (22 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AI${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (23 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AJ${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (24 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AK${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (25 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AL${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (26 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AM${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (27 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AN${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (28 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AO${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (29 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
-      sheet
-          .getRangeByName('AP${indextotol + 5 - 1}')
-          .setText((custo_TransReBillHistoryModels[index].isEmpty)
-              ? '❌'
-              : (30 >= custo_TransReBillHistoryModels[index].length)
-                  ? '❌'
-                  : '✔️');
+        sheet.getRangeByName('M${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        2)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('N${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        3)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('O${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        4)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('P${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        5)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('Q${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        6)
+                    ? '❌'
+                    : '✔️');
+
+        sheet.getRangeByName('R${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        7)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('S${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        8)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('T${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        9)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('U${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        10)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('V${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        11)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('W${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        12)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('X${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        13)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('Y${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        14)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('Z${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        15)
+                    ? '❌'
+                    : '✔️');
+
+        sheet.getRangeByName('AA${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        16)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AB${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        17)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AC${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        18)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AD${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        19)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AE${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        20)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AF${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        21)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AG${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        22)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AH${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        23)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AI${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        24)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AJ${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        25)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AK${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        16)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AL${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        27)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AM${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        28)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AN${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        29)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AO${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        30)
+                    ? '❌'
+                    : '✔️');
+        sheet.getRangeByName('AP${indextotol + 5 - 1}').setText(
+            (custo_TransReBillHistoryModels[index].isEmpty ||
+                    custo_TransReBillHistoryModels[index].length == 0 ||
+                    custo_TransReBillHistoryModels[index] == null)
+                ? '❌'
+                :
+                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                //     ? '❌'
+                //     :
+                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') !=
+                        31)
+                    ? '❌'
+                    : '✔️');
+      }
     }
 
     final List<int> bytes = workbook.saveAsStream();

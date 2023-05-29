@@ -5005,7 +5005,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                     Expanded(
                                       flex: 1,
-                                      child: Text('ชื้อพื้นที่เช่า',
+                                      child: Text('ชื่อพื้นที่เช่า',
                                           maxLines: 2,
                                           overflow: TextOverflow.ellipsis,
                                           softWrap: false,

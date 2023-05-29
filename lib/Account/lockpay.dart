@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -12,8 +13,10 @@ import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
 import 'package:group_radio_button/group_radio_button.dart';
 import 'package:grouped_buttons_ns/grouped_buttons_ns.dart';
 import 'package:intl/intl.dart';
+import 'package:pretty_qr_code/pretty_qr_code.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../CRC_16_Prompay/generate_qrcode.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetArea_Model.dart';
@@ -33,6 +36,7 @@ import '../PDF/pdf_Receipt.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'dart:html' as html;
+import 'dart:ui' as ui;
 
 class LockpayScreen extends StatefulWidget {
   const LockpayScreen({super.key});
@@ -68,6 +72,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
   List<AreaModel> areaModels = [];
   List<AreakModel> areakModels = [];
   List<PayMentModel> _PayMentModels = [];
+  String? selectedValue;
   List Area_ = [
     'คอมมูนิตี้มอลล์',
     'ออฟฟิศให้เช่า',
@@ -163,6 +168,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
       _Form_tax;
   List<String> _selecteSerbool = [];
   List _selecteSer = [];
+  List _selecteZnSer = [];
   double _area_sum = 0;
   double _area_rent_sum = 0;
 ///////////////////////////////////--------------------------------->pay
@@ -1524,6 +1530,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
   }
 
   ///----------------->
+  GlobalKey qrImageKey = GlobalKey();
   Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -1681,10 +1688,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                             FontWeight.bold,
                                                       ),
                                                     ),
+
                                                     InkWell(
-                                                      // onTap: () {
-                                                      //   read_GC_areaSelect();
-                                                      // },
                                                       child: Container(
                                                         width: 100,
                                                         decoration:
@@ -1712,334 +1717,595 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(8.0),
-                                                        child: PopupMenuButton(
-                                                          child: Center(
-                                                            child: Text(
-                                                              // minFontSize: 10,
-                                                              // maxFontSize: 15,
-                                                              maxLines: 2,
-                                                              (No_Area_ != '')
-                                                                  ? '$No_Area_'
-                                                                  : _selecteSer
-                                                                              .length ==
-                                                                          0
-                                                                      ? 'เลือก'
-                                                                      : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                                              style:
-                                                                  const TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text1_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          itemBuilder:
-                                                              (BuildContext
-                                                                      context) =>
-                                                                  [
-                                                            PopupMenuItem(
-                                                              child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    setState(
-                                                                        () {
-                                                                      read_GC_areak();
-                                                                      No_Area_ =
-                                                                          'ไม่ระบุพื้นที่';
-                                                                      _selecteSer =
-                                                                          [];
-                                                                      _selecteSerbool =
-                                                                          [];
-
-                                                                      _area_sum =
-                                                                          _area_sum +
-                                                                              1;
-                                                                      _area_rent_sum =
-                                                                          _area_rent_sum +
-                                                                              1;
-                                                                      Status5Form_NoArea_ren
-                                                                          .clear();
-
-                                                                      // _formKey
-                                                                      //     .currentState!
-                                                                      //     .reset();
-                                                                      // Status4Form_nameshop
-                                                                      //     .text = '';
-                                                                      // Status4Form_typeshop
-                                                                      //     .text = '';
-                                                                      // Status4Form_bussshop
-                                                                      //     .text = '';
-                                                                      // Status4Form_bussscontact
-                                                                      //     .text = '';
-                                                                      _TransModels
-                                                                          .clear();
-                                                                      _TransModels =
-                                                                          [];
-                                                                      Form_payment1
-                                                                          .clear();
-                                                                      Form_payment2
-                                                                          .clear();
-                                                                    });
-                                                                    read_GC_areaSelect();
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        '');
-                                                                  },
-                                                                  child: Container(
-                                                                      padding: const EdgeInsets.all(10),
-                                                                      width: MediaQuery.of(context).size.width,
-                                                                      child: Row(
-                                                                        children: const [
-                                                                          Expanded(
-                                                                            child:
-                                                                                Text(
-                                                                              'ไม่ระบุพื้นที่',
-                                                                              style: TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                            ),
-                                                                          )
-                                                                        ],
-                                                                      ))),
-                                                            ),
-                                                            PopupMenuItem(
-                                                              child: InkWell(
-                                                                child:
-                                                                    Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(
-                                                                                10),
-                                                                        width: MediaQuery.of(context)
-                                                                            .size
-                                                                            .width,
-                                                                        child:
-                                                                            Row(
-                                                                          children: const [
-                                                                            Expanded(
-                                                                              child: Text(
-                                                                                'เลือกพื้นที่',
-                                                                                style: TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight:
-                                                                                    //     FontWeight
-                                                                                    //         .bold,
-                                                                                    fontFamily: Font_.Fonts_T),
-                                                                              ),
-                                                                            )
-                                                                          ],
-                                                                        )),
-                                                                onTap:
-                                                                    () async {
-                                                                  setState(() {
-                                                                    No_Area_ =
-                                                                        '';
-                                                                    _TransModels
-                                                                        .clear();
-                                                                    _TransModels =
-                                                                        [];
-                                                                    Form_payment1
-                                                                        .clear();
-                                                                    Form_payment2
-                                                                        .clear();
-                                                                    read_GC_areak();
-                                                                  });
-                                                                  // _formKey
-                                                                  //     .currentState!
-                                                                  //     .reset();
-                                                                  // Status4Form_nameshop
-                                                                  //     .text = '';
-                                                                  // Status4Form_typeshop
-                                                                  //     .text = '';
-                                                                  // Status4Form_bussshop
-                                                                  //     .text = '';
-                                                                  // Status4Form_bussscontact
-                                                                  //     .text = '';
-                                                                  Navigator.pop(
-                                                                      context,
-                                                                      '');
-                                                                  showDialog<
-                                                                      String>(
-                                                                    barrierDismissible:
-                                                                        false,
-                                                                    context:
-                                                                        context,
-                                                                    builder: (BuildContext
-                                                                            context) =>
-                                                                        AlertDialog(
-                                                                      shape: const RoundedRectangleBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.all(Radius.circular(20.0))),
-                                                                      title: const Center(
-                                                                          child: Text(
-                                                                        'เลือกพื้นที่',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              PeopleChaoScreen_Color.Colors_Text1_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      )),
-                                                                      content:
-                                                                          SingleChildScrollView(
-                                                                        child: ListBody(
-                                                                            children: <Widget>[
-                                                                              Container(
-                                                                                  // width: 400,
-                                                                                  child: StreamBuilder(
-                                                                                      stream: Stream.periodic(const Duration(seconds: 0)),
-                                                                                      builder: (context, snapshot) {
-                                                                                        return CheckboxGroup(
-                                                                                            checked: _selecteSerbool,
-                                                                                            activeColor: Colors.red,
-                                                                                            checkColor: Colors.white,
-                                                                                            labels: <String>[
-                                                                                              for (var i = 0; i < areakModels.length; i++) '${areakModels[i].type}',
-                                                                                            ],
-                                                                                            onChange: (isChecked, label, index) {
-                                                                                              setState(() {
-                                                                                                No_Area_ = '';
-                                                                                                Status5Form_NoArea_.clear();
-                                                                                              });
-                                                                                              if (isChecked == false) {
-                                                                                                _selecteSer.remove(areakModels[index].ser);
-
-                                                                                                double areax = double.parse(areakModels[index].area!);
-                                                                                                double rentx = double.parse(areakModels[index].rent!);
-                                                                                                _area_sum = _area_sum - areax;
-                                                                                                _area_rent_sum = _area_rent_sum - rentx;
-
-                                                                                                if (isChecked == true) {
-                                                                                                  setState(() {
-                                                                                                    _area_sum = _area_sum + areax;
-                                                                                                    _area_rent_sum = _area_rent_sum + rentx;
-                                                                                                    _selecteSer.add(areakModels[index].ser);
-                                                                                                  });
-                                                                                                }
-                                                                                              } else {
-                                                                                                double areax = double.parse(areakModels[index].area!);
-                                                                                                double rentx = double.parse(areakModels[index].rent!);
-                                                                                                if (isChecked == true) {
-                                                                                                  setState(() {
-                                                                                                    _area_sum = _area_sum + areax;
-                                                                                                    _area_rent_sum = _area_rent_sum + rentx;
-                                                                                                    _selecteSer.add(areakModels[index].ser);
-                                                                                                  });
-                                                                                                }
-                                                                                              }
-                                                                                              print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                                                                                            },
-                                                                                            onSelected: (List<String> selected) {
-                                                                                              setState(() {
-                                                                                                _selecteSerbool = selected;
-                                                                                              });
-                                                                                              print('SerGetBankModels_ : ${_selecteSerbool}');
-                                                                                            });
-                                                                                      }))
-                                                                            ]),
-                                                                      ),
-                                                                      actions: <
-                                                                          Widget>[
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Row(
-                                                                            mainAxisAlignment:
-                                                                                MainAxisAlignment.end,
-                                                                            children: [
-                                                                              Padding(
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: Row(
-                                                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                                                  children: [
-                                                                                    Container(
-                                                                                      width: 100,
-                                                                                      decoration: const BoxDecoration(
-                                                                                        color: Colors.green,
-                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                      ),
-                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                      child: TextButton(
-                                                                                        onPressed: () {
-                                                                                          setState(() {
-                                                                                            No_Area_ = '';
-                                                                                            Status5Form_NoArea_.clear();
-                                                                                          });
-                                                                                          // setState(
-                                                                                          //     () {
-                                                                                          //   read_GC_areaSelectSer();
-                                                                                          // });
-                                                                                          Navigator.pop(context, 'OK');
-                                                                                        },
-                                                                                        child: const Text(
-                                                                                          'บันทึก',
-                                                                                          style: TextStyle(
-                                                                                            color: Colors.white,
-                                                                                            fontWeight: FontWeight.bold,
-                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                          ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  ],
-                                                                                ),
-                                                                              ),
-                                                                              Container(
-                                                                                width: 100,
-                                                                                decoration: const BoxDecoration(
-                                                                                  color: Colors.black,
-                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                ),
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: TextButton(
-                                                                                  onPressed: () {
-                                                                                    Navigator.pop(context);
-                                                                                    // setState(
-                                                                                    //     () {
-                                                                                    //   cQuotModels
-                                                                                    //       .clear();
-                                                                                    //   _selecteSer
-                                                                                    //       .clear();
-                                                                                    //   _selecteSerbool
-                                                                                    //       .clear();
-                                                                                    // });
-                                                                                  },
-                                                                                  child: const Text(
-                                                                                    'ยกเลิก',
-                                                                                    style: TextStyle(
-                                                                                      color: Colors.white,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                    ),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              ),
-                                                            ),
-                                                          ],
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 15,
+                                                          maxLines: 3,
+                                                          _selecteSer.length ==
+                                                                  0
+                                                              ? 'เลือก'
+                                                              : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                          style: const TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
                                                         ),
                                                       ),
+                                                      onTap: () async {
+                                                        read_GC_areaSelect();
+                                                        showDialog<String>(
+                                                          barrierDismissible:
+                                                              false,
+                                                          context: context,
+                                                          builder: (BuildContext
+                                                                  context) =>
+                                                              AlertDialog(
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            20.0))),
+                                                            title: const Center(
+                                                                child: Text(
+                                                              'เลือกพื้นที่',
+                                                              style: TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            )),
+                                                            content:
+                                                                SingleChildScrollView(
+                                                              child: ListBody(
+                                                                children: <
+                                                                    Widget>[
+                                                                  StreamBuilder(
+                                                                      stream: Stream.periodic(const Duration(
+                                                                          seconds:
+                                                                              0)),
+                                                                      builder:
+                                                                          (context,
+                                                                              snapshot) {
+                                                                        return CheckboxGroup(
+                                                                            checked:
+                                                                                _selecteSerbool,
+                                                                            activeColor: Colors
+                                                                                .red,
+                                                                            checkColor: Colors
+                                                                                .white,
+                                                                            labels: <
+                                                                                String>[
+                                                                              for (var i = 0; i < areaModels.length; i++)
+                                                                                '${areaModels[i].lncode}',
+                                                                            ],
+                                                                            labelStyle:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                            onChange: (isChecked,
+                                                                                label,
+                                                                                index) {
+                                                                              if (isChecked == false) {
+                                                                                _selecteSer.remove(areaModels[index].ser);
+                                                                                _selecteZnSer.remove(areaModels[index].zser);
+
+                                                                                double areax = double.parse(areaModels[index].area!);
+                                                                                double rentx = double.parse(areaModels[index].rent!);
+                                                                                _area_sum = _area_sum - areax;
+                                                                                _area_rent_sum = _area_rent_sum - rentx;
+
+                                                                                if (isChecked == true) {
+                                                                                  setState(() {
+                                                                                    _area_sum = _area_sum + areax;
+                                                                                    _area_rent_sum = _area_rent_sum + rentx;
+                                                                                    _selecteSer.add(areaModels[index].ser);
+                                                                                    _selecteZnSer.add(areaModels[index].zser);
+                                                                                  });
+                                                                                }
+                                                                              } else {
+                                                                                double areax = double.parse(areaModels[index].area!);
+                                                                                double rentx = double.parse(areaModels[index].rent!);
+                                                                                if (isChecked == true) {
+                                                                                  setState(() {
+                                                                                    _area_sum = _area_sum + areax;
+                                                                                    _area_rent_sum = _area_rent_sum + rentx;
+                                                                                    _selecteSer.add(areaModels[index].ser);
+                                                                                    _selecteZnSer.add(areaModels[index].zser);
+                                                                                  });
+                                                                                }
+                                                                              }
+                                                                              print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                                            },
+                                                                            onSelected:
+                                                                                (List<String> selected) {
+                                                                              setState(() {
+                                                                                _selecteSerbool = selected;
+                                                                              });
+                                                                              print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                                            });
+                                                                      })
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            actions: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .end,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Container(
+                                                                            width:
+                                                                                100,
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: Colors.green,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                            ),
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                TextButton(
+                                                                              onPressed: () {
+                                                                                setState(() {
+                                                                                  No_Area_ = '';
+                                                                                  Status5Form_NoArea_.clear();
+                                                                                });
+                                                                                // setState(
+                                                                                //     () {
+                                                                                //   read_GC_areaSelectSer();
+                                                                                // });
+                                                                                Navigator.pop(context, 'OK');
+                                                                              },
+                                                                              child: const Text(
+                                                                                'บันทึก',
+                                                                                style: TextStyle(
+                                                                                  color: Colors.white,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Container(
+                                                                      width:
+                                                                          100,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            topRight: Radius.circular(10),
+                                                                            bottomLeft: Radius.circular(10),
+                                                                            bottomRight: Radius.circular(10)),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          TextButton(
+                                                                        onPressed:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                          setState(
+                                                                              () {
+                                                                            _selecteSer.clear();
+                                                                            _selecteSerbool.clear();
+                                                                          });
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'ยกเลิก',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
+
+                                                    // InkWell(
+                                                    //   // onTap: () {
+                                                    //   //   read_GC_areaSelect();
+                                                    //   // },
+                                                    //   child: Container(
+                                                    //     width: 100,
+                                                    //     decoration:
+                                                    //         BoxDecoration(
+                                                    //       color:
+                                                    //           AppbackgroundColor
+                                                    //               .TiTile_Colors,
+                                                    //       borderRadius: const BorderRadius
+                                                    //               .only(
+                                                    //           topLeft: Radius
+                                                    //               .circular(10),
+                                                    //           topRight: Radius
+                                                    //               .circular(10),
+                                                    //           bottomLeft: Radius
+                                                    //               .circular(10),
+                                                    //           bottomRight:
+                                                    //               Radius
+                                                    //                   .circular(
+                                                    //                       10)),
+                                                    //       border: Border.all(
+                                                    //           color:
+                                                    //               Colors.black,
+                                                    //           width: 1),
+                                                    //     ),
+                                                    //     padding:
+                                                    //         const EdgeInsets
+                                                    //             .all(8.0),
+                                                    //     child: PopupMenuButton(
+                                                    //       child: Center(
+                                                    //         child: Text(
+                                                    //           // minFontSize: 10,
+                                                    //           // maxFontSize: 15,
+                                                    //           maxLines: 2,
+                                                    //           (No_Area_ != '')
+                                                    //               ? '$No_Area_'
+                                                    //               : _selecteSer
+                                                    //                           .length ==
+                                                    //                       0
+                                                    //                   ? 'เลือก'
+                                                    //                   : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                    //           style:
+                                                    //               const TextStyle(
+                                                    //             color: PeopleChaoScreen_Color
+                                                    //                 .Colors_Text1_,
+                                                    //             // fontWeight: FontWeight.bold,
+                                                    //             fontFamily:
+                                                    //                 FontWeight_
+                                                    //                     .Fonts_T,
+                                                    //             fontWeight:
+                                                    //                 FontWeight
+                                                    //                     .bold,
+                                                    //           ),
+                                                    //         ),
+                                                    //       ),
+                                                    //       itemBuilder:
+                                                    //           (BuildContext
+                                                    //                   context) =>
+                                                    //               [
+                                                    //         PopupMenuItem(
+                                                    //           child: InkWell(
+                                                    //               onTap:
+                                                    //                   () async {
+                                                    //                 setState(
+                                                    //                     () {
+                                                    //                   read_GC_areak();
+                                                    //                   No_Area_ =
+                                                    //                       'ไม่ระบุพื้นที่';
+                                                    //                   _selecteSer =
+                                                    //                       [];
+                                                    //                   _selecteSerbool =
+                                                    //                       [];
+
+                                                    //                   _area_sum =
+                                                    //                       _area_sum +
+                                                    //                           1;
+                                                    //                   _area_rent_sum =
+                                                    //                       _area_rent_sum +
+                                                    //                           1;
+                                                    //                   Status5Form_NoArea_ren
+                                                    //                       .clear();
+
+                                                    //                   // _formKey
+                                                    //                   //     .currentState!
+                                                    //                   //     .reset();
+                                                    //                   // Status4Form_nameshop
+                                                    //                   //     .text = '';
+                                                    //                   // Status4Form_typeshop
+                                                    //                   //     .text = '';
+                                                    //                   // Status4Form_bussshop
+                                                    //                   //     .text = '';
+                                                    //                   // Status4Form_bussscontact
+                                                    //                   //     .text = '';
+                                                    //                   _TransModels
+                                                    //                       .clear();
+                                                    //                   _TransModels =
+                                                    //                       [];
+                                                    //                   Form_payment1
+                                                    //                       .clear();
+                                                    //                   Form_payment2
+                                                    //                       .clear();
+                                                    //                 });
+                                                    //                 read_GC_areaSelect();
+                                                    //                 Navigator.pop(
+                                                    //                     context,
+                                                    //                     '');
+                                                    //               },
+                                                    //               child: Container(
+                                                    //                   padding: const EdgeInsets.all(10),
+                                                    //                   width: MediaQuery.of(context).size.width,
+                                                    //                   child: Row(
+                                                    //                     children: const [
+                                                    //                       Expanded(
+                                                    //                         child:
+                                                    //                             Text(
+                                                    //                           'ไม่ระบุพื้นที่',
+                                                    //                           style: TextStyle(
+                                                    //                               color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                               // fontWeight:
+                                                    //                               //     FontWeight
+                                                    //                               //         .bold,
+                                                    //                               fontFamily: Font_.Fonts_T),
+                                                    //                         ),
+                                                    //                       )
+                                                    //                     ],
+                                                    //                   ))),
+                                                    //         ),
+                                                    //         PopupMenuItem(
+                                                    //           child: InkWell(
+                                                    //             child:
+                                                    //                 Container(
+                                                    //                     padding:
+                                                    //                         const EdgeInsets.all(
+                                                    //                             10),
+                                                    //                     width: MediaQuery.of(context)
+                                                    //                         .size
+                                                    //                         .width,
+                                                    //                     child:
+                                                    //                         Row(
+                                                    //                       children: const [
+                                                    //                         Expanded(
+                                                    //                           child: Text(
+                                                    //                             'เลือกพื้นที่',
+                                                    //                             style: TextStyle(
+                                                    //                                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                    //                                 // fontWeight:
+                                                    //                                 //     FontWeight
+                                                    //                                 //         .bold,
+                                                    //                                 fontFamily: Font_.Fonts_T),
+                                                    //                           ),
+                                                    //                         )
+                                                    //                       ],
+                                                    //                     )),
+                                                    //             onTap:
+                                                    //                 () async {
+                                                    //               setState(() {
+                                                    //                 No_Area_ =
+                                                    //                     '';
+                                                    //                 _TransModels
+                                                    //                     .clear();
+                                                    //                 _TransModels =
+                                                    //                     [];
+                                                    //                 Form_payment1
+                                                    //                     .clear();
+                                                    //                 Form_payment2
+                                                    //                     .clear();
+                                                    //                 read_GC_areak();
+                                                    //               });
+                                                    //               // _formKey
+                                                    //               //     .currentState!
+                                                    //               //     .reset();
+                                                    //               // Status4Form_nameshop
+                                                    //               //     .text = '';
+                                                    //               // Status4Form_typeshop
+                                                    //               //     .text = '';
+                                                    //               // Status4Form_bussshop
+                                                    //               //     .text = '';
+                                                    //               // Status4Form_bussscontact
+                                                    //               //     .text = '';
+                                                    //               Navigator.pop(
+                                                    //                   context,
+                                                    //                   '');
+                                                    //               showDialog<
+                                                    //                   String>(
+                                                    //                 barrierDismissible:
+                                                    //                     false,
+                                                    //                 context:
+                                                    //                     context,
+                                                    //                 builder: (BuildContext
+                                                    //                         context) =>
+                                                    //                     AlertDialog(
+                                                    //                   shape: const RoundedRectangleBorder(
+                                                    //                       borderRadius:
+                                                    //                           BorderRadius.all(Radius.circular(20.0))),
+                                                    //                   title: const Center(
+                                                    //                       child: Text(
+                                                    //                     'เลือกพื้นที่',
+                                                    //                     style:
+                                                    //                         TextStyle(
+                                                    //                       color:
+                                                    //                           PeopleChaoScreen_Color.Colors_Text1_,
+                                                    //                       // fontWeight: FontWeight.bold,
+                                                    //                       fontFamily:
+                                                    //                           FontWeight_.Fonts_T,
+                                                    //                       fontWeight:
+                                                    //                           FontWeight.bold,
+                                                    //                     ),
+                                                    //                   )),
+                                                    //                   content:
+                                                    //                       SingleChildScrollView(
+                                                    //                     child: ListBody(
+                                                    //                         children: <Widget>[
+                                                    //                           Container(
+                                                    //                               // width: 400,
+                                                    //                               child: StreamBuilder(
+                                                    //                                   stream: Stream.periodic(const Duration(seconds: 0)),
+                                                    //                                   builder: (context, snapshot) {
+                                                    //                                     return CheckboxGroup(
+                                                    //                                         checked: _selecteSerbool,
+                                                    //                                         activeColor: Colors.red,
+                                                    //                                         checkColor: Colors.white,
+                                                    //                                         labels: <String>[
+                                                    //                                           for (var i = 0; i < areakModels.length; i++) '${areakModels[i].type}',
+                                                    //                                         ],
+                                                    //                                         onChange: (isChecked, label, index) {
+                                                    //                                           setState(() {
+                                                    //                                             No_Area_ = '';
+                                                    //                                             Status5Form_NoArea_.clear();
+                                                    //                                           });
+                                                    //                                           if (isChecked == false) {
+                                                    //                                             _selecteSer.remove(areakModels[index].ser);
+
+                                                    //                                             double areax = double.parse(areakModels[index].area!);
+                                                    //                                             double rentx = double.parse(areakModels[index].rent!);
+                                                    //                                             _area_sum = _area_sum - areax;
+                                                    //                                             _area_rent_sum = _area_rent_sum - rentx;
+
+                                                    //                                             if (isChecked == true) {
+                                                    //                                               setState(() {
+                                                    //                                                 _area_sum = _area_sum + areax;
+                                                    //                                                 _area_rent_sum = _area_rent_sum + rentx;
+                                                    //                                                 _selecteSer.add(areakModels[index].ser);
+                                                    //                                               });
+                                                    //                                             }
+                                                    //                                           } else {
+                                                    //                                             double areax = double.parse(areakModels[index].area!);
+                                                    //                                             double rentx = double.parse(areakModels[index].rent!);
+                                                    //                                             if (isChecked == true) {
+                                                    //                                               setState(() {
+                                                    //                                                 _area_sum = _area_sum + areax;
+                                                    //                                                 _area_rent_sum = _area_rent_sum + rentx;
+                                                    //                                                 _selecteSer.add(areakModels[index].ser);
+                                                    //                                               });
+                                                    //                                             }
+                                                    //                                           }
+                                                    //                                           print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                    //                                         },
+                                                    //                                         onSelected: (List<String> selected) {
+                                                    //                                           setState(() {
+                                                    //                                             _selecteSerbool = selected;
+                                                    //                                           });
+                                                    //                                           print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                    //                                         });
+                                                    //                                   }))
+                                                    //                         ]),
+                                                    //                   ),
+                                                    //                   actions: <
+                                                    //                       Widget>[
+                                                    //                     Padding(
+                                                    //                       padding:
+                                                    //                           const EdgeInsets.all(8.0),
+                                                    //                       child:
+                                                    //                           Row(
+                                                    //                         mainAxisAlignment:
+                                                    //                             MainAxisAlignment.end,
+                                                    //                         children: [
+                                                    //                           Padding(
+                                                    //                             padding: const EdgeInsets.all(8.0),
+                                                    //                             child: Row(
+                                                    //                               mainAxisAlignment: MainAxisAlignment.center,
+                                                    //                               children: [
+                                                    //                                 Container(
+                                                    //                                   width: 100,
+                                                    //                                   decoration: const BoxDecoration(
+                                                    //                                     color: Colors.green,
+                                                    //                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                    //                                   ),
+                                                    //                                   padding: const EdgeInsets.all(8.0),
+                                                    //                                   child: TextButton(
+                                                    //                                     onPressed: () {
+                                                    //                                       setState(() {
+                                                    //                                         No_Area_ = '';
+                                                    //                                         Status5Form_NoArea_.clear();
+                                                    //                                       });
+                                                    //                                       // setState(
+                                                    //                                       //     () {
+                                                    //                                       //   read_GC_areaSelectSer();
+                                                    //                                       // });
+                                                    //                                       Navigator.pop(context, 'OK');
+                                                    //                                     },
+                                                    //                                     child: const Text(
+                                                    //                                       'บันทึก',
+                                                    //                                       style: TextStyle(
+                                                    //                                         color: Colors.white,
+                                                    //                                         fontWeight: FontWeight.bold,
+                                                    //                                         fontFamily: FontWeight_.Fonts_T,
+                                                    //                                       ),
+                                                    //                                     ),
+                                                    //                                   ),
+                                                    //                                 ),
+                                                    //                               ],
+                                                    //                             ),
+                                                    //                           ),
+                                                    //                           Container(
+                                                    //                             width: 100,
+                                                    //                             decoration: const BoxDecoration(
+                                                    //                               color: Colors.black,
+                                                    //                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                    //                             ),
+                                                    //                             padding: const EdgeInsets.all(8.0),
+                                                    //                             child: TextButton(
+                                                    //                               onPressed: () {
+                                                    //                                 Navigator.pop(context);
+                                                    //                                 // setState(
+                                                    //                                 //     () {
+                                                    //                                 //   cQuotModels
+                                                    //                                 //       .clear();
+                                                    //                                 //   _selecteSer
+                                                    //                                 //       .clear();
+                                                    //                                 //   _selecteSerbool
+                                                    //                                 //       .clear();
+                                                    //                                 // });
+                                                    //                               },
+                                                    //                               child: const Text(
+                                                    //                                 'ยกเลิก',
+                                                    //                                 style: TextStyle(
+                                                    //                                   color: Colors.white,
+                                                    //                                   fontWeight: FontWeight.bold,
+                                                    //                                   fontFamily: FontWeight_.Fonts_T,
+                                                    //                                 ),
+                                                    //                               ),
+                                                    //                             ),
+                                                    //                           ),
+                                                    //                         ],
+                                                    //                       ),
+                                                    //                     ),
+                                                    //                   ],
+                                                    //                 ),
+                                                    //               );
+                                                    //             },
+                                                    //           ),
+                                                    //         ),
+                                                    //       ],
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -4735,6 +5001,13 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         ),
                                         items: _PayMentModels.map((item) =>
                                             DropdownMenuItem<String>(
+                                              onTap: () {
+                                                setState(() {
+                                                  selectedValue = item.bno!;
+                                                });
+                                                print(
+                                                    '**/*/*   --- ${selectedValue}');
+                                              },
                                               value:
                                                   '${item.ser}:${item.ptname}',
                                               child: Row(
@@ -4880,6 +5153,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               items: _PayMentModels.map(
                                                   (item) =>
                                                       DropdownMenuItem<String>(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            selectedValue =
+                                                                item.bno!;
+                                                          });
+                                                          print(
+                                                              '**/*/*   --- ${selectedValue}');
+                                                        },
                                                         value:
                                                             '${item.ser}:${item.ptname}',
                                                         child: Row(
@@ -5510,7 +5791,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                         //             print(
                         //                 'pppppp $paymentSer1 $paymentName1');
                         if (paymentName1.toString().trim() == 'เงินโอน' ||
-                            paymentName2.toString().trim() == 'เงินโอน')
+                            paymentName2.toString().trim() == 'เงินโอน' ||
+                            paymentName1.toString().trim() ==
+                                'Online Payment' ||
+                            paymentName2.toString().trim() == 'Online Payment')
                           Row(
                             children: [
                               Expanded(
@@ -5817,7 +6101,10 @@ class _LockpayScreenState extends State<LockpayScreen> {
                             ],
                           ),
                         if (paymentName1.toString().trim() == 'เงินโอน' ||
-                            paymentName2.toString().trim() == 'เงินโอน')
+                            paymentName2.toString().trim() == 'เงินโอน' ||
+                            paymentName1.toString().trim() ==
+                                'Online Payment' ||
+                            paymentName2.toString().trim() == 'Online Payment')
                           Container(
                             decoration: const BoxDecoration(
                               color: AppbackgroundColor.Sub_Abg_Colors,
@@ -6268,6 +6555,472 @@ class _LockpayScreenState extends State<LockpayScreen> {
                             )
                           ],
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Stack(
+                          children: [
+                            InkWell(
+                              child: Container(
+                                  width: 800,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue[900],
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: const Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    // border: Border.all(color: Colors.white, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                          height: 50,
+                                          width: 100,
+                                          child: Image.asset(
+                                            'images/prompay.png',
+                                            height: 50,
+                                            width: 100,
+                                            fit: BoxFit.cover,
+                                          )),
+                                      const Center(
+                                          child: Text(
+                                        'Generator QR Code PromtPay',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T),
+                                      )),
+                                    ],
+                                  )),
+                              onTap: (paymentName1.toString().trim() !=
+                                          'Online Payment' &&
+                                      paymentName2.toString().trim() !=
+                                          'Online Payment')
+                                  ? null
+                                  : () {
+                                      double totalQr_ = 0.00;
+                                      if (paymentName1.toString().trim() ==
+                                              'Online Payment' &&
+                                          paymentName2.toString().trim() ==
+                                              'Online Payment') {
+                                        setState(() {
+                                          totalQr_ = 0.00;
+                                        });
+                                        setState(() {
+                                          totalQr_ = double.parse(
+                                                  '${Form_payment1.text}') +
+                                              double.parse(
+                                                  '${Form_payment2.text}');
+                                        });
+                                      } else if (paymentName1
+                                              .toString()
+                                              .trim() ==
+                                          'Online Payment') {
+                                        setState(() {
+                                          totalQr_ = 0.00;
+                                        });
+                                        setState(() {
+                                          totalQr_ = double.parse(
+                                              '${Form_payment1.text}');
+                                        });
+                                      } else if (paymentName2
+                                              .toString()
+                                              .trim() ==
+                                          'Online Payment') {
+                                        setState(() {
+                                          totalQr_ = 0.00;
+                                        });
+                                        setState(() {
+                                          totalQr_ = double.parse(
+                                              '${Form_payment2.text}');
+                                        });
+                                      }
+
+                                      showDialog<void>(
+                                        context: context,
+                                        barrierDismissible:
+                                            false, // user must tap button!
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            title: Center(
+                                                child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.blue[300],
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: const Text(
+                                                      ' QR PromtPay',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ))),
+                                            content: SingleChildScrollView(
+                                              child: ListBody(
+                                                children: <Widget>[
+                                                  //  '${Form_bussshop}',
+                                                  //   '${Form_address}',
+                                                  //   '${Form_tel}',
+                                                  //   '${Form_email}',
+                                                  //   '${Form_tax}',
+                                                  //   '${Form_nameshop}',
+                                                  Center(
+                                                    child: RepaintBoundary(
+                                                      key: qrImageKey,
+                                                      child: Container(
+                                                        color: Colors.white,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .fromLTRB(
+                                                                4, 8, 4, 2),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                              style: TextStyle(
+                                                                color:
+                                                                    Colors.red,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            Center(
+                                                              child: Container(
+                                                                width: 220,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                          .green[
+                                                                      300],
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              0)),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    '$renTal_name',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: Colors
+                                                                          .white,
+                                                                      fontSize:
+                                                                          13,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            // Align(
+                                                            //   alignment: Alignment
+                                                            //       .centerLeft,
+                                                            //   child: Text(
+                                                            //     'คุณ : $Form_bussshop',
+                                                            //     style:
+                                                            //         TextStyle(
+                                                            //       fontSize: 13,
+                                                            //       fontWeight:
+                                                            //           FontWeight
+                                                            //               .bold,
+                                                            //     ),
+                                                            //   ),
+                                                            // ),
+                                                            Container(
+                                                              height: 60,
+                                                              width: 220,
+                                                              child:
+                                                                  Image.asset(
+                                                                "images/thai_qr_payment.png",
+                                                                height: 60,
+                                                                width: 220,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              width: 200,
+                                                              height: 200,
+                                                              child: Center(
+                                                                child: PrettyQr(
+                                                                  // typeNumber: 3,
+                                                                  image:
+                                                                      AssetImage(
+                                                                    "images/Icon-chao.png",
+                                                                  ),
+                                                                  size: 200,
+                                                                  data: generateQRCode(
+                                                                      promptPayID:
+                                                                          "$selectedValue",
+                                                                      amount:
+                                                                          totalQr_),
+                                                                  errorCorrectLevel:
+                                                                      QrErrorCorrectLevel
+                                                                          .M,
+                                                                  roundEdges:
+                                                                      true,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              'พร้อมเพย์ : $selectedValue',
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                              style: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                              style: TextStyle(
+                                                                fontSize: 10,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              color: Color(
+                                                                  0xFFD9D9B7),
+                                                              height: 60,
+                                                              width: 220,
+                                                              child:
+                                                                  Image.asset(
+                                                                "images/LOGOchao.png",
+                                                                height: 70,
+                                                                width: 220,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Center(
+                                                    child: Container(
+                                                      width: 220,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextButton(
+                                                        onPressed: () async {
+                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                          RenderRepaintBoundary
+                                                              boundary =
+                                                              qrImageKey
+                                                                      .currentContext!
+                                                                      .findRenderObject()
+                                                                  as RenderRepaintBoundary;
+                                                          ui.Image image =
+                                                              await boundary
+                                                                  .toImage();
+                                                          ByteData? byteData =
+                                                              await image
+                                                                  .toByteData(
+                                                                      format: ui
+                                                                          .ImageByteFormat
+                                                                          .png);
+                                                          Uint8List bytes =
+                                                              byteData!.buffer
+                                                                  .asUint8List();
+                                                          html.Blob blob =
+                                                              html.Blob(
+                                                                  [bytes]);
+                                                          String url = html.Url
+                                                              .createObjectUrlFromBlob(
+                                                                  blob);
+
+                                                          html.AnchorElement
+                                                              anchor =
+                                                              html.AnchorElement()
+                                                                ..href = url
+                                                                ..setAttribute(
+                                                                    'download',
+                                                                    'qrcode.png')
+                                                                ..click();
+
+                                                          html.Url
+                                                              .revokeObjectUrl(
+                                                                  url);
+                                                        },
+                                                        child: const Text(
+                                                          'Download QR Code',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  const Divider(
+                                                    color: Colors.grey,
+                                                    height: 4.0,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'OK'),
+                                                            child: const Text(
+                                                              'ปิด',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                            ),
+                            if (paymentName1.toString().trim() !=
+                                    'Online Payment' &&
+                                paymentName2.toString().trim() !=
+                                    'Online Payment')
+                              Positioned(
+                                  top: 0,
+                                  left: 0,
+                                  child: Container(
+                                    width: 800,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      // border: Border.all(color: Colors.white, width: 1),
+                                    ),
+                                  )),
+                          ],
+                        ),
                         Row(
                           children: [
                             const Expanded(
@@ -6513,14 +7266,19 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 // } catch (e) {}
                                               }
                                             } else if (select_page == 1) {
-                                              if (paymentName1
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน' ||
+                                              if (paymentName1.toString().trim() == 'เงินโอน' ||
                                                   paymentName2
                                                           .toString()
                                                           .trim() ==
-                                                      'เงินโอน') {
+                                                      'เงินโอน' ||
+                                                  paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment' ||
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
                                                 if (base64_Slip != null) {
                                                 } else {
                                                   _showMyDialogPay_Error(
@@ -6539,14 +7297,19 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 }
                                               } else {}
                                             } else if (select_page == 2) {
-                                              if (paymentName1
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน' ||
+                                              if (paymentName1.toString().trim() == 'เงินโอน' ||
                                                   paymentName2
                                                           .toString()
                                                           .trim() ==
-                                                      'เงินโอน') {
+                                                      'เงินโอน' ||
+                                                  paymentName1
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment' ||
+                                                  paymentName2
+                                                          .toString()
+                                                          .trim() ==
+                                                      'Online Payment') {
                                                 if (base64_Slip != null) {
                                                   try {
                                                     // OKuploadFile_Slip();
@@ -6788,6 +7551,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
   // }
 
   Future<Null> in_Trans(newValuePDFimg) async {
+    print(
+        ' ${_selecteZnSer.map((e) => e).toString().substring(1, _selecteZnSer.map((e) => e).toString().length - 1).trim()}');
     final tableData00 = [
       for (int index = 0; index < _TransModels.length; index++)
         [
@@ -6886,6 +7651,12 @@ class _LockpayScreenState extends State<LockpayScreen> {
           .toString(),
       'area_rent_sum': _area_rent_sum.toString(),
       'comment': comment.toString(),
+      'zser': _selecteZnSer
+          .map((e) => e)
+          .toString()
+          .substring(1, _selecteZnSer.map((e) => e).toString().length - 1)
+          .trim()
+          .toString(),
     }).then((value) async {
       print('$value');
       var result = json.decode(value.body);

@@ -118,6 +118,11 @@ class TransReBillModel {
   String? remark1;
   String? zn;
   String? area;
+  String? zser;
+  String? zser1;
+  String? znn;
+  String? descr;
+  String? descr1;
 
   TransReBillModel({
     this.ser,
@@ -235,6 +240,11 @@ class TransReBillModel {
     this.remark1,
     this.zn,
     this.area,
+    this.zser,
+    this.zser1,
+    this.znn,
+    this.descr,
+    this.descr1,
   });
 
   TransReBillModel.fromJson(Map<String, dynamic> json) {
@@ -354,6 +364,11 @@ class TransReBillModel {
     remark1 = json['remark1'];
     zn = json['zn'];
     area = json['area'];
+    zser = json['zser'];
+    zser1 = json['zser1'];
+    znn = json['znn'];
+    descr = json['descr'];
+    descr1 = json['descr1'];
   }
 
   Map<String, dynamic> toJson() {
@@ -474,6 +489,11 @@ class TransReBillModel {
     data['remark1'] = this.remark1;
     data['zn'] = this.zn;
     data['area'] = this.area;
+    data['zser'] = this.zser;
+    data['zser1'] = this.zser1;
+    data['znn'] = this.znn;
+    data['descr'] = this.descr;
+    data['descr1'] = this.descr1;
 
     return data;
   }

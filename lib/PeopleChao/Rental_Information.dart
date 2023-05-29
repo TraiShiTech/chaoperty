@@ -2263,24 +2263,148 @@ class _RentalInformationState extends State<RentalInformation> {
                 children: [
                   Expanded(
                     flex: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: (cxname_card != null)
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                    child: Stack(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: (cxname_card != null)
+                              ? Stack(
                                   children: [
-                                    Text(
-                                      'พบเอกสาร',
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey[300],
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        child: Image.network(
+                                          '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
+                                          // width: 200,
+                                          // height: 160,
+                                          fit: BoxFit.cover,
+                                        )
+                                        //  Center(
+                                        //   child: Column(
+                                        //     mainAxisAlignment: MainAxisAlignment.center,
+                                        //     children: [
+                                        //       Text(
+                                        //         'พบเอกสาร',
+                                        //         textAlign: TextAlign.center,
+                                        //         style: TextStyle(
+                                        //             color: PeopleChaoScreen_Color
+                                        //                 .Colors_Text2_,
+                                        //             // fontWeight: FontWeight.bold,
+                                        //             fontFamily: Font_.Fonts_T
+
+                                        //             //fontSize: 10.0
+                                        //             ),
+                                        //       ),
+                                        //       Text(
+                                        //         '$cxname_card',
+                                        //         textAlign: TextAlign.center,
+                                        //         style: TextStyle(
+                                        //             color: Colors.blue[800],
+                                        //             // fontWeight: FontWeight.bold,
+                                        //             fontFamily: Font_.Fonts_T,
+                                        //             fontSize: 8.0),
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        // ),
+                                        ),
+                                    Positioned(
+                                      top: 20,
+                                      right: 10,
+                                      child: InkWell(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.red[900]!
+                                                .withOpacity(0.8),
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Center(
+                                            child: Text(
+                                              'ดูเอกสาร',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily: Font_.Fonts_T
+
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => Dialog(
+                                              child: Stack(
+                                                children: [
+                                                  SizedBox(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.8,
+                                                    child: FittedBox(
+                                                      fit: BoxFit.contain,
+                                                      child: (cxname_card ==
+                                                                  null ||
+                                                              cxname_card
+                                                                      .toString() ==
+                                                                  '')
+                                                          ? Icon(Icons
+                                                              .image_not_supported)
+                                                          : Image.network(
+                                                              '${MyConstant().domain}/files/$foder/contract/card/$cxname_card'),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                      top: 10,
+                                                      right: 10,
+                                                      child: InkWell(
+                                                        onTap: () {
+                                                          Navigator.of(context)
+                                                              .pop();
+                                                        },
+                                                        child: Icon(
+                                                          Icons.cancel_outlined,
+                                                          size: 40,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ))
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    )
+                                  ],
+                                )
+                              : Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      'ไม่พบเอกสาร',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: PeopleChaoScreen_Color
@@ -2291,43 +2415,10 @@ class _RentalInformationState extends State<RentalInformation> {
                                           //fontSize: 10.0
                                           ),
                                     ),
-                                    Text(
-                                      '$cxname_card',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.blue[800],
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T,
-                                          fontSize: 8.0),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'ไม่พบเอกสาร',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      // fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T
-
-                                      //fontSize: 10.0
-                                      ),
-                                ),
-                              ),
-                            ),
+                        ),
+                      ],
                     ),
                   ),
                   if (Responsive.isDesktop(context))
@@ -2687,7 +2778,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                             ),
                                             onTap: () async {
                                               String Url =
-                                                  await '${MyConstant().domain}/files/kad_taii/contract/card/$cxname_card';
+                                                  await '${MyConstant().domain}/files/$foder/contract/card/$cxname_card';
                                               print(Url);
                                               Idcard_(context, Url);
                                               // String Url =

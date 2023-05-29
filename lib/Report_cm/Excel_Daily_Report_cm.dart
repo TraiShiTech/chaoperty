@@ -28,7 +28,8 @@ class Excgen_DailyReport_cm {
       tank_CM,
       electricity_CM,
       MOMO_CM,
-      rent_area_CM) async {
+      rent_area_CM,
+      sum_numDay_refno_CM) async {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
@@ -152,6 +153,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N1').cellStyle = globalStyle;
     sheet.getRangeByName('O1').cellStyle = globalStyle;
     sheet.getRangeByName('P1').cellStyle = globalStyle;
+    sheet.getRangeByName('Q1').cellStyle = globalStyle;
     final x.Range range = sheet.getRangeByName('E1');
     range.setText('รายงานประจำวัน (${renTal_name})');
 // ExcelSheetProtectionOption
@@ -175,6 +177,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N2').cellStyle = globalStyle;
     sheet.getRangeByName('O2').cellStyle = globalStyle;
     sheet.getRangeByName('P2').cellStyle = globalStyle;
+    sheet.getRangeByName('Q2').cellStyle = globalStyle;
     // sheet.getRangeByName('A2').setText('${renTal_name}');
     sheet
         .getRangeByName('A2')
@@ -198,6 +201,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N3').cellStyle = globalStyle55;
     sheet.getRangeByName('O3').cellStyle = globalStyle66;
     sheet.getRangeByName('P3').cellStyle = globalStyle66;
+    sheet.getRangeByName('Q3').cellStyle = globalStyle66;
 
     sheet.getRangeByName('A4').cellStyle = globalStyle3;
     sheet.getRangeByName('B4').cellStyle = globalStyle3;
@@ -215,6 +219,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N4').cellStyle = globalStyle5;
     sheet.getRangeByName('O4').cellStyle = globalStyle6;
     sheet.getRangeByName('P4').cellStyle = globalStyle6;
+    sheet.getRangeByName('Q4').cellStyle = globalStyle6;
 
     sheet.getRangeByName('A4').columnWidth = 18;
     sheet.getRangeByName('B4').columnWidth = 25;
@@ -232,6 +237,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N4').columnWidth = 18;
     sheet.getRangeByName('O4').columnWidth = 18;
     sheet.getRangeByName('P4').columnWidth = 18;
+    sheet.getRangeByName('Q4').columnWidth = 18;
     sheet.getRangeByName('A3:E3').merge();
     // sheet.getRangeByName('B3:B4').merge();
     // sheet.getRangeByName('C3:C4').merge();
@@ -246,6 +252,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('F3').setText('ยอดรับชำระ');
     sheet.getRangeByName('L3').setText('ยอดนำส่งธนาคาร');
     sheet.getRangeByName('O4').setText('สรุป');
+
     // sheet.getRangeByName('A3').setText('ข้อมูลผู้เช่า');
 
     sheet.getRangeByName('A4').rowHeight = 18;
@@ -264,6 +271,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('N4').rowHeight = 18;
     sheet.getRangeByName('O4').rowHeight = 18;
     sheet.getRangeByName('P4').rowHeight = 18;
+    sheet.getRangeByName('Q4').rowHeight = 18;
 
     sheet.getRangeByName('A4').setText('เลขที่');
     sheet.getRangeByName('B4').setText('โซน');
@@ -280,6 +288,7 @@ class Excgen_DailyReport_cm {
     sheet.getRangeByName('L4').setText('7 คณา');
     sheet.getRangeByName('M4').setText('บริหาร');
     sheet.getRangeByName('N4').setText('ขาจร');
+    sheet.getRangeByName('Q4').setText('หมายเหตุ');
     //sheet.getRangeByName('O4').setText('สรุป');
     // sheet.getRangeByName('P4').setText('สรุป');
     int index1 = 0;
@@ -305,6 +314,7 @@ class Excgen_DailyReport_cm {
       sheet.getRangeByName('N${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('O${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('P${indextotol + 5 - 1}').cellStyle = numberColor;
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').cellStyle = numberColor;
       sheet.getRangeByName('A${indextotol + 5 - 1}').rowHeight = 30;
       sheet.getRangeByName('B${indextotol + 5 - 1}').rowHeight = 30;
       sheet.getRangeByName('C${indextotol + 5 - 1}').rowHeight = 30;
@@ -324,6 +334,7 @@ class Excgen_DailyReport_cm {
       sheet
           .getRangeByName('O${indextotol + 5 - 1}:P${indextotol + 5 - 1}')
           .merge();
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').rowHeight = 30;
 
       // if (i1 == 0) {
       //   indextotol = indextotol + 0;
@@ -335,14 +346,18 @@ class Excgen_DailyReport_cm {
       // print('${indextotol}');
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${i2 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
-            (_TransReBillModels[i2].zn == null)
+            (_TransReBillModels[i2].znn == null)
                 ? '-'
-                : '${_TransReBillModels[i2].zn}',
+                : ((_TransReBillModels[i2].znn.toString() == ''))
+                    ? '${_TransReBillModels[i2].zn}'
+                    : '${_TransReBillModels[i2].znn}',
           );
 
-      sheet.getRangeByName('C${indextotol + 5 - 1}').setText(
-          (_TransReBillModels[i2].ln == null)
-              ? '${_TransReBillModels[index1].room_number}'
+      sheet
+          .getRangeByName('C${indextotol + 5 - 1}')
+          .setText((_TransReBillModels[i2].ln == null)
+              ? '${_TransReBillModels[i2].room_number}'
+              //'${_TransReBillModels[index1].room_number}'
               : '${_TransReBillModels[i2].ln}');
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
@@ -390,29 +405,86 @@ class Excgen_DailyReport_cm {
           // '${_TransReBillModels[i2].total_bill}'
           );
 
-      sheet
-          .getRangeByName('L${indextotol + 5 - 1}')
-          .setText((_TransReBillModels[i2].zn.toString() == 'A')
-              ? '${nFormat.format(double.parse('200'))}'
-              : (_TransReBillModels[i2].zn.toString() == 'B')
-                  ? '${nFormat.format(double.parse('100'))}'
-                  : (_TransReBillModels[i2].zn.toString() == 'C')
-                      ? '${nFormat.format(double.parse('50'))}'
-                      : '${nFormat.format(double.parse('0'))}');
+      (_TransReBillModels[i2].zser.toString() != '11' ||
+              _TransReBillModels[i2].zser.toString() != '12' ||
+              _TransReBillModels[i2].zser.toString() != '0' ||
+              _TransReBillModels[i2].zser == null ||
+              _TransReBillModels[i2].zser1 != null)
+          ? sheet.getRangeByName('L${indextotol + 5 - 1}').setText((_TransReBillModels[
+                          i2]
+                      .zser
+                      .toString() ==
+                  '1')
+              ? '${nFormat.format(double.parse('200') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+              : (_TransReBillModels[i2].zser.toString() == '8')
+                  ? '${nFormat.format(double.parse('100') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+                  : (_TransReBillModels[i2].zser.toString() == '9')
+                      ? '${nFormat.format(double.parse('50') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+                      : (_TransReBillModels[i2].zn.toString() == 'A' &&
+                              sum_numDay_refno_CM[i2].length != 0)
+                          ? '${nFormat.format(double.parse('200') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+                          : (_TransReBillModels[i2].zn.toString() == 'B' &&
+                                  sum_numDay_refno_CM[i2].length != 0)
+                              ? '${nFormat.format(double.parse('100') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+                              : (_TransReBillModels[i2].zn.toString() == 'C' &&
+                                      sum_numDay_refno_CM[i2].length != 0)
+                                  ? '${nFormat.format(double.parse('50') * double.parse('${sum_numDay_refno_CM[i2][0]!}'))}'
+                                  : '${nFormat.format(double.parse('0'))}')
+          : sheet.getRangeByName('L${indextotol + 5 - 1}').setText('');
 
       sheet.getRangeByName('M${indextotol + 5 - 1}').setText((_TransReBillModels[
                       i2]
-                  .zn
+                  .zser
                   .toString() ==
-              'A')
-          ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - double.parse('200'))}'
-          : (_TransReBillModels[i2].zn.toString() == 'B')
-              ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - double.parse('100'))}'
-              : (_TransReBillModels[i2].zn.toString() == 'C')
-                  ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - double.parse('50'))}'
-                  : '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - double.parse('0'))}');
-      sheet.getRangeByName('N${indextotol + 5 - 1}').setText('');
-      sheet.getRangeByName('O${indextotol + 5 - 1}').setText('');
+              '1')
+          ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('200') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+          : (_TransReBillModels[i2].zser.toString() == '8')
+              ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('100') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+              : (_TransReBillModels[i2].zser.toString() == '9')
+                  ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('50') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+                  : (_TransReBillModels[i2].zser.toString() == '11') //ขาจร (B)
+                      ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse(rent_CM[i2][0]!) - double.parse('195')))}'
+                      : (_TransReBillModels[i2].zser.toString() ==
+                              '12') //ขาจร (C)
+                          ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse(rent_CM[i2][0]!) - double.parse('100')))}'
+                          : (_TransReBillModels[i2].zn.toString() == 'A')
+                              ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('200') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+                              : (_TransReBillModels[i2].zn.toString() == 'B')
+                                  ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('100') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+                                  : (_TransReBillModels[i2].zn.toString() ==
+                                          'C')
+                                      ? '${nFormat.format(double.parse('${_TransReBillModels[i2].total_bill}') - (double.parse('50') * double.parse('${sum_numDay_refno_CM[i2][0]!}')))}'
+                                      : '0.00');
+
+      sheet.getRangeByName('N${indextotol + 5 - 1}').setText((_TransReBillModels[
+                      i2]
+                  .zser
+                  .toString() ==
+              '11') //ขาจร (B)
+          ? '${nFormat.format(double.parse(rent_CM[i2][0]!) - double.parse('195'))}'
+          : (_TransReBillModels[i2].zser.toString() == '12') //ขาจร (C)
+              ? '${nFormat.format(double.parse(rent_CM[i2][0]!) - double.parse('100'))}'
+              : '0.00');
+
+      sheet.getRangeByName('O${indextotol + 5 - 1}').setText(
+
+          // (_TransReBillModels[
+          //               i2]
+          //           .zser
+          //           .toString() ==
+          //       '11') //ขาจร (B)
+          //   ? 'ขาจร (B) = เอายอด ค่าเช่ารายวัน ขาจร B 330 หรือ 248 บาท (หรือยอดอะไรก็ตามที่กรอdไว้) หัก ค่าเช่ารายวัน ของแผง B ปรกติ 195 บาท จะเท่ากับ ยอดที่จะต้องใส่ไว้ในช่อง ยอดนำส่งธนาคาร ขาจร แล้วส่วนที่เหลือ 499-135 = 364 เอาไว้ช่อง บริหาร'
+          //   : (_TransReBillModels[i2].zser.toString() == '12') //ขาจร (C)
+          //       ? 'ขาจร (C) = เอายอด ค่าเช่ารายวัน ขาจร C 165 บาท หัก ค่าเช่ารายวัน ของแผง C ปรกติ 100 บาท = ยอดที่จะเอาไว้ในช่อง ยอดนำส่งธนาคารขาจร แล้วส่วนที่เหลือ 204-65 = 139 เอาไว้ช่อง บริหาร'
+          //       :
+          // (sum_numDay_refno_CM[i2].isEmpty)
+          //     ? ''
+          //     : 'เลข 7คณาต้อง คูณ ${sum_numDay_refno_CM[i2][0]!} วัน'
+          '');
+      sheet.getRangeByName('Q${indextotol + 5 - 1}').setText(
+          (_TransReBillModels[i2].descr == null)
+              ? ''
+              : '${_TransReBillModels[i2].descr.toString()}');
     }
 
     final List<int> bytes = workbook.saveAsStream();

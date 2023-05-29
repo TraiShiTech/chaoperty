@@ -28,7 +28,8 @@ class Excgen_DailyReport_cus_cm {
       tank_CM_cus,
       electricity_CM_cus,
       MOMO_CM_cus,
-      rent_area_CM_cus) async {
+      rent_area_CM_cus,
+      sum_numDay_refno_CM_cus) async {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
@@ -335,14 +336,18 @@ class Excgen_DailyReport_cus_cm {
       // print('${indextotol}');
       sheet.getRangeByName('A${indextotol + 5 - 1}').setText('${i2 + 1}');
       sheet.getRangeByName('B${indextotol + 5 - 1}').setText(
-            (_TransReBillModels_cus[i2].zn == null)
+            (_TransReBillModels_cus[i2].znn == null)
                 ? '-'
-                : '${_TransReBillModels_cus[i2].zn}',
+                : ((_TransReBillModels_cus[i2].znn.toString() == ''))
+                    ? '${_TransReBillModels_cus[i2].zn}'
+                    : '${_TransReBillModels_cus[i2].znn}',
           );
 
-      sheet.getRangeByName('C${indextotol + 5 - 1}').setText(
-          (_TransReBillModels_cus[i2].ln == null)
-              ? '${_TransReBillModels_cus[index1].room_number}'
+      sheet
+          .getRangeByName('C${indextotol + 5 - 1}')
+          .setText((_TransReBillModels_cus[i2].ln == null)
+              ? '${_TransReBillModels_cus[i2].room_number}'
+              //'${_TransReBillModels[index1].room_number}'
               : '${_TransReBillModels_cus[i2].ln}');
 
       sheet.getRangeByName('D${indextotol + 5 - 1}').setText(
@@ -390,29 +395,81 @@ class Excgen_DailyReport_cus_cm {
           // '${_TransReBillModels[i2].total_bill}'
           );
 
-      sheet
-          .getRangeByName('L${indextotol + 5 - 1}')
-          .setText((_TransReBillModels_cus[i2].zn.toString() == 'A')
-              ? '${nFormat.format(double.parse('200'))}'
-              : (_TransReBillModels_cus[i2].zn.toString() == 'B')
-                  ? '${nFormat.format(double.parse('100'))}'
-                  : (_TransReBillModels_cus[i2].zn.toString() == 'C')
-                      ? '${nFormat.format(double.parse('50'))}'
-                      : '${nFormat.format(double.parse('0'))}');
+      (_TransReBillModels_cus[i2].zser.toString() != '11' ||
+              _TransReBillModels_cus[i2].zser.toString() != '12' ||
+              _TransReBillModels_cus[i2].zser.toString() != '0' ||
+              _TransReBillModels_cus[i2].zser == null ||
+              _TransReBillModels_cus[i2].zser1 != null)
+          ? sheet.getRangeByName('L${indextotol + 5 - 1}').setText((_TransReBillModels_cus[
+                          i2]
+                      .zser
+                      .toString() ==
+                  '1')
+              ? '${nFormat.format(double.parse('200') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+              : (_TransReBillModels_cus[i2].zser.toString() == '8')
+                  ? '${nFormat.format(double.parse('100') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+                  : (_TransReBillModels_cus[i2].zser.toString() == '9')
+                      ? '${nFormat.format(double.parse('50') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+                      : (_TransReBillModels_cus[i2].zn.toString() == 'A')
+                          ? '${nFormat.format(double.parse('200') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+                          : (_TransReBillModels_cus[i2].zn.toString() == 'B')
+                              ? '${nFormat.format(double.parse('100') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+                              : (_TransReBillModels_cus[i2].zn.toString() ==
+                                      'C')
+                                  ? '${nFormat.format(double.parse('50') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}'))}'
+                                  : '${nFormat.format(double.parse('0'))}')
+          : sheet.getRangeByName('L${indextotol + 5 - 1}').setText('');
 
       sheet.getRangeByName('M${indextotol + 5 - 1}').setText((_TransReBillModels_cus[
                       i2]
-                  .zn
+                  .zser
                   .toString() ==
-              'A')
-          ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - double.parse('200'))}'
-          : (_TransReBillModels_cus[i2].zn.toString() == 'B')
-              ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - double.parse('100'))}'
-              : (_TransReBillModels_cus[i2].zn.toString() == 'C')
-                  ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - double.parse('50'))}'
-                  : '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - double.parse('0'))}');
-      sheet.getRangeByName('N${indextotol + 5 - 1}').setText('');
-      sheet.getRangeByName('O${indextotol + 5 - 1}').setText('');
+              '1')
+          ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('200') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+          : (_TransReBillModels_cus[i2].zser.toString() == '8')
+              ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('100') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+              : (_TransReBillModels_cus[i2].zser.toString() == '9')
+                  ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('50') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+                  : (_TransReBillModels_cus[i2].zser.toString() ==
+                          '11') //ขาจร (B)
+                      ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse(rent_CM_cus[i2][0]!) - double.parse('195')))}'
+                      : (_TransReBillModels_cus[i2].zser.toString() ==
+                              '12') //ขาจร (C)
+                          ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse(rent_CM_cus[i2][0]!) - double.parse('100')))}'
+                          : (_TransReBillModels_cus[i2].zn.toString() == 'A')
+                              ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('200') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+                              : (_TransReBillModels_cus[i2].zn.toString() ==
+                                      'B')
+                                  ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('100') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+                                  : (_TransReBillModels_cus[i2].zn.toString() ==
+                                          'C')
+                                      ? '${nFormat.format(double.parse('${_TransReBillModels_cus[i2].total_bill}') - (double.parse('50') * double.parse('${sum_numDay_refno_CM_cus[i2][0]!}')))}'
+                                      : '0.00');
+
+      sheet.getRangeByName('N${indextotol + 5 - 1}').setText((_TransReBillModels_cus[
+                      i2]
+                  .zser
+                  .toString() ==
+              '11') //ขาจร (B)
+          ? '${nFormat.format(double.parse(rent_CM_cus[i2][0]!) - double.parse('195'))}'
+          : (_TransReBillModels_cus[i2].zser.toString() == '12') //ขาจร (C)
+              ? '${nFormat.format(double.parse(rent_CM_cus[i2][0]!) - double.parse('100'))}'
+              : '0.00');
+
+      sheet.getRangeByName('O${indextotol + 5 - 1}').setText(
+
+          // (_TransReBillModels[
+          //               i2]
+          //           .zser
+          //           .toString() ==
+          //       '11') //ขาจร (B)
+          //   ? 'ขาจร (B) = เอายอด ค่าเช่ารายวัน ขาจร B 330 หรือ 248 บาท (หรือยอดอะไรก็ตามที่กรอdไว้) หัก ค่าเช่ารายวัน ของแผง B ปรกติ 195 บาท จะเท่ากับ ยอดที่จะต้องใส่ไว้ในช่อง ยอดนำส่งธนาคาร ขาจร แล้วส่วนที่เหลือ 499-135 = 364 เอาไว้ช่อง บริหาร'
+          //   : (_TransReBillModels[i2].zser.toString() == '12') //ขาจร (C)
+          //       ? 'ขาจร (C) = เอายอด ค่าเช่ารายวัน ขาจร C 165 บาท หัก ค่าเช่ารายวัน ของแผง C ปรกติ 100 บาท = ยอดที่จะเอาไว้ในช่อง ยอดนำส่งธนาคารขาจร แล้วส่วนที่เหลือ 204-65 = 139 เอาไว้ช่อง บริหาร'
+          //       :
+          (sum_numDay_refno_CM_cus[i2].isEmpty)
+              ? ''
+              : 'เลข 7คณาต้อง คูณ ${sum_numDay_refno_CM_cus[i2][0]!} วัน');
     }
 
     final List<int> bytes = workbook.saveAsStream();

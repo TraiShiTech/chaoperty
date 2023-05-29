@@ -119,6 +119,7 @@ class TransReBillHistoryModel {
   String? total_sumamt;
   String? total_sumvat;
   String? total_sumnvat;
+  String? total_refno;
 
   TransReBillHistoryModel({
     this.ser,
@@ -236,6 +237,7 @@ class TransReBillHistoryModel {
     this.total_sumamt,
     this.total_sumvat,
     this.total_sumnvat,
+    this.total_refno,
   });
 
   TransReBillHistoryModel.fromJson(Map<String, dynamic> json) {
@@ -356,6 +358,7 @@ class TransReBillHistoryModel {
     total_sumamt = json['total_sumamt'];
     total_sumvat = json['total_sumvat'];
     total_sumnvat = json['total_sumnvat'];
+    total_refno = json['total_refno'];
   }
 
   Map<String, dynamic> toJson() {
@@ -476,6 +479,7 @@ class TransReBillHistoryModel {
     data['total_sumamt'] = this.total_sumamt;
     data['total_sumvat'] = this.total_sumvat;
     data['total_sumnvat'] = this.total_sumnvat;
+    data['total_refno'] = this.total_refno;
     return data;
   }
 }

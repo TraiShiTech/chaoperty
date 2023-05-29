@@ -95,7 +95,11 @@ dependencies:
   internet_connection_checker_plus: ^1.0.1
   simple_barcode_scanner: ^0.0.8
   device_marketing_names: ^0.6.4
-  
+  crc: ^0.0.2
+  crc32_checksum: ^0.0.2
+  pretty_qr_code: ^2.0.3
+  image_downloader_web: ^2.0.2
+  fast_image_resizer: ^0.0.2
   
   
   flutter_localizations:
@@ -129,11 +133,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - images/LOGO.png
-    - images/excel_icon.gif
-    - images/IconPDF.gif
-    - images/electric_meter.png
-    - images/water_meter.png
+    - images/
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

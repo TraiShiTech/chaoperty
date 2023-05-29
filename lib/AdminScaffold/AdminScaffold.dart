@@ -963,14 +963,14 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                                   flex: 1,
                                                                                   child: Row(
                                                                                     children: [
-                                                                                      Expanded(
-                                                                                          flex: 1,
-                                                                                          child: Text(
-                                                                                            '🟢',
-                                                                                            maxLines: 2,
-                                                                                            textAlign: TextAlign.end,
-                                                                                            style: TextStyle(color: (minutesPassed > 1) ? Colors.red : Colors.green, fontFamily: Font_.Fonts_T),
-                                                                                          )),
+                                                                                      Expanded(flex: 1, child: Icon((minutesPassed > 1) ? Icons.motion_photos_off_rounded : Icons.motion_photos_on_rounded, color: (minutesPassed > 1) ? Colors.red : Colors.green)
+                                                                                          // Text(
+                                                                                          //   '🟢',
+                                                                                          //   maxLines: 2,
+                                                                                          //   textAlign: TextAlign.end,
+                                                                                          //   style: TextStyle(color: (minutesPassed > 1) ? Colors.red : Colors.green, fontFamily: Font_.Fonts_T),
+                                                                                          // )
+                                                                                          ),
                                                                                       Expanded(
                                                                                         flex: 2,
                                                                                         child: Text(
@@ -1019,7 +1019,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                       .Fonts_T),
                                                           children: <TextSpan>[
                                                             TextSpan(
-                                                              text: '🟢 ',
+                                                              text: ' สีเขียว ',
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .green,
@@ -1037,7 +1037,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                       .Fonts_T),
                                                             ),
                                                             TextSpan(
-                                                              text: ' 🟢 ',
+                                                              text: ' สีแดง ',
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .red,

@@ -165,7 +165,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
   }
 
   void _launchURL() async {
-    final String url = 'https://mbstarweb.netlify.app/#/';
+    final String url = 'https://chopertymaket.netlify.app/#/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -386,10 +386,26 @@ class _EditwebScreenState extends State<EditwebScreen> {
 
     var ren = preferences.getString('renTalSer');
 
-    String url = (Path_.toString() == 'abountimg')
-        ? '${MyConstant().domain}/UpC_rental_dataimg_editweb.php?isAdd=true&ren=${ren}&Value=${Namefile}&typevalue=2'
-        : '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&value='
+    String url = '';
+
+    if (Path_.toString() == 'abountimg') {
+      setState(() {
+        url =
+            '${MyConstant().domain}/UpC_rental_dataimg_editweb.php?isAdd=true&ren=${ren}&Value=${Namefile}&typevalue=2';
+      });
+    } else if (Path_.toString() == 'manimg') {
+      setState(() {
+        url =
+            '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&value='
             '&typevalue=6';
+      });
+    } else if (Path_.toString() == 'qrimg') {
+      setState(() {
+        url =
+            '${MyConstant().domain}/UpC_rental_data_editweb.php?isAdd=true&ren=$ren&value='
+            '&typevalue=5';
+      });
+    }
 
     var response = await http.get(Uri.parse(url));
     var result = json.decode(response.body);
@@ -1740,9 +1756,9 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                     .all(Radius
                                                                         .circular(
                                                                             10.0))),
-                                                            title: const Center(
+                                                            title: Center(
                                                                 child: Text(
-                                                              'มีรูป QR Code อยู่แล้ว ',
+                                                              'มีรูป QR Code อยู่แล้ว $qr_img_',
                                                               style: TextStyle(
                                                                   color: SettingScreen_Color
                                                                       .Colors_Text1_,

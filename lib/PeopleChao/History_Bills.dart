@@ -97,7 +97,7 @@ class _HistoryBillsState extends State<HistoryBills> {
     var qutser = widget.Get_Value_NameShop_index;
 
     String url =
-        '${MyConstant().domain}/GC_bill_pay.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+        '${MyConstant().domain}_user/GC_bill_pay.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
     try {
       var response = await http.get(Uri.parse(url));
 

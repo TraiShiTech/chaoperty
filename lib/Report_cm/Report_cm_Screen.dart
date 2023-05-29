@@ -176,12 +176,14 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
     electricity_CM = [];
     MOMO_CM = [];
     rent_area_CM = [];
-
+    sum_numDay_refno_CM = [];
+    //-------
     rent_CM_cus = [];
     tank_CM_cus = [];
     electricity_CM_cus = [];
     MOMO_CM_cus = [];
     rent_area_CM_cus = [];
+    sum_numDay_refno_CM_cus = [];
     // contractx_expneme = [];
     coutumer_rent_CM = [];
     coutumer_tank_CM = [];
@@ -192,6 +194,20 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
 
     // fetchAlbum();
   }
+
+  Future<Null> setState_() async {
+    setState(() {
+      YE_ = null;
+      Mon_ = null;
+
+      Value_selectDate = null;
+      Value_selectDate_daly_cus = null;
+      Value_selectDate1 = null;
+      Value_selectDate2 = null;
+    });
+  }
+
+  ///77777
 
   Future<Null> checkPreferance() async {
     int currentYear = DateTime.now().year;
@@ -681,7 +697,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
         electricity_CM = List.generate(_TransReBillModels.length, (_) => []);
         MOMO_CM = List.generate(_TransReBillModels.length, (_) => []);
         rent_area_CM = List.generate(_TransReBillModels.length, (_) => []);
-
+        sum_numDay_refno_CM =
+            List.generate(_TransReBillModels.length, (_) => []);
         red_Trans_select();
         // for (int index = 0; index < _TransReBillModels.length; index++) {
         //   red_Trans_select(index);
@@ -696,6 +713,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
   late List<List<dynamic>> electricity_CM_cus;
   late List<List<dynamic>> MOMO_CM_cus;
   late List<List<dynamic>> rent_area_CM_cus;
+  late List<List<dynamic>> sum_numDay_refno_CM_cus;
+
   Future<Null> red_Trans_bill_custo_Cm() async {
     if (_TransReBillModels_cus.length != 0) {
       setState(() {
@@ -738,16 +757,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
         MOMO_CM_cus = List.generate(_TransReBillModels_cus.length, (_) => []);
         rent_area_CM_cus =
             List.generate(_TransReBillModels_cus.length, (_) => []);
-
+        sum_numDay_refno_CM_cus =
+            List.generate(_TransReBillModels_cus.length, (_) => []);
         red_Trans_select_cus();
       }
     } catch (e) {}
   }
 
   Future<Null> red_Trans_select_cus() async {
+    String index_st = 'true';
     for (int index = 0; index < TransReBillModels_cus.length; index++) {
       if (_TransReBillHistoryModels.length != 0) {
         setState(() {
+          index_st = 'true';
           _TransReBillHistoryModels.clear();
 
           sum_pvat = 0;
@@ -805,30 +827,34 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               _TransReBillHistoryModels.add(_TransReBillHistoryModel);
               TransReBillModels_cus[index].add(_TransReBillHistoryModel);
             });
-
-            if (_TransReBillHistoryModel.expname.toString() == 'ค่าเช่า') {
+            if (index_st == 'true') {
+              sum_numDay_refno_CM_cus[index]
+                  .add('${_TransReBillHistoryModel.total_refno}');
+              setState(() {
+                index_st = 'false';
+              });
+            } else {}
+            if (_TransReBillHistoryModel.expser.toString() == '1') {
               rent_CM_cus[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() == 'ถัง') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '10') {
               tank_CM_cus[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() ==
-                    'ค่าไฟ่' ||
-                _TransReBillHistoryModel.expname.toString() == 'ค่าไฟ') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '12' ||
+                _TransReBillHistoryModel.expser.toString() == '12') {
               electricity_CM_cus[index]
                   .add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() == 'โม่') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '9') {
               MOMO_CM_cus[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() ==
-                'เช่าพื้นที่') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '11') {
               rent_area_CM_cus[index]
                   .add('${_TransReBillHistoryModel.total_sum}');
             }
 
             print(
-                '**********///${electricity_CM_cus[index]}///99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
+                '**********///${electricity_CM_cus[index]}///9999999999999999999999999999999999999988--${_TransReBillHistoryModel.expser}');
             print(
-                '**********///${electricity_CM_cus[index]}/**99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
+                '**********///${electricity_CM_cus[index]}/**9999999999999999999999999999999999999988--${_TransReBillHistoryModel.expname}');
             print(
-                '**********///${electricity_CM_cus[index]}/**99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
+                '**********///${electricity_CM_cus[index]}/**9999999999999999999999999999999999999988--${_TransReBillHistoryModel.expname}');
           }
         }
         // setState(() {
@@ -903,12 +929,14 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
   late List<List<dynamic>> electricity_CM;
   late List<List<dynamic>> MOMO_CM;
   late List<List<dynamic>> rent_area_CM;
-
+  late List<List<dynamic>> sum_numDay_refno_CM;
 ///////////--------------------------------------------->(รายงานประจำวัน)
   Future<Null> red_Trans_select() async {
+    String index_st = 'true';
     for (int index = 0; index < _TransReBillModels.length; index++) {
       if (_TransReBillHistoryModels.length != 0) {
         setState(() {
+          index_st = 'true';
           _TransReBillHistoryModels.clear();
 
           sum_pvat = 0;
@@ -967,26 +995,48 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               TransReBillModels[index].add(_TransReBillHistoryModel);
             });
 
-            if (_TransReBillHistoryModel.expname.toString() == 'ค่าเช่า') {
+            // if (_TransReBillHistoryModel.expname.toString() == 'ค่าเช่า') {
+            //   rent_CM[index].add('${_TransReBillHistoryModel.total_sum}');
+            // } else if (_TransReBillHistoryModel.expname.toString() == 'ถัง') {
+            //   tank_CM[index].add('${_TransReBillHistoryModel.total_sum}');
+            // } else if (_TransReBillHistoryModel.expname.toString() ==
+            //         'ค่าไฟ่' ||
+            //     _TransReBillHistoryModel.expname.toString() == 'ค่าไฟ') {
+            //   electricity_CM[index]
+            //       .add('${_TransReBillHistoryModel.total_sum}');
+            // } else if (_TransReBillHistoryModel.expname.toString() == 'โม่') {
+            //   MOMO_CM[index].add('${_TransReBillHistoryModel.total_sum}');
+            // } else if (_TransReBillHistoryModel.expname.toString() ==
+            //     'เช่าพื้นที่') {
+            //   rent_area_CM[index].add('${_TransReBillHistoryModel.total_sum}');
+            // }
+            if (index_st == 'true') {
+              sum_numDay_refno_CM[index]
+                  .add('${_TransReBillHistoryModel.total_refno}');
+              setState(() {
+                index_st = 'false';
+              });
+            } else {}
+            if (_TransReBillHistoryModel.expser.toString() == '1') {
+              // sum_numDay_refno_CM[index]
+              //     .add('${_TransReBillHistoryModel.total_refno}');
               rent_CM[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() == 'ถัง') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '10') {
               tank_CM[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() ==
-                    'ค่าไฟ่' ||
-                _TransReBillHistoryModel.expname.toString() == 'ค่าไฟ') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '12' ||
+                _TransReBillHistoryModel.expser.toString() == '12') {
               electricity_CM[index]
                   .add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() == 'โม่') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '9') {
               MOMO_CM[index].add('${_TransReBillHistoryModel.total_sum}');
-            } else if (_TransReBillHistoryModel.expname.toString() ==
-                'เช่าพื้นที่') {
+            } else if (_TransReBillHistoryModel.expser.toString() == '11') {
               rent_area_CM[index].add('${_TransReBillHistoryModel.total_sum}');
             }
 
             print(
-                '**********///${electricity_CM[index]}///99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
+                '**********///${electricity_CM[index]}///99999999999999999999999999999999999999${_TransReBillHistoryModel.expser}');
             print(
-                '**********///${electricity_CM[index]}/**99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
+                '**********///${electricity_CM[index]}/**99999999999999999999999999999999999999${_TransReBillHistoryModel.expser}');
             print(
                 '**********///${electricity_CM[index]}/**99999999999999999999999999999999999999${_TransReBillHistoryModel.expname}');
           }
@@ -1624,7 +1674,10 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                             ),
                             padding: const EdgeInsets.all(8.0),
                             child: InkWell(
-                              onTap: () => Navigator.pop(context, 'OK'),
+                              onTap: () {
+                                setState_();
+                                Navigator.pop(context, 'OK');
+                              },
                               child: const Text(
                                 'ปิด',
                                 style: TextStyle(
@@ -1823,8 +1876,9 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               tank_CM,
               electricity_CM,
               MOMO_CM,
-              rent_area_CM);
-        } else if (Value_Report == 'รายงานประจำวันรายบุคคล') {
+              rent_area_CM,
+              sum_numDay_refno_CM);
+        } else if (Value_Report == 'รายงานรายบุคคล') {
           Excgen_DailyReport_cus_cm.exportExcel_DailyReport_cus_cm(
               context,
               NameFile_,
@@ -1838,7 +1892,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               tank_CM_cus,
               electricity_CM_cus,
               MOMO_CM_cus,
-              rent_area_CM_cus);
+              rent_area_CM_cus,
+              sum_numDay_refno_CM_cus);
         } else if (Value_Report == 'รายงานผู้เช่า') {
           Excgen_Custo_cm.exportExcel_Custo_cm(
               context,
@@ -2464,653 +2519,318 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                 ),
                               ),
                             ),
-                            onTap: (_TransReBillModels_Income.isEmpty)
-                                ? null
-                                : (TransReBillModels_Income[
-                                            _TransReBillModels_Income.length -
-                                                1]
-                                        .isEmpty)
+                            onTap:
+                                (_TransReBillModels_Income.isEmpty ||
+                                        Value_selectDate1 == null ||
+                                        Value_selectDate2 == null)
                                     ? null
-                                    : () async {
-                                        Insert_log.Insert_logs(
-                                            'รายงาน', 'กดดูรายงานรายรับ');
-                                        // List show_more = [];
-                                        int? show_more;
-
-                                        double Sum_Ramt_ = 0.0;
-                                        double Sum_Ramtd_ = 0.0;
-                                        double Sum_Amt_ = 0.0;
-                                        double Sum_Total_ = 0.0;
-
-                                        for (int indexsum1 = 0;
-                                            indexsum1 <
+                                    : (TransReBillModels_Income[
                                                 _TransReBillModels_Income
-                                                    .length;
-                                            indexsum1++) {
-                                          Sum_Ramt_ = Sum_Ramt_ +
-                                              double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .ramt!);
+                                                        .length -
+                                                    1]
+                                            .isEmpty)
+                                        ? null
+                                        : () async {
+                                            Insert_log.Insert_logs(
+                                                'รายงาน', 'กดดูรายงานรายรับ');
+                                            // List show_more = [];
+                                            int? show_more;
 
-                                          Sum_Ramtd_ = Sum_Ramtd_ +
-                                              double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .ramtd!);
+                                            double Sum_Ramt_ = 0.0;
+                                            double Sum_Ramtd_ = 0.0;
+                                            double Sum_Amt_ = 0.0;
+                                            double Sum_Total_ = 0.0;
 
-                                          Sum_Amt_ = Sum_Amt_ +
-                                              double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .amt!);
+                                            for (int indexsum1 = 0;
+                                                indexsum1 <
+                                                    _TransReBillModels_Income
+                                                        .length;
+                                                indexsum1++) {
+                                              Sum_Ramt_ = Sum_Ramt_ +
+                                                  double.parse(
+                                                      _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .ramt!);
 
-                                          Sum_Total_ = Sum_Total_ +
-                                              double.parse(
-                                                  _TransReBillModels_Income[
-                                                          indexsum1]
-                                                      .total!);
-                                          // for (int indexsum2 = 0;
-                                          //     indexsum2 <
-                                          //         TransReBillModels[indexsum1].length;
-                                          //     indexsum2++) {
-                                          //   Sum_Ramt_ = Sum_Ramt_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .ramt!);
-                                          //   Sum_Ramtd_ = Sum_Ramtd_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .ramtd!);
-                                          //   Sum_Amt_ = Sum_Amt_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .amt!);
-                                          //   Sum_Total_ = Sum_Total_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .total!);
-                                          // }
-                                        }
+                                              Sum_Ramtd_ = Sum_Ramtd_ +
+                                                  double.parse(
+                                                      _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .ramtd!);
 
-                                        showDialog<void>(
-                                          context: context,
-                                          barrierDismissible:
-                                              false, // user must tap button!
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20.0))),
-                                              title: Column(
-                                                children: [
-                                                  const Center(
-                                                      child: Text(
-                                                    'รายงานรายรับ',
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  )),
-                                                  Row(
+                                              Sum_Amt_ = Sum_Amt_ +
+                                                  double.parse(
+                                                      _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .amt!);
+
+                                              Sum_Total_ = Sum_Total_ +
+                                                  double.parse(
+                                                      _TransReBillModels_Income[
+                                                              indexsum1]
+                                                          .total!);
+                                              // for (int indexsum2 = 0;
+                                              //     indexsum2 <
+                                              //         TransReBillModels[indexsum1].length;
+                                              //     indexsum2++) {
+                                              //   Sum_Ramt_ = Sum_Ramt_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .ramt!);
+                                              //   Sum_Ramtd_ = Sum_Ramtd_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .ramtd!);
+                                              //   Sum_Amt_ = Sum_Amt_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .amt!);
+                                              //   Sum_Total_ = Sum_Total_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .total!);
+                                              // }
+                                            }
+
+                                            showDialog<void>(
+                                              context: context,
+                                              barrierDismissible:
+                                                  false, // user must tap button!
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      20.0))),
+                                                  title: Column(
                                                     children: [
-                                                      Expanded(
-                                                          flex: 1,
+                                                      const Center(
                                                           child: Text(
-                                                            (Value_selectDate1 ==
-                                                                        null &&
-                                                                    Value_selectDate2 ==
-                                                                        null)
-                                                                ? 'วันที่: ? ถึง ?'
-                                                                : (Value_selectDate1 ==
-                                                                        null)
-                                                                    ? 'วันที่: ? ถึง $Value_selectDate2'
-                                                                    : (Value_selectDate2 ==
+                                                        'รายงานรายรับ',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                        ),
+                                                      )),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                (Value_selectDate1 ==
+                                                                            null &&
+                                                                        Value_selectDate2 ==
                                                                             null)
-                                                                        ? 'วันที่: $Value_selectDate1 ถึง ?'
-                                                                        : 'วันที่: $Value_selectDate1 ถึง $Value_selectDate2',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontSize: 14,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          )),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            'ทั้งหมด: ${_TransReBillModels_Income.length}',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          )),
+                                                                    ? 'วันที่: ? ถึง ?'
+                                                                    : (Value_selectDate1 ==
+                                                                            null)
+                                                                        ? 'วันที่: ? ถึง $Value_selectDate2'
+                                                                        : (Value_selectDate2 ==
+                                                                                null)
+                                                                            ? 'วันที่: $Value_selectDate1 ถึง ?'
+                                                                            : 'วันที่: $Value_selectDate1 ถึง $Value_selectDate2',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontSize: 14,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              )),
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                'ทั้งหมด: ${_TransReBillModels_Income.length}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 1),
+                                                      const Divider(),
+                                                      const SizedBox(height: 1),
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 1),
-                                                  const Divider(),
-                                                  const SizedBox(height: 1),
-                                                ],
-                                              ),
-                                              content: StreamBuilder(
-                                                  stream: Stream.periodic(
-                                                      const Duration(
-                                                          seconds: 0)),
-                                                  builder: (context, snapshot) {
-                                                    return ScrollConfiguration(
-                                                      behavior:
-                                                          ScrollConfiguration
+                                                  content: StreamBuilder(
+                                                      stream: Stream.periodic(
+                                                          const Duration(
+                                                              seconds: 0)),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        return ScrollConfiguration(
+                                                          behavior: ScrollConfiguration
                                                                   .of(context)
                                                               .copyWith(
                                                                   dragDevices: {
-                                                            PointerDeviceKind
-                                                                .touch,
-                                                            PointerDeviceKind
-                                                                .mouse,
-                                                          }),
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            Container(
-                                                              // color: Colors.grey[50],
-                                                              width: (Responsive
-                                                                      .isDesktop(
-                                                                          context))
-                                                                  ? MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.9
-                                                                  : (_TransReBillModels_Income
+                                                                PointerDeviceKind
+                                                                    .touch,
+                                                                PointerDeviceKind
+                                                                    .mouse,
+                                                              }),
+                                                          child:
+                                                              SingleChildScrollView(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            child: Row(
+                                                              children: [
+                                                                Container(
+                                                                  // color: Colors.grey[50],
+                                                                  width: (Responsive
+                                                                          .isDesktop(
+                                                                              context))
+                                                                      ? MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.9
+                                                                      : (_TransReBillModels_Income.length ==
+                                                                              0)
+                                                                          ? MediaQuery.of(context)
+                                                                              .size
+                                                                              .width
+                                                                          : 800,
+                                                                  // height:
+                                                                  //     MediaQuery.of(context)
+                                                                  //             .size
+                                                                  //             .height *
+                                                                  //         0.3,
+                                                                  child: (_TransReBillModels_Income
                                                                               .length ==
                                                                           0)
-                                                                      ? MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width
-                                                                      : 800,
-                                                              // height:
-                                                              //     MediaQuery.of(context)
-                                                              //             .size
-                                                              //             .height *
-                                                              //         0.3,
-                                                              child: (_TransReBillModels_Income
-                                                                          .length ==
-                                                                      0)
-                                                                  ? Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: const [
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            'ไม่พบข้อมูล ณ วันที่เลือก',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: ReportScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                      ? Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: const [
+                                                                            Center(
+                                                                              child: Text(
+                                                                                'ไม่พบข้อมูล ณ วันที่เลือก',
+                                                                                style: TextStyle(
+                                                                                  color: ReportScreen_Color.Colors_Text1_,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                ),
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  : Column(
-                                                                      children: <
-                                                                          Widget>[
-                                                                        // for (int index1 = 0;
-                                                                        //     index1 <
-                                                                        //         _TransReBillModels
-                                                                        //             .length;
-                                                                        //     index1++)
-                                                                        Container(
-                                                                            height: MediaQuery.of(context).size.height *
-                                                                                0.45,
-                                                                            child:
-                                                                                ListView.builder(
-                                                                              itemCount: _TransReBillModels_Income.length,
-                                                                              itemBuilder: (BuildContext context, int index1) {
-                                                                                return ListTile(
-                                                                                  title: SizedBox(
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Container(
-                                                                                          child: Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                                                            children: [
-                                                                                              Container(
-                                                                                                decoration: const BoxDecoration(
-                                                                                                  color: AppbackgroundColor.TiTile_Colors,
-                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                ),
-                                                                                                padding: const EdgeInsets.all(4.0),
-                                                                                                child: Text(
-                                                                                                  //            '${_TransReBillModels_Income[index1].docno}',
-                                                                                                  _TransReBillModels_Income[index1].docno == '' ? '${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}' : '${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].refno}',
-                                                                                                  style: const TextStyle(
-                                                                                                    color: ReportScreen_Color.Colors_Text1_,
-                                                                                                    fontWeight: FontWeight.bold,
-                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                          ],
+                                                                        )
+                                                                      : Column(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            // for (int index1 = 0;
+                                                                            //     index1 <
+                                                                            //         _TransReBillModels
+                                                                            //             .length;
+                                                                            //     index1++)
+                                                                            Container(
+                                                                                height: MediaQuery.of(context).size.height * 0.45,
+                                                                                child: ListView.builder(
+                                                                                  itemCount: _TransReBillModels_Income.length,
+                                                                                  itemBuilder: (BuildContext context, int index1) {
+                                                                                    return ListTile(
+                                                                                      title: SizedBox(
+                                                                                        child: Column(
+                                                                                          children: [
+                                                                                            Container(
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: AppbackgroundColor.TiTile_Colors,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(4.0),
+                                                                                                    child: Text(
+                                                                                                      //            '${_TransReBillModels_Income[index1].docno}',
+                                                                                                      _TransReBillModels_Income[index1].docno == '' ? '${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].docno}' : '${index1 + 1}. เลขที่: ${_TransReBillModels_Income[index1].refno}',
+                                                                                                      style: const TextStyle(
+                                                                                                        color: ReportScreen_Color.Colors_Text1_,
+                                                                                                        fontWeight: FontWeight.bold,
+                                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                                      ),
+                                                                                                    ),
                                                                                                   ),
-                                                                                                ),
+                                                                                                  // Expanded(
+                                                                                                  //   child: Text(
+                                                                                                  //     (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname == Null) ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
+                                                                                                  //     textAlign: TextAlign.end,
+                                                                                                  //     style: const TextStyle(
+                                                                                                  //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                  //       fontWeight: FontWeight.bold,
+                                                                                                  //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                  //     ),
+                                                                                                  //   ),
+                                                                                                  // )
+                                                                                                ],
                                                                                               ),
-                                                                                              // Expanded(
-                                                                                              //   child: Text(
-                                                                                              //     (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname == Null) ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
-                                                                                              //     textAlign: TextAlign.end,
-                                                                                              //     style: const TextStyle(
-                                                                                              //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                              //       fontWeight: FontWeight.bold,
-                                                                                              //       fontFamily: FontWeight_.Fonts_T,
-                                                                                              //     ),
-                                                                                              //   ),
-                                                                                              // )
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                        if (show_more != index1)
-                                                                                          SizedBox(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                Container(
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
-                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                  ),
-                                                                                                  // padding: const EdgeInsets.all(4.0),
-                                                                                                  child: Row(
-                                                                                                    children: const [
-                                                                                                      SizedBox(
-                                                                                                        width: 20,
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รหัสพื้นที่',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'ชื่อร้านค้า',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'วันที่',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ชื่อร้านค้า',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รูปแบบชำระ',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'ธนาคาร',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รายการทั้งหมด',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รวม70%',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รวม30%',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รวม',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '...',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: Colors.grey[200],
-                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                  ),
-                                                                                                  // padding: const EdgeInsets.all(4.0),
-                                                                                                  child: Row(
-                                                                                                    children: [
-                                                                                                      const SizedBox(
-                                                                                                        width: 20,
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     (_TransReBillModels[index1].ln == null) ? '' : '${_TransReBillModels[index1].ln}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     (_TransReBillModels[index1].sname == null) ? '' : '${_TransReBillModels[index1].sname}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '${_TransReBillModels_Income[index1].daterec}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname.toString() == '') ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '${_TransReBillModels_Income[index1].type}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     '${_TransReBillModels[index1].bank}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          //'ttt',
-                                                                                                          '${nFormat2.format(double.parse(TransReBillModels_Income[index1].length.toString()))}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          // '${_TransReBillModels_Income[index1].ramt}',
-                                                                                                          (_TransReBillModels_Income[index1].ramt == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramt!))}',
-                                                                                                          // '${_TransReBillModels[index1].ramt}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          // '${_TransReBillModels_Income[index1].ramtd}',
-                                                                                                          (_TransReBillModels_Income[index1].ramtd == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramtd!))}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels_Income[index1].total!))}',
-                                                                                                          // '${_TransReBillModels[index1].total_bill}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Padding(
-                                                                                                          padding: const EdgeInsets.all(8.0),
-                                                                                                          child: Row(
-                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                            children: [
-                                                                                                              InkWell(
-                                                                                                                onTap: () {
-                                                                                                                  setState(() {
-                                                                                                                    show_more = index1;
-                                                                                                                  });
-                                                                                                                },
-                                                                                                                child: Container(
-                                                                                                                  width: 100,
-                                                                                                                  decoration: BoxDecoration(
-                                                                                                                    color: Colors.green[300],
-                                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                                  ),
-                                                                                                                  padding: const EdgeInsets.all(4.0),
-                                                                                                                  child: const Center(
-                                                                                                                    child: Text(
-                                                                                                                      'ดูเพิ่มเติม',
-                                                                                                                      style: TextStyle(
-                                                                                                                        color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                        // fontWeight: FontWeight.bold,
-                                                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                                                      ),
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                ),
-                                                                                                              ),
-                                                                                                            ],
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
                                                                                             ),
-                                                                                          ),
-                                                                                        if (show_more == index1)
-                                                                                          SizedBox(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                Stack(
+                                                                                            if (show_more != index1)
+                                                                                              SizedBox(
+                                                                                                child: Column(
                                                                                                   children: [
                                                                                                     Container(
                                                                                                       decoration: BoxDecoration(
                                                                                                         color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
                                                                                                         borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                                       ),
-                                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                                      // padding: const EdgeInsets.all(4.0),
                                                                                                       child: Row(
                                                                                                         children: const [
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ลำดับ',
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
+                                                                                                          SizedBox(
+                                                                                                            width: 20,
                                                                                                           ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'รหัสพื้นที่',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'ชื่อร้านค้า',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
                                                                                                               'วันที่',
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'รายการ',
                                                                                                               textAlign: TextAlign.center,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -3122,7 +2842,56 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'Vat%',
+                                                                                                              'ชื่อร้านค้า',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'รูปแบบชำระ',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'ธนาคาร',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'รายการทั้งหมด',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'รวม70%',
                                                                                                               textAlign: TextAlign.right,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -3134,7 +2903,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'หน่วย',
+                                                                                                              'รวม30%',
                                                                                                               textAlign: TextAlign.right,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -3146,7 +2915,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'VAT',
+                                                                                                              'รวม',
                                                                                                               textAlign: TextAlign.right,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -3158,43 +2927,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              '70 %',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              '30 %',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ราคาก่อน Vat',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ราคารวม Vat',
+                                                                                                              '...',
                                                                                                               textAlign: TextAlign.center,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -3206,642 +2939,966 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                         ],
                                                                                                       ),
                                                                                                     ),
-                                                                                                    Positioned(
-                                                                                                        top: 0,
-                                                                                                        right: 2,
-                                                                                                        child: InkWell(
-                                                                                                          onTap: () {
-                                                                                                            setState(() {
-                                                                                                              show_more = null;
-                                                                                                            });
-                                                                                                          },
-                                                                                                          child: const Icon(
-                                                                                                            Icons.cancel,
-                                                                                                            color: Colors.red,
+                                                                                                    Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[200],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                      ),
+                                                                                                      // padding: const EdgeInsets.all(4.0),
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          const SizedBox(
+                                                                                                            width: 20,
                                                                                                           ),
-                                                                                                        ))
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     (_TransReBillModels[index1].ln == null) ? '' : '${_TransReBillModels[index1].ln}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     (_TransReBillModels[index1].sname == null) ? '' : '${_TransReBillModels[index1].sname}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              '${_TransReBillModels_Income[index1].daterec}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname.toString() == '') ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              '${_TransReBillModels_Income[index1].type}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     '${_TransReBillModels[index1].bank}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              //'ttt',
+                                                                                                              '${nFormat2.format(double.parse(TransReBillModels_Income[index1].length.toString()))}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              // '${_TransReBillModels_Income[index1].ramt}',
+                                                                                                              (_TransReBillModels_Income[index1].ramt == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramt!))}',
+                                                                                                              // '${_TransReBillModels[index1].ramt}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              // '${_TransReBillModels_Income[index1].ramtd}',
+                                                                                                              (_TransReBillModels_Income[index1].ramtd == null) ? '' : '${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramtd!))}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels_Income[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              '${nFormat.format(double.parse(_TransReBillModels_Income[index1].total!))}',
+                                                                                                              // '${_TransReBillModels[index1].total_bill}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Padding(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: Row(
+                                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                                children: [
+                                                                                                                  InkWell(
+                                                                                                                    onTap: () {
+                                                                                                                      setState(() {
+                                                                                                                        show_more = index1;
+                                                                                                                      });
+                                                                                                                    },
+                                                                                                                    child: Container(
+                                                                                                                      width: 100,
+                                                                                                                      decoration: BoxDecoration(
+                                                                                                                        color: Colors.green[300],
+                                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                                      ),
+                                                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                                                      child: const Center(
+                                                                                                                        child: Text(
+                                                                                                                          'ดูเพิ่มเติม',
+                                                                                                                          style: TextStyle(
+                                                                                                                            color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                                                          ),
+                                                                                                                        ),
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      ),
+                                                                                                    ),
                                                                                                   ],
                                                                                                 ),
-                                                                                                for (int index2 = 0; index2 < TransReBillModels_Income[index1].length; index2++)
-                                                                                                  Container(
-                                                                                                    color: Colors.green[100]!.withOpacity(0.5),
-                                                                                                    padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                                                                    // padding: const EdgeInsets.all(4.0),
-                                                                                                    child: Column(
+                                                                                              ),
+                                                                                            if (show_more == index1)
+                                                                                              SizedBox(
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Stack(
                                                                                                       children: [
-                                                                                                        Row(
-                                                                                                          children: [
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${index1 + 1}.${index2 + 1}',
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                        Container(
+                                                                                                          decoration: BoxDecoration(
+                                                                                                            color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
+                                                                                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                          ),
+                                                                                                          padding: const EdgeInsets.all(4.0),
+                                                                                                          child: Row(
+                                                                                                            children: const [
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ลำดับ',
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels_Income[index1][index2].date}',
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'วันที่',
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels_Income[index1][index2].expname}',
-                                                                                                                textAlign: TextAlign.center,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'รายการ',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels_Income[index1][index2].nvat}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'Vat%',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels_Income[index1][index2].vtype}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วย',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].vat!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'VAT',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                (TransReBillModels_Income[index1][index2].ramt.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].ramt!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  '70 %',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                (TransReBillModels_Income[index1][index2].ramtd.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].ramtd!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  '30 %',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].amt!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ราคาก่อน Vat',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].total!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ราคารวม Vat',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            // Expanded(
-                                                                                                            //   flex: 1,
-                                                                                                            //   child: Text(
-                                                                                                            //     (TransReBillModels[index1][index2].sname == null) ? '' : '**${TransReBillModels[index1][index2].sname!}',
-                                                                                                            //     style: const TextStyle(
-                                                                                                            //       color: ReportScreen_Color.Colors_Text2_,
-                                                                                                            //       // fontWeight:
-                                                                                                            //       //     FontWeight.bold,
-                                                                                                            //       fontFamily: Font_.Fonts_T,
-                                                                                                            //     ),
-                                                                                                            //   ),
-                                                                                                            // ),
-                                                                                                          ],
+                                                                                                            ],
+                                                                                                          ),
                                                                                                         ),
-                                                                                                        const SizedBox(
-                                                                                                          height: 10,
-                                                                                                        )
+                                                                                                        Positioned(
+                                                                                                            top: 0,
+                                                                                                            right: 2,
+                                                                                                            child: InkWell(
+                                                                                                              onTap: () {
+                                                                                                                setState(() {
+                                                                                                                  show_more = null;
+                                                                                                                });
+                                                                                                              },
+                                                                                                              child: const Icon(
+                                                                                                                Icons.cancel,
+                                                                                                                color: Colors.red,
+                                                                                                              ),
+                                                                                                            ))
                                                                                                       ],
                                                                                                     ),
-                                                                                                  ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                            )),
-                                                                      ],
-                                                                    ),
+                                                                                                    for (int index2 = 0; index2 < TransReBillModels_Income[index1].length; index2++)
+                                                                                                      Container(
+                                                                                                        color: Colors.green[100]!.withOpacity(0.5),
+                                                                                                        padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                                                                        // padding: const EdgeInsets.all(4.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Row(
+                                                                                                              children: [
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${index1 + 1}.${index2 + 1}',
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels_Income[index1][index2].date}',
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels_Income[index1][index2].expname}',
+                                                                                                                    textAlign: TextAlign.center,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels_Income[index1][index2].nvat}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels_Income[index1][index2].vtype}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].vat!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    (TransReBillModels_Income[index1][index2].ramt.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].ramt!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    (TransReBillModels_Income[index1][index2].ramtd.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].ramtd!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].amt!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels_Income[index1][index2].total!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                // Expanded(
+                                                                                                                //   flex: 1,
+                                                                                                                //   child: Text(
+                                                                                                                //     (TransReBillModels[index1][index2].sname == null) ? '' : '**${TransReBillModels[index1][index2].sname!}',
+                                                                                                                //     style: const TextStyle(
+                                                                                                                //       color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                //       // fontWeight:
+                                                                                                                //       //     FontWeight.bold,
+                                                                                                                //       fontFamily: Font_.Fonts_T,
+                                                                                                                //     ),
+                                                                                                                //   ),
+                                                                                                                // ),
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                            const SizedBox(
+                                                                                                              height: 10,
+                                                                                                            )
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                              actions: <Widget>[
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
+                                                          ),
+                                                        );
+                                                      }),
+                                                  actions: <Widget>[
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                              .fromLTRB(
                                                           8, 0, 20, 4),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    children: [
-                                                      StreamBuilder(
-                                                          stream:
-                                                              Stream.periodic(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .end,
+                                                        children: [
+                                                          StreamBuilder(
+                                                              stream: Stream.periodic(
                                                                   const Duration(
                                                                       seconds:
                                                                           0)),
-                                                          builder: (context,
-                                                              snapshot) {
-                                                            return Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .fromLTRB(
-                                                                      8,
-                                                                      0,
-                                                                      20,
-                                                                      4),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 120,
-                                                                    width: 240,
-                                                                    child:
-                                                                        Column(
-                                                                      children: [
-                                                                        Row(
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          8,
+                                                                          0,
+                                                                          20,
+                                                                          4),
+                                                                  child: Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .end,
+                                                                    children: [
+                                                                      SizedBox(
+                                                                        height:
+                                                                            120,
+                                                                        width:
+                                                                            240,
+                                                                        child:
+                                                                            Column(
                                                                           children: [
-                                                                            Expanded(
-                                                                                child: Container(
-                                                                              decoration: const BoxDecoration(
-                                                                                color: AppbackgroundColor.TiTile_Colors,
-                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              ),
-                                                                              child: const Center(
-                                                                                child: Text(
-                                                                                  'รวม',
-                                                                                  maxLines: 1,
-                                                                                  textAlign: TextAlign.start,
-                                                                                  style: TextStyle(
-                                                                                    color: ReportScreen_Color.Colors_Text1_,
-                                                                                    fontWeight: FontWeight.bold,
-                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                    child: Container(
+                                                                                  decoration: const BoxDecoration(
+                                                                                    color: AppbackgroundColor.TiTile_Colors,
+                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                   ),
+                                                                                  child: const Center(
+                                                                                    child: Text(
+                                                                                      'รวม',
+                                                                                      maxLines: 1,
+                                                                                      textAlign: TextAlign.start,
+                                                                                      style: TextStyle(
+                                                                                        color: ReportScreen_Color.Colors_Text1_,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ))
+                                                                              ],
+                                                                            ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.grey[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                      ),
+                                                                                      child: const Text(
+                                                                                        'รวม 70%',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.start,
+                                                                                        style: TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text1_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
                                                                                 ),
-                                                                              ),
-                                                                            ))
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          children: [
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    color: Colors.grey[300],
-                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                  ),
-                                                                                  child: const Text(
-                                                                                    'รวม 70%',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text1_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      color: Colors.grey[200],
+                                                                                      child: Text(
+                                                                                        '${nFormat.format(Sum_Ramt_)}',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.end,
+                                                                                        style: const TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  color: Colors.grey[200],
-                                                                                  child: Text(
-                                                                                    '${nFormat.format(Sum_Ramt_)}',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.end,
-                                                                                    style: const TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text2_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.grey[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                      ),
+                                                                                      child: const Text(
+                                                                                        'รวม 30%',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.start,
+                                                                                        style: TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text1_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      color: Colors.grey[200],
+                                                                                      child: Text(
+                                                                                        '${nFormat.format(Sum_Ramtd_)}',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.end,
+                                                                                        style: const TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                              ],
                                                                             ),
-                                                                          ],
-                                                                        ),
-                                                                        Row(
-                                                                          children: [
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    color: Colors.grey[300],
-                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                  ),
-                                                                                  child: const Text(
-                                                                                    'รวม 30%',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text1_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  color: Colors.grey[200],
-                                                                                  child: Text(
-                                                                                    '${nFormat.format(Sum_Ramtd_)}',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.end,
-                                                                                    style: const TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text2_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        // Row(
-                                                                        //   children: [
-                                                                        //     Expanded(
-                                                                        //       flex: 1,
-                                                                        //       child: Container(
-                                                                        //           decoration:
-                                                                        //               BoxDecoration(
-                                                                        //             color: Colors
-                                                                        //                     .grey[
-                                                                        //                 300],
-                                                                        //             borderRadius: const BorderRadius
-                                                                        //                     .only(
-                                                                        //                 topLeft:
-                                                                        //                     Radius.circular(
-                                                                        //                         0),
-                                                                        //                 topRight:
-                                                                        //                     Radius.circular(
-                                                                        //                         0),
-                                                                        //                 bottomLeft:
-                                                                        //                     Radius.circular(
-                                                                        //                         0),
-                                                                        //                 bottomRight:
-                                                                        //                     Radius.circular(0)),
-                                                                        //           ),
-                                                                        //           child:
-                                                                        //               const Text(
-                                                                        //             'รวมราคาก่อน Vat',
-                                                                        //             maxLines: 1,
-                                                                        //             textAlign:
-                                                                        //                 TextAlign
-                                                                        //                     .start,
-                                                                        //             style:
-                                                                        //                 TextStyle(
-                                                                        //               color: ReportScreen_Color
-                                                                        //                   .Colors_Text1_,
-                                                                        //               fontWeight:
-                                                                        //                   FontWeight
-                                                                        //                       .bold,
-                                                                        //               fontFamily:
-                                                                        //                   FontWeight_
-                                                                        //                       .Fonts_T,
-                                                                        //             ),
-                                                                        //           )),
-                                                                        //     ),
-                                                                        //     Expanded(
-                                                                        //       flex: 1,
-                                                                        //       child: Container(
-                                                                        //           color: Colors
-                                                                        //                   .grey[
-                                                                        //               200],
-                                                                        //           child: Text(
-                                                                        //             '${nFormat.format(Sum_Amt_)}',
-                                                                        //             maxLines: 1,
-                                                                        //             textAlign:
-                                                                        //                 TextAlign
-                                                                        //                     .end,
-                                                                        //             style:
-                                                                        //                 const TextStyle(
-                                                                        //               color: ReportScreen_Color
-                                                                        //                   .Colors_Text2_,
-                                                                        //               fontWeight:
-                                                                        //                   FontWeight
-                                                                        //                       .bold,
-                                                                        //               fontFamily:
-                                                                        //                   Font_
-                                                                        //                       .Fonts_T,
-                                                                        //             ),
-                                                                        //           )),
-                                                                        //     ),
-                                                                        //   ],
-                                                                        // ),
-                                                                        Row(
-                                                                          children: [
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    color: Colors.grey[300],
-                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                  ),
-                                                                                  child: const Text(
-                                                                                    'รวม',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text1_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            Expanded(
-                                                                              flex: 1,
-                                                                              child: Container(
-                                                                                  color: Colors.grey[200],
-                                                                                  child: Text(
-                                                                                    '${nFormat.format(Sum_Total_)}',
-                                                                                    maxLines: 1,
-                                                                                    textAlign: TextAlign.end,
-                                                                                    style: const TextStyle(
-                                                                                      color: ReportScreen_Color.Colors_Text2_,
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                    ),
-                                                                                  )),
+                                                                            // Row(
+                                                                            //   children: [
+                                                                            //     Expanded(
+                                                                            //       flex: 1,
+                                                                            //       child: Container(
+                                                                            //           decoration:
+                                                                            //               BoxDecoration(
+                                                                            //             color: Colors
+                                                                            //                     .grey[
+                                                                            //                 300],
+                                                                            //             borderRadius: const BorderRadius
+                                                                            //                     .only(
+                                                                            //                 topLeft:
+                                                                            //                     Radius.circular(
+                                                                            //                         0),
+                                                                            //                 topRight:
+                                                                            //                     Radius.circular(
+                                                                            //                         0),
+                                                                            //                 bottomLeft:
+                                                                            //                     Radius.circular(
+                                                                            //                         0),
+                                                                            //                 bottomRight:
+                                                                            //                     Radius.circular(0)),
+                                                                            //           ),
+                                                                            //           child:
+                                                                            //               const Text(
+                                                                            //             'รวมราคาก่อน Vat',
+                                                                            //             maxLines: 1,
+                                                                            //             textAlign:
+                                                                            //                 TextAlign
+                                                                            //                     .start,
+                                                                            //             style:
+                                                                            //                 TextStyle(
+                                                                            //               color: ReportScreen_Color
+                                                                            //                   .Colors_Text1_,
+                                                                            //               fontWeight:
+                                                                            //                   FontWeight
+                                                                            //                       .bold,
+                                                                            //               fontFamily:
+                                                                            //                   FontWeight_
+                                                                            //                       .Fonts_T,
+                                                                            //             ),
+                                                                            //           )),
+                                                                            //     ),
+                                                                            //     Expanded(
+                                                                            //       flex: 1,
+                                                                            //       child: Container(
+                                                                            //           color: Colors
+                                                                            //                   .grey[
+                                                                            //               200],
+                                                                            //           child: Text(
+                                                                            //             '${nFormat.format(Sum_Amt_)}',
+                                                                            //             maxLines: 1,
+                                                                            //             textAlign:
+                                                                            //                 TextAlign
+                                                                            //                     .end,
+                                                                            //             style:
+                                                                            //                 const TextStyle(
+                                                                            //               color: ReportScreen_Color
+                                                                            //                   .Colors_Text2_,
+                                                                            //               fontWeight:
+                                                                            //                   FontWeight
+                                                                            //                       .bold,
+                                                                            //               fontFamily:
+                                                                            //                   Font_
+                                                                            //                       .Fonts_T,
+                                                                            //             ),
+                                                                            //           )),
+                                                                            //     ),
+                                                                            //   ],
+                                                                            // ),
+                                                                            Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      decoration: BoxDecoration(
+                                                                                        color: Colors.grey[300],
+                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                      ),
+                                                                                      child: const Text(
+                                                                                        'รวม',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.start,
+                                                                                        style: TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text1_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Container(
+                                                                                      color: Colors.grey[200],
+                                                                                      child: Text(
+                                                                                        '${nFormat.format(Sum_Total_)}',
+                                                                                        maxLines: 1,
+                                                                                        textAlign: TextAlign.end,
+                                                                                        style: const TextStyle(
+                                                                                          color: ReportScreen_Color.Colors_Text2_,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T,
+                                                                                        ),
+                                                                                      )),
+                                                                                ),
+                                                                              ],
                                                                             ),
                                                                           ],
                                                                         ),
-                                                                      ],
-                                                                    ),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 1),
-                                                const Divider(),
-                                                const SizedBox(height: 1),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8, 4, 8, 4),
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        if (_TransReBillModels_Income
-                                                                .length !=
-                                                            0)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: InkWell(
-                                                              child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .blue,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                ),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                );
+                                                              }),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 1),
+                                                    const Divider(),
+                                                    const SizedBox(height: 1),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 4, 8, 4),
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            if (_TransReBillModels_Income
+                                                                    .length !=
+                                                                0)
+                                                              Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .all(
                                                                         8.0),
-                                                                child:
-                                                                    const Center(
-                                                                  child: Text(
-                                                                    'Export file',
-                                                                    style:
-                                                                        TextStyle(
+                                                                child: InkWell(
+                                                                  child:
+                                                                      Container(
+                                                                    width: 100,
+                                                                    decoration:
+                                                                        const BoxDecoration(
                                                                       color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
+                                                                          .blue,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'Export file',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      Value_Report =
+                                                                          'รายงานรายรับ';
+                                                                      Pre_and_Dow =
+                                                                          'Download';
+                                                                    });
+                                                                    // Navigator.pop(context);
+                                                                    _showMyDialog_SAVE();
+                                                                  },
                                                                 ),
                                                               ),
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  Value_Report =
-                                                                      'รายงานรายรับ';
-                                                                  Pre_and_Dow =
-                                                                      'Download';
-                                                                });
-                                                                // Navigator.pop(context);
-                                                                _showMyDialog_SAVE();
-                                                              },
-                                                            ),
-                                                          ),
-                                                        // if (_TransReBillModels_Income
-                                                        //         .length !=
-                                                        //     0)
-                                                        //   Padding(
-                                                        //     padding:
-                                                        //         const EdgeInsets.all(8.0),
-                                                        //     child: InkWell(
-                                                        //       child: Container(
-                                                        //         width: 100,
-                                                        //         decoration:
-                                                        //             const BoxDecoration(
-                                                        //           color: Colors.green,
-                                                        //           borderRadius:
-                                                        //               BorderRadius.only(
-                                                        //                   topLeft: Radius
-                                                        //                       .circular(
-                                                        //                           10),
-                                                        //                   topRight: Radius
-                                                        //                       .circular(
-                                                        //                           10),
-                                                        //                   bottomLeft: Radius
-                                                        //                       .circular(
-                                                        //                           10),
-                                                        //                   bottomRight: Radius
-                                                        //                       .circular(
-                                                        //                           10)),
-                                                        //         ),
-                                                        //         padding:
-                                                        //             const EdgeInsets.all(
-                                                        //                 8.0),
-                                                        //         child: const Center(
-                                                        //           child: Text(
-                                                        //             'Print',
-                                                        //             style: TextStyle(
-                                                        //               color: Colors.white,
-                                                        //               fontWeight:
-                                                        //                   FontWeight.bold,
-                                                        //               fontFamily:
-                                                        //                   Font_.Fonts_T,
-                                                        //             ),
-                                                        //           ),
-                                                        //         ),
-                                                        //       ),
-                                                        //       onTap: () async {
-                                                        //         setState(() {
-                                                        //           Value_Report =
-                                                        //               'รายงานรายรับ';
-                                                        //           Pre_and_Dow = 'Preview';
-                                                        //         });
-                                                        //         Navigator.pop(context);
+                                                            // if (_TransReBillModels_Income
+                                                            //         .length !=
+                                                            //     0)
+                                                            //   Padding(
+                                                            //     padding:
+                                                            //         const EdgeInsets.all(8.0),
+                                                            //     child: InkWell(
+                                                            //       child: Container(
+                                                            //         width: 100,
+                                                            //         decoration:
+                                                            //             const BoxDecoration(
+                                                            //           color: Colors.green,
+                                                            //           borderRadius:
+                                                            //               BorderRadius.only(
+                                                            //                   topLeft: Radius
+                                                            //                       .circular(
+                                                            //                           10),
+                                                            //                   topRight: Radius
+                                                            //                       .circular(
+                                                            //                           10),
+                                                            //                   bottomLeft: Radius
+                                                            //                       .circular(
+                                                            //                           10),
+                                                            //                   bottomRight: Radius
+                                                            //                       .circular(
+                                                            //                           10)),
+                                                            //         ),
+                                                            //         padding:
+                                                            //             const EdgeInsets.all(
+                                                            //                 8.0),
+                                                            //         child: const Center(
+                                                            //           child: Text(
+                                                            //             'Print',
+                                                            //             style: TextStyle(
+                                                            //               color: Colors.white,
+                                                            //               fontWeight:
+                                                            //                   FontWeight.bold,
+                                                            //               fontFamily:
+                                                            //                   Font_.Fonts_T,
+                                                            //             ),
+                                                            //           ),
+                                                            //         ),
+                                                            //       ),
+                                                            //       onTap: () async {
+                                                            //         setState(() {
+                                                            //           Value_Report =
+                                                            //               'รายงานรายรับ';
+                                                            //           Pre_and_Dow = 'Preview';
+                                                            //         });
+                                                            //         Navigator.pop(context);
 
-                                                        //         _displayPdf_();
-                                                        //       },
-                                                        //     ),
-                                                        //   ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                              width: 100,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                              ),
+                                                            //         _displayPdf_();
+                                                            //       },
+                                                            //     ),
+                                                            //   ),
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'ปิด',
-                                                                  style:
-                                                                      TextStyle(
+                                                              child: InkWell(
+                                                                child:
+                                                                    Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      const BoxDecoration(
                                                                     color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
+                                                                        .black,
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      'ปิด',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
+                                                                onTap: () {
+                                                                  setState_();
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      'OK');
+                                                                },
                                                               ),
                                                             ),
-                                                            onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
+                                                          ],
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
+                                                  ],
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
                           ),
-                          (_TransReBillModels_Income.isEmpty)
+                          (_TransReBillModels_Income.isEmpty ||
+                                  Value_selectDate1 == null ||
+                                  Value_selectDate2 == null)
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -6132,9 +6189,10 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                               ),
                                                             ),
                                                             onTap: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
+                                                              setState_();
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'OK');
                                                             },
                                                           ),
                                                         ),
@@ -7179,809 +7237,296 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                 ),
                               ),
                             ),
-                            onTap: (_TransReBillModels.isEmpty)
-                                ? null
-                                : (TransReBillModels[
-                                            _TransReBillModels.length - 1]
-                                        .isEmpty)
+                            onTap:
+                                (_TransReBillModels.isEmpty ||
+                                        Value_selectDate == null)
                                     ? null
-                                    : () async {
-                                        // List show_more = [];
-                                        int? show_more;
+                                    : (TransReBillModels[
+                                                _TransReBillModels.length - 1]
+                                            .isEmpty)
+                                        ? null
+                                        : () async {
+                                            // List show_more = [];
+                                            int? show_more;
 
-                                        double Sum_Ramt_ = 0.0;
-                                        double Sum_Ramtd_ = 0.0;
-                                        double Sum_Amt_ = 0.0;
-                                        double Sum_Total_ = 0.0;
+                                            double Sum_Ramt_ = 0.0;
+                                            double Sum_Ramtd_ = 0.0;
+                                            double Sum_Amt_ = 0.0;
+                                            double Sum_Total_ = 0.0;
 
-                                        for (int indexsum1 = 0;
-                                            indexsum1 <
-                                                _TransReBillModels.length;
-                                            indexsum1++) {
-                                          Sum_Ramt_ = Sum_Ramt_ +
-                                              double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .ramt!);
+                                            for (int indexsum1 = 0;
+                                                indexsum1 <
+                                                    _TransReBillModels.length;
+                                                indexsum1++) {
+                                              Sum_Ramt_ = Sum_Ramt_ +
+                                                  double.parse(
+                                                      _TransReBillModels[
+                                                              indexsum1]
+                                                          .ramt!);
 
-                                          Sum_Ramtd_ = Sum_Ramtd_ +
-                                              double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .ramtd!);
+                                              Sum_Ramtd_ = Sum_Ramtd_ +
+                                                  double.parse(
+                                                      _TransReBillModels[
+                                                              indexsum1]
+                                                          .ramtd!);
 
-                                          Sum_Amt_ = Sum_Amt_ +
-                                              double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .amt!);
+                                              Sum_Amt_ = Sum_Amt_ +
+                                                  double.parse(
+                                                      _TransReBillModels[
+                                                              indexsum1]
+                                                          .amt!);
 
-                                          Sum_Total_ = Sum_Total_ +
-                                              double.parse(
-                                                  _TransReBillModels[indexsum1]
-                                                      .total_bill!);
-                                          // for (int indexsum2 = 0;
-                                          //     indexsum2 <
-                                          //         TransReBillModels[indexsum1].length;
-                                          //     indexsum2++) {
-                                          //   Sum_Ramt_ = Sum_Ramt_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .ramt!);
-                                          //   Sum_Ramtd_ = Sum_Ramtd_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .ramtd!);
-                                          //   Sum_Amt_ = Sum_Amt_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .amt!);
-                                          //   Sum_Total_ = Sum_Total_ +
-                                          //       double.parse(TransReBillModels[indexsum1]
-                                          //               [indexsum2]
-                                          //           .total!);
-                                          // }
-                                        }
-                                        Insert_log.Insert_logs(
-                                            'รายงาน', 'กดดูรายงานประจำวัน');
+                                              Sum_Total_ = Sum_Total_ +
+                                                  double.parse(
+                                                      _TransReBillModels[
+                                                              indexsum1]
+                                                          .total_bill!);
+                                              // for (int indexsum2 = 0;
+                                              //     indexsum2 <
+                                              //         TransReBillModels[indexsum1].length;
+                                              //     indexsum2++) {
+                                              //   Sum_Ramt_ = Sum_Ramt_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .ramt!);
+                                              //   Sum_Ramtd_ = Sum_Ramtd_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .ramtd!);
+                                              //   Sum_Amt_ = Sum_Amt_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .amt!);
+                                              //   Sum_Total_ = Sum_Total_ +
+                                              //       double.parse(TransReBillModels[indexsum1]
+                                              //               [indexsum2]
+                                              //           .total!);
+                                              // }
+                                            }
+                                            Insert_log.Insert_logs(
+                                                'รายงาน', 'กดดูรายงานประจำวัน');
 
-                                        showDialog<void>(
-                                          context: context,
-                                          barrierDismissible:
-                                              false, // user must tap button!
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  20.0))),
-                                              title: Column(
-                                                children: [
-                                                  const Center(
-                                                      child: Text(
-                                                    'รายงานประจำวัน',
-                                                    style: TextStyle(
-                                                      color: ReportScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                    ),
-                                                  )),
-                                                  Row(
+                                            showDialog<void>(
+                                              context: context,
+                                              barrierDismissible:
+                                                  false, // user must tap button!
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      20.0))),
+                                                  title: Column(
                                                     children: [
-                                                      Expanded(
-                                                          flex: 1,
+                                                      const Center(
                                                           child: Text(
-                                                            (Value_selectDate ==
-                                                                    null)
-                                                                ? 'วันที่: ?'
-                                                                : 'วันที่: $Value_selectDate',
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style:
-                                                                const TextStyle(
-                                                              color: ReportScreen_Color
+                                                        'รายงานประจำวัน',
+                                                        style: TextStyle(
+                                                          color:
+                                                              ReportScreen_Color
                                                                   .Colors_Text1_,
-                                                              fontSize: 14,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          )),
-                                                      Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            'ทั้งหมด: ${_TransReBillModels.length}',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                              // fontWeight: FontWeight.bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                            ),
-                                                          )),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                        ),
+                                                      )),
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                (Value_selectDate ==
+                                                                        null)
+                                                                    ? 'วันที่: ?'
+                                                                    : 'วันที่: $Value_selectDate',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontSize: 14,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              )),
+                                                          Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                'ทั้งหมด: ${_TransReBillModels.length}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style:
+                                                                    const TextStyle(
+                                                                  fontSize: 14,
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                ),
+                                                              )),
+                                                        ],
+                                                      ),
+                                                      const SizedBox(height: 1),
+                                                      const Divider(),
+                                                      const SizedBox(height: 1),
                                                     ],
                                                   ),
-                                                  const SizedBox(height: 1),
-                                                  const Divider(),
-                                                  const SizedBox(height: 1),
-                                                ],
-                                              ),
-                                              content: StreamBuilder(
-                                                  stream: Stream.periodic(
-                                                      const Duration(
-                                                          seconds: 0)),
-                                                  builder: (context, snapshot) {
-                                                    return ScrollConfiguration(
-                                                      behavior:
-                                                          ScrollConfiguration
+                                                  content: StreamBuilder(
+                                                      stream: Stream.periodic(
+                                                          const Duration(
+                                                              seconds: 0)),
+                                                      builder:
+                                                          (context, snapshot) {
+                                                        return ScrollConfiguration(
+                                                          behavior: ScrollConfiguration
                                                                   .of(context)
                                                               .copyWith(
                                                                   dragDevices: {
-                                                            PointerDeviceKind
-                                                                .touch,
-                                                            PointerDeviceKind
-                                                                .mouse,
-                                                          }),
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: [
-                                                            Container(
-                                                              // color: Colors.grey[50],
-                                                              width: (Responsive
-                                                                      .isDesktop(
-                                                                          context))
-                                                                  ? MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width *
-                                                                      0.9
-                                                                  : (_TransReBillModels
+                                                                PointerDeviceKind
+                                                                    .touch,
+                                                                PointerDeviceKind
+                                                                    .mouse,
+                                                              }),
+                                                          child:
+                                                              SingleChildScrollView(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            child: Row(
+                                                              children: [
+                                                                Container(
+                                                                  // color: Colors.grey[50],
+                                                                  width: (Responsive
+                                                                          .isDesktop(
+                                                                              context))
+                                                                      ? MediaQuery.of(context)
+                                                                              .size
+                                                                              .width *
+                                                                          0.9
+                                                                      : (_TransReBillModels.length ==
+                                                                              0)
+                                                                          ? MediaQuery.of(context)
+                                                                              .size
+                                                                              .width
+                                                                          : 800,
+                                                                  // height:
+                                                                  //     MediaQuery.of(context)
+                                                                  //             .size
+                                                                  //             .height *
+                                                                  //         0.3,
+                                                                  child: (_TransReBillModels
                                                                               .length ==
                                                                           0)
-                                                                      ? MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width
-                                                                      : 800,
-                                                              // height:
-                                                              //     MediaQuery.of(context)
-                                                              //             .size
-                                                              //             .height *
-                                                              //         0.3,
-                                                              child: (_TransReBillModels
-                                                                          .length ==
-                                                                      0)
-                                                                  ? Column(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .center,
-                                                                      children: const [
-                                                                        Center(
-                                                                          child:
-                                                                              Text(
-                                                                            'ไม่พบข้อมูล ณ วันที่เลือก',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: ReportScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                      ? Column(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: const [
+                                                                            Center(
+                                                                              child: Text(
+                                                                                'ไม่พบข้อมูล ณ วันที่เลือก',
+                                                                                style: TextStyle(
+                                                                                  color: ReportScreen_Color.Colors_Text1_,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                ),
+                                                                              ),
                                                                             ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    )
-                                                                  : Column(
-                                                                      children: <
-                                                                          Widget>[
-                                                                        // for (int index1 = 0;
-                                                                        //     index1 <
-                                                                        //         _TransReBillModels
-                                                                        //             .length;
-                                                                        //     index1++)
-                                                                        Container(
-                                                                            height: MediaQuery.of(context).size.height *
-                                                                                0.45,
-                                                                            child:
-                                                                                ListView.builder(
-                                                                              itemCount: _TransReBillModels.length,
-                                                                              itemBuilder: (BuildContext context, int index1) {
-                                                                                return ListTile(
-                                                                                  title: SizedBox(
-                                                                                    child: Column(
-                                                                                      children: [
-                                                                                        Container(
-                                                                                          child: Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.start,
-                                                                                            children: [
-                                                                                              Container(
-                                                                                                decoration: const BoxDecoration(
-                                                                                                  color: AppbackgroundColor.TiTile_Colors,
-                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                ),
-                                                                                                padding: const EdgeInsets.all(4.0),
-                                                                                                child: Text(
-                                                                                                  _TransReBillModels[index1].doctax == '' ? '${index1 + 1}. เลขที่: ${_TransReBillModels[index1].docno}' : '${index1 + 1}. เลขที่: ${_TransReBillModels[index1].doctax}',
-                                                                                                  style: const TextStyle(
-                                                                                                    color: ReportScreen_Color.Colors_Text1_,
-                                                                                                    fontWeight: FontWeight.bold,
-                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                          ],
+                                                                        )
+                                                                      : Column(
+                                                                          children: <
+                                                                              Widget>[
+                                                                            // for (int index1 = 0;
+                                                                            //     index1 <
+                                                                            //         _TransReBillModels
+                                                                            //             .length;
+                                                                            //     index1++)
+                                                                            Container(
+                                                                                height: MediaQuery.of(context).size.height * 0.45,
+                                                                                child: ListView.builder(
+                                                                                  itemCount: _TransReBillModels.length,
+                                                                                  itemBuilder: (BuildContext context, int index1) {
+                                                                                    return ListTile(
+                                                                                      title: SizedBox(
+                                                                                        child: Column(
+                                                                                          children: [
+                                                                                            Container(
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.start,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    decoration: const BoxDecoration(
+                                                                                                      color: AppbackgroundColor.TiTile_Colors,
+                                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                    ),
+                                                                                                    padding: const EdgeInsets.all(4.0),
+                                                                                                    child: Text(
+                                                                                                      _TransReBillModels[index1].doctax == '' ? '${index1 + 1}. เลขที่: ${_TransReBillModels[index1].docno}' : '${index1 + 1}. เลขที่: ${_TransReBillModels[index1].doctax}',
+                                                                                                      style: const TextStyle(
+                                                                                                        color: ReportScreen_Color.Colors_Text1_,
+                                                                                                        fontWeight: FontWeight.bold,
+                                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                                      ),
+                                                                                                    ),
                                                                                                   ),
-                                                                                                ),
+                                                                                                ],
                                                                                               ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                        if (show_more != index1)
-                                                                                          SizedBox(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                Container(
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
-                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                  ),
-                                                                                                  // padding: const EdgeInsets.all(4.0),
-                                                                                                  child: Row(
-                                                                                                    children: const [
-                                                                                                      SizedBox(
-                                                                                                        width: 20,
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รหัสพื้นที่',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รายการทั้งหมด',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รูปแบบชำระ',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'โซน',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รหัสพื้นที่',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'วันที่',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ผู้เช่า',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ชื่อร้านค้า',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ขนาดพื้นที่ (ตร.ม.)',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'ธนาคาร',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รวม70%',
-                                                                                                      //     textAlign: TextAlign.right,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      //   Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     'รวม30%',
-                                                                                                      //     textAlign: TextAlign.right,
-                                                                                                      //     style: TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ค่าเช่า',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'โม่',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ถัง',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'เช่าพื้นที่',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'ค่าไฟ',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          'รวม',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '...',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: FontWeight_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                ),
-                                                                                                Container(
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: Colors.grey[200],
-                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                  ),
-                                                                                                  // padding: const EdgeInsets.all(4.0),
-                                                                                                  child: Row(
-                                                                                                    children: [
-                                                                                                      const SizedBox(
-                                                                                                        width: 20,
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     (_TransReBillModels[index1].ln == null) ? '' : '${_TransReBillModels[index1].ln}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     '${nFormat2.format(double.parse(TransReBillModels[index1].length.toString()))}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     '${_TransReBillModels[index1].type}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels[index1].zn == null) ? '-' : '${_TransReBillModels[index1].zn}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels[index1].ln == null) ? '${_TransReBillModels[index1].room_number}' : '${_TransReBillModels[index1].ln}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     '${_TransReBillModels[index1].daterec}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels[index1].cname == null) ? '${_TransReBillModels[index1].remark}' : '${_TransReBillModels[index1].cname}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            //fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels[index1].sname == null) ? '-' : '${_TransReBillModels[index1].sname}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (_TransReBillModels[index1].area == null) ? '-' : '${_TransReBillModels[index1].area}',
-                                                                                                          // '${TransReBillModels[index1].length}',
-                                                                                                          textAlign: TextAlign.center,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      // Expanded(
-                                                                                                      //   flex: 1,
-                                                                                                      //   child: Text(
-                                                                                                      //     '${_TransReBillModels[index1].bank}',
-                                                                                                      //     // '${TransReBillModels[index1].length}',
-                                                                                                      //     textAlign: TextAlign.center,
-                                                                                                      //     style: const TextStyle(
-                                                                                                      //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                      //       // fontWeight: FontWeight.bold,
-                                                                                                      //       fontFamily: Font_.Fonts_T,
-                                                                                                      //     ),
-                                                                                                      //   ),
-                                                                                                      // ),
-
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (rent_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(rent_CM[index1][0]!))}',
-                                                                                                          //'${rent_CM[index1][0].toString()}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramt!))}',
-                                                                                                          // '${_TransReBillModels[index1].ramt}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (MOMO_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(MOMO_CM[index1][0]!))}',
-                                                                                                          //'${MOMO_CM[index1][0].toString()}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (tank_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(tank_CM[index1][0]!))}',
-                                                                                                          // '${tank_CM[index1][0].toString()}',
-                                                                                                          // '${tank_CM[index1]}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (rent_area_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(rent_area_CM[index1][0]!))}',
-                                                                                                          //'${rent_area_CM[index1][0].toString()}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          (electricity_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(electricity_CM[index1][0]!))}',
-                                                                                                          //'${electricity_CM[index1][0].toString()}',
-                                                                                                          //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
-                                                                                                          //  '${_TransReBillModels[index1].ramtd}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Text(
-                                                                                                          '${nFormat.format(double.parse(_TransReBillModels[index1].total_bill!))}',
-                                                                                                          // '${_TransReBillModels[index1].total_bill}',
-                                                                                                          textAlign: TextAlign.right,
-                                                                                                          style: const TextStyle(
-                                                                                                            color: ReportScreen_Color.Colors_Text1_,
-                                                                                                            // fontWeight: FontWeight.bold,
-                                                                                                            fontFamily: Font_.Fonts_T,
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                      Expanded(
-                                                                                                        flex: 1,
-                                                                                                        child: Padding(
-                                                                                                          padding: const EdgeInsets.all(8.0),
-                                                                                                          child: Row(
-                                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                            children: [
-                                                                                                              InkWell(
-                                                                                                                onTap: () {
-                                                                                                                  setState(() {
-                                                                                                                    show_more = index1;
-                                                                                                                  });
-                                                                                                                },
-                                                                                                                child: Container(
-                                                                                                                  width: 100,
-                                                                                                                  decoration: BoxDecoration(
-                                                                                                                    color: Colors.green[300],
-                                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                                  ),
-                                                                                                                  padding: const EdgeInsets.all(4.0),
-                                                                                                                  child: const Center(
-                                                                                                                    child: Text(
-                                                                                                                      'ดูเพิ่มเติม',
-                                                                                                                      style: TextStyle(
-                                                                                                                        color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                        // fontWeight: FontWeight.bold,
-                                                                                                                        fontFamily: Font_.Fonts_T,
-                                                                                                                      ),
-                                                                                                                    ),
-                                                                                                                  ),
-                                                                                                                ),
-                                                                                                              ),
-                                                                                                            ],
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ),
-                                                                                                    ],
-                                                                                                  ),
-                                                                                                ),
-                                                                                              ],
                                                                                             ),
-                                                                                          ),
-                                                                                        if (show_more == index1)
-                                                                                          SizedBox(
-                                                                                            child: Column(
-                                                                                              children: [
-                                                                                                Stack(
+                                                                                            if (show_more != index1)
+                                                                                              SizedBox(
+                                                                                                child: Column(
                                                                                                   children: [
                                                                                                     Container(
                                                                                                       decoration: BoxDecoration(
                                                                                                         color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
                                                                                                         borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                                       ),
-                                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                                      // padding: const EdgeInsets.all(4.0),
                                                                                                       child: Row(
                                                                                                         children: const [
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ลำดับ',
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
+                                                                                                          SizedBox(
+                                                                                                            width: 20,
                                                                                                           ),
                                                                                                           // Expanded(
                                                                                                           //   flex: 1,
                                                                                                           //   child: Text(
-                                                                                                          //     'กำหนดชำระ',
+                                                                                                          //     'รหัสพื้นที่',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'รายการทั้งหมด',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'รูปแบบชำระ',
+                                                                                                          //     textAlign: TextAlign.center,
                                                                                                           //     style: TextStyle(
                                                                                                           //       color: ReportScreen_Color.Colors_Text1_,
                                                                                                           //       fontWeight: FontWeight.bold,
@@ -7992,7 +7537,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'รายการ',
+                                                                                                              'โซน',
                                                                                                               textAlign: TextAlign.center,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -8004,7 +7549,106 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'Vat%',
+                                                                                                              'รหัสพื้นที่',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'วันที่',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ผู้เช่า',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ชื่อร้านค้า',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ขนาดพื้นที่ (ตร.ม.)',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'ธนาคาร',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'รวม70%',
+                                                                                                          //     textAlign: TextAlign.right,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          //   Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     'รวม30%',
+                                                                                                          //     textAlign: TextAlign.right,
+                                                                                                          //     style: TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ค่าเช่า',
                                                                                                               textAlign: TextAlign.right,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -8016,7 +7660,63 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'หน่วย',
+                                                                                                              'โม่',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ถัง',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'เช่าพื้นที่',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'ค่าไฟ',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'รวม',
                                                                                                               textAlign: TextAlign.right,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -8028,55 +7728,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              'VAT',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              '70 %',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              '30 %',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ราคาก่อน Vat',
-                                                                                                              textAlign: TextAlign.right,
-                                                                                                              style: TextStyle(
-                                                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                                                fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                                                              ),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                          Expanded(
-                                                                                                            flex: 1,
-                                                                                                            child: Text(
-                                                                                                              'ราคารวม Vat',
+                                                                                                              '...',
                                                                                                               textAlign: TextAlign.center,
                                                                                                               style: TextStyle(
                                                                                                                 color: ReportScreen_Color.Colors_Text1_,
@@ -8088,661 +7740,1066 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                         ],
                                                                                                       ),
                                                                                                     ),
-                                                                                                    Positioned(
-                                                                                                        top: 0,
-                                                                                                        right: 2,
-                                                                                                        child: InkWell(
-                                                                                                          onTap: () {
-                                                                                                            setState(() {
-                                                                                                              show_more = null;
-                                                                                                            });
-                                                                                                          },
-                                                                                                          child: const Icon(
-                                                                                                            Icons.cancel,
-                                                                                                            color: Colors.red,
+                                                                                                    Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[200],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                      ),
+                                                                                                      // padding: const EdgeInsets.all(4.0),
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          const SizedBox(
+                                                                                                            width: 20,
                                                                                                           ),
-                                                                                                        ))
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     (_TransReBillModels[index1].ln == null) ? '' : '${_TransReBillModels[index1].ln}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     '${nFormat2.format(double.parse(TransReBillModels[index1].length.toString()))}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     '${_TransReBillModels[index1].type}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels[index1].zn == null) ? '-' : '${_TransReBillModels[index1].zn}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels[index1].ln == null) ? '${_TransReBillModels[index1].room_number}' : '${_TransReBillModels[index1].ln}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     '${_TransReBillModels[index1].daterec}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels[index1].cname == null) ? '${_TransReBillModels[index1].remark}' : '${_TransReBillModels[index1].cname}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels[index1].sname == null) ? '-' : '${_TransReBillModels[index1].sname}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels[index1].area == null) ? '-' : '${_TransReBillModels[index1].area}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          // Expanded(
+                                                                                                          //   flex: 1,
+                                                                                                          //   child: Text(
+                                                                                                          //     '${_TransReBillModels[index1].bank}',
+                                                                                                          //     // '${TransReBillModels[index1].length}',
+                                                                                                          //     textAlign: TextAlign.center,
+                                                                                                          //     style: const TextStyle(
+                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                          //       // fontWeight: FontWeight.bold,
+                                                                                                          //       fontFamily: Font_.Fonts_T,
+                                                                                                          //     ),
+                                                                                                          //   ),
+                                                                                                          // ),
+
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (rent_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(rent_CM[index1][0]!))}',
+                                                                                                              //'${rent_CM[index1][0].toString()}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramt!))}',
+                                                                                                              // '${_TransReBillModels[index1].ramt}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (MOMO_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(MOMO_CM[index1][0]!))}',
+                                                                                                              //'${MOMO_CM[index1][0].toString()}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (tank_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(tank_CM[index1][0]!))}',
+                                                                                                              // '${tank_CM[index1][0].toString()}',
+                                                                                                              // '${tank_CM[index1]}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (rent_area_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(rent_area_CM[index1][0]!))}',
+                                                                                                              //'${rent_area_CM[index1][0].toString()}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (electricity_CM[index1].isEmpty) ? '0.00' : '${nFormat.format(double.parse(electricity_CM[index1][0]!))}',
+                                                                                                              //'${electricity_CM[index1][0].toString()}',
+                                                                                                              //'${nFormat.format(double.parse(_TransReBillModels[index1].ramtd!))}',
+                                                                                                              //  '${_TransReBillModels[index1].ramtd}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              '${nFormat.format(double.parse(_TransReBillModels[index1].total_bill!))}',
+                                                                                                              // '${_TransReBillModels[index1].total_bill}',
+                                                                                                              textAlign: TextAlign.right,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Padding(
+                                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                                              child: Row(
+                                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                                children: [
+                                                                                                                  InkWell(
+                                                                                                                    onTap: () {
+                                                                                                                      setState(() {
+                                                                                                                        show_more = index1;
+                                                                                                                      });
+                                                                                                                    },
+                                                                                                                    child: Container(
+                                                                                                                      width: 100,
+                                                                                                                      decoration: BoxDecoration(
+                                                                                                                        color: Colors.green[300],
+                                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                                      ),
+                                                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                                                      child: const Center(
+                                                                                                                        child: Text(
+                                                                                                                          'ดูเพิ่มเติม',
+                                                                                                                          style: TextStyle(
+                                                                                                                            color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                            // fontWeight: FontWeight.bold,
+                                                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                                                          ),
+                                                                                                                        ),
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ],
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      ),
+                                                                                                    ),
                                                                                                   ],
                                                                                                 ),
-                                                                                                for (int index2 = 0; index2 < TransReBillModels[index1].length; index2++)
-                                                                                                  Container(
-                                                                                                    color: Colors.green[100]!.withOpacity(0.5), padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                                                                                    // padding: const EdgeInsets.all(4.0),
-                                                                                                    child: Column(
+                                                                                              ),
+                                                                                            if (show_more == index1)
+                                                                                              SizedBox(
+                                                                                                child: Column(
+                                                                                                  children: [
+                                                                                                    Stack(
                                                                                                       children: [
-                                                                                                        Row(
-                                                                                                          children: [
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${index1 + 1}.${index2 + 1}',
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                        Container(
+                                                                                                          decoration: BoxDecoration(
+                                                                                                            color: AppbackgroundColor.TiTile_Colors.withOpacity(0.7),
+                                                                                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                          ),
+                                                                                                          padding: const EdgeInsets.all(4.0),
+                                                                                                          child: Row(
+                                                                                                            children: const [
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ลำดับ',
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            // Expanded(
-                                                                                                            //   flex: 1,
-                                                                                                            //   child: Text(
-                                                                                                            //     '${TransReBillModels[index1][index2].date}',
-                                                                                                            //     style: const TextStyle(
-                                                                                                            //       color: ReportScreen_Color.Colors_Text2_,
-                                                                                                            //       // fontWeight:
-                                                                                                            //       //     FontWeight.bold,
-                                                                                                            //       fontFamily: Font_.Fonts_T,
-                                                                                                            //     ),
-                                                                                                            //   ),
-                                                                                                            // ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels[index1][index2].expname}',
-                                                                                                                textAlign: TextAlign.center,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              // Expanded(
+                                                                                                              //   flex: 1,
+                                                                                                              //   child: Text(
+                                                                                                              //     'กำหนดชำระ',
+                                                                                                              //     style: TextStyle(
+                                                                                                              //       color: ReportScreen_Color.Colors_Text1_,
+                                                                                                              //       fontWeight: FontWeight.bold,
+                                                                                                              //       fontFamily: FontWeight_.Fonts_T,
+                                                                                                              //     ),
+                                                                                                              //   ),
+                                                                                                              // ),
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'รายการ',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels[index1][index2].total_sumnvat}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'Vat%',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${TransReBillModels[index1][index2].vtype}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'หน่วย',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumvat!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'VAT',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                (TransReBillModels[index1][index2].total_sumramt.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumramt!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  '70 %',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                (TransReBillModels[index1][index2].total_sumramtd.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumramtd!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  '30 %',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumamt!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ราคาก่อน Vat',
+                                                                                                                  textAlign: TextAlign.right,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            Expanded(
-                                                                                                              flex: 1,
-                                                                                                              child: Text(
-                                                                                                                '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sum!))}',
-                                                                                                                textAlign: TextAlign.right,
-                                                                                                                style: const TextStyle(
-                                                                                                                  color: ReportScreen_Color.Colors_Text2_,
-                                                                                                                  // fontWeight:
-                                                                                                                  //     FontWeight.bold,
-                                                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                                              Expanded(
+                                                                                                                flex: 1,
+                                                                                                                child: Text(
+                                                                                                                  'ราคารวม Vat',
+                                                                                                                  textAlign: TextAlign.center,
+                                                                                                                  style: TextStyle(
+                                                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                                  ),
                                                                                                                 ),
                                                                                                               ),
-                                                                                                            ),
-                                                                                                            // Expanded(
-                                                                                                            //   flex: 1,
-                                                                                                            //   child: Text(
-                                                                                                            //     (TransReBillModels[index1][index2].sname == null) ? '' : '**${TransReBillModels[index1][index2].sname!}',
-                                                                                                            //     style: const TextStyle(
-                                                                                                            //       color: ReportScreen_Color.Colors_Text2_,
-                                                                                                            //       // fontWeight:
-                                                                                                            //       //     FontWeight.bold,
-                                                                                                            //       fontFamily: Font_.Fonts_T,
-                                                                                                            //     ),
-                                                                                                            //   ),
-                                                                                                            // ),
-                                                                                                          ],
+                                                                                                            ],
+                                                                                                          ),
                                                                                                         ),
-                                                                                                        const SizedBox(
-                                                                                                          height: 10,
-                                                                                                        )
+                                                                                                        Positioned(
+                                                                                                            top: 0,
+                                                                                                            right: 2,
+                                                                                                            child: InkWell(
+                                                                                                              onTap: () {
+                                                                                                                setState(() {
+                                                                                                                  show_more = null;
+                                                                                                                });
+                                                                                                              },
+                                                                                                              child: const Icon(
+                                                                                                                Icons.cancel,
+                                                                                                                color: Colors.red,
+                                                                                                              ),
+                                                                                                            ))
                                                                                                       ],
                                                                                                     ),
-                                                                                                  ),
-                                                                                              ],
-                                                                                            ),
-                                                                                          ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                );
-                                                                              },
-                                                                            )),
-                                                                      ],
-                                                                    ),
+                                                                                                    for (int index2 = 0; index2 < TransReBillModels[index1].length; index2++)
+                                                                                                      Container(
+                                                                                                        color: Colors.green[100]!.withOpacity(0.5), padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                                                                        // padding: const EdgeInsets.all(4.0),
+                                                                                                        child: Column(
+                                                                                                          children: [
+                                                                                                            Row(
+                                                                                                              children: [
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${index1 + 1}.${index2 + 1}',
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                // Expanded(
+                                                                                                                //   flex: 1,
+                                                                                                                //   child: Text(
+                                                                                                                //     '${TransReBillModels[index1][index2].date}',
+                                                                                                                //     style: const TextStyle(
+                                                                                                                //       color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                //       // fontWeight:
+                                                                                                                //       //     FontWeight.bold,
+                                                                                                                //       fontFamily: Font_.Fonts_T,
+                                                                                                                //     ),
+                                                                                                                //   ),
+                                                                                                                // ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels[index1][index2].expname}',
+                                                                                                                    textAlign: TextAlign.center,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels[index1][index2].total_sumnvat}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${TransReBillModels[index1][index2].vtype}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumvat!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    (TransReBillModels[index1][index2].total_sumramt.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumramt!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    (TransReBillModels[index1][index2].total_sumramtd.toString() == 'null') ? '-' : '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumramtd!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sumamt!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                Expanded(
+                                                                                                                  flex: 1,
+                                                                                                                  child: Text(
+                                                                                                                    '${nFormat.format(double.parse(TransReBillModels[index1][index2].total_sum!))}',
+                                                                                                                    textAlign: TextAlign.right,
+                                                                                                                    style: const TextStyle(
+                                                                                                                      color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                      // fontWeight:
+                                                                                                                      //     FontWeight.bold,
+                                                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
+                                                                                                                // Expanded(
+                                                                                                                //   flex: 1,
+                                                                                                                //   child: Text(
+                                                                                                                //     (TransReBillModels[index1][index2].sname == null) ? '' : '**${TransReBillModels[index1][index2].sname!}',
+                                                                                                                //     style: const TextStyle(
+                                                                                                                //       color: ReportScreen_Color.Colors_Text2_,
+                                                                                                                //       // fontWeight:
+                                                                                                                //       //     FontWeight.bold,
+                                                                                                                //       fontFamily: Font_.Fonts_T,
+                                                                                                                //     ),
+                                                                                                                //   ),
+                                                                                                                // ),
+                                                                                                              ],
+                                                                                                            ),
+                                                                                                            const SizedBox(
+                                                                                                              height: 10,
+                                                                                                            )
+                                                                                                          ],
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                    );
+                                                                                  },
+                                                                                )),
+                                                                          ],
+                                                                        ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }),
-                                              actions: <Widget>[
-                                                StreamBuilder(
-                                                    stream: Stream.periodic(
-                                                        const Duration(
-                                                            seconds: 0)),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      return Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                8, 0, 20, 4),
+                                                          ),
+                                                        );
+                                                      }),
+                                                  actions: <Widget>[
+                                                    StreamBuilder(
+                                                        stream: Stream.periodic(
+                                                            const Duration(
+                                                                seconds: 0)),
+                                                        builder: (context,
+                                                            snapshot) {
+                                                          return Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    8,
+                                                                    0,
+                                                                    20,
+                                                                    4),
+                                                            child: Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .end,
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 120,
+                                                                  width: 240,
+                                                                  child: Column(
+                                                                    children: [
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                              child: Container(
+                                                                            decoration:
+                                                                                const BoxDecoration(
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                            ),
+                                                                            child:
+                                                                                const Center(
+                                                                              child: Text(
+                                                                                'รวม',
+                                                                                maxLines: 1,
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(
+                                                                                  color: ReportScreen_Color.Colors_Text1_,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ))
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.grey[300],
+                                                                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                ),
+                                                                                child: const Text(
+                                                                                  'รวม 70%',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                color: Colors.grey[200],
+                                                                                child: Text(
+                                                                                  '${nFormat.format(Sum_Ramt_)}',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text2_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.grey[300],
+                                                                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                ),
+                                                                                child: const Text(
+                                                                                  'รวม 30%',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                color: Colors.grey[200],
+                                                                                child: Text(
+                                                                                  '${nFormat.format(Sum_Ramtd_)}',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text2_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      // Row(
+                                                                      //   children: [
+                                                                      //     Expanded(
+                                                                      //       flex: 1,
+                                                                      //       child: Container(
+                                                                      //           decoration:
+                                                                      //               BoxDecoration(
+                                                                      //             color: Colors
+                                                                      //                     .grey[
+                                                                      //                 300],
+                                                                      //             borderRadius: const BorderRadius
+                                                                      //                     .only(
+                                                                      //                 topLeft:
+                                                                      //                     Radius.circular(
+                                                                      //                         0),
+                                                                      //                 topRight:
+                                                                      //                     Radius.circular(
+                                                                      //                         0),
+                                                                      //                 bottomLeft:
+                                                                      //                     Radius.circular(
+                                                                      //                         0),
+                                                                      //                 bottomRight:
+                                                                      //                     Radius.circular(0)),
+                                                                      //           ),
+                                                                      //           child:
+                                                                      //               const Text(
+                                                                      //             'รวมราคาก่อน Vat',
+                                                                      //             maxLines: 1,
+                                                                      //             textAlign:
+                                                                      //                 TextAlign
+                                                                      //                     .start,
+                                                                      //             style:
+                                                                      //                 TextStyle(
+                                                                      //               color: ReportScreen_Color
+                                                                      //                   .Colors_Text1_,
+                                                                      //               fontWeight:
+                                                                      //                   FontWeight
+                                                                      //                       .bold,
+                                                                      //               fontFamily:
+                                                                      //                   FontWeight_
+                                                                      //                       .Fonts_T,
+                                                                      //             ),
+                                                                      //           )),
+                                                                      //     ),
+                                                                      //     Expanded(
+                                                                      //       flex: 1,
+                                                                      //       child: Container(
+                                                                      //           color: Colors
+                                                                      //                   .grey[
+                                                                      //               200],
+                                                                      //           child: Text(
+                                                                      //             '${nFormat.format(Sum_Amt_)}',
+                                                                      //             maxLines: 1,
+                                                                      //             textAlign:
+                                                                      //                 TextAlign
+                                                                      //                     .end,
+                                                                      //             style:
+                                                                      //                 const TextStyle(
+                                                                      //               color: ReportScreen_Color
+                                                                      //                   .Colors_Text2_,
+                                                                      //               fontWeight:
+                                                                      //                   FontWeight
+                                                                      //                       .bold,
+                                                                      //               fontFamily:
+                                                                      //                   Font_
+                                                                      //                       .Fonts_T,
+                                                                      //             ),
+                                                                      //           )),
+                                                                      //     ),
+                                                                      //   ],
+                                                                      // ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.grey[300],
+                                                                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                ),
+                                                                                child: const Text(
+                                                                                  'รวม',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text1_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child: Container(
+                                                                                color: Colors.grey[200],
+                                                                                child: Text(
+                                                                                  '${nFormat.format(Sum_Total_)}',
+                                                                                  maxLines: 1,
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: const TextStyle(
+                                                                                    color: ReportScreen_Color.Colors_Text2_,
+                                                                                    fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  ),
+                                                                                )),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          );
+                                                        }),
+                                                    const SizedBox(height: 1),
+                                                    const Divider(),
+                                                    const SizedBox(height: 1),
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 4, 8, 4),
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
                                                         child: Row(
                                                           mainAxisAlignment:
                                                               MainAxisAlignment
                                                                   .end,
                                                           children: [
-                                                            SizedBox(
-                                                              height: 120,
-                                                              width: 240,
-                                                              child: Column(
-                                                                children: [
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                          child:
-                                                                              Container(
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          color:
-                                                                              AppbackgroundColor.TiTile_Colors,
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(5),
-                                                                              topRight: Radius.circular(5),
-                                                                              bottomLeft: Radius.circular(0),
-                                                                              bottomRight: Radius.circular(0)),
-                                                                        ),
-                                                                        child:
-                                                                            const Center(
-                                                                          child:
-                                                                              Text(
-                                                                            'รวม',
-                                                                            maxLines:
-                                                                                1,
-                                                                            textAlign:
-                                                                                TextAlign.start,
-                                                                            style:
-                                                                                TextStyle(
-                                                                              color: ReportScreen_Color.Colors_Text1_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ))
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                              color: Colors.grey[300],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                            ),
-                                                                            child: const Text(
-                                                                              'รวม 70%',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            color: Colors.grey[200],
-                                                                            child: Text(
-                                                                              '${nFormat.format(Sum_Ramt_)}',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text2_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                              color: Colors.grey[300],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                            ),
-                                                                            child: const Text(
-                                                                              'รวม 30%',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            color: Colors.grey[200],
-                                                                            child: Text(
-                                                                              '${nFormat.format(Sum_Ramtd_)}',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text2_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  // Row(
-                                                                  //   children: [
-                                                                  //     Expanded(
-                                                                  //       flex: 1,
-                                                                  //       child: Container(
-                                                                  //           decoration:
-                                                                  //               BoxDecoration(
-                                                                  //             color: Colors
-                                                                  //                     .grey[
-                                                                  //                 300],
-                                                                  //             borderRadius: const BorderRadius
-                                                                  //                     .only(
-                                                                  //                 topLeft:
-                                                                  //                     Radius.circular(
-                                                                  //                         0),
-                                                                  //                 topRight:
-                                                                  //                     Radius.circular(
-                                                                  //                         0),
-                                                                  //                 bottomLeft:
-                                                                  //                     Radius.circular(
-                                                                  //                         0),
-                                                                  //                 bottomRight:
-                                                                  //                     Radius.circular(0)),
-                                                                  //           ),
-                                                                  //           child:
-                                                                  //               const Text(
-                                                                  //             'รวมราคาก่อน Vat',
-                                                                  //             maxLines: 1,
-                                                                  //             textAlign:
-                                                                  //                 TextAlign
-                                                                  //                     .start,
-                                                                  //             style:
-                                                                  //                 TextStyle(
-                                                                  //               color: ReportScreen_Color
-                                                                  //                   .Colors_Text1_,
-                                                                  //               fontWeight:
-                                                                  //                   FontWeight
-                                                                  //                       .bold,
-                                                                  //               fontFamily:
-                                                                  //                   FontWeight_
-                                                                  //                       .Fonts_T,
-                                                                  //             ),
-                                                                  //           )),
-                                                                  //     ),
-                                                                  //     Expanded(
-                                                                  //       flex: 1,
-                                                                  //       child: Container(
-                                                                  //           color: Colors
-                                                                  //                   .grey[
-                                                                  //               200],
-                                                                  //           child: Text(
-                                                                  //             '${nFormat.format(Sum_Amt_)}',
-                                                                  //             maxLines: 1,
-                                                                  //             textAlign:
-                                                                  //                 TextAlign
-                                                                  //                     .end,
-                                                                  //             style:
-                                                                  //                 const TextStyle(
-                                                                  //               color: ReportScreen_Color
-                                                                  //                   .Colors_Text2_,
-                                                                  //               fontWeight:
-                                                                  //                   FontWeight
-                                                                  //                       .bold,
-                                                                  //               fontFamily:
-                                                                  //                   Font_
-                                                                  //                       .Fonts_T,
-                                                                  //             ),
-                                                                  //           )),
-                                                                  //     ),
-                                                                  //   ],
-                                                                  // ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            decoration: BoxDecoration(
-                                                                              color: Colors.grey[300],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                            ),
-                                                                            child: const Text(
-                                                                              'รวม',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text1_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: FontWeight_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                      Expanded(
-                                                                        flex: 1,
-                                                                        child: Container(
-                                                                            color: Colors.grey[200],
-                                                                            child: Text(
-                                                                              '${nFormat.format(Sum_Total_)}',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                color: ReportScreen_Color.Colors_Text2_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T,
-                                                                              ),
-                                                                            )),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      );
-                                                    }),
-                                                const SizedBox(height: 1),
-                                                const Divider(),
-                                                const SizedBox(height: 1),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.fromLTRB(
-                                                          8, 4, 8, 4),
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        if (_TransReBillModels
-                                                                .length !=
-                                                            0)
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: InkWell(
-                                                              child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .blue,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                ),
+                                                            if (_TransReBillModels
+                                                                    .length !=
+                                                                0)
+                                                              Padding(
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .all(
                                                                         8.0),
-                                                                child:
-                                                                    const Center(
-                                                                  child: Text(
-                                                                    'Export file',
-                                                                    style:
-                                                                        TextStyle(
+                                                                child: InkWell(
+                                                                  child:
+                                                                      Container(
+                                                                    width: 100,
+                                                                    decoration:
+                                                                        const BoxDecoration(
                                                                       color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T,
+                                                                          .blue,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'Export file',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T,
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
+                                                                  onTap: () {
+                                                                    if (_TransReBillModels
+                                                                            .length ==
+                                                                        0) {
+                                                                    } else {
+                                                                      setState(
+                                                                          () {
+                                                                        show_more =
+                                                                            null;
+                                                                        Value_Report =
+                                                                            'รายงานประจำวัน';
+                                                                        Pre_and_Dow =
+                                                                            'Download';
+                                                                      });
+                                                                      // Navigator.of(
+                                                                      //         context)
+                                                                      //     .pop();
+                                                                      _showMyDialog_SAVE();
+                                                                    }
+                                                                  },
                                                                 ),
                                                               ),
-                                                              onTap: () {
-                                                                if (_TransReBillModels
-                                                                        .length ==
-                                                                    0) {
-                                                                } else {
-                                                                  setState(() {
-                                                                    show_more =
-                                                                        null;
-                                                                    Value_Report =
-                                                                        'รายงานประจำวัน';
-                                                                    Pre_and_Dow =
-                                                                        'Download';
-                                                                  });
-                                                                  // Navigator.of(
-                                                                  //         context)
-                                                                  //     .pop();
-                                                                  _showMyDialog_SAVE();
-                                                                }
-                                                              },
-                                                            ),
-                                                          ),
-                                                        // if (_TransReBillModels
-                                                        //         .length !=
-                                                        //     0)
-                                                        //   Padding(
-                                                        //     padding:
-                                                        //         const EdgeInsets
-                                                        //             .all(8.0),
-                                                        //     child: InkWell(
-                                                        //       child: Container(
-                                                        //         width: 100,
-                                                        //         decoration:
-                                                        //             const BoxDecoration(
-                                                        //           color: Colors
-                                                        //               .green,
-                                                        //           borderRadius: BorderRadius.only(
-                                                        //               topLeft:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               topRight:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               bottomLeft:
-                                                        //                   Radius.circular(
-                                                        //                       10),
-                                                        //               bottomRight:
-                                                        //                   Radius.circular(
-                                                        //                       10)),
-                                                        //         ),
-                                                        //         padding:
-                                                        //             const EdgeInsets
-                                                        //                     .all(
-                                                        //                 8.0),
-                                                        //         child:
-                                                        //             const Center(
-                                                        //           child: Text(
-                                                        //             'Print',
-                                                        //             style:
-                                                        //                 TextStyle(
-                                                        //               color: Colors
-                                                        //                   .white,
-                                                        //               fontWeight:
-                                                        //                   FontWeight
-                                                        //                       .bold,
-                                                        //               fontFamily:
-                                                        //                   Font_
-                                                        //                       .Fonts_T,
-                                                        //             ),
-                                                        //           ),
-                                                        //         ),
-                                                        //       ),
-                                                        //       onTap: () async {
-                                                        //         if (_TransReBillModels
-                                                        //                 .length ==
-                                                        //             0) {
-                                                        //         } else {
-                                                        //           setState(() {
-                                                        //             show_more =
-                                                        //                 null;
-                                                        //             Value_Report =
-                                                        //                 'รายงานประจำวัน';
-                                                        //             Pre_and_Dow =
-                                                        //                 'Preview';
-                                                        //           });
-                                                        //           // Navigator.pop(context);
-                                                        //           _displayPdf_();
-                                                        //         }
-                                                        //       },
-                                                        //     ),
-                                                        //   ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                              width: 100,
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                borderRadius: BorderRadius.only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                              ),
+                                                            // if (_TransReBillModels
+                                                            //         .length !=
+                                                            //     0)
+                                                            //   Padding(
+                                                            //     padding:
+                                                            //         const EdgeInsets
+                                                            //             .all(8.0),
+                                                            //     child: InkWell(
+                                                            //       child: Container(
+                                                            //         width: 100,
+                                                            //         decoration:
+                                                            //             const BoxDecoration(
+                                                            //           color: Colors
+                                                            //               .green,
+                                                            //           borderRadius: BorderRadius.only(
+                                                            //               topLeft:
+                                                            //                   Radius.circular(
+                                                            //                       10),
+                                                            //               topRight:
+                                                            //                   Radius.circular(
+                                                            //                       10),
+                                                            //               bottomLeft:
+                                                            //                   Radius.circular(
+                                                            //                       10),
+                                                            //               bottomRight:
+                                                            //                   Radius.circular(
+                                                            //                       10)),
+                                                            //         ),
+                                                            //         padding:
+                                                            //             const EdgeInsets
+                                                            //                     .all(
+                                                            //                 8.0),
+                                                            //         child:
+                                                            //             const Center(
+                                                            //           child: Text(
+                                                            //             'Print',
+                                                            //             style:
+                                                            //                 TextStyle(
+                                                            //               color: Colors
+                                                            //                   .white,
+                                                            //               fontWeight:
+                                                            //                   FontWeight
+                                                            //                       .bold,
+                                                            //               fontFamily:
+                                                            //                   Font_
+                                                            //                       .Fonts_T,
+                                                            //             ),
+                                                            //           ),
+                                                            //         ),
+                                                            //       ),
+                                                            //       onTap: () async {
+                                                            //         if (_TransReBillModels
+                                                            //                 .length ==
+                                                            //             0) {
+                                                            //         } else {
+                                                            //           setState(() {
+                                                            //             show_more =
+                                                            //                 null;
+                                                            //             Value_Report =
+                                                            //                 'รายงานประจำวัน';
+                                                            //             Pre_and_Dow =
+                                                            //                 'Preview';
+                                                            //           });
+                                                            //           // Navigator.pop(context);
+                                                            //           _displayPdf_();
+                                                            //         }
+                                                            //       },
+                                                            //     ),
+                                                            //   ),
+                                                            Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(8.0),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'ปิด',
-                                                                  style:
-                                                                      TextStyle(
+                                                              child: InkWell(
+                                                                child:
+                                                                    Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      const BoxDecoration(
                                                                     color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T,
+                                                                        .black,
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      'ปิด',
+                                                                      style:
+                                                                          TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight.bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T,
+                                                                      ),
+                                                                    ),
                                                                   ),
                                                                 ),
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    show_more =
+                                                                        null;
+                                                                  });
+                                                                  setState_();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
                                                               ),
                                                             ),
-                                                            onTap: () {
-                                                              setState(() {
-                                                                show_more =
-                                                                    null;
-                                                              });
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
+                                                          ],
                                                         ),
-                                                      ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ],
+                                                  ],
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
                           ),
                           // const Padding(
                           //   padding: EdgeInsets.all(8.0),
@@ -8755,7 +8812,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                           //     ),
                           //   ),
                           // ),
-                          (_TransReBillModels.isEmpty)
+                          (_TransReBillModels.isEmpty ||
+                                  Value_selectDate == null)
                               ? Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
@@ -9475,8 +9533,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                               //           .total!);
                                               // }
                                             }
-                                            Insert_log.Insert_logs('รายงาน',
-                                                'กดดูรายงานประจำวันรายบุคคล');
+                                            Insert_log.Insert_logs(
+                                                'รายงาน', 'กดดูรายงานรายบุคคล');
 
                                             showDialog<void>(
                                               context: context,
@@ -9494,7 +9552,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                     children: [
                                                       Center(
                                                           child: Text(
-                                                        'รายงานประจำวันรายบุคคล ',
+                                                        'รายงานรายบุคคล ',
                                                         style: TextStyle(
                                                           color:
                                                               ReportScreen_Color
@@ -10825,7 +10883,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                         show_more =
                                                                             null;
                                                                         Value_Report =
-                                                                            'รายงานประจำวันรายบุคคล';
+                                                                            'รายงานรายบุคคล';
                                                                         Pre_and_Dow =
                                                                             'Download';
                                                                       });
@@ -10991,8 +11049,8 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                     (Value_selectDate_daly_cus != null &&
                                             TransReBillModels_cus.isEmpty &&
                                             Value_selectDate_daly_cus != null)
-                                        ? 'รายงานประจำวันรายบุคคล (ไม่พบข้อมูล ✖️)'
-                                        : 'รายงานประจำวันรายบุคคล',
+                                        ? 'รายงานรายบุคคล (ไม่พบข้อมูล ✖️)'
+                                        : 'รายงานรายบุคคล',
                                     style: const TextStyle(
                                       color: ReportScreen_Color.Colors_Text2_,
                                       // fontWeight: FontWeight.bold,
@@ -11014,7 +11072,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                         const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Text(
-                                            'กำลังโหลดรายงานประจำวันรายบุคคล...',
+                                            'กำลังโหลดรายงานรายบุคคล...',
                                             style: TextStyle(
                                               color: ReportScreen_Color
                                                   .Colors_Text2_,
@@ -11028,7 +11086,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                   : const Padding(
                                       padding: EdgeInsets.all(8.0),
                                       child: Text(
-                                        'รายงานประจำวันรายบุคคล ✔️',
+                                        'รายงานรายบุคคล ✔️',
                                         style: TextStyle(
                                           color:
                                               ReportScreen_Color.Colors_Text2_,
@@ -11939,54 +11997,109 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                               ))
                                                                                         ],
                                                                                       ),
-                                                                                      Container(
-                                                                                        decoration: BoxDecoration(
-                                                                                          color: Colors.grey[200],
-                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                        ),
-                                                                                        padding: const EdgeInsets.all(3.0),
-                                                                                        child: Row(
-                                                                                          children: [
-                                                                                            // for (int indax = 0; indax < teNantModels.length; indax++)
-                                                                                            for (int indax2 = 0; indax2 < 31; indax2++)
-                                                                                              // for (int indax3 = 0; indax3 < custo_TransReBillHistoryModels[index].length; indax2++)
-                                                                                              Expanded(
-                                                                                                flex: 1,
-                                                                                                child: Container(
-                                                                                                  decoration: BoxDecoration(
-                                                                                                    color: (indax2 % 2 == 0) ? Colors.grey[200] : AppbackgroundColor.Sub_Abg_Colors,
-
-                                                                                                    borderRadius: BorderRadius.only(
-                                                                                                      topLeft: Radius.circular(0),
-                                                                                                      topRight: Radius.circular(0),
-                                                                                                      bottomLeft: Radius.circular(0),
-                                                                                                      bottomRight: Radius.circular(0),
-                                                                                                    ),
-                                                                                                    // border: Border.all(color: Colors.grey, width: 1),
-                                                                                                  ),
-                                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                                  child: Text(
-                                                                                                    (custo_TransReBillHistoryModels[index].isEmpty)
-                                                                                                        ? '❌'
-                                                                                                        : (indax2 >= custo_TransReBillHistoryModels[index].length)
-                                                                                                            ? '❌'
-                                                                                                            : '✔️',
-                                                                                                    textAlign: TextAlign.center,
-                                                                                                    style: TextStyle(
-                                                                                                      color: (custo_TransReBillHistoryModels[index].isEmpty)
-                                                                                                          ? Colors.red
-                                                                                                          : (indax2 >= custo_TransReBillHistoryModels[index].length)
-                                                                                                              ? Colors.red
-                                                                                                              : Colors.green,
-                                                                                                      // fontWeight: FontWeight.bold,
-                                                                                                      fontFamily: Font_.Fonts_T,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ),
+                                                                                      (custo_TransReBillHistoryModels[index].length == 0)
+                                                                                          ? Container(
+                                                                                              decoration: BoxDecoration(
+                                                                                                color: Colors.grey[200],
+                                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
                                                                                               ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ),
+                                                                                              padding: const EdgeInsets.all(3.0),
+                                                                                              child: Row(
+                                                                                                children: [
+                                                                                                  for (int indax2 = 1; indax2 < 32; indax2++)
+
+                                                                                                    // for (int indax3 = 0; indax3 < custo_TransReBillHistoryModels[index].length; indax2++)
+                                                                                                    Expanded(
+                                                                                                      flex: 1,
+                                                                                                      child: Container(
+                                                                                                        decoration: BoxDecoration(
+                                                                                                          color: (indax2 % 2 == 0) ? Colors.grey[200] : AppbackgroundColor.Sub_Abg_Colors,
+
+                                                                                                          borderRadius: const BorderRadius.only(
+                                                                                                            topLeft: Radius.circular(0),
+                                                                                                            topRight: Radius.circular(0),
+                                                                                                            bottomLeft: Radius.circular(0),
+                                                                                                            bottomRight: Radius.circular(0),
+                                                                                                          ),
+                                                                                                          // border: Border.all(color: Colors.grey, width: 1),
+                                                                                                        ),
+                                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                                        child: const Text(
+                                                                                                          '❌',
+                                                                                                          textAlign: TextAlign.center,
+                                                                                                          style: TextStyle(
+                                                                                                            color: Colors.red,
+                                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            )
+                                                                                          : Container(
+                                                                                              decoration: BoxDecoration(
+                                                                                                color: Colors.grey[200],
+                                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                              ),
+                                                                                              padding: const EdgeInsets.all(3.0),
+                                                                                              child: Row(
+                                                                                                children: [
+                                                                                                  for (int indax2 = 1; indax2 < 32; indax2++)
+                                                                                                    for (int indax1 = 0; indax1 < custo_TransReBillHistoryModels[index].length; indax1++)
+                                                                                                      // for (int indax3 = 0; indax3 < custo_TransReBillHistoryModels[index].length; indax2++)
+                                                                                                      Expanded(
+                                                                                                        flex: 1,
+                                                                                                        child: Container(
+                                                                                                          decoration: BoxDecoration(
+                                                                                                            color: (indax2 % 2 == 0) ? Colors.grey[200] : AppbackgroundColor.Sub_Abg_Colors,
+
+                                                                                                            borderRadius: const BorderRadius.only(
+                                                                                                              topLeft: Radius.circular(0),
+                                                                                                              topRight: Radius.circular(0),
+                                                                                                              bottomLeft: Radius.circular(0),
+                                                                                                              bottomRight: Radius.circular(0),
+                                                                                                            ),
+                                                                                                            // border: Border.all(color: Colors.grey, width: 1),
+                                                                                                          ),
+                                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                                          child: Text(
+                                                                                                            (custo_TransReBillHistoryModels[index].isEmpty || custo_TransReBillHistoryModels[index].length == 0 || custo_TransReBillHistoryModels[index] == null)
+                                                                                                                ? '❌'
+                                                                                                                :
+                                                                                                                // (indax2 >= custo_TransReBillHistoryModels[index].length)
+                                                                                                                //     ? '❌'
+                                                                                                                //     :
+                                                                                                                (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') != indax2)
+                                                                                                                    ? '❌'
+                                                                                                                    : '✔️',
+                                                                                                            //'${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}',
+                                                                                                            // (custo_TransReBillHistoryModels[index].isEmpty)
+                                                                                                            //     ? '❌'
+                                                                                                            //     : (indax2 >= custo_TransReBillHistoryModels[index].length)
+                                                                                                            //         ? '❌'
+                                                                                                            //         : '✔️',
+                                                                                                            textAlign: TextAlign.center,
+                                                                                                            style: TextStyle(
+                                                                                                              color: (custo_TransReBillHistoryModels[index].isEmpty || custo_TransReBillHistoryModels[index].length == 0)
+                                                                                                                  ? Colors.red
+                                                                                                                  : (int.parse('${DateTime.parse(custo_TransReBillHistoryModels[index][indax1].dateacc!).day}') != indax2)
+                                                                                                                      ? Colors.red
+                                                                                                                      : Colors.green,
+                                                                                                              // (custo_TransReBillHistoryModels[index].isEmpty)
+                                                                                                              //     ? Colors.red
+                                                                                                              //     : (indax2 >= custo_TransReBillHistoryModels[index].length)
+                                                                                                              //         ? Colors.red
+                                                                                                              //         : Colors.green,
+                                                                                                              // fontWeight: FontWeight.bold,
+                                                                                                              fontFamily: Font_.Fonts_T,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
                                                                                     ],
                                                                                   ),
                                                                                 )
@@ -12129,6 +12242,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                           ),
                                                         ),
                                                         onTap: () {
+                                                          setState_();
                                                           Navigator.of(context)
                                                               .pop();
                                                         },

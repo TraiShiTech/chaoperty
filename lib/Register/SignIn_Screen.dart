@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:chaoperty/Constant/Myconstant.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/gestures.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +16,7 @@ import '../AdminScaffold/AdminScaffold.dart';
 import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetUser_Model.dart';
+import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'SignUp_Screen.dart';
 import 'SignUp_Screen2.dart';
@@ -95,288 +98,345 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-      color: const Color(0xfff3f3ee),
-      height: MediaQuery.of(context).size.height,
-      child: Column(children: [
-        Expanded(
-          flex: 2,
-          child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: Container(
-                constraints: const BoxConstraints(
-                  minWidth: 200,
-                  maxWidth: 400,
-                ),
-                child: const Image(
-                  image: AssetImage('images/LOGO.png'),
-                  // width: 200,
-                ),
-              )),
-        ),
-        Expanded(
-          flex: 4,
-          child: Padding(
-              padding: const EdgeInsets.all(30),
-              child: Container(
-                  child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
+            color: const Color(0xfff3f3ee),
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Center(
                     child: Container(
-                      constraints: const BoxConstraints(
-                        minWidth: 300,
-                        maxWidth: 320,
+                      //   constraints: BoxConstraints(
+                      //   maxWidth: MediaQuery.of(context).size.width / 1.05,
+                      // ),
+                      width: MediaQuery.of(context).size.width,
+
+                      decoration: BoxDecoration(
+                        color: const Color(0xfff3f3ee),
+                        borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0)),
                       ),
                       child: SingleChildScrollView(
+                        // scrollDirection: Axis.horizontal,
+                        dragStartBehavior: DragStartBehavior.down,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Form(
-                              key: _formKey,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text('เข้าสู่ระบบ',
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                        softWrap: false,
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            color: SinginScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T)),
+                            Padding(
+                                padding: (Responsive.isDesktop(context))
+                                    ? const EdgeInsets.all(30)
+                                    : const EdgeInsets.all(8),
+                                child: Container(
+                                  constraints: BoxConstraints(
+                                    minWidth: (Responsive.isDesktop(context))
+                                        ? 200
+                                        : 100,
+                                    maxWidth: (Responsive.isDesktop(context))
+                                        ? 400
+                                        : 200,
                                   ),
-                                  SizedBox(
-                                    height: 20,
+                                  child: const Image(
+                                    image: AssetImage('images/LOGO.png'),
+                                    // width: 200,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      //keyboardType: TextInputType.none,
-                                      controller: Form1_text,
-                                      onChanged: (value) =>
-                                          email_username = value.trim(),
-                                      validator: (value) {
-                                        // if (value == null ||
-                                        //     value.isEmpty ||
-                                        //     value.length < 13) {
-                                        //   return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                        if (!((value!.contains('@')) &&
-                                            (value.contains('.')))) {
-                                          return 'กรุณากรอก Email  ตย.you@email.com';
-                                        }
-                                        // if (int.parse(value.toString()) < 13) {
-                                        //   return '< 13';
-                                        // }
-                                        return null;
-                                      },
-                                      // maxLength: 13,
-                                      cursorColor: Colors.green,
-                                      decoration: InputDecoration(
-                                          fillColor:
-                                              Colors.white.withOpacity(0.3),
-                                          filled: true,
-                                          prefixIcon: const Icon(Icons.person,
-                                              color: Colors.black),
-                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          errorStyle: TextStyle(
-                                              fontFamily: Font_.Fonts_T),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          labelText: 'USERNAME',
-                                          labelStyle: const TextStyle(
-                                              color: Colors.black54,
-                                              fontFamily: Font_.Fonts_T)),
-                                      // inputFormatters: <TextInputFormatter>[
-                                      //   // for below version 2 use this
-                                      //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
-                                      //       allow: true),
-                                      //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                      //   // for version 2 and greater youcan also use this
-                                      //   // FilteringTextInputFormatter.digitsOnly
-                                      // ],
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      //keyboardType: TextInputType.none,
-                                      obscureText: true,
-                                      controller: Form2_text,
-                                      onChanged: (value) =>
-                                          password_username = value.trim(),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty
-                                            // || value.length < 13
-                                            ) {
-                                          //   return 'ใส่ข้อมูลให้ครบถ้วน ';
-
-                                          return 'กรุณากรอก Password!!';
-                                        }
-                                        // if (int.parse(value.toString()) < 13) {
-                                        //   return '< 13';
-                                        // }
-                                        return null;
-                                      },
-
-                                      onFieldSubmitted: (value) {
-                                        if (_formKey.currentState!.validate()) {
-                                          signInThread();
-                                        }
-                                      },
-                                      // maxLength: 13,
-                                      cursorColor: Colors.green,
-                                      decoration: InputDecoration(
-                                          fillColor:
-                                              Colors.white.withOpacity(0.3),
-                                          filled: true,
-                                          prefixIcon: const Icon(Icons.key,
-                                              color: Colors.black),
-                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                          focusedBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          errorStyle: TextStyle(
-                                              fontFamily: Font_.Fonts_T),
-                                          enabledBorder:
-                                              const OutlineInputBorder(
-                                            borderRadius: BorderRadius.only(
-                                              topRight: Radius.circular(15),
-                                              topLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                            ),
-                                            borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                          labelText: 'PASSWORD',
-                                          labelStyle: const TextStyle(
-                                              color: Colors.black54,
-                                              fontFamily: Font_.Fonts_T)),
-                                      // inputFormatters: <TextInputFormatter>[
-                                      //   // for below version 2 use this
-                                      //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                      //   // for version 2 and greater youcan also use this
-                                      //   FilteringTextInputFormatter.digitsOnly
-                                      // ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  InkWell(
-                                    onTap: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        signInThread();
-                                      }
-
-                                      // final response = await SendEmail(
-                                      //     'dzentric.com@gmail.com',
-                                      //     'tys000555@gmail.com',
-                                      //     '1234');
-                                      // ScaffoldMessenger.of(context).showSnackBar(
-                                      //   response == 200
-                                      //       ? const SnackBar(
-                                      //           content: Text('Message Sent!'),
-                                      //           backgroundColor: Colors.green)
-                                      //       : const SnackBar(
-                                      //           content:
-                                      //               Text('Failed to send message!'),
-                                      //           backgroundColor: Colors.red),
-                                      // );
-                                    },
-                                    child: Container(
-                                      width: 150,
-                                      height: 60,
-                                      decoration: BoxDecoration(
-                                        color: Colors.lime[800],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20)),
-                                      ),
-                                      child: const Center(
-                                        child: Text('เข้าสู่ระบบ',
-                                            maxLines: 3,
+                                )),
+                            Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                constraints: const BoxConstraints(
+                                  minWidth: 300,
+                                  maxWidth: 320,
+                                ),
+                                child: Form(
+                                  key: _formKey,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.all(4.0),
+                                        child: AutoSizeText(
+                                            minFontSize:
+                                                (Responsive.isDesktop(context))
+                                                    ? 30
+                                                    : 20,
+                                            maxFontSize: 50,
+                                            maxLines: 1,
+                                            'เข้าสู่ระบบ',
                                             overflow: TextOverflow.ellipsis,
                                             softWrap: false,
                                             style: TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.white,
+                                                // fontSize: 20,
+                                                color: SinginScreen_Color
+                                                    .Colors_Text1_,
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily:
                                                     FontWeight_.Fonts_T)),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                SingUpScreen()),
-                                      );
-                                    },
-                                    child: Container(
-                                      child: const Center(
-                                        child: Text('ลงทะเบียนผู้ใช้',
-                                            maxLines: 3,
-                                            overflow: TextOverflow.ellipsis,
-                                            softWrap: false,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.grey,
-                                                fontFamily: Font_.Fonts_T)),
+                                      SizedBox(
+                                        height: (Responsive.isDesktop(context))
+                                            ? 20
+                                            : 10,
                                       ),
-                                    ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          //keyboardType: TextInputType.none,
+                                          controller: Form1_text,
+                                          onChanged: (value) =>
+                                              email_username = value.trim(),
+                                          validator: (value) {
+                                            // if (value == null ||
+                                            //     value.isEmpty ||
+                                            //     value.length < 13) {
+                                            //   return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                            if (!((value!.contains('@')) &&
+                                                (value.contains('.')))) {
+                                              return 'กรุณากรอก Email  ตย.you@email.com';
+                                            }
+                                            // if (int.parse(value.toString()) < 13) {
+                                            //   return '< 13';
+                                            // }
+                                            return null;
+                                          },
+                                          // maxLength: 13,
+                                          cursorColor: Colors.green,
+                                          decoration: InputDecoration(
+                                              fillColor:
+                                                  Colors.white.withOpacity(0.3),
+                                              filled: true,
+                                              prefixIcon: const Icon(
+                                                  Icons.person,
+                                                  color: Colors.black),
+                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              errorStyle: TextStyle(
+                                                  fontFamily: Font_.Fonts_T),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              labelText: 'USERNAME',
+                                              labelStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black54,
+                                                  fontFamily: Font_.Fonts_T)),
+                                          // inputFormatters: <TextInputFormatter>[
+                                          //   // for below version 2 use this
+                                          //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
+                                          //       allow: true),
+                                          //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                          //   // for version 2 and greater youcan also use this
+                                          //   // FilteringTextInputFormatter.digitsOnly
+                                          // ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          //keyboardType: TextInputType.none,
+                                          obscureText: true,
+                                          controller: Form2_text,
+                                          onChanged: (value) =>
+                                              password_username = value.trim(),
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty
+                                                // || value.length < 13
+                                                ) {
+                                              //   return 'ใส่ข้อมูลให้ครบถ้วน ';
+
+                                              return 'กรุณากรอก Password!!';
+                                            }
+                                            // if (int.parse(value.toString()) < 13) {
+                                            //   return '< 13';
+                                            // }
+                                            return null;
+                                          },
+
+                                          onFieldSubmitted: (value) {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              signInThread();
+                                            }
+                                          },
+                                          // maxLength: 13,
+                                          cursorColor: Colors.green,
+                                          decoration: InputDecoration(
+                                              fillColor:
+                                                  Colors.white.withOpacity(0.3),
+                                              filled: true,
+                                              prefixIcon: const Icon(Icons.key,
+                                                  color: Colors.black),
+                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              errorStyle: TextStyle(
+                                                  fontFamily: Font_.Fonts_T),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              labelText: 'PASSWORD',
+                                              labelStyle: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black54,
+                                                  fontFamily: Font_.Fonts_T)),
+                                          // inputFormatters: <TextInputFormatter>[
+                                          //   // for below version 2 use this
+                                          //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                          //   // for version 2 and greater youcan also use this
+                                          //   FilteringTextInputFormatter.digitsOnly
+                                          // ],
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: (Responsive.isDesktop(context))
+                                            ? 30
+                                            : 15,
+                                      ),
+                                      InkWell(
+                                        onTap: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            signInThread();
+                                          }
+
+                                          // final response = await SendEmail(
+                                          //     'dzentric.com@gmail.com',
+                                          //     'tys000555@gmail.com',
+                                          //     '1234');
+                                          // ScaffoldMessenger.of(context).showSnackBar(
+                                          //   response == 200
+                                          //       ? const SnackBar(
+                                          //           content: Text('Message Sent!'),
+                                          //           backgroundColor: Colors.green)
+                                          //       : const SnackBar(
+                                          //           content:
+                                          //               Text('Failed to send message!'),
+                                          //           backgroundColor: Colors.red),
+                                          // );
+                                        },
+                                        child: Container(
+                                          width: 150,
+                                          height:
+                                              (Responsive.isDesktop(context))
+                                                  ? 60
+                                                  : 40,
+                                          decoration: BoxDecoration(
+                                            color: Colors.lime[800],
+                                            borderRadius: const BorderRadius
+                                                    .only(
+                                                topLeft: Radius.circular(20),
+                                                topRight: Radius.circular(20),
+                                                bottomLeft: Radius.circular(20),
+                                                bottomRight:
+                                                    Radius.circular(20)),
+                                          ),
+                                          child: Center(
+                                            child: Text('เข้าสู่ระบบ',
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        (Responsive.isDesktop(
+                                                                context))
+                                                            ? 20
+                                                            : 15,
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T)),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: (Responsive.isDesktop(context))
+                                            ? 20
+                                            : 10,
+                                      ),
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SingUpScreen()),
+                                          );
+                                        },
+                                        child: Container(
+                                          child: const Center(
+                                            child: Text('ลงทะเบียนผู้ใช้',
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.grey,
+                                                    fontFamily: Font_.Fonts_T)),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: (Responsive.isDesktop(context))
+                                            ? 20
+                                            : 10,
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ],
@@ -384,40 +444,370 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ),
                   ),
-                ],
-              ))),
-        ),
-        Expanded(
-          child: Container(
-            //   constraints: BoxConstraints(
-            //   maxWidth: MediaQuery.of(context).size.width / 1.05,
-            // ),
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.lightGreen[600],
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(0),
-                  topRight: Radius.circular(0),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0)),
-            ),
+                ),
+                Container(
+                  //   constraints: BoxConstraints(
+                  //   maxWidth: MediaQuery.of(context).size.width / 1.05,
+                  // ),
+                  width: MediaQuery.of(context).size.width,
+                  height: (Responsive.isDesktop(context)) ? 100 : 50,
+                  decoration: BoxDecoration(
+                    color: Colors.lightGreen[600],
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0)),
+                  ),
 
-            child: Center(
-              child: Text('© 2023  Dzentric Co.,Ltd. All Rights Reserved',
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: FontWeight_.Fonts_T)),
-            ),
-          ),
-        ),
-      ]),
-    ));
+                  child: Center(
+                    child: AutoSizeText(
+                        minFontSize: (Responsive.isDesktop(context)) ? 20 : 15,
+                        maxFontSize: 40,
+                        maxLines: 1,
+                        '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: false,
+                        style: TextStyle(
+                            // fontSize: 20,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T)),
+                  ),
+                ),
+              ],
+            )));
+
+    // Scaffold(
+    //     body: Container(
+    //   color: const Color(0xfff3f3ee),
+    //   height: MediaQuery.of(context).size.height,
+    //   child: Column(children: [
+    //     Expanded(
+    //       flex: 2,
+    //       child:
+    // Padding(
+    //           padding: const EdgeInsets.all(30),
+    //           child: Container(
+    //             constraints: const BoxConstraints(
+    //               minWidth: 200,
+    //               maxWidth: 400,
+    //             ),
+    //             child: const Image(
+    //               image: AssetImage('images/LOGO.png'),
+    //               // width: 200,
+    //             ),
+    //           )),
+    //     ),
+    //     Expanded(
+    //       flex: 4,
+    //       child: Padding(
+    //           padding: const EdgeInsets.all(30),
+    //           child: Container(
+    //               child: Column(
+    //             children: [
+    //               Expanded(
+    //                 flex: 1,
+    //                 child: Container(
+    //                   constraints: const BoxConstraints(
+    //                     minWidth: 300,
+    //                     maxWidth: 320,
+    //                   ),
+    //                   child: SingleChildScrollView(
+    //                     child:
+    // Column(
+    //                       children: [
+    //                         Form(
+    //                           key: _formKey,
+    //                           child: Column(
+    //                             mainAxisAlignment: MainAxisAlignment.center,
+    //                             children: [
+    //                               const Padding(
+    //                                 padding: EdgeInsets.all(8.0),
+    //                                 child: Text('เข้าสู่ระบบ',
+    //                                     maxLines: 3,
+    //                                     overflow: TextOverflow.ellipsis,
+    //                                     softWrap: false,
+    //                                     style: TextStyle(
+    //                                         fontSize: 30,
+    //                                         color: SinginScreen_Color
+    //                                             .Colors_Text1_,
+    //                                         fontWeight: FontWeight.bold,
+    //                                         fontFamily: FontWeight_.Fonts_T)),
+    //                               ),
+    //                               SizedBox(
+    //                                 height: 20,
+    //                               ),
+    //                               Padding(
+    //                                 padding: const EdgeInsets.all(8.0),
+    //                                 child: TextFormField(
+    //                                   //keyboardType: TextInputType.none,
+    //                                   controller: Form1_text,
+    //                                   onChanged: (value) =>
+    //                                       email_username = value.trim(),
+    //                                   validator: (value) {
+    //                                     // if (value == null ||
+    //                                     //     value.isEmpty ||
+    //                                     //     value.length < 13) {
+    //                                     //   return 'ใส่ข้อมูลให้ครบถ้วน ';
+    //                                     if (!((value!.contains('@')) &&
+    //                                         (value.contains('.')))) {
+    //                                       return 'กรุณากรอก Email  ตย.you@email.com';
+    //                                     }
+    //                                     // if (int.parse(value.toString()) < 13) {
+    //                                     //   return '< 13';
+    //                                     // }
+    //                                     return null;
+    //                                   },
+    //                                   // maxLength: 13,
+    //                                   cursorColor: Colors.green,
+    //                                   decoration: InputDecoration(
+    //                                       fillColor:
+    //                                           Colors.white.withOpacity(0.3),
+    //                                       filled: true,
+    //                                       prefixIcon: const Icon(Icons.person,
+    //                                           color: Colors.black),
+    //                                       // suffixIcon: Icon(Icons.clear, color: Colors.black),
+    //                                       focusedBorder:
+    //                                           const OutlineInputBorder(
+    //                                         borderRadius: BorderRadius.only(
+    //                                           topRight: Radius.circular(15),
+    //                                           topLeft: Radius.circular(15),
+    //                                           bottomRight: Radius.circular(15),
+    //                                           bottomLeft: Radius.circular(15),
+    //                                         ),
+    //                                         borderSide: BorderSide(
+    //                                           width: 1,
+    //                                           color: Colors.black,
+    //                                         ),
+    //                                       ),
+    //                                       errorStyle: TextStyle(
+    //                                           fontFamily: Font_.Fonts_T),
+    //                                       enabledBorder:
+    //                                           const OutlineInputBorder(
+    //                                         borderRadius: BorderRadius.only(
+    //                                           topRight: Radius.circular(15),
+    //                                           topLeft: Radius.circular(15),
+    //                                           bottomRight: Radius.circular(15),
+    //                                           bottomLeft: Radius.circular(15),
+    //                                         ),
+    //                                         borderSide: BorderSide(
+    //                                           width: 1,
+    //                                           color: Colors.black,
+    //                                         ),
+    //                                       ),
+    //                                       labelText: 'USERNAME',
+    //                                       labelStyle: const TextStyle(
+    //                                           color: Colors.black54,
+    //                                           fontFamily: Font_.Fonts_T)),
+    //                                   // inputFormatters: <TextInputFormatter>[
+    //                                   //   // for below version 2 use this
+    //                                   //   FilteringTextInputFormatter(RegExp("[a-zA-Z1-9@.]"),
+    //                                   //       allow: true),
+    //                                   //   // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+    //                                   //   // for version 2 and greater youcan also use this
+    //                                   //   // FilteringTextInputFormatter.digitsOnly
+    //                                   // ],
+    //                                 ),
+    //                               ),
+    //                               Padding(
+    //                                 padding: const EdgeInsets.all(8.0),
+    //                                 child: TextFormField(
+    //                                   //keyboardType: TextInputType.none,
+    //                                   obscureText: true,
+    //                                   controller: Form2_text,
+    //                                   onChanged: (value) =>
+    //                                       password_username = value.trim(),
+    //                                   validator: (value) {
+    //                                     if (value == null || value.isEmpty
+    //                                         // || value.length < 13
+    //                                         ) {
+    //                                       //   return 'ใส่ข้อมูลให้ครบถ้วน ';
+
+    //                                       return 'กรุณากรอก Password!!';
+    //                                     }
+    //                                     // if (int.parse(value.toString()) < 13) {
+    //                                     //   return '< 13';
+    //                                     // }
+    //                                     return null;
+    //                                   },
+
+    //                                   onFieldSubmitted: (value) {
+    //                                     if (_formKey.currentState!.validate()) {
+    //                                       signInThread();
+    //                                     }
+    //                                   },
+    //                                   // maxLength: 13,
+    //                                   cursorColor: Colors.green,
+    //                                   decoration: InputDecoration(
+    //                                       fillColor:
+    //                                           Colors.white.withOpacity(0.3),
+    //                                       filled: true,
+    //                                       prefixIcon: const Icon(Icons.key,
+    //                                           color: Colors.black),
+    //                                       // suffixIcon: Icon(Icons.clear, color: Colors.black),
+    //                                       focusedBorder:
+    //                                           const OutlineInputBorder(
+    //                                         borderRadius: BorderRadius.only(
+    //                                           topRight: Radius.circular(15),
+    //                                           topLeft: Radius.circular(15),
+    //                                           bottomRight: Radius.circular(15),
+    //                                           bottomLeft: Radius.circular(15),
+    //                                         ),
+    //                                         borderSide: BorderSide(
+    //                                           width: 1,
+    //                                           color: Colors.black,
+    //                                         ),
+    //                                       ),
+    //                                       errorStyle: TextStyle(
+    //                                           fontFamily: Font_.Fonts_T),
+    //                                       enabledBorder:
+    //                                           const OutlineInputBorder(
+    //                                         borderRadius: BorderRadius.only(
+    //                                           topRight: Radius.circular(15),
+    //                                           topLeft: Radius.circular(15),
+    //                                           bottomRight: Radius.circular(15),
+    //                                           bottomLeft: Radius.circular(15),
+    //                                         ),
+    //                                         borderSide: BorderSide(
+    //                                           width: 1,
+    //                                           color: Colors.black,
+    //                                         ),
+    //                                       ),
+    //                                       labelText: 'PASSWORD',
+    //                                       labelStyle: const TextStyle(
+    //                                           color: Colors.black54,
+    //                                           fontFamily: Font_.Fonts_T)),
+    //                                   // inputFormatters: <TextInputFormatter>[
+    //                                   //   // for below version 2 use this
+    //                                   //   FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+    //                                   //   // for version 2 and greater youcan also use this
+    //                                   //   FilteringTextInputFormatter.digitsOnly
+    //                                   // ],
+    //                                 ),
+    //                               ),
+    //                               SizedBox(
+    //                                 height: 30,
+    //                               ),
+    //                               InkWell(
+    //                                 onTap: () async {
+    //                                   if (_formKey.currentState!.validate()) {
+    //                                     signInThread();
+    //                                   }
+
+    //                                   // final response = await SendEmail(
+    //                                   //     'dzentric.com@gmail.com',
+    //                                   //     'tys000555@gmail.com',
+    //                                   //     '1234');
+    //                                   // ScaffoldMessenger.of(context).showSnackBar(
+    //                                   //   response == 200
+    //                                   //       ? const SnackBar(
+    //                                   //           content: Text('Message Sent!'),
+    //                                   //           backgroundColor: Colors.green)
+    //                                   //       : const SnackBar(
+    //                                   //           content:
+    //                                   //               Text('Failed to send message!'),
+    //                                   //           backgroundColor: Colors.red),
+    //                                   // );
+    //                                 },
+    //                                 child: Container(
+    //                                   width: 150,
+    //                                   height: 60,
+    //                                   decoration: BoxDecoration(
+    //                                     color: Colors.lime[800],
+    //                                     borderRadius: const BorderRadius.only(
+    //                                         topLeft: Radius.circular(20),
+    //                                         topRight: Radius.circular(20),
+    //                                         bottomLeft: Radius.circular(20),
+    //                                         bottomRight: Radius.circular(20)),
+    //                                   ),
+    //                                   child: const Center(
+    //                                     child: Text('เข้าสู่ระบบ',
+    //                                         maxLines: 3,
+    //                                         overflow: TextOverflow.ellipsis,
+    //                                         softWrap: false,
+    //                                         style: TextStyle(
+    //                                             fontSize: 20,
+    //                                             color: Colors.white,
+    //                                             fontWeight: FontWeight.bold,
+    //                                             fontFamily:
+    //                                                 FontWeight_.Fonts_T)),
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                               SizedBox(
+    //                                 height: 20,
+    //                               ),
+    //                               InkWell(
+    //                                 onTap: () {
+    //                                   Navigator.push(
+    //                                     context,
+    //                                     MaterialPageRoute(
+    //                                         builder: (context) =>
+    //                                             SingUpScreen()),
+    //                                   );
+    //                                 },
+    //                                 child: Container(
+    //                                   child: const Center(
+    //                                     child: Text('ลงทะเบียนผู้ใช้',
+    //                                         maxLines: 3,
+    //                                         overflow: TextOverflow.ellipsis,
+    //                                         softWrap: false,
+    //                                         style: TextStyle(
+    //                                             fontSize: 18,
+    //                                             color: Colors.grey,
+    //                                             fontFamily: Font_.Fonts_T)),
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                               SizedBox(
+    //                                 height: 20,
+    //                               ),
+    //                             ],
+    //                           ),
+    //                         ),
+    //                       ],
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           )
+    // )),
+    //     ),
+    //     Expanded(
+    //       child:
+    // Container(
+    //         //   constraints: BoxConstraints(
+    //         //   maxWidth: MediaQuery.of(context).size.width / 1.05,
+    //         // ),
+    //         width: MediaQuery.of(context).size.width,
+    //         height: 150,
+    //         decoration: BoxDecoration(
+    //           color: Colors.lightGreen[600],
+    //           borderRadius: const BorderRadius.only(
+    //               topLeft: Radius.circular(0),
+    //               topRight: Radius.circular(0),
+    //               bottomLeft: Radius.circular(0),
+    //               bottomRight: Radius.circular(0)),
+    //         ),
+
+    //         child: Center(
+    //           child: Text('© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+    //               maxLines: 3,
+    //               overflow: TextOverflow.ellipsis,
+    //               softWrap: false,
+    //               style: TextStyle(
+    //                   fontSize: 20,
+    //                   color: Colors.white,
+    //                   fontWeight: FontWeight.bold,
+    //                   fontFamily: FontWeight_.Fonts_T)),
+    //         ),
+    //       ),
+    //     ),
+    //   ]),
+    // )
+    // );
   }
 
   Future<Null> signInThread() async {

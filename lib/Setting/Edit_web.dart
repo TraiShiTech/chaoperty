@@ -165,7 +165,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
   }
 
   void _launchURL() async {
-    final String url = 'https://chopertymaket.netlify.app/#/';
+    final String url = 'https://www.dzentric.com/chaoperty_market/#/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

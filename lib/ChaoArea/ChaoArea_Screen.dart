@@ -773,7 +773,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                             ))
                         : SizedBox(),
                     Expanded(
-                      flex: 2,
+                      flex: MediaQuery.of(context).size.shortestSide <
+                              MediaQuery.of(context).size.width * 1
+                          ? 2
+                          : 3,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -786,7 +789,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 bottomRight: Radius.circular(10)),
                             border: Border.all(color: Colors.grey, width: 1),
                           ),
-                          width: 150,
+                          width: 200,
                           child: DropdownButtonFormField2(
                             decoration: InputDecoration(
                               isDense: true,
@@ -870,7 +873,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ),
                     ),
                     Expanded(
-                      flex: 8,
+                      flex: MediaQuery.of(context).size.shortestSide <
+                              MediaQuery.of(context).size.width * 1
+                          ? 8
+                          : 6,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(

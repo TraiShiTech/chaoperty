@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 import '../Style/colors.dart';
+import 'Add_Custo_Screen.dart';
 import 'Customer_Screen.dart';
 import 'Meter_Screen.dart';
 import 'Systemlog_Screen.dart';
@@ -22,7 +23,7 @@ class _BureauScreenState extends State<BureauScreen> {
   int Status_ = 1;
 
   // List Status = ['ทะเบียนลูกค้า', 'ทะเบียนมิเตอร์', 'ประวัติการใช้งาน'];
-  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน'];
+  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน', 'เพิ่มข้อมูลลูกค้า'];
   Widget build(BuildContext context) {
     return Container(
       // color: AppbackgroundColor.Sub_Abg_Colors,
@@ -154,7 +155,7 @@ class _BureauScreenState extends State<BureauScreen> {
             ? CustomerScreen()
             : (Status_ == 2)
                 ? SystemlogScreen()
-                : SystemlogScreen()
+                : Add_Custo_Screen()
       ]),
     );
   }

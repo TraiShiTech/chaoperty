@@ -82,7 +82,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   String singleDeviceNameFromModel = "Unknown";
   String deviceNames = "Unknown";
   String deviceNamesFromModel = "Unknown";
-
+  final _keybar = GlobalKey<ScaffoldState>();
 ///////////------------------------------------------->
   @override
   void initState() {
@@ -95,6 +95,34 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     read_GC_rental();
     read_GC_areak();
     initPlugin();
+  }
+
+  Future<Null> deall_Trans_select() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+
+    String url =
+        '${MyConstant().domain}/D_tran_select.php?isAdd=true&ren=$ren&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() == 'true') {
+      } else if (result.toString() == 'false') {
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
+                  style: TextStyle(
+                      color: Colors.white, fontFamily: Font_.Fonts_T))),
+        );
+      }
+    } catch (e) {
+      print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   Future<void> initPlugin() async {
@@ -594,7 +622,1062 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         child: const CircularProgressIndicator(),
       );
     }
+    return (Responsive.isDesktop(context)) ? adminweb() : adminmobile();
+  }
+
+  AdminScaffold adminweb() {
     return AdminScaffold(
+      backgroundColor: AppbackgroundColor.Abg_Colors,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
+        foregroundColor: Colors.black,
+        titleSpacing: 00.0,
+        centerTitle: true,
+        toolbarHeight: 50.2,
+        // toolbarOpacity: 0.8,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(0),
+            bottomLeft: Radius.circular(0),
+          ),
+        ),
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      if (Responsive.isDesktop(context))
+                        (img_logo == null || img_logo.toString() == '')
+                            ? SizedBox()
+                            : InkWell(
+                                child: CircleAvatar(
+                                  radius: 20.0,
+                                  backgroundImage: NetworkImage(
+                                      '${MyConstant().domain}/files/$foder/logo/$img_logo'),
+                                  backgroundColor: Colors.transparent,
+                                ),
+                                onTap: () {
+                                  if (img_logo == null ||
+                                      img_logo.toString() == '') {
+                                  } else {
+                                    String url =
+                                        '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                    _showMyDialogImg(
+                                        url,
+                                        renTal_name == null
+                                            ? ' '
+                                            : ' $renTal_name');
+                                  }
+                                },
+                              ),
+                      InkWell(
+                        child: Text(
+                          renTal_name == null ? ' ภาพรวม' : ' $renTal_name',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              color: AdminScafScreen_Color.Colors_Text1_,
+                              fontWeight: (Responsive.isDesktop(context))
+                                  ? FontWeight.bold
+                                  : null,
+                              fontSize:
+                                  (Responsive.isDesktop(context)) ? null : 12,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                        onTap: () {
+                          if (img_logo == null || img_logo.toString() == '') {
+                          } else {
+                            String url =
+                                '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                            _showMyDialogImg(url,
+                                renTal_name == null ? ' ' : ' $renTal_name');
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ),
+        actions: [
+          Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.lightGreen[200],
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                padding: const EdgeInsets.all(0.5),
+                child: Row(
+                  children: [
+                    StreamBuilder(
+                        stream: Stream.periodic(const Duration(seconds: 0)),
+                        builder: (context, snapshot) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: InkWell(
+                                onTap: renTal_name == null
+                                    ? null
+                                    : () async {
+                                        startTimer();
+                                        showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            title: Center(
+                                                child: Text(
+                                              'ผู้ใช้งานระบบขณะนี้ ',
+                                              style: TextStyle(
+                                                  color: AdminScafScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            )),
+                                            content: ScrollConfiguration(
+                                              behavior: ScrollConfiguration.of(
+                                                      context)
+                                                  .copyWith(dragDevices: {
+                                                PointerDeviceKind.touch,
+                                                PointerDeviceKind.mouse,
+                                              }),
+                                              child: SingleChildScrollView(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                dragStartBehavior:
+                                                    DragStartBehavior.start,
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      width: (Responsive
+                                                              .isDesktop(
+                                                                  context))
+                                                          ? MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.85
+                                                          : 800,
+                                                      child: StreamBuilder(
+                                                          stream:
+                                                              Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          0)),
+                                                          builder: (context,
+                                                              snapshot) {
+                                                            return Column(
+                                                              children: [
+                                                                Row(
+                                                                  children: [
+                                                                    Text(
+                                                                      'ทั้งหมด : ${userModels.length} คน',
+                                                                      style: TextStyle(
+                                                                          color: AdminScafScreen_Color
+                                                                              .Colors_Text1_,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                                Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    color: AppbackgroundColor
+                                                                        .TiTile_Colors,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    children: const [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          '...',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          'Email',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          'ชื่อ',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          'ตำแหน่ง',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          'เวลาอัพเดตล่าสุด',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Container(
+                                                                    height: MediaQuery.of(context)
+                                                                            .size
+                                                                            .height *
+                                                                        0.4,
+                                                                    width: (Responsive.isDesktop(
+                                                                            context))
+                                                                        ? MediaQuery.of(context).size.width *
+                                                                            0.85
+                                                                        : 800,
+                                                                    child: ListView.builder(
+                                                                        padding: const EdgeInsets.all(8),
+                                                                        itemCount: userModels.length,
+                                                                        itemBuilder: (BuildContext context, int index) {
+                                                                          String
+                                                                              email =
+                                                                              '${userModels[index].email}';
+                                                                          int emailLength =
+                                                                              email.length;
+                                                                          String
+                                                                              firstTwoCharacters =
+                                                                              email.substring(0, 2);
+                                                                          String
+                                                                              lastFourCharacters =
+                                                                              email.substring(emailLength - 4);
+                                                                          String
+                                                                              censoredEmail =
+                                                                              '$firstTwoCharacters${'*' * (emailLength - 6)}$lastFourCharacters';
+
+                                                                          String
+                                                                              connected_ =
+                                                                              '${userModels[index].connected}';
+
+                                                                          DateTime
+                                                                              connectedTime =
+                                                                              DateTime.parse(connected_);
+
+                                                                          DateTime
+                                                                              currentTime =
+                                                                              DateTime.now();
+
+                                                                          Duration
+                                                                              difference =
+                                                                              currentTime.difference(connectedTime);
+
+                                                                          int minutesPassed =
+                                                                              difference.inMinutes;
+                                                                          return Container(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8),
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Text(
+                                                                                    '${index + 1}',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    maxLines: 2,
+                                                                                    style: TextStyle(
+                                                                                        color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Text(
+                                                                                    '${censoredEmail} ',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    maxLines: 2,
+                                                                                    style: TextStyle(
+                                                                                        color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Text(
+                                                                                    textAlign: TextAlign.center,
+                                                                                    maxLines: 2,
+                                                                                    '${userModels[index].fname} ${userModels[index].lname}',
+                                                                                    style: TextStyle(
+                                                                                        color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Text(
+                                                                                    '${userModels[index].position}',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    maxLines: 2,
+                                                                                    style: TextStyle(
+                                                                                        color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ),
+                                                                                Expanded(
+                                                                                  flex: 1,
+                                                                                  child: Row(
+                                                                                    children: [
+                                                                                      Expanded(flex: 1, child: Icon((minutesPassed > 1) ? Icons.motion_photos_off_rounded : Icons.motion_photos_on_rounded, color: (minutesPassed > 1) ? Colors.red : Colors.green)
+                                                                                          // Text(
+                                                                                          //   '🟢',
+                                                                                          //   maxLines: 2,
+                                                                                          //   textAlign: TextAlign.end,
+                                                                                          //   style: TextStyle(color: (minutesPassed > 1) ? Colors.red : Colors.green, fontFamily: Font_.Fonts_T),
+                                                                                          // )
+                                                                                          ),
+                                                                                      Expanded(
+                                                                                        flex: 2,
+                                                                                        child: Text(
+                                                                                          (minutesPassed > 1) ? 'ใช้งานเมื่อ $minutesPassed นาทีที่แล้ว' : ' ${userModels[index].connected}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          maxLines: 2,
+                                                                                          style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontFamily: Font_.Fonts_T),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        })),
+                                                              ],
+                                                            );
+                                                          }),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              2.0),
+                                                      child: RichText(
+                                                        text: const TextSpan(
+                                                          text: '**หมายเหตุ : ',
+                                                          style: TextStyle(
+                                                              color: AdminScafScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T),
+                                                          children: <TextSpan>[
+                                                            TextSpan(
+                                                              text: ' สีเขียว ',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .green,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  ' กำลังใช้งาน (ไม่เกิน 1 นาที) ,',
+                                                              style: TextStyle(
+                                                                  color: AdminScafScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                            TextSpan(
+                                                              text: ' สีแดง ',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  ' ใช้งานล่าสุด (ไม่เกิน 15 นาที)',
+                                                              style: TextStyle(
+                                                                  color: AdminScafScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Divider(
+                                                    color: Colors.grey,
+                                                    height: 4.0,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Container(
+                                                                width: 100,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  borderRadius: BorderRadius.only(
+                                                                      topLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10)),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child:
+                                                                    TextButton(
+                                                                  onPressed: () =>
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          'OK'),
+                                                                  child:
+                                                                      const Text(
+                                                                    'ปิด',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                child: Stack(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Icons.people,
+                                        color: Colors.red,
+                                        size: 16,
+                                      ),
+                                    ),
+                                    Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        child: Container(
+                                          // decoration: const BoxDecoration(
+                                          //   color: Colors.white,
+                                          //   borderRadius: BorderRadius.only(
+                                          //       topLeft: Radius.circular(20),
+                                          //       topRight: Radius.circular(20),
+                                          //       bottomLeft: Radius.circular(20),
+                                          //       bottomRight: Radius.circular(20)),
+                                          // ),
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(
+                                            renTal_name == null
+                                                ? '0'
+                                                : '${userModels.length}',
+                                            // '${userModels.length}***/$connected_Minutes/$ser_user/$email_user',
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                                fontFamily:
+                                                    FontWeight_.Fonts_T),
+                                          ),
+                                        ))
+                                  ],
+                                )),
+                          );
+                        }),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: StreamBuilder(
+                          stream: Stream.periodic(const Duration(seconds: 0)),
+                          builder: (context, snapshot) {
+                            return Text(
+                              'สวัสดีคุณ $fname_user',
+                              style: TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            );
+                          }),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0))),
+                            title: const Center(
+                                child: Text(
+                              'ออกจากระบบ',
+                              style: TextStyle(
+                                  color: AdminScafScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            )),
+                            actions: <Widget>[
+                              Column(
+                                children: [
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  const Divider(
+                                    color: Colors.grey,
+                                    height: 4.0,
+                                  ),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            width: 100,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                deall_Trans_select();
+                                                SharedPreferences preferences =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                var ser = preferences
+                                                    .getString('ser');
+                                                var on = '0';
+                                                String url =
+                                                    '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+                                                  if (result.toString() ==
+                                                      'true') {
+                                                    SharedPreferences
+                                                        preferences =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    preferences.clear();
+                                                    routToService(
+                                                        SignInScreen());
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                          content: Text(
+                                                              '(ผิดพลาด)')),
+                                                    );
+                                                  }
+                                                } catch (e) {}
+                                              },
+                                              child: const Text(
+                                                'ยืนยัน',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 100,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.redAccent,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                ),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          context, 'OK'),
+                                                  child: const Text(
+                                                    'ยกเลิก',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(Icons.logout_rounded),
+                      ),
+                    ),
+                    // TimerBuilder.scheduled([alert!], builder: (context) {
+                    //   // This function will be called once the alert time is reached
+                    //   var now = DateTime.now();
+                    //   var reached = now.compareTo(alert!) >= 0;
+                    //   // final textStyle = Theme.of(context).textTheme.title;
+                    //   return Center(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: <Widget>[
+                    //         // Icon(
+                    //         //   reached ? Icons.alarm_on : Icons.alarm,
+                    //         //   color: reached ? Colors.red : Colors.green,
+                    //         //   size: 48,
+                    //         // ),
+                    //         !reached
+                    //             ? TimerBuilder.periodic(Duration(seconds: 1),
+                    //                 alignment: Duration.zero,
+                    //                 builder: (context) {
+                    //                 // This function will be called every second until the alert time
+                    //                 var now = DateTime.now();
+                    //                 var remaining = alert!.difference(now);
+                    //                 return Text(
+                    //                   formatDuration(remaining),
+                    //                   // style: textStyle,
+                    //                 );
+                    //               })
+                    //             : Text(
+                    //                 "00:00:00 \t\t",
+                    //                 // style: textStyle
+                    //               ),
+                    //         // RaisedButton(
+                    //         //   child: Text("Reset"),
+                    //         //   onPressed: () {
+                    //         //     setState(() {
+                    //         //       alert =
+                    //         //           DateTime.now().add(Duration(seconds: 120));
+                    //         //     });
+                    //         //   },
+                    //         // ),
+                    //       ],
+                    //     ),
+                    //   );
+                    // }),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+        elevation: 0,
+        backgroundColor: AppBarColors.ABar_Colors,
+      ),
+      sideBar: SideBar(
+        key: _keybar,
+        textStyle:
+            const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T),
+        iconColor: Colors.white,
+        backgroundColor: AppBarColors.ABar_Colors,
+        items: [
+          for (int i = 0; i < perMissionModels.length; i++)
+            if (int.parse(perMissionModels[i].ser!) <= 3)
+              AdminMenuItem(
+                title: perMissionModels[i].perm!.trim(),
+                route: '/${perMissionModels[i].perm!.trim()}',
+                icon: IconData(
+                  int.parse(
+                    '${perMissionModels[i].icon}',
+                  ),
+                  fontFamily: 'MaterialIcons',
+                ),
+              ),
+          AdminMenuItem(
+            title: 'อื่นๆ',
+            // icon: Icons.more_horiz,
+            icon: IconData(
+              int.parse(
+                '0xf8d9',
+              ),
+              fontFamily: 'MaterialIcons',
+            ),
+            children: [
+              for (int i = 0; i < perMissionModels.length; i++)
+                if (int.parse(perMissionModels[i].ser!) > 3)
+                  AdminMenuItem(
+                    title: perMissionModels[i].perm!.trim(),
+                    route: '/${perMissionModels[i].perm!.trim()}',
+                    icon: IconData(
+                      int.parse(
+                        '${perMissionModels[i].icon}',
+                      ),
+                      fontFamily: 'MaterialIcons',
+                    ),
+                  ),
+            ],
+          ),
+        ],
+        selectedRoute: '/',
+        onSelected: (item) async {
+          for (int i = 0; i < perMissionModels.length; i++) {
+            if (item.route == '/${perMissionModels[i].perm!.trim()}') {
+              if (renTal_user != null) {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                preferences.setString(
+                    'route', perMissionModels[i].perm!.trim().toString());
+                setState(() {
+                  Value_Route = perMissionModels[i].perm!.trim();
+                  _keybar.currentState?.closeDrawer();
+                });
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content:
+                          Text('กรุณาเลือกสถานที่ของท่านเพื่อเรียกดูข้อมูล')),
+                );
+              }
+            }
+          }
+          // if (item.route == '/หน้าหลัก') {
+          //   setState(() {
+          //     Value_Route = 'หน้าหลัก';
+          //   });
+          //   // Navigator.push(context,
+          //   //     MaterialPageRoute(builder: (context) => const HomeScreen()));
+          //   print('1หน้าหลัก');
+          // } else if ((item.route == '/พื้นที่เช่า')) {
+          //   setState(() {
+          //     Value_Route = 'พื้นที่เช่า';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const ChaoAreaScreen()));
+          //   print('2พื้นที่เช่า');
+          // } else if ((item.route == '/ผู้เช่า')) {
+          //   setState(() {
+          //     Value_Route = 'ผู้เช่า';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const PeopleChaoScreen()));
+          //   print('3');
+          // } else if ((item.route == '/บัญชี')) {
+          //   setState(() {
+          //     Value_Route = 'บัญชี';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const AccountScreen()));
+          //   print('4บัญชี');
+          // } else if ((item.route == '/จัดการ')) {
+          //   setState(() {
+          //     Value_Route = 'จัดการ';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const ManageScreen()));
+          //   print('5');
+          // } else if ((item.route == '/รายงาน')) {
+          //   setState(() {
+          //     Value_Route = 'รายงาน';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const ReportScreen()));
+          //   print('6รายงาน');
+          // } else if ((item.route == '/ตั้งค่า')) {
+          //   setState(() {
+          //     Value_Route = 'ตั้งค่า';
+          //   });
+          //   // Navigator.push(
+          //   //     context,
+          //   //     MaterialPageRoute(
+          //   //         builder: (context) => const SettingScreen()));
+          //   print('7ตั้งค่า');
+          // }
+        },
+        header: Container(
+          color: AppBarColors.ABar_Colors,
+          child: Column(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(0),
+                      bottomLeft: Radius.circular(0),
+                      bottomRight: Radius.circular(0)),
+                ),
+                child: const Image(
+                  image: AssetImage('images/LOGO.png'),
+                ),
+              ),
+              InkWell(
+                onTap: () async {
+                  setState(() {
+                    Value_Route = 'หน้าหลัก';
+                  });
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  preferences.setString('route', 'หน้าหลัก');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    height: 50,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                          bottomRight: Radius.circular(20)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'เมนูหลัก',
+                        style: TextStyle(
+                            color: AdminScafScreen_Color.Colors_Text1_,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: FontWeight_.Fonts_T),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        footer: Container(
+          // height: 50,
+          width: double.infinity,
+          color: AppBarColors.ABar_Colors,
+          child: Container(
+            // height: 40,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(5),
+                  topRight: Radius.circular(5),
+                  bottomLeft: Radius.circular(0),
+                  bottomRight: Radius.circular(0)),
+            ),
+            child: const Center(
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  softWrap: false,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: AdminScafScreen_Color.Colors_Text2_,
+                      // fontWeight: FontWeight.bold,
+                      fontFamily: Font_.Fonts_T,
+                      fontSize: 10.0),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: (Value_Route == 'หน้าหลัก')
+          ? const HomeScreen()
+          : (Value_Route == 'พื้นที่เช่า')
+              ? const ChaoAreaScreen()
+              : (Value_Route == 'ผู้เช่า')
+                  ? const PeopleChaoScreen()
+                  : (Value_Route == 'บัญชี')
+                      ? const AccountScreen()
+                      : (Value_Route == 'จัดการ')
+                          ? const ManageScreen()
+                          : (Value_Route == 'รายงาน' &&
+                                  renTal_user.toString() == '65')
+                              ? const Report_cm_Screen()
+                              : (Value_Route == 'รายงาน' &&
+                                      renTal_user.toString() != '65')
+                                  ? ReportScreen()
+                                  : (Value_Route == 'ทะเบียน')
+                                      ? const BureauScreen()
+                                      : (Value_Route == 'สิทธิการเข้าถึง')
+                                          ? const SettingUserScreen()
+                                          : const SettingScreen(),
+    );
+  }
+
+  Scaffold adminmobile() {
+    return Scaffold(
       backgroundColor: AppbackgroundColor.Abg_Colors,
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
@@ -1319,50 +2402,6 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                         child: Icon(Icons.logout_rounded),
                       ),
                     ),
-                    // TimerBuilder.scheduled([alert!], builder: (context) {
-                    //   // This function will be called once the alert time is reached
-                    //   var now = DateTime.now();
-                    //   var reached = now.compareTo(alert!) >= 0;
-                    //   // final textStyle = Theme.of(context).textTheme.title;
-                    //   return Center(
-                    //     child: Column(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: <Widget>[
-                    //         // Icon(
-                    //         //   reached ? Icons.alarm_on : Icons.alarm,
-                    //         //   color: reached ? Colors.red : Colors.green,
-                    //         //   size: 48,
-                    //         // ),
-                    //         !reached
-                    //             ? TimerBuilder.periodic(Duration(seconds: 1),
-                    //                 alignment: Duration.zero,
-                    //                 builder: (context) {
-                    //                 // This function will be called every second until the alert time
-                    //                 var now = DateTime.now();
-                    //                 var remaining = alert!.difference(now);
-                    //                 return Text(
-                    //                   formatDuration(remaining),
-                    //                   // style: textStyle,
-                    //                 );
-                    //               })
-                    //             : Text(
-                    //                 "00:00:00 \t\t",
-                    //                 // style: textStyle
-                    //               ),
-                    //         // RaisedButton(
-                    //         //   child: Text("Reset"),
-                    //         //   onPressed: () {
-                    //         //     setState(() {
-                    //         //       alert =
-                    //         //           DateTime.now().add(Duration(seconds: 120));
-                    //         //     });
-                    //         //   },
-                    //         // ),
-                    //       ],
-                    //     ),
-                    //   );
-                    // }),
                   ],
                 ),
               ),
@@ -1372,7 +2411,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         elevation: 0,
         backgroundColor: AppBarColors.ABar_Colors,
       ),
-      sideBar: SideBar(
+      drawer: SideBar(
         textStyle:
             const TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T),
         iconColor: Colors.white,
@@ -1426,6 +2465,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     'route', perMissionModels[i].perm!.trim().toString());
                 setState(() {
                   Value_Route = perMissionModels[i].perm!.trim();
+                  Navigator.pop(context);
                 });
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -1436,68 +2476,6 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               }
             }
           }
-          // if (item.route == '/หน้าหลัก') {
-          //   setState(() {
-          //     Value_Route = 'หน้าหลัก';
-          //   });
-          //   // Navigator.push(context,
-          //   //     MaterialPageRoute(builder: (context) => const HomeScreen()));
-          //   print('1หน้าหลัก');
-          // } else if ((item.route == '/พื้นที่เช่า')) {
-          //   setState(() {
-          //     Value_Route = 'พื้นที่เช่า';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const ChaoAreaScreen()));
-          //   print('2พื้นที่เช่า');
-          // } else if ((item.route == '/ผู้เช่า')) {
-          //   setState(() {
-          //     Value_Route = 'ผู้เช่า';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const PeopleChaoScreen()));
-          //   print('3');
-          // } else if ((item.route == '/บัญชี')) {
-          //   setState(() {
-          //     Value_Route = 'บัญชี';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const AccountScreen()));
-          //   print('4บัญชี');
-          // } else if ((item.route == '/จัดการ')) {
-          //   setState(() {
-          //     Value_Route = 'จัดการ';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const ManageScreen()));
-          //   print('5');
-          // } else if ((item.route == '/รายงาน')) {
-          //   setState(() {
-          //     Value_Route = 'รายงาน';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const ReportScreen()));
-          //   print('6รายงาน');
-          // } else if ((item.route == '/ตั้งค่า')) {
-          //   setState(() {
-          //     Value_Route = 'ตั้งค่า';
-          //   });
-          //   // Navigator.push(
-          //   //     context,
-          //   //     MaterialPageRoute(
-          //   //         builder: (context) => const SettingScreen()));
-          //   print('7ตั้งค่า');
-          // }
         },
         header: Container(
           color: AppBarColors.ABar_Colors,
@@ -1520,6 +2498,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 onTap: () async {
                   setState(() {
                     Value_Route = 'หน้าหลัก';
+                    Navigator.pop(context);
                   });
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
@@ -1615,6 +2594,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,
     );
-    Navigator.pushAndRemoveUntil(context, route, (route) => false);
+    Navigator.pushAndRemoveUntil(context, route, (route) {
+      return false;
+    });
   }
 }

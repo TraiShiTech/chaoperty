@@ -17,6 +17,7 @@ class UserModel {
   String? modeclor;
   String? data_update;
   String? connected;
+   String? onoff;
 
   UserModel(
       {this.ser,
@@ -36,7 +37,8 @@ class UserModel {
       this.otp,
       this.modeclor,
       this.connected,
-      this.data_update});
+      this.data_update,
+      this.onoff});
 
   UserModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -57,7 +59,8 @@ class UserModel {
     modeclor = json['modeclor'];
     connected = json['connected'];
     data_update = json['data_update'];
-  }
+    onoff= json['onoff'];
+  } 
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -79,6 +82,7 @@ class UserModel {
     data['modeclor'] = this.modeclor;
     data['data_update'] = this.data_update;
     data['connected'] = this.connected;
+    data['onoff'] = this.onoff;
     return data;
   }
 }

@@ -1187,7 +1187,7 @@ class _PaysState extends State<Pays> {
                       Row(
                         children: [
                           Expanded(
-                            flex: 4,
+                            flex: (Responsive.isDesktop(context)) ? 4 : 2,
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -1225,9 +1225,11 @@ class _PaysState extends State<Pays> {
                                   //     color: Colors.grey, width: 1),
                                 ),
                                 padding: const EdgeInsets.all(8.0),
-                                child: const Center(
-                                  child: Text(
+                                child: Center(
+                                  child: AutoSizeText(
                                     'รายการยังไม่วางบิล',
+                                    minFontSize: 12,
+                                    maxFontSize: 18,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: PeopleChaoScreen_Color
@@ -1236,6 +1238,8 @@ class _PaysState extends State<Pays> {
                                         fontFamily: FontWeight_.Fonts_T
                                         //fontSize: 10.0
                                         ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
                               ),
@@ -1282,18 +1286,23 @@ class _PaysState extends State<Pays> {
                                 ),
                                 padding: const EdgeInsets.all(8.0),
                                 child: const Center(
-                                  child: Text(
-                                    'รายการวางบิล',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
+                                    child: AutoSizeText(
+                                  'รายการวางบิล',
+                                  minFontSize: 12,
+                                  maxFontSize: 18,
+                                  textAlign: TextAlign
+                                      .center, //(Responsive.isTablet(context))
+
+                                  style: TextStyle(
+                                      color:
+                                          PeopleChaoScreen_Color.Colors_Text1_,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T
+                                      //fontSize: 10.0
+                                      ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                )),
                               ),
                             ),
                           ),
@@ -1307,12 +1316,14 @@ class _PaysState extends State<Pays> {
                               height: 50,
                               color: Colors.brown[200],
                               padding: const EdgeInsets.all(8.0),
-                              child: const Center(
+                              child: Center(
                                 child: AutoSizeText(
                                   minFontSize: 10,
                                   maxFontSize: 25,
-                                  maxLines: 1,
-                                  'ประเภท',
+                                  maxLines: 2,
+                                  (Responsive.isDesktop(context))
+                                      ? 'ประเภท'
+                                      : 'กำหนดชำระ \n ประเภท',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color:
@@ -1323,28 +1334,30 @@ class _PaysState extends State<Pays> {
                               ),
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              color: Colors.brown[200],
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Center(
-                                child: AutoSizeText(
-                                  minFontSize: 10,
-                                  maxFontSize: 25,
-                                  maxLines: 1,
-                                  'กำหนดชำระ',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color:
-                                          PeopleChaoScreen_Color.Colors_Text2_,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: Font_.Fonts_T),
-                                ),
-                              ),
-                            ),
-                          ),
+                          (Responsive.isDesktop(context))
+                              ? Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 50,
+                                    color: Colors.brown[200],
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Center(
+                                      child: AutoSizeText(
+                                        minFontSize: 10,
+                                        maxFontSize: 25,
+                                        maxLines: 1,
+                                        'กำหนดชำระ',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
                           select_page == 0
                               ? Expanded(
                                   flex: 2,
@@ -1481,12 +1494,20 @@ class _PaysState extends State<Pays> {
                                                 flex: 2,
                                                 child: Tooltip(
                                                   richMessage: TextSpan(
-                                                    text: _TransBillModels[
-                                                                    index]
-                                                                .descr ==
-                                                            null
-                                                        ? '${_TransBillModels[index].expname}'
-                                                        : '${_TransBillModels[index].descr}',
+                                                    text: (Responsive.isDesktop(
+                                                            context))
+                                                        ? _TransBillModels[
+                                                                        index]
+                                                                    .descr ==
+                                                                null
+                                                            ? '${_TransBillModels[index].expname}'
+                                                            : '${_TransBillModels[index].descr}'
+                                                        : _TransBillModels[
+                                                                        index]
+                                                                    .descr ==
+                                                                null
+                                                            ? '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].expname}'
+                                                            : '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543} \n ${_TransBillModels[index].descr}',
                                                     style: const TextStyle(
                                                       color: HomeScreen_Color
                                                           .Colors_Text1_,
@@ -1503,64 +1524,121 @@ class _PaysState extends State<Pays> {
                                                             5),
                                                     color: Colors.grey[200],
                                                   ),
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 25,
-                                                    maxLines: 1,
-                                                    _TransBillModels[index]
-                                                                .descr ==
-                                                            null
-                                                        ? '${_TransBillModels[index].expname}'
-                                                        : '${_TransBillModels[index].descr}',
-                                                    textAlign: TextAlign.start,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
+                                                  child: (Responsive.isDesktop(
+                                                          context))
+                                                      ? AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 2,
+                                                          _TransBillModels[
+                                                                          index]
+                                                                      .descr ==
+                                                                  null
+                                                              ? '${_TransBillModels[index].expname}'
+                                                              : '${_TransBillModels[index].descr}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        )
+                                                      : Column(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      6,
+                                                                  maxFontSize:
+                                                                      12,
+                                                                  maxLines: 2,
+                                                                  '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      color: Colors.grey.shade500,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      25,
+                                                                  maxLines: 2,
+                                                                  _TransBillModels[index]
+                                                                              .descr ==
+                                                                          null
+                                                                      ? '${_TransBillModels[index].expname}'
+                                                                      : '${_TransBillModels[index].descr}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: const TextStyle(
+                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                      //fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Tooltip(
-                                                  richMessage: TextSpan(
-                                                    text:
-                                                        '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                                    style: const TextStyle(
-                                                      color: HomeScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      //fontSize: 10.0
-                                                    ),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            5),
-                                                    color: Colors.grey[200],
-                                                  ),
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 25,
-                                                    maxLines: 1,
-                                                    '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
-                                                    textAlign: TextAlign.center,
-                                                    style: const TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                              ),
+                                              (Responsive.isDesktop(context))
+                                                  ? Expanded(
+                                                      flex: 1,
+                                                      child: Tooltip(
+                                                        richMessage: TextSpan(
+                                                          text:
+                                                              '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                          style:
+                                                              const TextStyle(
+                                                            color: HomeScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            //fontSize: 10.0
+                                                          ),
+                                                        ),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(5),
+                                                          color:
+                                                              Colors.grey[200],
+                                                        ),
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 25,
+                                                          maxLines: 1,
+                                                          '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  //fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : SizedBox(),
                                               Expanded(
                                                 flex: 2,
                                                 child: Tooltip(
@@ -2026,24 +2104,97 @@ class _PaysState extends State<Pays> {
                                             ),
                                           ),
                                         if (select_page == 0)
-                                          Expanded(
-                                            flex: 1,
-                                            child: Center(
-                                              child: InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    red_Trans_billAll();
-                                                  });
-                                                },
-                                                child: Container(
-                                                  // width: 120,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey.shade300,
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
+                                          (Responsive.isDesktop(context))
+                                              ? Expanded(
+                                                  flex: 1,
+                                                  child: Center(
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          red_Trans_billAll();
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        // width: 120,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: const Center(
+                                                          child: AutoSizeText(
+                                                            minFontSize: 8,
+                                                            maxFontSize: 15,
+                                                            'ค่าบริการทั้งหมด',
+                                                            maxLines: 1,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              : SizedBox(),
+                                        (Responsive.isDesktop(context))
+                                            ? Expanded(
+                                                flex: 1,
+                                                child: Center(
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _InvoiceModels.clear();
+                                                        _InvoiceHistoryModels
+                                                            .clear();
+                                                        _TransReBillHistoryModels
+                                                            .clear();
+                                                        sum_disamtx.text =
+                                                            '0.00';
+                                                        sum_dispx.text = '0.00';
+                                                        sum_pvat = 0.00;
+                                                        sum_vat = 0.00;
+                                                        sum_wht = 0.00;
+                                                        sum_amt = 0.00;
+                                                        sum_dis = 0.00;
+                                                        sum_disamt = 0.00;
+                                                        sum_disp = 0;
+                                                        deall_Trans_select();
+                                                        red_InvoiceC();
+                                                        select_page = 2;
+                                                        numinvoice = null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      // width: 120,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[300],
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
                                                             topRight:
                                                                 Radius.circular(
                                                                     10),
@@ -2053,100 +2204,172 @@ class _PaysState extends State<Pays> {
                                                             bottomRight:
                                                                 Radius.circular(
                                                                     10)),
-                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Center(
-                                                    child: AutoSizeText(
-                                                      minFontSize: 8,
-                                                      maxFontSize: 15,
-                                                      'ค่าบริการทั้งหมด',
-                                                      maxLines: 1,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
+                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: const Center(
+                                                        child: AutoSizeText(
+                                                          minFontSize: 8,
+                                                          maxFontSize: 15,
+                                                          'ใบเสร็จชั่วคราว',
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              color: PeopleChaoScreen_Color
                                                                   .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                                              //fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            : SizedBox(),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    (Responsive.isDesktop(context))
+                                        ? SizedBox()
+                                        : Row(
+                                            children: [
+                                              if (select_page == 0)
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Center(
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          red_Trans_billAll();
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        // width: 120,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors
+                                                              .grey.shade300,
+                                                          borderRadius: const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: const Center(
+                                                          child: AutoSizeText(
+                                                            minFontSize: 8,
+                                                            maxFontSize: 15,
+                                                            'ค่าบริการทั้งหมด',
+                                                            maxLines: 2,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Expanded(
+                                                flex: 1,
+                                                child: Center(
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _InvoiceModels.clear();
+                                                        _InvoiceHistoryModels
+                                                            .clear();
+                                                        _TransReBillHistoryModels
+                                                            .clear();
+                                                        sum_disamtx.text =
+                                                            '0.00';
+                                                        sum_dispx.text = '0.00';
+                                                        sum_pvat = 0.00;
+                                                        sum_vat = 0.00;
+                                                        sum_wht = 0.00;
+                                                        sum_amt = 0.00;
+                                                        sum_dis = 0.00;
+                                                        sum_disamt = 0.00;
+                                                        sum_disp = 0;
+                                                        deall_Trans_select();
+                                                        red_InvoiceC();
+                                                        select_page = 2;
+                                                        numinvoice = null;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      // width: 120,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[300],
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: const Center(
+                                                        child: AutoSizeText(
+                                                          maxLines: 2,
+                                                          minFontSize: 8,
+                                                          maxFontSize: 15,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          'ใบเสร็จชั่วคราว',
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: TextStyle(
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              //fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        Expanded(
-                                          flex: 1,
-                                          child: Center(
-                                            child: InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  _InvoiceModels.clear();
-                                                  _InvoiceHistoryModels.clear();
-                                                  _TransReBillHistoryModels
-                                                      .clear();
-                                                  sum_disamtx.text = '0.00';
-                                                  sum_dispx.text = '0.00';
-                                                  sum_pvat = 0.00;
-                                                  sum_vat = 0.00;
-                                                  sum_wht = 0.00;
-                                                  sum_amt = 0.00;
-                                                  sum_dis = 0.00;
-                                                  sum_disamt = 0.00;
-                                                  sum_disp = 0;
-                                                  deall_Trans_select();
-                                                  red_InvoiceC();
-                                                  select_page = 2;
-                                                  numinvoice = null;
-                                                });
-                                              },
-                                              child: Container(
-                                                // width: 120,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey[300],
-                                                  borderRadius:
-                                                      const BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Center(
-                                                  child: AutoSizeText(
-                                                    minFontSize: 8,
-                                                    maxFontSize: 15,
-                                                    'ใบเสร็จชั่วคราว',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        //fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                            ],
+                                          )
                                   ]),
                                 ),
                               ),
@@ -5413,7 +5636,9 @@ class _PaysState extends State<Pays> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    width: 800,
+                    width: (Responsive.isDesktop(context))
+                        ? 800
+                        : MediaQuery.of(context).size.shortestSide * 0.95,
                     child: Column(
                       children: [
                         Row(
@@ -5511,8 +5736,10 @@ class _PaysState extends State<Pays> {
                                 child: Center(
                                   child: Row(
                                     children: [
-                                      const Text(
-                                        'รูปแบบการชำระ',
+                                      Text(
+                                        (Responsive.isDesktop(context))
+                                            ? 'รูปแบบการชำระ'
+                                            : 'การชำระ',
                                         textAlign: TextAlign.end,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -7159,194 +7386,396 @@ class _PaysState extends State<Pays> {
                         SizedBox(
                           height: 10,
                         ),
-                        Stack(
-                          children: [
-                            InkWell(
-                              child: Container(
-                                  width: 800,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.blue[900],
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: const Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10)),
-                                    // border: Border.all(color: Colors.white, width: 1),
-                                  ),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                          height: 50,
-                                          width: 100,
-                                          child: Image.asset(
-                                            'images/prompay.png',
-                                            height: 50,
-                                            width: 100,
-                                            fit: BoxFit.cover,
-                                          )),
-                                      const Center(
-                                          child: Text(
-                                        'Generator QR Code PromtPay',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T),
-                                      )),
-                                    ],
-                                  )),
-                              onTap: (paymentName1.toString().trim() !=
-                                          'Online Payment' &&
-                                      paymentName2.toString().trim() !=
-                                          'Online Payment')
-                                  ? null
-                                  : () {
-                                      double totalQr_ = 0.00;
-                                      if (paymentName1.toString().trim() ==
-                                              'Online Payment' &&
-                                          paymentName2.toString().trim() ==
-                                              'Online Payment') {
-                                        setState(() {
-                                          totalQr_ = 0.00;
-                                        });
-                                        setState(() {
-                                          totalQr_ = double.parse(
-                                                  '${Form_payment1.text}') +
-                                              double.parse(
-                                                  '${Form_payment2.text}');
-                                        });
-                                      } else if (paymentName1
-                                              .toString()
-                                              .trim() ==
-                                          'Online Payment') {
-                                        setState(() {
-                                          totalQr_ = 0.00;
-                                        });
-                                        setState(() {
-                                          totalQr_ = double.parse(
-                                              '${Form_payment1.text}');
-                                        });
-                                      } else if (paymentName2
-                                              .toString()
-                                              .trim() ==
-                                          'Online Payment') {
-                                        setState(() {
-                                          totalQr_ = 0.00;
-                                        });
-                                        setState(() {
-                                          totalQr_ = double.parse(
-                                              '${Form_payment2.text}');
-                                        });
-                                      }
+                        (paymentName1.toString().trim() == 'Online Payment' ||
+                                paymentName2.toString().trim() ==
+                                    'Online Payment')
+                            ? Stack(
+                                children: [
+                                  InkWell(
+                                    child: Container(
+                                        width: 800,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color: Colors.blue[900],
+                                          borderRadius: BorderRadius.only(
+                                              topLeft:
+                                                  const Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          // border: Border.all(color: Colors.white, width: 1),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                                height: 50,
+                                                width: 100,
+                                                child: Image.asset(
+                                                  'images/prompay.png',
+                                                  height: 50,
+                                                  width: 100,
+                                                  fit: BoxFit.cover,
+                                                )),
+                                            const Center(
+                                                child: Text(
+                                              'Generator QR Code PromtPay',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            )),
+                                          ],
+                                        )),
+                                    onTap:
+                                        (paymentName1.toString().trim() !=
+                                                    'Online Payment' &&
+                                                paymentName2
+                                                        .toString()
+                                                        .trim() !=
+                                                    'Online Payment')
+                                            ? null
+                                            : () {
+                                                double totalQr_ = 0.00;
+                                                if (paymentName1
+                                                            .toString()
+                                                            .trim() ==
+                                                        'Online Payment' &&
+                                                    paymentName2
+                                                            .toString()
+                                                            .trim() ==
+                                                        'Online Payment') {
+                                                  setState(() {
+                                                    totalQr_ = 0.00;
+                                                  });
+                                                  setState(() {
+                                                    totalQr_ = double.parse(
+                                                            '${Form_payment1.text}') +
+                                                        double.parse(
+                                                            '${Form_payment2.text}');
+                                                  });
+                                                } else if (paymentName1
+                                                        .toString()
+                                                        .trim() ==
+                                                    'Online Payment') {
+                                                  setState(() {
+                                                    totalQr_ = 0.00;
+                                                  });
+                                                  setState(() {
+                                                    totalQr_ = double.parse(
+                                                        '${Form_payment1.text}');
+                                                  });
+                                                } else if (paymentName2
+                                                        .toString()
+                                                        .trim() ==
+                                                    'Online Payment') {
+                                                  setState(() {
+                                                    totalQr_ = 0.00;
+                                                  });
+                                                  setState(() {
+                                                    totalQr_ = double.parse(
+                                                        '${Form_payment2.text}');
+                                                  });
+                                                }
 
-                                      showDialog<void>(
-                                        context: context,
-                                        barrierDismissible:
-                                            false, // user must tap button!
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(20.0))),
-                                            title: Center(
-                                                child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.blue[300],
-                                                      borderRadius:
-                                                          const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            4.0),
-                                                    child: const Text(
-                                                      ' QR PromtPay',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ))),
-                                            content: SingleChildScrollView(
-                                              child: ListBody(
-                                                children: <Widget>[
-                                                  //  '${Form_bussshop}',
-                                                  //   '${Form_address}',
-                                                  //   '${Form_tel}',
-                                                  //   '${Form_email}',
-                                                  //   '${Form_tax}',
-                                                  //   '${Form_nameshop}',
-                                                  Center(
-                                                    child: RepaintBoundary(
-                                                      key: qrImageKey,
-                                                      child: Container(
-                                                        color: Colors.white,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .fromLTRB(
-                                                                4, 8, 4, 2),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
-                                                              style: TextStyle(
-                                                                color:
-                                                                    Colors.red,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
+                                                showDialog<void>(
+                                                  context: context,
+                                                  barrierDismissible:
+                                                      false, // user must tap button!
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return AlertDialog(
+                                                      shape: const RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius.circular(
+                                                                      20.0))),
+                                                      // title: Center(
+                                                      //     child: Container(
+                                                      //         decoration:
+                                                      //             BoxDecoration(
+                                                      //           color: Colors
+                                                      //               .blue[300],
+                                                      //           borderRadius: const BorderRadius
+                                                      //                   .only(
+                                                      //               topLeft:
+                                                      //                   Radius.circular(
+                                                      //                       10),
+                                                      //               topRight: Radius
+                                                      //                   .circular(
+                                                      //                       10),
+                                                      //               bottomLeft:
+                                                      //                   Radius.circular(
+                                                      //                       10),
+                                                      //               bottomRight:
+                                                      //                   Radius.circular(
+                                                      //                       10)),
+                                                      //         ),
+                                                      //         padding:
+                                                      //             const EdgeInsets
+                                                      //                 .all(4.0),
+                                                      //         child: const Text(
+                                                      //           ' QR PromtPay',
+                                                      //           style:
+                                                      //               TextStyle(
+                                                      //             color: Colors
+                                                      //                 .white,
+                                                      //             fontWeight:
+                                                      //                 FontWeight
+                                                      //                     .bold,
+                                                      //           ),
+                                                      //         ))),
+                                                      content:
+                                                          SingleChildScrollView(
+                                                        child: ListBody(
+                                                          children: <Widget>[
+                                                            //  '${Form_bussshop}',
+                                                            //   '${Form_address}',
+                                                            //   '${Form_tel}',
+                                                            //   '${Form_email}',
+                                                            //   '${Form_tax}',
+                                                            //   '${Form_nameshop}',
+                                                            Center(
+                                                              child:
+                                                                  RepaintBoundary(
+                                                                key: qrImageKey,
+                                                                child:
+                                                                    Container(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .fromLTRB(
+                                                                          4,
+                                                                          8,
+                                                                          4,
+                                                                          2),
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Center(
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              220,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.green[300],
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(0),
+                                                                                bottomRight: Radius.circular(0)),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              '$renTal_name',
+                                                                              style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontSize: 13,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      // Align(
+                                                                      //   alignment: Alignment
+                                                                      //       .centerLeft,
+                                                                      //   child: Text(
+                                                                      //     'คุณ : $Form_bussshop',
+                                                                      //     style:
+                                                                      //         TextStyle(
+                                                                      //       fontSize: 13,
+                                                                      //       fontWeight:
+                                                                      //           FontWeight
+                                                                      //               .bold,
+                                                                      //     ),
+                                                                      //   ),
+                                                                      // ),
+                                                                      Container(
+                                                                        height:
+                                                                            60,
+                                                                        width:
+                                                                            220,
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "images/thai_qr_payment.png",
+                                                                          height:
+                                                                              60,
+                                                                          width:
+                                                                              220,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        width:
+                                                                            200,
+                                                                        height:
+                                                                            200,
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              PrettyQr(
+                                                                            // typeNumber: 3,
+                                                                            image:
+                                                                                AssetImage(
+                                                                              "images/Icon-chao.png",
+                                                                            ),
+                                                                            size:
+                                                                                200,
+                                                                            data:
+                                                                                generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                                            errorCorrectLevel:
+                                                                                QrErrorCorrectLevel.M,
+                                                                            roundEdges:
+                                                                                true,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        'พร้อมเพย์ : $selectedValue',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              13,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      Text(
+                                                                        '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          fontSize:
+                                                                              10,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                      Container(
+                                                                        color: Color(
+                                                                            0xFFD9D9B7),
+                                                                        height:
+                                                                            60,
+                                                                        width:
+                                                                            220,
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "images/LOGOchao.png",
+                                                                          height:
+                                                                              70,
+                                                                          width:
+                                                                              220,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
                                                               ),
                                                             ),
                                                             Center(
                                                               child: Container(
                                                                 width: 220,
                                                                 decoration:
-                                                                    BoxDecoration(
+                                                                    const BoxDecoration(
                                                                   color: Colors
-                                                                          .green[
-                                                                      300],
+                                                                      .green,
                                                                   borderRadius: BorderRadius.only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              0),
                                                                       topRight:
                                                                           Radius.circular(
-                                                                              10),
+                                                                              0),
                                                                       bottomLeft:
                                                                           Radius.circular(
-                                                                              0),
+                                                                              10),
                                                                       bottomRight:
                                                                           Radius.circular(
-                                                                              0)),
+                                                                              10)),
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
                                                                             .all(
                                                                         8.0),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    '$renTal_name',
+                                                                child:
+                                                                    TextButton(
+                                                                  onPressed:
+                                                                      () async {
+                                                                    // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                                    RenderRepaintBoundary
+                                                                        boundary =
+                                                                        qrImageKey
+                                                                            .currentContext!
+                                                                            .findRenderObject() as RenderRepaintBoundary;
+                                                                    ui.Image
+                                                                        image =
+                                                                        await boundary
+                                                                            .toImage();
+                                                                    ByteData?
+                                                                        byteData =
+                                                                        await image.toByteData(
+                                                                            format:
+                                                                                ui.ImageByteFormat.png);
+                                                                    Uint8List
+                                                                        bytes =
+                                                                        byteData!
+                                                                            .buffer
+                                                                            .asUint8List();
+                                                                    html.Blob
+                                                                        blob =
+                                                                        html.Blob([
+                                                                      bytes
+                                                                    ]);
+                                                                    String url = html
+                                                                            .Url
+                                                                        .createObjectUrlFromBlob(
+                                                                            blob);
+
+                                                                    html.AnchorElement
+                                                                        anchor =
+                                                                        html.AnchorElement()
+                                                                          ..href =
+                                                                              url
+                                                                          ..setAttribute(
+                                                                              'download',
+                                                                              'qrcode.png')
+                                                                          ..click();
+
+                                                                    html.Url
+                                                                        .revokeObjectUrl(
+                                                                            url);
+                                                                  },
+                                                                  child:
+                                                                      const Text(
+                                                                    'Download QR Code',
                                                                     style:
                                                                         TextStyle(
                                                                       color: Colors
                                                                           .white,
-                                                                      fontSize:
-                                                                          13,
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
@@ -7355,273 +7784,104 @@ class _PaysState extends State<Pays> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            // Align(
-                                                            //   alignment: Alignment
-                                                            //       .centerLeft,
-                                                            //   child: Text(
-                                                            //     'คุณ : $Form_bussshop',
-                                                            //     style:
-                                                            //         TextStyle(
-                                                            //       fontSize: 13,
-                                                            //       fontWeight:
-                                                            //           FontWeight
-                                                            //               .bold,
-                                                            //     ),
-                                                            //   ),
-                                                            // ),
-                                                            Container(
-                                                              height: 60,
-                                                              width: 220,
-                                                              child:
-                                                                  Image.asset(
-                                                                "images/thai_qr_payment.png",
-                                                                height: 60,
-                                                                width: 220,
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      actions: <Widget>[
+                                                        Column(
+                                                          children: [
+                                                            const SizedBox(
+                                                              height: 5.0,
                                                             ),
-                                                            Container(
-                                                              width: 200,
-                                                              height: 200,
-                                                              child: Center(
-                                                                child: PrettyQr(
-                                                                  // typeNumber: 3,
-                                                                  image:
-                                                                      AssetImage(
-                                                                    "images/Icon-chao.png",
+                                                            const Divider(
+                                                              color:
+                                                                  Colors.grey,
+                                                              height: 4.0,
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 5.0,
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .end,
+                                                                children: [
+                                                                  Container(
+                                                                    width: 100,
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      borderRadius: BorderRadius.only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextButton(
+                                                                      onPressed: () => Navigator.pop(
+                                                                          context,
+                                                                          'OK'),
+                                                                      child:
+                                                                          const Text(
+                                                                        'ปิด',
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                                  size: 200,
-                                                                  data: generateQRCode(
-                                                                      promptPayID:
-                                                                          "$selectedValue",
-                                                                      amount:
-                                                                          totalQr_),
-                                                                  errorCorrectLevel:
-                                                                      QrErrorCorrectLevel
-                                                                          .M,
-                                                                  roundEdges:
-                                                                      true,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'พร้อมเพย์ : $selectedValue',
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
-                                                              style: TextStyle(
-                                                                fontSize: 13,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Text(
-                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
-                                                              style: TextStyle(
-                                                                fontSize: 10,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              color: Color(
-                                                                  0xFFD9D9B7),
-                                                              height: 60,
-                                                              width: 220,
-                                                              child:
-                                                                  Image.asset(
-                                                                "images/LOGOchao.png",
-                                                                height: 70,
-                                                                width: 220,
+                                                                ],
                                                               ),
                                                             ),
                                                           ],
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Center(
-                                                    child: Container(
-                                                      width: 220,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        0),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        0),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: TextButton(
-                                                        onPressed: () async {
-                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
-
-                                                          RenderRepaintBoundary
-                                                              boundary =
-                                                              qrImageKey
-                                                                      .currentContext!
-                                                                      .findRenderObject()
-                                                                  as RenderRepaintBoundary;
-                                                          ui.Image image =
-                                                              await boundary
-                                                                  .toImage();
-                                                          ByteData? byteData =
-                                                              await image
-                                                                  .toByteData(
-                                                                      format: ui
-                                                                          .ImageByteFormat
-                                                                          .png);
-                                                          Uint8List bytes =
-                                                              byteData!.buffer
-                                                                  .asUint8List();
-                                                          html.Blob blob =
-                                                              html.Blob(
-                                                                  [bytes]);
-                                                          String url = html.Url
-                                                              .createObjectUrlFromBlob(
-                                                                  blob);
-
-                                                          html.AnchorElement
-                                                              anchor =
-                                                              html.AnchorElement()
-                                                                ..href = url
-                                                                ..setAttribute(
-                                                                    'download',
-                                                                    'qrcode.png')
-                                                                ..click();
-
-                                                          html.Url
-                                                              .revokeObjectUrl(
-                                                                  url);
-                                                        },
-                                                        child: const Text(
-                                                          'Download QR Code',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              Column(
-                                                children: [
-                                                  const SizedBox(
-                                                    height: 5.0,
-                                                  ),
-                                                  const Divider(
-                                                    color: Colors.grey,
-                                                    height: 4.0,
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 5.0,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      children: [
-                                                        Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.black,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: TextButton(
-                                                            onPressed: () =>
-                                                                Navigator.pop(
-                                                                    context,
-                                                                    'OK'),
-                                                            child: const Text(
-                                                              'ปิด',
-                                                              style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
                                                       ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                                    },
-                            ),
-                            if (paymentName1.toString().trim() !=
-                                    'Online Payment' &&
-                                paymentName2.toString().trim() !=
-                                    'Online Payment')
-                              Positioned(
-                                  top: 0,
-                                  left: 0,
-                                  child: Container(
-                                    width: 800,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                      // border: Border.all(color: Colors.white, width: 1),
-                                    ),
-                                  )),
-                          ],
-                        ),
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                  ),
+                                  if (paymentName1.toString().trim() !=
+                                          'Online Payment' &&
+                                      paymentName2.toString().trim() !=
+                                          'Online Payment')
+                                    Positioned(
+                                        top: 0,
+                                        left: 0,
+                                        child: Container(
+                                          width: 800,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.withOpacity(0.5),
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            // border: Border.all(color: Colors.white, width: 1),
+                                          ),
+                                        )),
+                                ],
+                              )
+                            : SizedBox(),
                         SizedBox(
                           height: 10,
                         ),

@@ -1281,7 +1281,12 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                       )
                                     : const SizedBox(),
                                 Expanded(
-                                  flex: 2,
+                                  flex: MediaQuery.of(context)
+                                              .size
+                                              .shortestSide <
+                                          MediaQuery.of(context).size.width * 1
+                                      ? 2
+                                      : 3,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
@@ -1379,7 +1384,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                     ),
                                   ),
                                 ),
-                                const Expanded(
+                                Expanded(
                                   flex: 1,
                                   child: Padding(
                                     padding: EdgeInsets.all(8.0),
@@ -1395,7 +1400,12 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                   ),
                                 ),
                                 Expanded(
-                                  flex: 8,
+                                  flex: MediaQuery.of(context)
+                                              .size
+                                              .shortestSide <
+                                          MediaQuery.of(context).size.width * 1
+                                      ? 8
+                                      : 6,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
@@ -2064,7 +2074,12 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  flex: 2,
+                                  flex: MediaQuery.of(context)
+                                              .size
+                                              .shortestSide <
+                                          MediaQuery.of(context).size.width * 1
+                                      ? 2
+                                      : 3,
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
@@ -2697,7 +2712,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                 MainAxisAlignment.end,
                                                                             children: [
                                                                               Container(
-                                                                                width: 100,
+                                                                                width: 120,
                                                                                 decoration: const BoxDecoration(
                                                                                   color: Colors.green,
                                                                                   borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),

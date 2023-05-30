@@ -828,30 +828,126 @@ class _SignInScreenState extends State<SignInScreen> {
       print(result);
       for (var map in result) {
         UserModel userModel = UserModel.fromJson(map);
-        if (password.trim() == userModel.passwd!.trim()) {
-          String verify = userModel.verify!;
-          if (verify == "1") {
-            // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
-            routeToService(AdminScafScreen(route: 'หน้าหลัก'), userModel);
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text('Email ของคุณ!')),
-            // );
+        var onoff = int.parse(userModel.onoff!);
+        var ser = userModel.ser;
+        if (onoff == 0) {
+          if (password.trim() == userModel.passwd!.trim()) {
+            String verify = userModel.verify!;
+            if (verify == "1") {
+              // Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
+              routeToService(AdminScafScreen(route: 'หน้าหลัก'), userModel);
+              var on = '1';
+              String url =
+                  '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+
+              try {
+                var response = await http.get(Uri.parse(url));
+
+                var result = json.decode(response.body);
+                print(result);
+                if (result.toString() == 'true') {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('ยินดีต้อนรับ')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('ยินดีต้อนรับ (ผิดพลาด)')),
+                  );
+                }
+              } catch (e) {}
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(content: Text('Email ของคุณ!')),
+              // );
+            } else {
+              routeToService(SingUpScreen2(), userModel);
+              // ScaffoldMessenger.of(context).showSnackBar(
+              //   SnackBar(
+              //       content: Text(
+              //           'คุณยังไม่ยืนยันตัวตน กรุณายืนยันตัวตนที่ Email ของคุณ!')),
+              // );
+            }
           } else {
-            routeToService(SingUpScreen2(), userModel);
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(
-            //       content: Text(
-            //           'คุณยังไม่ยืนยันตัวตน กรุณายืนยันตัวตนที่ Email ของคุณ!')),
-            // );
+            Form2_text.clear();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content: Text('Password ผิดพลาด กรุณาลองใหม่!',
+                      style: TextStyle(
+                          color: Colors.white, fontFamily: Font_.Fonts_T))),
+            );
           }
         } else {
-          Form2_text.clear();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text('Password ผิดพลาด กรุณาลองใหม่!',
-                    style: TextStyle(
-                        color: Colors.white, fontFamily: Font_.Fonts_T))),
+          showDialog<String>(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: const Center(
+                  child: Text(
+                'รหัสผู้ใช้งานนี้กำลังใช้งานอยู่ โปรดลองใหม่อีกครั้ง',
+                style: TextStyle(
+                    color: AdminScafScreen_Color.Colors_Text1_,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: FontWeight_.Fonts_T),
+              )),
+              actions: <Widget>[
+                Column(
+                  children: [
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      height: 4.0,
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              width: 100,
+                              decoration: const BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextButton(
+                                onPressed: () async {
+                                  Navigator.pop(context, 'OK');
+                                },
+                                child: const Text(
+                                  'ยืนยัน',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                       ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
+          // ScaffoldMessenger.of(context).showSnackBar(
+          //   SnackBar(
+          //       content: Text('รหัสผู้ใช้งานนี้กำลังใช้งานอยู่ โปรดลองใหม่อีกครั้ง',
+          //           style: TextStyle(
+          //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+          // );
         }
       }
     } catch (e) {

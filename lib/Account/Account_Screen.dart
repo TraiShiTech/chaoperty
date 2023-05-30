@@ -3414,7 +3414,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     .size
                                                     .width *
                                                 0.55
-                                            : 1200,
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .shortestSide /
+                                                1,
                                         height: (Responsive.isDesktop(context))
                                             ? MediaQuery.of(context)
                                                     .size
@@ -4128,6 +4131,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           .width *
                                                       0.7
                                                   : 1200,
+                                                   height:  MediaQuery.of(context)
+                                                          .size
+                                                          .width ,
                                               decoration: const BoxDecoration(
                                                 color: AppbackgroundColor
                                                     .Sub_Abg_Colors,
@@ -4140,7 +4146,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     bottomRight:
                                                         Radius.circular(10)),
                                               ),
-                                              child: Column(
+                                              child: ListView(
                                                 children: [
                                                   Align(
                                                     alignment:
@@ -4380,174 +4386,70 @@ class _AccountScreenState extends State<AccountScreen> {
                                                     ),
                                                   ),
                                                 ],
-                                              ))
-                                        ])),
-                                    Container(
-                                      width: (Responsive.isDesktop(context))
-                                          ? 490
-                                          : 485,
-                                      height: (Responsive.isDesktop(context))
-                                          ? MediaQuery.of(context).size.height *
-                                              0.7
-                                          : MediaQuery.of(context).size.height *
-                                              0.65,
-                                      child: Stack(
-                                        children: [
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: Container(
-                                                      height: 50,
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Colors.orange[100],
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  0),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  0),
-                                                        ),
-                                                        // border: Border.all(
-                                                        //     color: Colors.grey, width: 1),
-                                                      ),
-                                                      // padding: const EdgeInsets.all(8.0),
-                                                      child: const Center(
-                                                        child: Text(
-                                                          'รายละเอียดการชำระ',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T
-                                                              //fontSize: 10.0
-                                                              //fontSize: 10.0
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Expanded(
-                                                child: Container(
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    border: Border(
-                                                      left: BorderSide(
-                                                        width: 1,
-                                                        color: Color.fromARGB(
-                                                            255, 226, 223, 223),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: Column(
+                                              )),
+                                          (Responsive.isDesktop(context))
+                                              ? SizedBox()
+                                              : Container(
+                                                  width: (Responsive.isDesktop(
+                                                          context))
+                                                      ? 490
+                                                      : 485,
+                                                  height: (Responsive.isDesktop(
+                                                          context))
+                                                      ? MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.7
+                                                      : MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.65,
+                                                  child: Stack(
                                                     children: [
-                                                      Row(
+                                                      Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Container(
-                                                              height: 50,
-                                                              color: Colors
-                                                                  .green[200],
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'ยอดชำระรวม',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Container(
-                                                              height: 50,
-                                                              color: Colors
-                                                                  .green[50],
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  // '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                  '${nFormat.format(sum_amt - sum_disamt)}',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: const TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              height: 50,
-                                                              color: AppbackgroundColor
-                                                                  .Sub_Abg_Colors,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Center(
-                                                                child: Row(
-                                                                  children: [
-                                                                    const Text(
-                                                                      'การชำระ',
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                flex: 2,
+                                                                child:
+                                                                    Container(
+                                                                  height: 50,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                            .orange[
+                                                                        100],
+                                                                    borderRadius:
+                                                                        const BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              0),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              0),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  // padding: const EdgeInsets.all(8.0),
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      'รายละเอียดการชำระ',
                                                                       textAlign:
                                                                           TextAlign
-                                                                              .end,
+                                                                              .center,
                                                                       style: TextStyle(
                                                                           color: PeopleChaoScreen_Color
                                                                               .Colors_Text1_,
@@ -4556,225 +4458,1786 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           fontFamily:
                                                                               FontWeight_.Fonts_T
                                                                           //fontSize: 10.0
+                                                                          //fontSize: 10.0
                                                                           ),
                                                                     ),
-                                                                    const SizedBox(
-                                                                      width: 5,
-                                                                    ),
-                                                                    IconButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        setState(
-                                                                            () {
-                                                                          if (pamentpage ==
-                                                                              1) {
-                                                                            pamentpage =
-                                                                                0;
-                                                                            Form_payment2.clear();
-                                                                            Form_payment1.text =
-                                                                                (sum_amt - double.parse(sum_disamtx.text)).toStringAsFixed(2).toString();
-                                                                          } else {
-                                                                            pamentpage =
-                                                                                1;
-                                                                          }
-                                                                        });
-                                                                        if (pamentpage ==
-                                                                            0) {
-                                                                          setState(
-                                                                              () {
-                                                                            paymentName2 =
-                                                                                null;
-                                                                          });
-                                                                        } else {}
-                                                                      },
-                                                                      icon: pamentpage ==
-                                                                              0
-                                                                          ? Icon(
-                                                                              Icons.add_circle_outline,
-                                                                              color: Colors.green,
-                                                                            )
-                                                                          : const Icon(
-                                                                              Icons.remove_circle_outline,
-                                                                              color: Colors.red,
-                                                                            ),
-                                                                    )
-                                                                  ],
+                                                                  ),
                                                                 ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          Expanded(
+                                                            child: Container(
+                                                              decoration:
+                                                                  const BoxDecoration(
+                                                                border: Border(
+                                                                  left:
+                                                                      BorderSide(
+                                                                    width: 1,
+                                                                    color: Color
+                                                                        .fromARGB(
+                                                                            255,
+                                                                            226,
+                                                                            223,
+                                                                            223),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              child: Column(
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              Colors.green[200],
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'ยอดชำระรวม',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              Colors.green[50],
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Text(
+                                                                              // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                              '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: const TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 2,
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              AppbackgroundColor.Sub_Abg_Colors,
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Center(
+                                                                            child:
+                                                                                Row(
+                                                                              children: [
+                                                                                const Text(
+                                                                                  'การชำระ',
+                                                                                  textAlign: TextAlign.end,
+                                                                                  style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  width: 5,
+                                                                                ),
+                                                                                IconButton(
+                                                                                  onPressed: () {
+                                                                                    setState(() {
+                                                                                      if (pamentpage == 1) {
+                                                                                        pamentpage = 0;
+                                                                                        Form_payment2.clear();
+                                                                                        Form_payment1.text = (sum_amt - double.parse(sum_disamtx.text)).toStringAsFixed(2).toString();
+                                                                                      } else {
+                                                                                        pamentpage = 1;
+                                                                                      }
+                                                                                    });
+                                                                                    if (pamentpage == 0) {
+                                                                                      setState(() {
+                                                                                        paymentName2 = null;
+                                                                                      });
+                                                                                    } else {}
+                                                                                  },
+                                                                                  icon: pamentpage == 0
+                                                                                      ? Icon(
+                                                                                          Icons.add_circle_outline,
+                                                                                          color: Colors.green,
+                                                                                        )
+                                                                                      : const Icon(
+                                                                                          Icons.remove_circle_outline,
+                                                                                          color: Colors.red,
+                                                                                        ),
+                                                                                )
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(6),
+                                                                                    topRight: Radius.circular(6),
+                                                                                    bottomLeft: Radius.circular(6),
+                                                                                    bottomRight: Radius.circular(6),
+                                                                                  ),
+                                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: DropdownButtonFormField2(
+                                                                                  decoration: InputDecoration(
+                                                                                    //Add isDense true and zero Padding.
+                                                                                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                                    isDense: true,
+                                                                                    contentPadding: EdgeInsets.zero,
+                                                                                    border: OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.circular(15),
+                                                                                    ),
+                                                                                    //Add more decoration as you want here
+                                                                                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                                  ),
+                                                                                  isExpanded: true,
+                                                                                  // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                                  hint: Row(
+                                                                                    children: [
+                                                                                      Text(
+                                                                                        '$paymentName1',
+                                                                                        style: const TextStyle(
+                                                                                            fontSize: 14,
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  icon: const Icon(
+                                                                                    Icons.arrow_drop_down,
+                                                                                    color: Colors.black45,
+                                                                                  ),
+                                                                                  iconSize: 25,
+                                                                                  buttonHeight: 42,
+                                                                                  buttonPadding: const EdgeInsets.only(left: 10, right: 10),
+                                                                                  dropdownDecoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(15),
+                                                                                  ),
+                                                                                  items: _PayMentModels.map((item) => DropdownMenuItem<String>(
+                                                                                        value: '${item.ser}:${item.ptname}',
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${item.ptname!}',
+                                                                                                textAlign: TextAlign.start,
+                                                                                                style: const TextStyle(
+                                                                                                    fontSize: 14,
+                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${item.bno!}',
+                                                                                                textAlign: TextAlign.end,
+                                                                                                style: const TextStyle(
+                                                                                                    fontSize: 14,
+                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      )).toList(),
+                                                                                  onChanged: (value) async {
+                                                                                    print(value);
+                                                                                    // Do something when changing the item if you want.
+
+                                                                                    var zones = value!.indexOf(':');
+                                                                                    var rtnameSer = value.substring(0, zones);
+                                                                                    var rtnameName = value.substring(zones + 1);
+                                                                                    // print(
+                                                                                    //     'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                                    setState(() {
+                                                                                      paymentSer1 = rtnameSer.trim().toString();
+                                                                                      if (rtnameSer.toString() == '0') {
+                                                                                        paymentName1 = null;
+                                                                                      } else {
+                                                                                        paymentName1 = rtnameName.toString();
+                                                                                      }
+
+                                                                                      if (rtnameSer.toString() == '0') {
+                                                                                        Form_payment1.clear();
+                                                                                      } else {
+                                                                                        Form_payment1.text = (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+                                                                                      }
+                                                                                    });
+                                                                                    print('mmmmm ${paymentSer1.toString()} $rtnameName');
+                                                                                    // print(
+                                                                                    //     'pppppp $paymentSer1 $paymentName1');
+                                                                                    // print('Form_payment1.text');
+                                                                                    // print(Form_payment1.text);
+                                                                                    // print(Form_payment2.text);
+                                                                                    // print('Form_payment1.text');
+                                                                                  },
+                                                                                  // onSaved: (value) {
+
+                                                                                  // },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            pamentpage == 0
+                                                                                ? const SizedBox()
+                                                                                : Expanded(
+                                                                                    child: Container(
+                                                                                      decoration: const BoxDecoration(
+                                                                                        color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topLeft: Radius.circular(6),
+                                                                                          topRight: Radius.circular(6),
+                                                                                          bottomLeft: Radius.circular(6),
+                                                                                          bottomRight: Radius.circular(6),
+                                                                                        ),
+                                                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                                                      ),
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: DropdownButtonFormField2(
+                                                                                        decoration: InputDecoration(
+                                                                                          //Add isDense true and zero Padding.
+                                                                                          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                                          isDense: true,
+                                                                                          contentPadding: EdgeInsets.zero,
+                                                                                          border: OutlineInputBorder(
+                                                                                            borderRadius: BorderRadius.circular(15),
+                                                                                          ),
+                                                                                          //Add more decoration as you want here
+                                                                                          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                                        ),
+                                                                                        isExpanded: true,
+                                                                                        // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                                        hint: Row(
+                                                                                          children: [
+                                                                                            const Text(
+                                                                                              'เลือก',
+                                                                                              style: TextStyle(
+                                                                                                  fontSize: 14,
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                        icon: const Icon(
+                                                                                          Icons.arrow_drop_down,
+                                                                                          color: Colors.black45,
+                                                                                        ),
+                                                                                        iconSize: 25,
+                                                                                        buttonHeight: 42,
+                                                                                        buttonPadding: const EdgeInsets.only(left: 10, right: 10),
+                                                                                        dropdownDecoration: BoxDecoration(
+                                                                                          borderRadius: BorderRadius.circular(15),
+                                                                                        ),
+                                                                                        items: _PayMentModels.map((item) => DropdownMenuItem<String>(
+                                                                                              value: '${item.ser}:${item.ptname}',
+                                                                                              child: Row(
+                                                                                                children: [
+                                                                                                  Expanded(
+                                                                                                    child: Text(
+                                                                                                      '${item.ptname!}',
+                                                                                                      textAlign: TextAlign.start,
+                                                                                                      style: const TextStyle(
+                                                                                                          fontSize: 14,
+                                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Expanded(
+                                                                                                    child: Text(
+                                                                                                      '${item.bno!}',
+                                                                                                      textAlign: TextAlign.end,
+                                                                                                      style: const TextStyle(
+                                                                                                          fontSize: 14,
+                                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            )).toList(),
+                                                                                        onChanged: (value) async {
+                                                                                          // Do something when changing the item if you want.
+
+                                                                                          var zones = value!.indexOf(':');
+                                                                                          var rtnameSer = value.substring(0, zones);
+                                                                                          var rtnameName = value.substring(zones + 1);
+                                                                                          print('mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                                          setState(() {
+                                                                                            paymentSer2 = rtnameSer.toString();
+                                                                                            paymentName2 = rtnameName.toString();
+
+                                                                                            if (rtnameSer.toString() == '0') {
+                                                                                              paymentName2 = null;
+                                                                                            } else {
+                                                                                              paymentName2 = rtnameName.toString();
+                                                                                            }
+                                                                                            if (rtnameSer.toString() == '0') {
+                                                                                              Form_payment2.clear();
+                                                                                            } else {
+                                                                                              Form_payment2.text = (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+                                                                                            }
+                                                                                          });
+
+                                                                                          print('pppppp $paymentSer2 $paymentName2');
+                                                                                        },
+                                                                                        // onSaved: (value) {
+
+                                                                                        // },
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              AppbackgroundColor.Sub_Abg_Colors,
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'จำนวนเงิน',
+                                                                              textAlign: TextAlign.end,
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                height: 50,
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(6),
+                                                                                    topRight: Radius.circular(6),
+                                                                                    bottomLeft: Radius.circular(6),
+                                                                                    bottomRight: Radius.circular(6),
+                                                                                  ),
+                                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: TextFormField(
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  controller: Form_payment1,
+                                                                                  // onChanged: (value) {
+                                                                                  //   setState(() {});
+                                                                                  // },
+                                                                                  onChanged: (value) async {
+                                                                                    // var money1 =
+                                                                                    //     double.parse(value);
+                                                                                    // var money2 =
+                                                                                    //     (sum_amt -
+                                                                                    //         sum_disamt);
+                                                                                    // var money3 =
+                                                                                    //     (money2 - money1).toString();
+                                                                                    // setState(
+                                                                                    //     () {
+                                                                                    //   if (paymentSer2 ==
+                                                                                    //       null) {
+                                                                                    //     Form_payment1.text =
+                                                                                    //         (money1).toStringAsFixed(2).toString();
+                                                                                    //   } else {
+                                                                                    //     Form_payment1.text =
+                                                                                    //         (money1).toStringAsFixed(2).toString();
+                                                                                    //     Form_payment2.text =
+                                                                                    //         money3;
+                                                                                    //   }
+                                                                                    // });
+
+                                                                                    // Get the current cursor position
+
+                                                                                    final currentCursorPosition = Form_payment1.selection.start;
+
+                                                                                    // Update the text of the controller
+                                                                                    if (paymentSer2 != null)
+                                                                                      setState(() {
+                                                                                        Form_payment2.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                      });
+
+                                                                                    // Set the new cursor position
+                                                                                    final newCursorPosition = currentCursorPosition + (value.length - Form_payment1.text.length);
+                                                                                    Form_payment1.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                                  },
+                                                                                  onFieldSubmitted: (value) {
+                                                                                    var money1 = double.parse(value);
+                                                                                    var money2 = (sum_amt - sum_disamt);
+                                                                                    var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                    setState(() {
+                                                                                      if (paymentSer2 == null) {
+                                                                                        Form_payment1.text = (money1).toStringAsFixed(2).toString();
+                                                                                      } else {
+                                                                                        Form_payment1.text = (money1).toStringAsFixed(2).toString();
+                                                                                        Form_payment2.text = money3;
+                                                                                      }
+                                                                                    });
+                                                                                  },
+                                                                                  // maxLength: 13,
+                                                                                  cursorColor: Colors.green,
+                                                                                  decoration: InputDecoration(
+                                                                                      fillColor: Colors.white.withOpacity(0.3),
+                                                                                      filled: true,
+                                                                                      // prefixIcon:
+                                                                                      //     const Icon(Icons.person, color: Colors.black),
+                                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                      focusedBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.black,
+                                                                                        ),
+                                                                                      ),
+                                                                                      enabledBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.grey,
+                                                                                        ),
+                                                                                      ),
+                                                                                      // labelText: 'ระบุอายุสัญญา',
+                                                                                      labelStyle: const TextStyle(
+                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T)),
+                                                                                  inputFormatters: <TextInputFormatter>[
+                                                                                    // for below version 2 use this
+                                                                                    FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                    // for version 2 and greater youcan also use this
+                                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            pamentpage == 0
+                                                                                ? const SizedBox()
+                                                                                : Expanded(
+                                                                                    child: Container(
+                                                                                      height: 50,
+                                                                                      decoration: const BoxDecoration(
+                                                                                        color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topLeft: Radius.circular(6),
+                                                                                          topRight: Radius.circular(6),
+                                                                                          bottomLeft: Radius.circular(6),
+                                                                                          bottomRight: Radius.circular(6),
+                                                                                        ),
+                                                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                                                      ),
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: TextFormField(
+                                                                                        keyboardType: TextInputType.number,
+                                                                                        controller: Form_payment2,
+                                                                                        // onChanged: (value) {
+                                                                                        //   setState(() {});
+                                                                                        // },
+                                                                                        onChanged: (value) {
+                                                                                          // var money1 = double.parse(value);
+                                                                                          // var money2 = (sum_amt - sum_disamt);
+                                                                                          // var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                          // setState(() {
+                                                                                          //   if (paymentSer1 == null) {
+                                                                                          //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                          //   } else {
+                                                                                          //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                          //     Form_payment1.text = money3;
+                                                                                          //   }
+                                                                                          // });
+
+                                                                                          final currentCursorPosition = Form_payment2.selection.start;
+
+                                                                                          // Update the text of the controller
+                                                                                          if (paymentSer1 != null)
+                                                                                            setState(() {
+                                                                                              Form_payment1.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                            });
+
+                                                                                          // Set the new cursor position
+                                                                                          final newCursorPosition = currentCursorPosition + (value.length - Form_payment2.text.length);
+                                                                                          Form_payment2.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                                        },
+                                                                                        onFieldSubmitted: (value) {
+                                                                                          var money1 = double.parse(value);
+                                                                                          var money2 = (sum_amt - sum_disamt);
+                                                                                          var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                          setState(() {
+                                                                                            if (paymentSer1 == null) {
+                                                                                              Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                            } else {
+                                                                                              Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                              Form_payment1.text = money3;
+                                                                                            }
+                                                                                          });
+                                                                                        },
+                                                                                        // maxLength: 13,
+                                                                                        cursorColor: Colors.green,
+                                                                                        decoration: InputDecoration(
+                                                                                            fillColor: Colors.white.withOpacity(0.3),
+                                                                                            filled: true,
+                                                                                            // prefixIcon:
+                                                                                            //     const Icon(Icons.person, color: Colors.black),
+                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                            focusedBorder: const OutlineInputBorder(
+                                                                                              borderRadius: BorderRadius.only(
+                                                                                                topRight: Radius.circular(15),
+                                                                                                topLeft: Radius.circular(15),
+                                                                                                bottomRight: Radius.circular(15),
+                                                                                                bottomLeft: Radius.circular(15),
+                                                                                              ),
+                                                                                              borderSide: BorderSide(
+                                                                                                width: 1,
+                                                                                                color: Colors.black,
+                                                                                              ),
+                                                                                            ),
+                                                                                            enabledBorder: const OutlineInputBorder(
+                                                                                              borderRadius: BorderRadius.only(
+                                                                                                topRight: Radius.circular(15),
+                                                                                                topLeft: Radius.circular(15),
+                                                                                                bottomRight: Radius.circular(15),
+                                                                                                bottomLeft: Radius.circular(15),
+                                                                                              ),
+                                                                                              borderSide: BorderSide(
+                                                                                                width: 1,
+                                                                                                color: Colors.grey,
+                                                                                              ),
+                                                                                            ),
+                                                                                            // labelText: 'ระบุอายุสัญญา',
+                                                                                            labelStyle: const TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T)),
+                                                                                        inputFormatters: <TextInputFormatter>[
+                                                                                          // for below version 2 use this
+                                                                                          FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                          // for version 2 and greater youcan also use this
+                                                                                          // FilteringTextInputFormatter.digitsOnly
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                height: 50,
+                                                                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: const Center(
+                                                                                  child: Text(
+                                                                                    'วันที่ทำรายการ',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                        //fontSize: 10.0
+                                                                                        ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                  height: 50,
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    height: 50,
+                                                                                    decoration: BoxDecoration(
+                                                                                      // color: Colors.green,
+                                                                                      borderRadius: const BorderRadius.only(
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        topRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                      ),
+                                                                                      border: Border.all(color: Colors.grey, width: 1),
+                                                                                    ),
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        DateTime? newDate = await showDatePicker(
+                                                                                          locale: const Locale('th', 'TH'),
+                                                                                          context: context,
+                                                                                          initialDate: DateTime.now(),
+                                                                                          firstDate: DateTime.now().add(const Duration(days: -50)),
+                                                                                          lastDate: DateTime.now().add(const Duration(days: 365)),
+                                                                                          builder: (context, child) {
+                                                                                            return Theme(
+                                                                                              data: Theme.of(context).copyWith(
+                                                                                                colorScheme: const ColorScheme.light(
+                                                                                                  primary: AppBarColors.ABar_Colors, // header background color
+                                                                                                  onPrimary: Colors.white, // header text color
+                                                                                                  onSurface: Colors.black, // body text color
+                                                                                                ),
+                                                                                                textButtonTheme: TextButtonThemeData(
+                                                                                                  style: TextButton.styleFrom(
+                                                                                                    primary: Colors.black, // button text color
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              child: child!,
+                                                                                            );
+                                                                                          },
+                                                                                        );
+
+                                                                                        if (newDate == null) {
+                                                                                          return;
+                                                                                        } else {
+                                                                                          String start = DateFormat('yyyy-MM-dd').format(newDate);
+                                                                                          String end = DateFormat('dd-MM-yyyy').format(newDate);
+
+                                                                                          print('$start $end');
+                                                                                          setState(() {
+                                                                                            Value_newDateY1 = start;
+                                                                                            Value_newDateD1 = end;
+                                                                                          });
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(5.0),
+                                                                                        child: AutoSizeText(
+                                                                                          Value_newDateD1 == '' ? 'เลือกวันที่' : '$Value_newDateD1',
+                                                                                          minFontSize: 16,
+                                                                                          maxFontSize: 20,
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T),
+                                                                                          maxLines: 1,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                height: 50,
+                                                                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: const Center(
+                                                                                  child: Text(
+                                                                                    'วันที่ชำระ',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                        //fontSize: 10.0
+                                                                                        ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                  height: 50,
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: Container(
+                                                                                    height: 50,
+                                                                                    decoration: BoxDecoration(
+                                                                                      // color: Colors.green,
+                                                                                      borderRadius: const BorderRadius.only(
+                                                                                        topLeft: Radius.circular(15),
+                                                                                        topRight: Radius.circular(15),
+                                                                                        bottomLeft: Radius.circular(15),
+                                                                                        bottomRight: Radius.circular(15),
+                                                                                      ),
+                                                                                      border: Border.all(color: Colors.grey, width: 1),
+                                                                                    ),
+                                                                                    child: InkWell(
+                                                                                      onTap: () async {
+                                                                                        DateTime? newDate = await showDatePicker(
+                                                                                          locale: const Locale('th', 'TH'),
+                                                                                          context: context,
+                                                                                          initialDate: DateTime.now(),
+                                                                                          firstDate: DateTime.now().add(const Duration(days: -50)),
+                                                                                          lastDate: DateTime.now().add(const Duration(days: 365)),
+                                                                                          builder: (context, child) {
+                                                                                            return Theme(
+                                                                                              data: Theme.of(context).copyWith(
+                                                                                                colorScheme: const ColorScheme.light(
+                                                                                                  primary: AppBarColors.ABar_Colors, // header background color
+                                                                                                  onPrimary: Colors.white, // header text color
+                                                                                                  onSurface: Colors.black, // body text color
+                                                                                                ),
+                                                                                                textButtonTheme: TextButtonThemeData(
+                                                                                                  style: TextButton.styleFrom(
+                                                                                                    primary: Colors.black, // button text color
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              child: child!,
+                                                                                            );
+                                                                                          },
+                                                                                        );
+
+                                                                                        if (newDate == null) {
+                                                                                          return;
+                                                                                        } else {
+                                                                                          String start = DateFormat('yyyy-MM-dd').format(newDate);
+                                                                                          String end = DateFormat('dd-MM-yyyy').format(newDate);
+
+                                                                                          print('$start $end');
+                                                                                          setState(() {
+                                                                                            Value_newDateY = start;
+                                                                                            Value_newDateD = end;
+                                                                                          });
+                                                                                        }
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        padding: const EdgeInsets.all(5.0),
+                                                                                        child: AutoSizeText(
+                                                                                          Value_newDateD == '' ? 'เลือกวันที่' : '$Value_newDateD',
+                                                                                          minFontSize: 16,
+                                                                                          maxFontSize: 20,
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: const TextStyle(
+                                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                              // fontWeight: FontWeight.bold,
+                                                                                              fontFamily: Font_.Fonts_T),
+                                                                                          maxLines: 1,
+                                                                                          overflow: TextOverflow.ellipsis,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  )),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  //  print(
+                                                                  //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                  //             print(
+                                                                  //                 'pppppp $paymentSer1 $paymentName1');
+                                                                  if (paymentName1
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน' ||
+                                                                      paymentName2
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน')
+                                                                    Row(
+                                                                      children: [
+                                                                        Expanded(
+                                                                          flex:
+                                                                              2,
+                                                                          child:
+                                                                              Container(
+                                                                            height:
+                                                                                50,
+                                                                            color:
+                                                                                AppbackgroundColor.Sub_Abg_Colors,
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                const Center(
+                                                                              child: Text(
+                                                                                ' เวลา/หลักฐาน',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        Expanded(
+                                                                          flex:
+                                                                              4,
+                                                                          child:
+                                                                              Container(
+                                                                            width:
+                                                                                100,
+                                                                            height:
+                                                                                50,
+                                                                            color:
+                                                                                AppbackgroundColor.Sub_Abg_Colors,
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Center(
+                                                                              child: Row(
+                                                                                children: [
+                                                                                  Expanded(
+                                                                                    child: Container(
+                                                                                      height: 50,
+                                                                                      decoration: const BoxDecoration(
+                                                                                        color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topLeft: Radius.circular(6),
+                                                                                          topRight: Radius.circular(6),
+                                                                                          bottomLeft: Radius.circular(0),
+                                                                                          bottomRight: Radius.circular(0),
+                                                                                        ),
+                                                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                                                      ),
+                                                                                      // padding: const EdgeInsets.all(8.0),
+                                                                                      child: TextFormField(
+                                                                                        keyboardType: TextInputType.number,
+                                                                                        controller: Form_time,
+                                                                                        onChanged: (value) {
+                                                                                          setState(() {});
+                                                                                        },
+                                                                                        // maxLength: 13,
+                                                                                        cursorColor: Colors.green,
+                                                                                        decoration: InputDecoration(
+                                                                                            fillColor: Colors.white.withOpacity(0.3),
+                                                                                            filled: true,
+                                                                                            // prefixIcon:
+                                                                                            //     const Icon(Icons.person, color: Colors.black),
+                                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                            focusedBorder: const OutlineInputBorder(
+                                                                                              borderRadius: BorderRadius.only(
+                                                                                                topRight: Radius.circular(15),
+                                                                                                topLeft: Radius.circular(15),
+                                                                                                bottomRight: Radius.circular(15),
+                                                                                                bottomLeft: Radius.circular(15),
+                                                                                              ),
+                                                                                              borderSide: BorderSide(
+                                                                                                width: 1,
+                                                                                                color: Colors.black,
+                                                                                              ),
+                                                                                            ),
+                                                                                            enabledBorder: const OutlineInputBorder(
+                                                                                              borderRadius: BorderRadius.only(
+                                                                                                topRight: Radius.circular(15),
+                                                                                                topLeft: Radius.circular(15),
+                                                                                                bottomRight: Radius.circular(15),
+                                                                                                bottomLeft: Radius.circular(15),
+                                                                                              ),
+                                                                                              borderSide: BorderSide(
+                                                                                                width: 1,
+                                                                                                color: Colors.grey,
+                                                                                              ),
+                                                                                            ),
+                                                                                            hintText: '00:00:00',
+                                                                                            // helperText: '00:00:00',
+                                                                                            // labelText: '00:00:00',
+                                                                                            labelStyle: const TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T)),
+
+                                                                                        inputFormatters: [
+                                                                                          MaskedInputFormatter('##:##:##'),
+                                                                                          // FilteringTextInputFormatter.allow(
+                                                                                          //     RegExp(r'[0-9]')),
+                                                                                        ],
+                                                                                        // inputFormatters: <TextInputFormatter>[
+                                                                                        //   // for below version 2 use this
+                                                                                        //   FilteringTextInputFormatter.allow(
+                                                                                        //       RegExp(r'[0-9 .]')),
+                                                                                        //   // for version 2 and greater youcan also use this
+                                                                                        //   // FilteringTextInputFormatter.digitsOnly
+                                                                                        // ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  const SizedBox(
+                                                                                    width: 10,
+                                                                                  ),
+                                                                                  Expanded(
+                                                                                    child: InkWell(
+                                                                                      onTap: () {
+                                                                                        (base64_Slip == null)
+                                                                                            ? uploadFile_Slip()
+                                                                                            : showDialog<void>(
+                                                                                                context: context,
+                                                                                                barrierDismissible: false, // user must tap button!
+                                                                                                builder: (BuildContext context) {
+                                                                                                  return AlertDialog(
+                                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                                                                                    title: const Center(
+                                                                                                        child: Text(
+                                                                                                      'มีไฟล์ slip อยู่แล้ว',
+                                                                                                      style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    )),
+                                                                                                    content: SingleChildScrollView(
+                                                                                                      child: ListBody(
+                                                                                                        children: const <Widget>[
+                                                                                                          Text(
+                                                                                                            'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
+                                                                                                            style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    actions: <Widget>[
+                                                                                                      Row(
+                                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                        children: [
+                                                                                                          Padding(
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: InkWell(
+                                                                                                              child: Container(
+                                                                                                                  width: 100,
+                                                                                                                  decoration: BoxDecoration(
+                                                                                                                    color: Colors.red[600],
+                                                                                                                    borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                                                                  ),
+                                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                                  child: const Center(
+                                                                                                                      child: Text(
+                                                                                                                    'ลบไฟล์',
+                                                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                                                  ))),
+                                                                                                              onTap: () async {
+                                                                                                                setState(() {
+                                                                                                                  base64_Slip = null;
+                                                                                                                });
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                          Padding(
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: InkWell(
+                                                                                                              child: Container(
+                                                                                                                  width: 100,
+                                                                                                                  decoration: const BoxDecoration(
+                                                                                                                    color: Colors.black,
+                                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                                                                  ),
+                                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                                  child: const Center(
+                                                                                                                      child: Text(
+                                                                                                                    'ปิด',
+                                                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                                                  ))),
+                                                                                                              onTap: () {
+                                                                                                                Navigator.of(context).pop();
+                                                                                                              },
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ],
+                                                                                                      ),
+                                                                                                    ],
+                                                                                                  );
+                                                                                                },
+                                                                                              );
+                                                                                      },
+                                                                                      child: Container(
+                                                                                        decoration: const BoxDecoration(
+                                                                                          color: Colors.green,
+                                                                                          borderRadius: BorderRadius.only(
+                                                                                            topLeft: Radius.circular(10),
+                                                                                            topRight: Radius.circular(10),
+                                                                                            bottomLeft: Radius.circular(10),
+                                                                                            bottomRight: Radius.circular(10),
+                                                                                          ),
+                                                                                          // border: Border.all(
+                                                                                          //     color: Colors.grey, width: 1),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: const Text(
+                                                                                          'เพิ่มไฟล์',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                              //fontSize: 10.0
+                                                                                              ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  if (paymentName1
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน' ||
+                                                                      paymentName2
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'เงินโอน')
+                                                                    Container(
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: AppbackgroundColor
+                                                                            .Sub_Abg_Colors,
+                                                                        borderRadius:
+                                                                            BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(0),
+                                                                          topRight:
+                                                                              Radius.circular(0),
+                                                                          bottomLeft:
+                                                                              Radius.circular(6),
+                                                                          bottomRight:
+                                                                              Radius.circular(6),
+                                                                        ),
+                                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Align(
+                                                                              alignment: Alignment.centerLeft,
+                                                                              child: Column(
+                                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(2.0),
+                                                                                    child: Text(
+                                                                                      (base64_Slip != null) ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว ' : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
+                                                                                      textAlign: TextAlign.start,
+                                                                                      style: TextStyle(color: (base64_Slip != null) ? Colors.green[600] : Colors.red[600], fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                          //fontSize: 10.0
+                                                                                          ),
+                                                                                    ),
+                                                                                  ),
+                                                                                  // Padding(
+                                                                                  //   padding: const EdgeInsets.all(2.0),
+                                                                                  //   child: Text(
+                                                                                  //     (base64_Slip != null) ? '$base64_Slip' : '',
+                                                                                  //     textAlign: TextAlign.start,
+                                                                                  //     style: TextStyle(
+                                                                                  //         color: Colors.blue[600],
+                                                                                  //         fontWeight: FontWeight.bold,
+                                                                                  //         fontFamily: FontWeight_.Fonts_T,
+                                                                                  //         fontSize: 10.0),
+                                                                                  //   ),
+                                                                                  // ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                InkWell(
+                                                                              onTap: () async {
+                                                                                // String Url =
+                                                                                //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
+                                                                                // print(Url);
+                                                                                showDialog(
+                                                                                  context: context,
+                                                                                  builder: (context) => AlertDialog(
+                                                                                      title: Center(
+                                                                                        child: Text(
+                                                                                          '${_InvoiceHistoryModels[index].docno}',
+                                                                                          maxLines: 1,
+                                                                                          textAlign: TextAlign.start,
+                                                                                          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T, fontSize: 12.0),
+                                                                                        ),
+                                                                                      ),
+                                                                                      content: Stack(
+                                                                                        alignment: Alignment.center,
+                                                                                        children: <Widget>[
+                                                                                          Image.memory(
+                                                                                            base64Decode(base64_Slip.toString()),
+                                                                                            // height: 200,
+                                                                                            // fit: BoxFit.cover,
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                      actions: <Widget>[
+                                                                                        Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            // Padding(
+                                                                                            //   padding:
+                                                                                            //       const EdgeInsets.all(8.0),
+                                                                                            //   child: Container(
+                                                                                            //     width: 100,
+                                                                                            //     decoration: const BoxDecoration(
+                                                                                            //       color: Colors.green,
+                                                                                            //       borderRadius:
+                                                                                            //           BorderRadius.only(
+                                                                                            //               topLeft: Radius
+                                                                                            //                   .circular(10),
+                                                                                            //               topRight:
+                                                                                            //                   Radius.circular(
+                                                                                            //                       10),
+                                                                                            //               bottomLeft:
+                                                                                            //                   Radius.circular(
+                                                                                            //                       10),
+                                                                                            //               bottomRight:
+                                                                                            //                   Radius.circular(
+                                                                                            //                       10)),
+                                                                                            //     ),
+                                                                                            //     padding:
+                                                                                            //         const EdgeInsets.all(8.0),
+                                                                                            //     child: TextButton(
+                                                                                            //       onPressed: () async {
+                                                                                            //         // downloadImage2();
+                                                                                            //         // downloadImage(Url);
+                                                                                            //         // Navigator.pop(
+                                                                                            //         //     context, 'OK');
+                                                                                            //       },
+                                                                                            //       child: const Text(
+                                                                                            //         'ดาวน์โหลด',
+                                                                                            //         style: TextStyle(
+                                                                                            //             color: Colors.white,
+                                                                                            //             fontWeight:
+                                                                                            //                 FontWeight.bold,
+                                                                                            //             fontFamily: FontWeight_
+                                                                                            //                 .Fonts_T),
+                                                                                            //       ),
+                                                                                            //     ),
+                                                                                            //   ),
+                                                                                            // ),
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: Container(
+                                                                                                width: 100,
+                                                                                                decoration: const BoxDecoration(
+                                                                                                  color: Colors.black,
+                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                ),
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: TextButton(
+                                                                                                  onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                  child: const Text(
+                                                                                                    'ปิด',
+                                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ]),
+                                                                                );
+                                                                              },
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: Colors.blue,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(10),
+                                                                                    topRight: Radius.circular(10),
+                                                                                    bottomLeft: Radius.circular(10),
+                                                                                    bottomRight: Radius.circular(10),
+                                                                                  ),
+                                                                                  // border: Border.all(
+                                                                                  //     color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: const Text(
+                                                                                  'เรียกดูไฟล์',
+                                                                                  textAlign: TextAlign.center,
+                                                                                  style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  // const SizedBox(
+                                                                  //   height: 20,
+                                                                  // ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child:
+                                                                            Container(
+                                                                          color:
+                                                                              Colors.white,
+                                                                          // height: 100,
+                                                                          // width: MediaQuery.of(
+                                                                          //             context)
+                                                                          //         .size
+                                                                          //         .width *
+                                                                          //     0.33,
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.end,
+                                                                            children: [
+                                                                              SizedBox(
+                                                                                height: 35,
+                                                                              ),
+                                                                              Row(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    'หมายเหตุ',
+                                                                                    textAlign: TextAlign.start,
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontFamily: Font_.Fonts_T),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              TextFormField(
+                                                                                // keyboardType: TextInputType.name,
+                                                                                controller: Form_note,
+
+                                                                                maxLines: 2,
+                                                                                // maxLength: 13,
+                                                                                cursorColor: Colors.green,
+                                                                                decoration: InputDecoration(
+                                                                                  fillColor: Colors.white.withOpacity(0.3),
+                                                                                  filled: true,
+                                                                                  // prefixIcon:
+                                                                                  //     const Icon(Icons.person, color: Colors.black),
+                                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                  focusedBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.black,
+                                                                                    ),
+                                                                                  ),
+                                                                                  enabledBorder: const OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topRight: Radius.circular(15),
+                                                                                      topLeft: Radius.circular(15),
+                                                                                      bottomRight: Radius.circular(15),
+                                                                                      bottomLeft: Radius.circular(15),
+                                                                                    ),
+                                                                                    borderSide: BorderSide(
+                                                                                      width: 1,
+                                                                                      color: Colors.grey,
+                                                                                    ),
+                                                                                  ),
+                                                                                  // labelText: 'ระบุชื่อร้านค้า',
+                                                                                  labelStyle: const TextStyle(
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                  Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child: Text(
+                                                                            ""),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 4,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              InkWell(
+                                                                            onTap:
+                                                                                () async {
+                                                                              var pay1;
+                                                                              var pay2;
+                                                                              setState(() {
+                                                                                Slip_status = '2';
+                                                                              });
+                                                                              List newValuePDFimg = [];
+                                                                              for (int index = 0; index < 1; index++) {
+                                                                                if (renTalModels[0].imglogo!.trim() == '') {
+                                                                                  // newValuePDFimg.add(
+                                                                                  //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                                } else {
+                                                                                  newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                                }
+                                                                              }
+                                                                              if (pamentpage == 0) {
+                                                                                setState(() {
+                                                                                  // Form_payment2
+                                                                                  //     .clear();
+                                                                                  Form_payment2.text = '';
+                                                                                });
+                                                                              }
+                                                                              //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
+                                                                              setState(() {
+                                                                                pay1 = Form_payment1.text == '' ? '0.00' : Form_payment1.text;
+                                                                                pay2 = Form_payment2.text == '' ? '0.00' : Form_payment2.text;
+                                                                              });
+
+                                                                              print('>>1>  ${Form_payment1.text}');
+                                                                              print('>>2>  ${Form_payment2.text}  $pay2');
+                                                                              print('${(double.parse(pay1) + double.parse(pay2))}');
+                                                                              if ((double.parse(pay1) + double.parse(pay2) != (sum_amt - sum_disamt))) {
+                                                                                _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
+                                                                                // ScaffoldMessenger.of(
+                                                                                //         context)
+                                                                                //     .showSnackBar(
+                                                                                //   const SnackBar(
+                                                                                //       content: Text(
+                                                                                //           'จำนวนเงินไม่ถูกต้อง ',
+                                                                                //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                // );
+                                                                              } else if (double.parse(pay1) < 0.00 || double.parse(pay2) < 0.00) {
+                                                                                _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง ');
+                                                                                // ScaffoldMessenger.of(
+                                                                                //         context)
+                                                                                //     .showSnackBar(
+                                                                                //   const SnackBar(
+                                                                                //       content: Text(
+                                                                                //           'จำนวนเงินไม่ถูกต้อง',
+                                                                                //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                // );
+                                                                              } else {
+                                                                                if (pamentpage == 0 &&
+                                                                                    // Form_payment1.text ==
+                                                                                    //     '' ||
+                                                                                    paymentName1 == null) {
+                                                                                  _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                                                  // ScaffoldMessenger.of(
+                                                                                  //         context)
+                                                                                  //     .showSnackBar(
+                                                                                  //   const SnackBar(
+                                                                                  //       content:
+                                                                                  //           Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                  // );
+                                                                                } else if (pamentpage == 1 &&
+                                                                                        // Form_payment2.text ==
+                                                                                        //     '' ||
+                                                                                        paymentName2 == null ||
+                                                                                    paymentName1 == null) {
+                                                                                  _showMyDialogPay_Error((paymentName1 == null) ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1' : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                                                  // ScaffoldMessenger.of(
+                                                                                  //         context)
+                                                                                  //     .showSnackBar(
+                                                                                  //   SnackBar(
+                                                                                  //       content: (paymentName1 == null)
+                                                                                  //           ? Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))
+                                                                                  //           : Text('กรุณาเลือกรูปแบบชำระ! ที่ 2', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                  // );
+                                                                                } else {
+                                                                                  print('${pamentpage}: ${paymentName1}////${paymentName2}');
+                                                                                  if (paymentSer1 != '0' && paymentSer1 != null) {
+                                                                                    if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) || (double.parse(pay1) + double.parse(pay2)) < (sum_amt - sum_disamt)) {
+                                                                                      if ((sum_amt - sum_disamt) != 0) {
+                                                                                        if (paymentName1.toString().trim() == 'เงินโอน' || paymentName2.toString().trim() == 'เงินโอน') {
+                                                                                          if (base64_Slip != null) {
+                                                                                            try {
+                                                                                              final tableData00 = [
+                                                                                                for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                                  [
+                                                                                                    '${index + 1}',
+                                                                                                    '${_InvoiceHistoryModels[index].date}',
+                                                                                                    '${_InvoiceHistoryModels[index].descr}',
+                                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                                    '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                                  ],
+                                                                                              ];
+                                                                                              OKuploadFile_Slip();
+                                                                                              in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                              Navigator.pop(context, 'OK');
+                                                                                            } catch (e) {}
+                                                                                          } else {
+                                                                                            _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                            //   const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                            // );
+                                                                                          }
+                                                                                        } else {
+                                                                                          try {
+                                                                                            final tableData00 = [
+                                                                                              for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                                [
+                                                                                                  '${index + 1}',
+                                                                                                  '${_InvoiceHistoryModels[index].date}',
+                                                                                                  '${_InvoiceHistoryModels[index].descr}',
+                                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                                ],
+                                                                                            ];
+                                                                                            // OKuploadFile_Slip();
+                                                                                            //_InvoiceHistoryModels
+
+                                                                                            in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                            Navigator.pop(context, 'OK');
+                                                                                          } catch (e) {}
+                                                                                        }
+                                                                                      } else {
+                                                                                        _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                                                        // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                        //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                        // );
+                                                                                      }
+                                                                                    } else {
+                                                                                      _showMyDialogPay_Error('กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                                                      // ScaffoldMessenger.of(context)
+                                                                                      //     .showSnackBar(
+                                                                                      //   const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      // );
+                                                                                    }
+                                                                                  } else {
+                                                                                    _showMyDialogPay_Error('กรุณาเลือกรูปแบบการชำระ!');
+                                                                                    // ScaffoldMessenger.of(context)
+                                                                                    //     .showSnackBar(
+                                                                                    //   const SnackBar(
+                                                                                    //       content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                    // );
+                                                                                  }
+                                                                                }
+                                                                              }
+                                                                            },
+                                                                            child: Container(
+                                                                                height: 50,
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: Colors.orange,
+                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: const Center(
+                                                                                    child: Text(
+                                                                                  'รับชำระ',
+                                                                                  style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                ))),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
                                                               ),
                                                             ),
                                                           ),
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Row(
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                        ])),
+                                    (Responsive.isDesktop(context))
+                                        ? Container(
+                                            width:
+                                                (Responsive.isDesktop(context))
+                                                    ? 490
+                                                    : 485,
+                                            height:
+                                                (Responsive.isDesktop(context))
+                                                    ? MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.7
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .height *
+                                                        0.65,
+                                            child: Stack(
+                                              children: [
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 2,
+                                                          child: Container(
+                                                            height: 50,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: Colors
+                                                                  .orange[100],
+                                                              borderRadius:
+                                                                  const BorderRadius
+                                                                      .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0),
+                                                              ),
+                                                              // border: Border.all(
+                                                              //     color: Colors.grey, width: 1),
+                                                            ),
+                                                            // padding: const EdgeInsets.all(8.0),
+                                                            child: const Center(
+                                                              child: Text(
+                                                                'รายละเอียดการชำระ',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Expanded(
+                                                      child: Container(
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          border: Border(
+                                                            left: BorderSide(
+                                                              width: 1,
+                                                              color: Color
+                                                                  .fromARGB(
+                                                                      255,
+                                                                      226,
+                                                                      223,
+                                                                      223),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        child: Column(
+                                                          children: [
+                                                            Row(
                                                               children: [
                                                                 Expanded(
+                                                                  flex: 1,
                                                                   child:
                                                                       Container(
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: AppbackgroundColor
-                                                                          .Sub_Abg_Colors,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(6),
-                                                                        topRight:
-                                                                            Radius.circular(6),
-                                                                        bottomLeft:
-                                                                            Radius.circular(6),
-                                                                        bottomRight:
-                                                                            Radius.circular(6),
-                                                                      ),
-                                                                      // border: Border.all(color: Colors.grey, width: 1),
-                                                                    ),
+                                                                    height: 50,
+                                                                    color: Colors
+                                                                            .green[
+                                                                        200],
                                                                     padding:
                                                                         const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
-                                                                        DropdownButtonFormField2(
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        //Add isDense true and zero Padding.
-                                                                        //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                                                        isDense:
-                                                                            true,
-                                                                        contentPadding:
-                                                                            EdgeInsets.zero,
-                                                                        border:
-                                                                            OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(15),
-                                                                        ),
-                                                                        //Add more decoration as you want here
-                                                                        //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                                                      ),
-                                                                      isExpanded:
-                                                                          true,
-                                                                      // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                                                      hint: Row(
-                                                                        children: [
+                                                                        const Center(
+                                                                      child:
                                                                           Text(
-                                                                            '$paymentName1',
-                                                                            style: const TextStyle(
-                                                                                fontSize: 14,
-                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                // fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .arrow_drop_down,
-                                                                        color: Colors
-                                                                            .black45,
-                                                                      ),
-                                                                      iconSize:
-                                                                          25,
-                                                                      buttonHeight:
-                                                                          42,
-                                                                      buttonPadding: const EdgeInsets
-                                                                              .only(
-                                                                          left:
-                                                                              10,
-                                                                          right:
-                                                                              10),
-                                                                      dropdownDecoration:
-                                                                          BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(15),
-                                                                      ),
-                                                                      items: _PayMentModels.map((item) =>
-                                                                          DropdownMenuItem<
-                                                                              String>(
-                                                                            value:
-                                                                                '${item.ser}:${item.ptname}',
-                                                                            child:
-                                                                                Row(
-                                                                              children: [
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    '${item.ptname!}',
-                                                                                    textAlign: TextAlign.start,
-                                                                                    style: const TextStyle(
-                                                                                        fontSize: 14,
-                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                        // fontWeight: FontWeight.bold,
-                                                                                        fontFamily: Font_.Fonts_T),
-                                                                                  ),
-                                                                                ),
-                                                                                Expanded(
-                                                                                  child: Text(
-                                                                                    '${item.bno!}',
-                                                                                    textAlign: TextAlign.end,
-                                                                                    style: const TextStyle(
-                                                                                        fontSize: 14,
-                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                        // fontWeight: FontWeight.bold,
-                                                                                        fontFamily: Font_.Fonts_T),
-                                                                                  ),
-                                                                                ),
-                                                                              ],
+                                                                        'ยอดชำระรวม',
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T
+                                                                            //fontSize: 10.0
                                                                             ),
-                                                                          )).toList(),
-                                                                      onChanged:
-                                                                          (value) async {
-                                                                        print(
-                                                                            value);
-                                                                        // Do something when changing the item if you want.
-
-                                                                        var zones =
-                                                                            value!.indexOf(':');
-                                                                        var rtnameSer = value.substring(
-                                                                            0,
-                                                                            zones);
-                                                                        var rtnameName =
-                                                                            value.substring(zones +
-                                                                                1);
-                                                                        // print(
-                                                                        //     'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                                                        setState(
-                                                                            () {
-                                                                          paymentSer1 = rtnameSer
-                                                                              .trim()
-                                                                              .toString();
-                                                                          if (rtnameSer.toString() ==
-                                                                              '0') {
-                                                                            paymentName1 =
-                                                                                null;
-                                                                          } else {
-                                                                            paymentName1 =
-                                                                                rtnameName.toString();
-                                                                          }
-
-                                                                          if (rtnameSer.toString() ==
-                                                                              '0') {
-                                                                            Form_payment1.clear();
-                                                                          } else {
-                                                                            Form_payment1.text =
-                                                                                (sum_amt - sum_disamt).toStringAsFixed(2).toString();
-                                                                          }
-                                                                        });
-                                                                        print(
-                                                                            'mmmmm ${paymentSer1.toString()} $rtnameName');
-                                                                        // print(
-                                                                        //     'pppppp $paymentSer1 $paymentName1');
-                                                                        // print('Form_payment1.text');
-                                                                        // print(Form_payment1.text);
-                                                                        // print(Form_payment2.text);
-                                                                        // print('Form_payment1.text');
-                                                                      },
-                                                                      // onSaved: (value) {
-
-                                                                      // },
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                pamentpage == 0
-                                                                    ? const SizedBox()
-                                                                    : Expanded(
+                                                                Expanded(
+                                                                  flex: 1,
+                                                                  child:
+                                                                      Container(
+                                                                    height: 50,
+                                                                    color: Colors
+                                                                        .green[50],
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Text(
+                                                                        // '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                        '${nFormat.format(sum_amt - sum_disamt)}',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    height: 50,
+                                                                    color: AppbackgroundColor
+                                                                        .Sub_Abg_Colors,
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          const Text(
+                                                                            'การชำระ',
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                            width:
+                                                                                5,
+                                                                          ),
+                                                                          IconButton(
+                                                                            onPressed:
+                                                                                () {
+                                                                              setState(() {
+                                                                                if (pamentpage == 1) {
+                                                                                  pamentpage = 0;
+                                                                                  Form_payment2.clear();
+                                                                                  Form_payment1.text = (sum_amt - double.parse(sum_disamtx.text)).toStringAsFixed(2).toString();
+                                                                                } else {
+                                                                                  pamentpage = 1;
+                                                                                }
+                                                                              });
+                                                                              if (pamentpage == 0) {
+                                                                                setState(() {
+                                                                                  paymentName2 = null;
+                                                                                });
+                                                                              } else {}
+                                                                            },
+                                                                            icon: pamentpage == 0
+                                                                                ? Icon(
+                                                                                    Icons.add_circle_outline,
+                                                                                    color: Colors.green,
+                                                                                  )
+                                                                                : const Icon(
+                                                                                    Icons.remove_circle_outline,
+                                                                                    color: Colors.red,
+                                                                                  ),
+                                                                          )
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 4,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
                                                                         child:
                                                                             Container(
                                                                           decoration:
@@ -4812,9 +6275,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             hint:
                                                                                 Row(
                                                                               children: [
-                                                                                const Text(
-                                                                                  'เลือก',
-                                                                                  style: TextStyle(
+                                                                                Text(
+                                                                                  '$paymentName1',
+                                                                                  style: const TextStyle(
                                                                                       fontSize: 14,
                                                                                       color: PeopleChaoScreen_Color.Colors_Text2_,
                                                                                       // fontWeight: FontWeight.bold,
@@ -4869,29 +6332,35 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                 )).toList(),
                                                                             onChanged:
                                                                                 (value) async {
+                                                                              print(value);
                                                                               // Do something when changing the item if you want.
 
                                                                               var zones = value!.indexOf(':');
                                                                               var rtnameSer = value.substring(0, zones);
                                                                               var rtnameName = value.substring(zones + 1);
-                                                                              print('mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                              // print(
+                                                                              //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                                                               setState(() {
-                                                                                paymentSer2 = rtnameSer.toString();
-                                                                                paymentName2 = rtnameName.toString();
+                                                                                paymentSer1 = rtnameSer.trim().toString();
+                                                                                if (rtnameSer.toString() == '0') {
+                                                                                  paymentName1 = null;
+                                                                                } else {
+                                                                                  paymentName1 = rtnameName.toString();
+                                                                                }
 
                                                                                 if (rtnameSer.toString() == '0') {
-                                                                                  paymentName2 = null;
+                                                                                  Form_payment1.clear();
                                                                                 } else {
-                                                                                  paymentName2 = rtnameName.toString();
-                                                                                }
-                                                                                if (rtnameSer.toString() == '0') {
-                                                                                  Form_payment2.clear();
-                                                                                } else {
-                                                                                  Form_payment2.text = (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+                                                                                  Form_payment1.text = (sum_amt - sum_disamt).toStringAsFixed(2).toString();
                                                                                 }
                                                                               });
-
-                                                                              print('pppppp $paymentSer2 $paymentName2');
+                                                                              print('mmmmm ${paymentSer1.toString()} $rtnameName');
+                                                                              // print(
+                                                                              //     'pppppp $paymentSer1 $paymentName1');
+                                                                              // print('Form_payment1.text');
+                                                                              // print(Form_payment1.text);
+                                                                              // print(Form_payment2.text);
+                                                                              // print('Form_payment1.text');
                                                                             },
                                                                             // onSaved: (value) {
 
@@ -4899,210 +6368,158 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           ),
                                                                         ),
                                                                       ),
+                                                                      pamentpage ==
+                                                                              0
+                                                                          ? const SizedBox()
+                                                                          : Expanded(
+                                                                              child: Container(
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(6),
+                                                                                    topRight: Radius.circular(6),
+                                                                                    bottomLeft: Radius.circular(6),
+                                                                                    bottomRight: Radius.circular(6),
+                                                                                  ),
+                                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: DropdownButtonFormField2(
+                                                                                  decoration: InputDecoration(
+                                                                                    //Add isDense true and zero Padding.
+                                                                                    //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                                                    isDense: true,
+                                                                                    contentPadding: EdgeInsets.zero,
+                                                                                    border: OutlineInputBorder(
+                                                                                      borderRadius: BorderRadius.circular(15),
+                                                                                    ),
+                                                                                    //Add more decoration as you want here
+                                                                                    //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                                                  ),
+                                                                                  isExpanded: true,
+                                                                                  // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                                                  hint: Row(
+                                                                                    children: [
+                                                                                      const Text(
+                                                                                        'เลือก',
+                                                                                        style: TextStyle(
+                                                                                            fontSize: 14,
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                  icon: const Icon(
+                                                                                    Icons.arrow_drop_down,
+                                                                                    color: Colors.black45,
+                                                                                  ),
+                                                                                  iconSize: 25,
+                                                                                  buttonHeight: 42,
+                                                                                  buttonPadding: const EdgeInsets.only(left: 10, right: 10),
+                                                                                  dropdownDecoration: BoxDecoration(
+                                                                                    borderRadius: BorderRadius.circular(15),
+                                                                                  ),
+                                                                                  items: _PayMentModels.map((item) => DropdownMenuItem<String>(
+                                                                                        value: '${item.ser}:${item.ptname}',
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${item.ptname!}',
+                                                                                                textAlign: TextAlign.start,
+                                                                                                style: const TextStyle(
+                                                                                                    fontSize: 14,
+                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                            Expanded(
+                                                                                              child: Text(
+                                                                                                '${item.bno!}',
+                                                                                                textAlign: TextAlign.end,
+                                                                                                style: const TextStyle(
+                                                                                                    fontSize: 14,
+                                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                    // fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: Font_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      )).toList(),
+                                                                                  onChanged: (value) async {
+                                                                                    // Do something when changing the item if you want.
+
+                                                                                    var zones = value!.indexOf(':');
+                                                                                    var rtnameSer = value.substring(0, zones);
+                                                                                    var rtnameName = value.substring(zones + 1);
+                                                                                    print('mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                                                    setState(() {
+                                                                                      paymentSer2 = rtnameSer.toString();
+                                                                                      paymentName2 = rtnameName.toString();
+
+                                                                                      if (rtnameSer.toString() == '0') {
+                                                                                        paymentName2 = null;
+                                                                                      } else {
+                                                                                        paymentName2 = rtnameName.toString();
+                                                                                      }
+                                                                                      if (rtnameSer.toString() == '0') {
+                                                                                        Form_payment2.clear();
+                                                                                      } else {
+                                                                                        Form_payment2.text = (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+                                                                                      }
+                                                                                    });
+
+                                                                                    print('pppppp $paymentSer2 $paymentName2');
+                                                                                  },
+                                                                                  // onSaved: (value) {
+
+                                                                                  // },
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                    ],
+                                                                  ),
+                                                                ),
                                                               ],
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Container(
-                                                              height: 50,
-                                                              color: AppbackgroundColor
-                                                                  .Sub_Abg_Colors,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  const Center(
-                                                                child: Text(
-                                                                  'จำนวนเงิน',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .end,
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Row(
+                                                            Row(
                                                               children: [
                                                                 Expanded(
+                                                                  flex: 1,
                                                                   child:
                                                                       Container(
                                                                     height: 50,
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: AppbackgroundColor
-                                                                          .Sub_Abg_Colors,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(6),
-                                                                        topRight:
-                                                                            Radius.circular(6),
-                                                                        bottomLeft:
-                                                                            Radius.circular(6),
-                                                                        bottomRight:
-                                                                            Radius.circular(6),
-                                                                      ),
-                                                                      // border: Border.all(color: Colors.grey, width: 1),
-                                                                    ),
+                                                                    color: AppbackgroundColor
+                                                                        .Sub_Abg_Colors,
                                                                     padding:
                                                                         const EdgeInsets.all(
                                                                             8.0),
                                                                     child:
-                                                                        TextFormField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          Form_payment1,
-                                                                      // onChanged: (value) {
-                                                                      //   setState(() {});
-                                                                      // },
-                                                                      onChanged:
-                                                                          (value) async {
-                                                                        // var money1 =
-                                                                        //     double.parse(value);
-                                                                        // var money2 =
-                                                                        //     (sum_amt -
-                                                                        //         sum_disamt);
-                                                                        // var money3 =
-                                                                        //     (money2 - money1).toString();
-                                                                        // setState(
-                                                                        //     () {
-                                                                        //   if (paymentSer2 ==
-                                                                        //       null) {
-                                                                        //     Form_payment1.text =
-                                                                        //         (money1).toStringAsFixed(2).toString();
-                                                                        //   } else {
-                                                                        //     Form_payment1.text =
-                                                                        //         (money1).toStringAsFixed(2).toString();
-                                                                        //     Form_payment2.text =
-                                                                        //         money3;
-                                                                        //   }
-                                                                        // });
-
-                                                                        // Get the current cursor position
-
-                                                                        final currentCursorPosition = Form_payment1
-                                                                            .selection
-                                                                            .start;
-
-                                                                        // Update the text of the controller
-                                                                        if (paymentSer2 !=
-                                                                            null)
-                                                                          setState(
-                                                                              () {
-                                                                            Form_payment2.text =
-                                                                                '${(sum_amt - sum_disamt) - double.parse(value)}';
-                                                                          });
-
-                                                                        // Set the new cursor position
-                                                                        final newCursorPosition =
-                                                                            currentCursorPosition +
-                                                                                (value.length - Form_payment1.text.length);
-                                                                        Form_payment1.selection =
-                                                                            TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
-                                                                      },
-                                                                      onFieldSubmitted:
-                                                                          (value) {
-                                                                        var money1 =
-                                                                            double.parse(value);
-                                                                        var money2 =
-                                                                            (sum_amt -
-                                                                                sum_disamt);
-                                                                        var money3 = (money2 -
-                                                                                money1)
-                                                                            .toStringAsFixed(2)
-                                                                            .toString();
-                                                                        setState(
-                                                                            () {
-                                                                          if (paymentSer2 ==
-                                                                              null) {
-                                                                            Form_payment1.text =
-                                                                                (money1).toStringAsFixed(2).toString();
-                                                                          } else {
-                                                                            Form_payment1.text =
-                                                                                (money1).toStringAsFixed(2).toString();
-                                                                            Form_payment2.text =
-                                                                                money3;
-                                                                          }
-                                                                        });
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration: InputDecoration(
-                                                                          fillColor: Colors.white.withOpacity(0.3),
-                                                                          filled: true,
-                                                                          // prefixIcon:
-                                                                          //     const Icon(Icons.person, color: Colors.black),
-                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                          focusedBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'จำนวนเงิน',
+                                                                        textAlign:
+                                                                            TextAlign.end,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T
+                                                                            //fontSize: 10.0
                                                                             ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.black,
-                                                                            ),
-                                                                          ),
-                                                                          enabledBorder: const OutlineInputBorder(
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topRight: Radius.circular(15),
-                                                                              topLeft: Radius.circular(15),
-                                                                              bottomRight: Radius.circular(15),
-                                                                              bottomLeft: Radius.circular(15),
-                                                                            ),
-                                                                            borderSide:
-                                                                                BorderSide(
-                                                                              width: 1,
-                                                                              color: Colors.grey,
-                                                                            ),
-                                                                          ),
-                                                                          // labelText: 'ระบุอายุสัญญา',
-                                                                          labelStyle: const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              // fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T)),
-                                                                      inputFormatters: <
-                                                                          TextInputFormatter>[
-                                                                        // for below version 2 use this
-                                                                        FilteringTextInputFormatter.allow(
-                                                                            RegExp(r'[0-9 .]')),
-                                                                        // for version 2 and greater youcan also use this
-                                                                        // FilteringTextInputFormatter.digitsOnly
-                                                                      ],
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                pamentpage == 0
-                                                                    ? const SizedBox()
-                                                                    : Expanded(
+                                                                Expanded(
+                                                                  flex: 4,
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
                                                                         child:
                                                                             Container(
                                                                           height:
@@ -5127,35 +6544,46 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             keyboardType:
                                                                                 TextInputType.number,
                                                                             controller:
-                                                                                Form_payment2,
+                                                                                Form_payment1,
                                                                             // onChanged: (value) {
                                                                             //   setState(() {});
                                                                             // },
                                                                             onChanged:
-                                                                                (value) {
-                                                                              // var money1 = double.parse(value);
-                                                                              // var money2 = (sum_amt - sum_disamt);
-                                                                              // var money3 = (money2 - money1).toStringAsFixed(2).toString();
-                                                                              // setState(() {
-                                                                              //   if (paymentSer1 == null) {
-                                                                              //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                (value) async {
+                                                                              // var money1 =
+                                                                              //     double.parse(value);
+                                                                              // var money2 =
+                                                                              //     (sum_amt -
+                                                                              //         sum_disamt);
+                                                                              // var money3 =
+                                                                              //     (money2 - money1).toString();
+                                                                              // setState(
+                                                                              //     () {
+                                                                              //   if (paymentSer2 ==
+                                                                              //       null) {
+                                                                              //     Form_payment1.text =
+                                                                              //         (money1).toStringAsFixed(2).toString();
                                                                               //   } else {
-                                                                              //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
-                                                                              //     Form_payment1.text = money3;
+                                                                              //     Form_payment1.text =
+                                                                              //         (money1).toStringAsFixed(2).toString();
+                                                                              //     Form_payment2.text =
+                                                                              //         money3;
                                                                               //   }
                                                                               // });
 
-                                                                              final currentCursorPosition = Form_payment2.selection.start;
+                                                                              // Get the current cursor position
+
+                                                                              final currentCursorPosition = Form_payment1.selection.start;
 
                                                                               // Update the text of the controller
-                                                                              if (paymentSer1 != null)
+                                                                              if (paymentSer2 != null)
                                                                                 setState(() {
-                                                                                  Form_payment1.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                  Form_payment2.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
                                                                                 });
 
                                                                               // Set the new cursor position
-                                                                              final newCursorPosition = currentCursorPosition + (value.length - Form_payment2.text.length);
-                                                                              Form_payment2.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                              final newCursorPosition = currentCursorPosition + (value.length - Form_payment1.text.length);
+                                                                              Form_payment1.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
                                                                             },
                                                                             onFieldSubmitted:
                                                                                 (value) {
@@ -5163,11 +6591,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                               var money2 = (sum_amt - sum_disamt);
                                                                               var money3 = (money2 - money1).toStringAsFixed(2).toString();
                                                                               setState(() {
-                                                                                if (paymentSer1 == null) {
-                                                                                  Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                if (paymentSer2 == null) {
+                                                                                  Form_payment1.text = (money1).toStringAsFixed(2).toString();
                                                                                 } else {
-                                                                                  Form_payment2.text = (money1).toStringAsFixed(2).toString();
-                                                                                  Form_payment1.text = money3;
+                                                                                  Form_payment1.text = (money1).toStringAsFixed(2).toString();
+                                                                                  Form_payment2.text = money3;
                                                                                 }
                                                                               });
                                                                             },
@@ -5218,324 +6646,122 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           ),
                                                                         ),
                                                                       ),
+                                                                      pamentpage ==
+                                                                              0
+                                                                          ? const SizedBox()
+                                                                          : Expanded(
+                                                                              child: Container(
+                                                                                height: 50,
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(6),
+                                                                                    topRight: Radius.circular(6),
+                                                                                    bottomLeft: Radius.circular(6),
+                                                                                    bottomRight: Radius.circular(6),
+                                                                                  ),
+                                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: TextFormField(
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  controller: Form_payment2,
+                                                                                  // onChanged: (value) {
+                                                                                  //   setState(() {});
+                                                                                  // },
+                                                                                  onChanged: (value) {
+                                                                                    // var money1 = double.parse(value);
+                                                                                    // var money2 = (sum_amt - sum_disamt);
+                                                                                    // var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                    // setState(() {
+                                                                                    //   if (paymentSer1 == null) {
+                                                                                    //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                    //   } else {
+                                                                                    //     Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                    //     Form_payment1.text = money3;
+                                                                                    //   }
+                                                                                    // });
+
+                                                                                    final currentCursorPosition = Form_payment2.selection.start;
+
+                                                                                    // Update the text of the controller
+                                                                                    if (paymentSer1 != null)
+                                                                                      setState(() {
+                                                                                        Form_payment1.text = '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                                                      });
+
+                                                                                    // Set the new cursor position
+                                                                                    final newCursorPosition = currentCursorPosition + (value.length - Form_payment2.text.length);
+                                                                                    Form_payment2.selection = TextSelection.fromPosition(TextPosition(offset: newCursorPosition));
+                                                                                  },
+                                                                                  onFieldSubmitted: (value) {
+                                                                                    var money1 = double.parse(value);
+                                                                                    var money2 = (sum_amt - sum_disamt);
+                                                                                    var money3 = (money2 - money1).toStringAsFixed(2).toString();
+                                                                                    setState(() {
+                                                                                      if (paymentSer1 == null) {
+                                                                                        Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                      } else {
+                                                                                        Form_payment2.text = (money1).toStringAsFixed(2).toString();
+                                                                                        Form_payment1.text = money3;
+                                                                                      }
+                                                                                    });
+                                                                                  },
+                                                                                  // maxLength: 13,
+                                                                                  cursorColor: Colors.green,
+                                                                                  decoration: InputDecoration(
+                                                                                      fillColor: Colors.white.withOpacity(0.3),
+                                                                                      filled: true,
+                                                                                      // prefixIcon:
+                                                                                      //     const Icon(Icons.person, color: Colors.black),
+                                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                      focusedBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.black,
+                                                                                        ),
+                                                                                      ),
+                                                                                      enabledBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.grey,
+                                                                                        ),
+                                                                                      ),
+                                                                                      // labelText: 'ระบุอายุสัญญา',
+                                                                                      labelStyle: const TextStyle(
+                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T)),
+                                                                                  inputFormatters: <TextInputFormatter>[
+                                                                                    // for below version 2 use this
+                                                                                    FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                                    // for version 2 and greater youcan also use this
+                                                                                    // FilteringTextInputFormatter.digitsOnly
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                    ],
+                                                                  ),
+                                                                ),
                                                               ],
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Row(
+                                                            Row(
                                                               children: [
                                                                 Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                    height: 50,
-                                                                    color: AppbackgroundColor
-                                                                        .Sub_Abg_Colors,
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        const Center(
-                                                                      child:
-                                                                          Text(
-                                                                        'วันที่ทำรายการ',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  child: Container(
-                                                                      height: 50,
-                                                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: Container(
-                                                                        height:
-                                                                            50,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          // color: Colors.green,
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          border: Border.all(
-                                                                              color: Colors.grey,
-                                                                              width: 1),
-                                                                        ),
-                                                                        child:
-                                                                            InkWell(
-                                                                          onTap:
-                                                                              () async {
-                                                                            DateTime?
-                                                                                newDate =
-                                                                                await showDatePicker(
-                                                                              locale: const Locale('th', 'TH'),
-                                                                              context: context,
-                                                                              initialDate: DateTime.now(),
-                                                                              firstDate: DateTime.now().add(const Duration(days: -50)),
-                                                                              lastDate: DateTime.now().add(const Duration(days: 365)),
-                                                                              builder: (context, child) {
-                                                                                return Theme(
-                                                                                  data: Theme.of(context).copyWith(
-                                                                                    colorScheme: const ColorScheme.light(
-                                                                                      primary: AppBarColors.ABar_Colors, // header background color
-                                                                                      onPrimary: Colors.white, // header text color
-                                                                                      onSurface: Colors.black, // body text color
-                                                                                    ),
-                                                                                    textButtonTheme: TextButtonThemeData(
-                                                                                      style: TextButton.styleFrom(
-                                                                                        primary: Colors.black, // button text color
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  child: child!,
-                                                                                );
-                                                                              },
-                                                                            );
-
-                                                                            if (newDate ==
-                                                                                null) {
-                                                                              return;
-                                                                            } else {
-                                                                              String start = DateFormat('yyyy-MM-dd').format(newDate);
-                                                                              String end = DateFormat('dd-MM-yyyy').format(newDate);
-
-                                                                              print('$start $end');
-                                                                              setState(() {
-                                                                                Value_newDateY1 = start;
-                                                                                Value_newDateD1 = end;
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            padding:
-                                                                                const EdgeInsets.all(5.0),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              Value_newDateD1 == '' ? 'เลือกวันที่' : '$Value_newDateD1',
-                                                                              minFontSize: 16,
-                                                                              maxFontSize: 20,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  child:
-                                                                      Container(
-                                                                    height: 50,
-                                                                    color: AppbackgroundColor
-                                                                        .Sub_Abg_Colors,
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        const Center(
-                                                                      child:
-                                                                          Text(
-                                                                        'วันที่ชำระ',
-                                                                        textAlign:
-                                                                            TextAlign.center,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: FontWeight_.Fonts_T
-                                                                            //fontSize: 10.0
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  child: Container(
-                                                                      height: 50,
-                                                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: Container(
-                                                                        height:
-                                                                            50,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          // color: Colors.green,
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          border: Border.all(
-                                                                              color: Colors.grey,
-                                                                              width: 1),
-                                                                        ),
-                                                                        child:
-                                                                            InkWell(
-                                                                          onTap:
-                                                                              () async {
-                                                                            DateTime?
-                                                                                newDate =
-                                                                                await showDatePicker(
-                                                                              locale: const Locale('th', 'TH'),
-                                                                              context: context,
-                                                                              initialDate: DateTime.now(),
-                                                                              firstDate: DateTime.now().add(const Duration(days: -50)),
-                                                                              lastDate: DateTime.now().add(const Duration(days: 365)),
-                                                                              builder: (context, child) {
-                                                                                return Theme(
-                                                                                  data: Theme.of(context).copyWith(
-                                                                                    colorScheme: const ColorScheme.light(
-                                                                                      primary: AppBarColors.ABar_Colors, // header background color
-                                                                                      onPrimary: Colors.white, // header text color
-                                                                                      onSurface: Colors.black, // body text color
-                                                                                    ),
-                                                                                    textButtonTheme: TextButtonThemeData(
-                                                                                      style: TextButton.styleFrom(
-                                                                                        primary: Colors.black, // button text color
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
-                                                                                  child: child!,
-                                                                                );
-                                                                              },
-                                                                            );
-
-                                                                            if (newDate ==
-                                                                                null) {
-                                                                              return;
-                                                                            } else {
-                                                                              String start = DateFormat('yyyy-MM-dd').format(newDate);
-                                                                              String end = DateFormat('dd-MM-yyyy').format(newDate);
-
-                                                                              print('$start $end');
-                                                                              setState(() {
-                                                                                Value_newDateY = start;
-                                                                                Value_newDateD = end;
-                                                                              });
-                                                                            }
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            padding:
-                                                                                const EdgeInsets.all(5.0),
-                                                                            child:
-                                                                                AutoSizeText(
-                                                                              Value_newDateD == '' ? 'เลือกวันที่' : '$Value_newDateD',
-                                                                              minFontSize: 16,
-                                                                              maxFontSize: 20,
-                                                                              textAlign: TextAlign.center,
-                                                                              style: const TextStyle(
-                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight: FontWeight.bold,
-                                                                                  fontFamily: Font_.Fonts_T),
-                                                                              maxLines: 1,
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      )),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      //  print(
-                                                      //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                                      //             print(
-                                                      //                 'pppppp $paymentSer1 $paymentName1');
-                                                      if (paymentName1
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'เงินโอน' ||
-                                                          paymentName2
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'เงินโอน')
-                                                        Row(
-                                                          children: [
-                                                            Expanded(
-                                                              flex: 2,
-                                                              child: Container(
-                                                                height: 50,
-                                                                color: AppbackgroundColor
-                                                                    .Sub_Abg_Colors,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                  child: Text(
-                                                                    ' เวลา/หลักฐาน',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Expanded(
-                                                              flex: 4,
-                                                              child: Container(
-                                                                width: 100,
-                                                                height: 50,
-                                                                color: AppbackgroundColor
-                                                                    .Sub_Abg_Colors,
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Center(
+                                                                  flex: 4,
                                                                   child: Row(
                                                                     children: [
                                                                       Expanded(
@@ -5543,193 +6769,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                             Container(
                                                                           height:
                                                                               50,
-                                                                          decoration:
-                                                                              const BoxDecoration(
-                                                                            color:
-                                                                                AppbackgroundColor.Sub_Abg_Colors,
-                                                                            borderRadius:
-                                                                                BorderRadius.only(
-                                                                              topLeft: Radius.circular(6),
-                                                                              topRight: Radius.circular(6),
-                                                                              bottomLeft: Radius.circular(0),
-                                                                              bottomRight: Radius.circular(0),
-                                                                            ),
-                                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                                          ),
-                                                                          // padding: const EdgeInsets.all(8.0),
+                                                                          color:
+                                                                              AppbackgroundColor.Sub_Abg_Colors,
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
                                                                           child:
-                                                                              TextFormField(
-                                                                            keyboardType:
-                                                                                TextInputType.number,
-                                                                            controller:
-                                                                                Form_time,
-                                                                            onChanged:
-                                                                                (value) {
-                                                                              setState(() {});
-                                                                            },
-                                                                            // maxLength: 13,
-                                                                            cursorColor:
-                                                                                Colors.green,
-                                                                            decoration: InputDecoration(
-                                                                                fillColor: Colors.white.withOpacity(0.3),
-                                                                                filled: true,
-                                                                                // prefixIcon:
-                                                                                //     const Icon(Icons.person, color: Colors.black),
-                                                                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                                focusedBorder: const OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.only(
-                                                                                    topRight: Radius.circular(15),
-                                                                                    topLeft: Radius.circular(15),
-                                                                                    bottomRight: Radius.circular(15),
-                                                                                    bottomLeft: Radius.circular(15),
-                                                                                  ),
-                                                                                  borderSide: BorderSide(
-                                                                                    width: 1,
-                                                                                    color: Colors.black,
-                                                                                  ),
-                                                                                ),
-                                                                                enabledBorder: const OutlineInputBorder(
-                                                                                  borderRadius: BorderRadius.only(
-                                                                                    topRight: Radius.circular(15),
-                                                                                    topLeft: Radius.circular(15),
-                                                                                    bottomRight: Radius.circular(15),
-                                                                                    bottomLeft: Radius.circular(15),
-                                                                                  ),
-                                                                                  borderSide: BorderSide(
-                                                                                    width: 1,
-                                                                                    color: Colors.grey,
-                                                                                  ),
-                                                                                ),
-                                                                                hintText: '00:00:00',
-                                                                                // helperText: '00:00:00',
-                                                                                // labelText: '00:00:00',
-                                                                                labelStyle: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T)),
-
-                                                                            inputFormatters: [
-                                                                              MaskedInputFormatter('##:##:##'),
-                                                                              // FilteringTextInputFormatter.allow(
-                                                                              //     RegExp(r'[0-9]')),
-                                                                            ],
-                                                                            // inputFormatters: <TextInputFormatter>[
-                                                                            //   // for below version 2 use this
-                                                                            //   FilteringTextInputFormatter.allow(
-                                                                            //       RegExp(r'[0-9 .]')),
-                                                                            //   // for version 2 and greater youcan also use this
-                                                                            //   // FilteringTextInputFormatter.digitsOnly
-                                                                            // ],
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(
-                                                                        width:
-                                                                            10,
-                                                                      ),
-                                                                      Expanded(
-                                                                        child:
-                                                                            InkWell(
-                                                                          onTap:
-                                                                              () {
-                                                                            (base64_Slip == null)
-                                                                                ? uploadFile_Slip()
-                                                                                : showDialog<void>(
-                                                                                    context: context,
-                                                                                    barrierDismissible: false, // user must tap button!
-                                                                                    builder: (BuildContext context) {
-                                                                                      return AlertDialog(
-                                                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
-                                                                                        title: const Center(
-                                                                                            child: Text(
-                                                                                          'มีไฟล์ slip อยู่แล้ว',
-                                                                                          style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                        )),
-                                                                                        content: SingleChildScrollView(
-                                                                                          child: ListBody(
-                                                                                            children: const <Widget>[
-                                                                                              Text(
-                                                                                                'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
-                                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ),
-                                                                                        actions: <Widget>[
-                                                                                          Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                                                            children: [
-                                                                                              Padding(
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: InkWell(
-                                                                                                  child: Container(
-                                                                                                      width: 100,
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.red[600],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: const Center(
-                                                                                                          child: Text(
-                                                                                                        'ลบไฟล์',
-                                                                                                        style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                                      ))),
-                                                                                                  onTap: () async {
-                                                                                                    setState(() {
-                                                                                                      base64_Slip = null;
-                                                                                                    });
-                                                                                                    Navigator.of(context).pop();
-                                                                                                  },
-                                                                                                ),
-                                                                                              ),
-                                                                                              Padding(
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: InkWell(
-                                                                                                  child: Container(
-                                                                                                      width: 100,
-                                                                                                      decoration: const BoxDecoration(
-                                                                                                        color: Colors.black,
-                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: const Center(
-                                                                                                          child: Text(
-                                                                                                        'ปิด',
-                                                                                                        style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                                      ))),
-                                                                                                  onTap: () {
-                                                                                                    Navigator.of(context).pop();
-                                                                                                  },
-                                                                                                ),
-                                                                                              ),
-                                                                                            ],
-                                                                                          ),
-                                                                                        ],
-                                                                                      );
-                                                                                    },
-                                                                                  );
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: Colors.green,
-                                                                              borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10),
-                                                                              ),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors.grey, width: 1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
+                                                                              const Center(
                                                                             child:
-                                                                                const Text(
-                                                                              'เพิ่มไฟล์',
+                                                                                Text(
+                                                                              'วันที่ทำรายการ',
                                                                               textAlign: TextAlign.center,
                                                                               style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
                                                                                   //fontSize: 10.0
@@ -5738,628 +6786,988 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           ),
                                                                         ),
                                                                       ),
+                                                                      Expanded(
+                                                                        child: Container(
+                                                                            height: 50,
+                                                                            color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            child: Container(
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                // color: Colors.green,
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  topRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                ),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              child: InkWell(
+                                                                                onTap: () async {
+                                                                                  DateTime? newDate = await showDatePicker(
+                                                                                    locale: const Locale('th', 'TH'),
+                                                                                    context: context,
+                                                                                    initialDate: DateTime.now(),
+                                                                                    firstDate: DateTime.now().add(const Duration(days: -50)),
+                                                                                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                                                                                    builder: (context, child) {
+                                                                                      return Theme(
+                                                                                        data: Theme.of(context).copyWith(
+                                                                                          colorScheme: const ColorScheme.light(
+                                                                                            primary: AppBarColors.ABar_Colors, // header background color
+                                                                                            onPrimary: Colors.white, // header text color
+                                                                                            onSurface: Colors.black, // body text color
+                                                                                          ),
+                                                                                          textButtonTheme: TextButtonThemeData(
+                                                                                            style: TextButton.styleFrom(
+                                                                                              primary: Colors.black, // button text color
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: child!,
+                                                                                      );
+                                                                                    },
+                                                                                  );
+
+                                                                                  if (newDate == null) {
+                                                                                    return;
+                                                                                  } else {
+                                                                                    String start = DateFormat('yyyy-MM-dd').format(newDate);
+                                                                                    String end = DateFormat('dd-MM-yyyy').format(newDate);
+
+                                                                                    print('$start $end');
+                                                                                    setState(() {
+                                                                                      Value_newDateY1 = start;
+                                                                                      Value_newDateD1 = end;
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: Container(
+                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                  child: AutoSizeText(
+                                                                                    Value_newDateD1 == '' ? 'เลือกวันที่' : '$Value_newDateD1',
+                                                                                    minFontSize: 16,
+                                                                                    maxFontSize: 20,
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: const TextStyle(
+                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                    maxLines: 1,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            )),
+                                                                      ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      if (paymentName1
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'เงินโอน' ||
-                                                          paymentName2
-                                                                  .toString()
-                                                                  .trim() ==
-                                                              'เงินโอน')
-                                                        Container(
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: AppbackgroundColor
-                                                                .Sub_Abg_Colors,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .only(
-                                                              topLeft: Radius
-                                                                  .circular(0),
-                                                              topRight: Radius
-                                                                  .circular(0),
-                                                              bottomLeft: Radius
-                                                                  .circular(6),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          6),
-                                                            ),
-                                                            // border: Border.all(color: Colors.grey, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
-                                                                    mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .center,
+                                                                Expanded(
+                                                                  flex: 4,
+                                                                  child: Row(
                                                                     children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(2.0),
+                                                                      Expanded(
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              50,
+                                                                          color:
+                                                                              AppbackgroundColor.Sub_Abg_Colors,
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'วันที่ชำระ',
+                                                                              textAlign: TextAlign.center,
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                  //fontSize: 10.0
+                                                                                  ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        child: Container(
+                                                                            height: 50,
+                                                                            color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            child: Container(
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                // color: Colors.green,
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  topRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                ),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              child: InkWell(
+                                                                                onTap: () async {
+                                                                                  DateTime? newDate = await showDatePicker(
+                                                                                    locale: const Locale('th', 'TH'),
+                                                                                    context: context,
+                                                                                    initialDate: DateTime.now(),
+                                                                                    firstDate: DateTime.now().add(const Duration(days: -50)),
+                                                                                    lastDate: DateTime.now().add(const Duration(days: 365)),
+                                                                                    builder: (context, child) {
+                                                                                      return Theme(
+                                                                                        data: Theme.of(context).copyWith(
+                                                                                          colorScheme: const ColorScheme.light(
+                                                                                            primary: AppBarColors.ABar_Colors, // header background color
+                                                                                            onPrimary: Colors.white, // header text color
+                                                                                            onSurface: Colors.black, // body text color
+                                                                                          ),
+                                                                                          textButtonTheme: TextButtonThemeData(
+                                                                                            style: TextButton.styleFrom(
+                                                                                              primary: Colors.black, // button text color
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                        child: child!,
+                                                                                      );
+                                                                                    },
+                                                                                  );
+
+                                                                                  if (newDate == null) {
+                                                                                    return;
+                                                                                  } else {
+                                                                                    String start = DateFormat('yyyy-MM-dd').format(newDate);
+                                                                                    String end = DateFormat('dd-MM-yyyy').format(newDate);
+
+                                                                                    print('$start $end');
+                                                                                    setState(() {
+                                                                                      Value_newDateY = start;
+                                                                                      Value_newDateD = end;
+                                                                                    });
+                                                                                  }
+                                                                                },
+                                                                                child: Container(
+                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                  child: AutoSizeText(
+                                                                                    Value_newDateD == '' ? 'เลือกวันที่' : '$Value_newDateD',
+                                                                                    minFontSize: 16,
+                                                                                    maxFontSize: 20,
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: const TextStyle(
+                                                                                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                        // fontWeight: FontWeight.bold,
+                                                                                        fontFamily: Font_.Fonts_T),
+                                                                                    maxLines: 1,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            )),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            //  print(
+                                                            //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                            //             print(
+                                                            //                 'pppppp $paymentSer1 $paymentName1');
+                                                            if (paymentName1
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    'เงินโอน' ||
+                                                                paymentName2
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    'เงินโอน')
+                                                              Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 2,
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          50,
+                                                                      color: AppbackgroundColor
+                                                                          .Sub_Abg_Colors,
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          const Center(
                                                                         child:
                                                                             Text(
-                                                                          (base64_Slip != null)
-                                                                              ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว '
-                                                                              : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
+                                                                          ' เวลา/หลักฐาน',
                                                                           textAlign:
                                                                               TextAlign.start,
                                                                           style: TextStyle(
-                                                                              color: (base64_Slip != null) ? Colors.green[600] : Colors.red[600],
+                                                                              color: PeopleChaoScreen_Color.Colors_Text1_,
                                                                               fontWeight: FontWeight.bold,
                                                                               fontFamily: FontWeight_.Fonts_T
                                                                               //fontSize: 10.0
                                                                               ),
                                                                         ),
                                                                       ),
-                                                                      // Padding(
-                                                                      //   padding: const EdgeInsets.all(2.0),
-                                                                      //   child: Text(
-                                                                      //     (base64_Slip != null) ? '$base64_Slip' : '',
-                                                                      //     textAlign: TextAlign.start,
-                                                                      //     style: TextStyle(
-                                                                      //         color: Colors.blue[600],
-                                                                      //         fontWeight: FontWeight.bold,
-                                                                      //         fontFamily: FontWeight_.Fonts_T,
-                                                                      //         fontSize: 10.0),
-                                                                      //   ),
-                                                                      // ),
-                                                                    ],
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              Expanded(
-                                                                flex: 1,
-                                                                child: InkWell(
-                                                                  onTap:
-                                                                      () async {
-                                                                    // String Url =
-                                                                    //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
-                                                                    // print(Url);
-                                                                    showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder: (context) => AlertDialog(
-                                                                          title: Center(
-                                                                            child:
-                                                                                Text(
-                                                                              '${_InvoiceHistoryModels[index].docno}',
-                                                                              maxLines: 1,
-                                                                              textAlign: TextAlign.start,
-                                                                              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T, fontSize: 12.0),
-                                                                            ),
-                                                                          ),
-                                                                          content: Stack(
-                                                                            alignment:
-                                                                                Alignment.center,
-                                                                            children: <Widget>[
-                                                                              Image.memory(
-                                                                                base64Decode(base64_Slip.toString()),
-                                                                                // height: 200,
-                                                                                // fit: BoxFit.cover,
-                                                                              ),
-                                                                            ],
-                                                                          ),
-                                                                          actions: <Widget>[
+                                                                  Expanded(
+                                                                    flex: 4,
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          100,
+                                                                      height:
+                                                                          50,
+                                                                      color: AppbackgroundColor
+                                                                          .Sub_Abg_Colors,
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
                                                                             Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                // Padding(
-                                                                                //   padding:
-                                                                                //       const EdgeInsets.all(8.0),
-                                                                                //   child: Container(
-                                                                                //     width: 100,
-                                                                                //     decoration: const BoxDecoration(
-                                                                                //       color: Colors.green,
-                                                                                //       borderRadius:
-                                                                                //           BorderRadius.only(
-                                                                                //               topLeft: Radius
-                                                                                //                   .circular(10),
-                                                                                //               topRight:
-                                                                                //                   Radius.circular(
-                                                                                //                       10),
-                                                                                //               bottomLeft:
-                                                                                //                   Radius.circular(
-                                                                                //                       10),
-                                                                                //               bottomRight:
-                                                                                //                   Radius.circular(
-                                                                                //                       10)),
-                                                                                //     ),
-                                                                                //     padding:
-                                                                                //         const EdgeInsets.all(8.0),
-                                                                                //     child: TextButton(
-                                                                                //       onPressed: () async {
-                                                                                //         // downloadImage2();
-                                                                                //         // downloadImage(Url);
-                                                                                //         // Navigator.pop(
-                                                                                //         //     context, 'OK');
-                                                                                //       },
-                                                                                //       child: const Text(
-                                                                                //         'ดาวน์โหลด',
-                                                                                //         style: TextStyle(
-                                                                                //             color: Colors.white,
-                                                                                //             fontWeight:
-                                                                                //                 FontWeight.bold,
-                                                                                //             fontFamily: FontWeight_
-                                                                                //                 .Fonts_T),
-                                                                                //       ),
-                                                                                //     ),
-                                                                                //   ),
-                                                                                // ),
-                                                                                Padding(
-                                                                                  padding: const EdgeInsets.all(8.0),
-                                                                                  child: Container(
-                                                                                    width: 100,
-                                                                                    decoration: const BoxDecoration(
-                                                                                      color: Colors.black,
-                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                    ),
-                                                                                    padding: const EdgeInsets.all(8.0),
-                                                                                    child: TextButton(
-                                                                                      onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                      child: const Text(
-                                                                                        'ปิด',
-                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                          children: [
+                                                                            Expanded(
+                                                                              child: Container(
+                                                                                height: 50,
+                                                                                decoration: const BoxDecoration(
+                                                                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                  borderRadius: BorderRadius.only(
+                                                                                    topLeft: Radius.circular(6),
+                                                                                    topRight: Radius.circular(6),
+                                                                                    bottomLeft: Radius.circular(0),
+                                                                                    bottomRight: Radius.circular(0),
+                                                                                  ),
+                                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                                ),
+                                                                                // padding: const EdgeInsets.all(8.0),
+                                                                                child: TextFormField(
+                                                                                  keyboardType: TextInputType.number,
+                                                                                  controller: Form_time,
+                                                                                  onChanged: (value) {
+                                                                                    setState(() {});
+                                                                                  },
+                                                                                  // maxLength: 13,
+                                                                                  cursorColor: Colors.green,
+                                                                                  decoration: InputDecoration(
+                                                                                      fillColor: Colors.white.withOpacity(0.3),
+                                                                                      filled: true,
+                                                                                      // prefixIcon:
+                                                                                      //     const Icon(Icons.person, color: Colors.black),
+                                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                                      focusedBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.black,
+                                                                                        ),
                                                                                       ),
+                                                                                      enabledBorder: const OutlineInputBorder(
+                                                                                        borderRadius: BorderRadius.only(
+                                                                                          topRight: Radius.circular(15),
+                                                                                          topLeft: Radius.circular(15),
+                                                                                          bottomRight: Radius.circular(15),
+                                                                                          bottomLeft: Radius.circular(15),
+                                                                                        ),
+                                                                                        borderSide: BorderSide(
+                                                                                          width: 1,
+                                                                                          color: Colors.grey,
+                                                                                        ),
+                                                                                      ),
+                                                                                      hintText: '00:00:00',
+                                                                                      // helperText: '00:00:00',
+                                                                                      // labelText: '00:00:00',
+                                                                                      labelStyle: const TextStyle(
+                                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                          // fontWeight: FontWeight.bold,
+                                                                                          fontFamily: Font_.Fonts_T)),
+
+                                                                                  inputFormatters: [
+                                                                                    MaskedInputFormatter('##:##:##'),
+                                                                                    // FilteringTextInputFormatter.allow(
+                                                                                    //     RegExp(r'[0-9]')),
+                                                                                  ],
+                                                                                  // inputFormatters: <TextInputFormatter>[
+                                                                                  //   // for below version 2 use this
+                                                                                  //   FilteringTextInputFormatter.allow(
+                                                                                  //       RegExp(r'[0-9 .]')),
+                                                                                  //   // for version 2 and greater youcan also use this
+                                                                                  //   // FilteringTextInputFormatter.digitsOnly
+                                                                                  // ],
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              width: 10,
+                                                                            ),
+                                                                            Expanded(
+                                                                              child: InkWell(
+                                                                                onTap: () {
+                                                                                  (base64_Slip == null)
+                                                                                      ? uploadFile_Slip()
+                                                                                      : showDialog<void>(
+                                                                                          context: context,
+                                                                                          barrierDismissible: false, // user must tap button!
+                                                                                          builder: (BuildContext context) {
+                                                                                            return AlertDialog(
+                                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                                                                                              title: const Center(
+                                                                                                  child: Text(
+                                                                                                'มีไฟล์ slip อยู่แล้ว',
+                                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              )),
+                                                                                              content: SingleChildScrollView(
+                                                                                                child: ListBody(
+                                                                                                  children: const <Widget>[
+                                                                                                    Text(
+                                                                                                      'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
+                                                                                                      style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                              actions: <Widget>[
+                                                                                                Row(
+                                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                  children: [
+                                                                                                    Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: BoxDecoration(
+                                                                                                              color: Colors.red[600],
+                                                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ลบไฟล์',
+                                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                                            ))),
+                                                                                                        onTap: () async {
+                                                                                                          setState(() {
+                                                                                                            base64_Slip = null;
+                                                                                                          });
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                    Padding(
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: InkWell(
+                                                                                                        child: Container(
+                                                                                                            width: 100,
+                                                                                                            decoration: const BoxDecoration(
+                                                                                                              color: Colors.black,
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: const Center(
+                                                                                                                child: Text(
+                                                                                                              'ปิด',
+                                                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                                            ))),
+                                                                                                        onTap: () {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                        },
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ],
+                                                                                            );
+                                                                                          },
+                                                                                        );
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: const BoxDecoration(
+                                                                                    color: Colors.green,
+                                                                                    borderRadius: BorderRadius.only(
+                                                                                      topLeft: Radius.circular(10),
+                                                                                      topRight: Radius.circular(10),
+                                                                                      bottomLeft: Radius.circular(10),
+                                                                                      bottomRight: Radius.circular(10),
                                                                                     ),
+                                                                                    // border: Border.all(
+                                                                                    //     color: Colors.grey, width: 1),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: const Text(
+                                                                                    'เพิ่มไฟล์',
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                        //fontSize: 10.0
+                                                                                        ),
                                                                                   ),
                                                                                 ),
-                                                                              ],
+                                                                              ),
                                                                             ),
-                                                                          ]),
-                                                                    );
-                                                                  },
-                                                                  child:
-                                                                      Container(
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: Colors
-                                                                          .blue,
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(10),
-                                                                        topRight:
-                                                                            Radius.circular(10),
-                                                                        bottomLeft:
-                                                                            Radius.circular(10),
-                                                                        bottomRight:
-                                                                            Radius.circular(10),
-                                                                      ),
-                                                                      // border: Border.all(
-                                                                      //     color: Colors.grey, width: 1),
-                                                                    ),
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        const Text(
-                                                                      'เรียกดูไฟล์',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text1_,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T
-                                                                          //fontSize: 10.0
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      // const SizedBox(
-                                                      //   height: 20,
-                                                      // ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            child: Container(
-                                                              color:
-                                                                  Colors.white,
-                                                              // height: 100,
-                                                              // width: MediaQuery.of(
-                                                              //             context)
-                                                              //         .size
-                                                              //         .width *
-                                                              //     0.33,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Column(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  SizedBox(
-                                                                    height: 35,
-                                                                  ),
-                                                                  Row(
-                                                                    children: [
-                                                                      Text(
-                                                                        'หมายเหตุ',
-                                                                        textAlign:
-                                                                            TextAlign.start,
-                                                                        style: TextStyle(
-                                                                            color:
-                                                                                PeopleChaoScreen_Color.Colors_Text1_,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  TextFormField(
-                                                                    // keyboardType: TextInputType.name,
-                                                                    controller:
-                                                                        Form_note,
-
-                                                                    maxLines: 2,
-                                                                    // maxLength: 13,
-                                                                    cursorColor:
-                                                                        Colors
-                                                                            .green,
-                                                                    decoration:
-                                                                        InputDecoration(
-                                                                      fillColor: Colors
-                                                                          .white
-                                                                          .withOpacity(
-                                                                              0.3),
-                                                                      filled:
-                                                                          true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder:
-                                                                          const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
+                                                                          ],
                                                                         ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder:
-                                                                          const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      // labelText: 'ระบุชื่อร้านค้า',
-                                                                      labelStyle:
-                                                                          const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        // fontWeight: FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ],
                                                               ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Text(""),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 4,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: InkWell(
-                                                                onTap:
-                                                                    () async {
-                                                                  var pay1;
-                                                                  var pay2;
-                                                                  setState(() {
-                                                                    Slip_status =
-                                                                        '2';
-                                                                  });
-                                                                  List
-                                                                      newValuePDFimg =
-                                                                      [];
-                                                                  for (int index =
-                                                                          0;
-                                                                      index < 1;
-                                                                      index++) {
-                                                                    if (renTalModels[0]
-                                                                            .imglogo!
-                                                                            .trim() ==
-                                                                        '') {
-                                                                      // newValuePDFimg.add(
-                                                                      //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                                                    } else {
-                                                                      newValuePDFimg
-                                                                          .add(
-                                                                              '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                                                    }
-                                                                  }
-                                                                  if (pamentpage ==
-                                                                      0) {
-                                                                    setState(
-                                                                        () {
-                                                                      // Form_payment2
-                                                                      //     .clear();
-                                                                      Form_payment2
-                                                                          .text = '';
-                                                                    });
-                                                                  }
-                                                                  //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
-                                                                  setState(() {
-                                                                    pay1 = Form_payment1.text ==
-                                                                            ''
-                                                                        ? '0.00'
-                                                                        : Form_payment1
-                                                                            .text;
-                                                                    pay2 = Form_payment2.text ==
-                                                                            ''
-                                                                        ? '0.00'
-                                                                        : Form_payment2
-                                                                            .text;
-                                                                  });
+                                                            if (paymentName1
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    'เงินโอน' ||
+                                                                paymentName2
+                                                                        .toString()
+                                                                        .trim() ==
+                                                                    'เงินโอน')
+                                                              Container(
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: AppbackgroundColor
+                                                                      .Sub_Abg_Colors,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            0),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            0),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            6),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            6),
+                                                                  ),
+                                                                  // border: Border.all(color: Colors.grey, width: 1),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          Align(
+                                                                        alignment:
+                                                                            Alignment.centerLeft,
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.start,
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(2.0),
+                                                                              child: Text(
+                                                                                (base64_Slip != null) ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว ' : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: (base64_Slip != null) ? Colors.green[600] : Colors.red[600], fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                            // Padding(
+                                                                            //   padding: const EdgeInsets.all(2.0),
+                                                                            //   child: Text(
+                                                                            //     (base64_Slip != null) ? '$base64_Slip' : '',
+                                                                            //     textAlign: TextAlign.start,
+                                                                            //     style: TextStyle(
+                                                                            //         color: Colors.blue[600],
+                                                                            //         fontWeight: FontWeight.bold,
+                                                                            //         fontFamily: FontWeight_.Fonts_T,
+                                                                            //         fontSize: 10.0),
+                                                                            //   ),
+                                                                            // ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Expanded(
+                                                                      flex: 1,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () async {
+                                                                          // String Url =
+                                                                          //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
+                                                                          // print(Url);
+                                                                          showDialog(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (context) => AlertDialog(
+                                                                                title: Center(
+                                                                                  child: Text(
+                                                                                    '${_InvoiceHistoryModels[index].docno}',
+                                                                                    maxLines: 1,
+                                                                                    textAlign: TextAlign.start,
+                                                                                    style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T, fontSize: 12.0),
+                                                                                  ),
+                                                                                ),
+                                                                                content: Stack(
+                                                                                  alignment: Alignment.center,
+                                                                                  children: <Widget>[
+                                                                                    Image.memory(
+                                                                                      base64Decode(base64_Slip.toString()),
+                                                                                      // height: 200,
+                                                                                      // fit: BoxFit.cover,
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                                actions: <Widget>[
+                                                                                  Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      // Padding(
+                                                                                      //   padding:
+                                                                                      //       const EdgeInsets.all(8.0),
+                                                                                      //   child: Container(
+                                                                                      //     width: 100,
+                                                                                      //     decoration: const BoxDecoration(
+                                                                                      //       color: Colors.green,
+                                                                                      //       borderRadius:
+                                                                                      //           BorderRadius.only(
+                                                                                      //               topLeft: Radius
+                                                                                      //                   .circular(10),
+                                                                                      //               topRight:
+                                                                                      //                   Radius.circular(
+                                                                                      //                       10),
+                                                                                      //               bottomLeft:
+                                                                                      //                   Radius.circular(
+                                                                                      //                       10),
+                                                                                      //               bottomRight:
+                                                                                      //                   Radius.circular(
+                                                                                      //                       10)),
+                                                                                      //     ),
+                                                                                      //     padding:
+                                                                                      //         const EdgeInsets.all(8.0),
+                                                                                      //     child: TextButton(
+                                                                                      //       onPressed: () async {
+                                                                                      //         // downloadImage2();
+                                                                                      //         // downloadImage(Url);
+                                                                                      //         // Navigator.pop(
+                                                                                      //         //     context, 'OK');
+                                                                                      //       },
+                                                                                      //       child: const Text(
+                                                                                      //         'ดาวน์โหลด',
+                                                                                      //         style: TextStyle(
+                                                                                      //             color: Colors.white,
+                                                                                      //             fontWeight:
+                                                                                      //                 FontWeight.bold,
+                                                                                      //             fontFamily: FontWeight_
+                                                                                      //                 .Fonts_T),
+                                                                                      //       ),
+                                                                                      //     ),
+                                                                                      //   ),
+                                                                                      // ),
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Container(
+                                                                                          width: 100,
+                                                                                          decoration: const BoxDecoration(
+                                                                                            color: Colors.black,
+                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          ),
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: TextButton(
+                                                                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                            child: const Text(
+                                                                                              'ปิด',
+                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
+                                                                                  ),
+                                                                                ]),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          decoration:
+                                                                              const BoxDecoration(
+                                                                            color:
+                                                                                Colors.blue,
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10),
+                                                                            ),
+                                                                            // border: Border.all(
+                                                                            //     color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              const Text(
+                                                                            'เรียกดูไฟล์',
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T
+                                                                                //fontSize: 10.0
+                                                                                ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            // const SizedBox(
+                                                            //   height: 20,
+                                                            // ),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  child:
+                                                                      Container(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    // height: 100,
+                                                                    // width: MediaQuery.of(
+                                                                    //             context)
+                                                                    //         .size
+                                                                    //         .width *
+                                                                    //     0.33,
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Column(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        SizedBox(
+                                                                          height:
+                                                                              35,
+                                                                        ),
+                                                                        Row(
+                                                                          children: [
+                                                                            Text(
+                                                                              'หมายเหตุ',
+                                                                              textAlign: TextAlign.start,
+                                                                              style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        TextFormField(
+                                                                          // keyboardType: TextInputType.name,
+                                                                          controller:
+                                                                              Form_note,
 
-                                                                  print(
-                                                                      '>>1>  ${Form_payment1.text}');
-                                                                  print(
-                                                                      '>>2>  ${Form_payment2.text}  $pay2');
-                                                                  print(
-                                                                      '${(double.parse(pay1) + double.parse(pay2))}');
-                                                                  if ((double.parse(
-                                                                              pay1) +
-                                                                          double.parse(
-                                                                              pay2) !=
-                                                                      (sum_amt -
-                                                                          sum_disamt))) {
-                                                                    _showMyDialogPay_Error(
-                                                                        'จำนวนเงินไม่ถูกต้อง ');
-                                                                    // ScaffoldMessenger.of(
-                                                                    //         context)
-                                                                    //     .showSnackBar(
-                                                                    //   const SnackBar(
-                                                                    //       content: Text(
-                                                                    //           'จำนวนเงินไม่ถูกต้อง ',
-                                                                    //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                    // );
-                                                                  } else if (double.parse(
-                                                                              pay1) <
-                                                                          0.00 ||
-                                                                      double.parse(
-                                                                              pay2) <
-                                                                          0.00) {
-                                                                    _showMyDialogPay_Error(
-                                                                        'จำนวนเงินไม่ถูกต้อง ');
-                                                                    // ScaffoldMessenger.of(
-                                                                    //         context)
-                                                                    //     .showSnackBar(
-                                                                    //   const SnackBar(
-                                                                    //       content: Text(
-                                                                    //           'จำนวนเงินไม่ถูกต้อง',
-                                                                    //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                    // );
-                                                                  } else {
-                                                                    if (pamentpage ==
-                                                                            0 &&
-                                                                        // Form_payment1.text ==
-                                                                        //     '' ||
-                                                                        paymentName1 ==
-                                                                            null) {
-                                                                      _showMyDialogPay_Error(
-                                                                          'กรุณาเลือกรูปแบบชำระ! ที่ 1');
-                                                                      // ScaffoldMessenger.of(
-                                                                      //         context)
-                                                                      //     .showSnackBar(
-                                                                      //   const SnackBar(
-                                                                      //       content:
-                                                                      //           Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                      // );
-                                                                    } else if (pamentpage ==
-                                                                                1 &&
-                                                                            // Form_payment2.text ==
-                                                                            //     '' ||
-                                                                            paymentName2 ==
-                                                                                null ||
-                                                                        paymentName1 ==
-                                                                            null) {
-                                                                      _showMyDialogPay_Error((paymentName1 ==
-                                                                              null)
-                                                                          ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
-                                                                          : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
-                                                                      // ScaffoldMessenger.of(
-                                                                      //         context)
-                                                                      //     .showSnackBar(
-                                                                      //   SnackBar(
-                                                                      //       content: (paymentName1 == null)
-                                                                      //           ? Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))
-                                                                      //           : Text('กรุณาเลือกรูปแบบชำระ! ที่ 2', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                      // );
-                                                                    } else {
-                                                                      print(
-                                                                          '${pamentpage}: ${paymentName1}////${paymentName2}');
-                                                                      if (paymentSer1 !=
-                                                                              '0' &&
-                                                                          paymentSer1 !=
-                                                                              null) {
-                                                                        if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) ||
-                                                                            (double.parse(pay1) + double.parse(pay2)) <
-                                                                                (sum_amt - sum_disamt)) {
-                                                                          if ((sum_amt - sum_disamt) !=
-                                                                              0) {
-                                                                            if (paymentName1.toString().trim() == 'เงินโอน' ||
-                                                                                paymentName2.toString().trim() == 'เงินโอน') {
-                                                                              if (base64_Slip != null) {
-                                                                                try {
-                                                                                  final tableData00 = [
-                                                                                    for (int index = 0; index < _InvoiceHistoryModels.length; index++)
-                                                                                      [
-                                                                                        '${index + 1}',
-                                                                                        '${_InvoiceHistoryModels[index].date}',
-                                                                                        '${_InvoiceHistoryModels[index].descr}',
-                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                                        '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                                      ],
-                                                                                  ];
-                                                                                  OKuploadFile_Slip();
-                                                                                  in_Trans_invoice_refno(tableData00, newValuePDFimg);
-                                                                                  Navigator.pop(context, 'OK');
-                                                                                } catch (e) {}
+                                                                          maxLines:
+                                                                              2,
+                                                                          // maxLength: 13,
+                                                                          cursorColor:
+                                                                              Colors.green,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            fillColor:
+                                                                                Colors.white.withOpacity(0.3),
+                                                                            filled:
+                                                                                true,
+                                                                            // prefixIcon:
+                                                                            //     const Icon(Icons.person, color: Colors.black),
+                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            focusedBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                            enabledBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                            // labelText: 'ระบุชื่อร้านค้า',
+                                                                            labelStyle:
+                                                                                const TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              // fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Expanded(
+                                                                  flex: 4,
+                                                                  child:
+                                                                      Text(""),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 4,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      onTap:
+                                                                          () async {
+                                                                        var pay1;
+                                                                        var pay2;
+                                                                        setState(
+                                                                            () {
+                                                                          Slip_status =
+                                                                              '2';
+                                                                        });
+                                                                        List
+                                                                            newValuePDFimg =
+                                                                            [];
+                                                                        for (int index =
+                                                                                0;
+                                                                            index <
+                                                                                1;
+                                                                            index++) {
+                                                                          if (renTalModels[0].imglogo!.trim() ==
+                                                                              '') {
+                                                                            // newValuePDFimg.add(
+                                                                            //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                                          } else {
+                                                                            newValuePDFimg.add('${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                                          }
+                                                                        }
+                                                                        if (pamentpage ==
+                                                                            0) {
+                                                                          setState(
+                                                                              () {
+                                                                            // Form_payment2
+                                                                            //     .clear();
+                                                                            Form_payment2.text =
+                                                                                '';
+                                                                          });
+                                                                        }
+                                                                        //select_page = 0 _TransModels : = 1 _InvoiceHistoryModels
+                                                                        setState(
+                                                                            () {
+                                                                          pay1 = Form_payment1.text == ''
+                                                                              ? '0.00'
+                                                                              : Form_payment1.text;
+                                                                          pay2 = Form_payment2.text == ''
+                                                                              ? '0.00'
+                                                                              : Form_payment2.text;
+                                                                        });
+
+                                                                        print(
+                                                                            '>>1>  ${Form_payment1.text}');
+                                                                        print(
+                                                                            '>>2>  ${Form_payment2.text}  $pay2');
+                                                                        print(
+                                                                            '${(double.parse(pay1) + double.parse(pay2))}');
+                                                                        if ((double.parse(pay1) + double.parse(pay2) !=
+                                                                            (sum_amt -
+                                                                                sum_disamt))) {
+                                                                          _showMyDialogPay_Error(
+                                                                              'จำนวนเงินไม่ถูกต้อง ');
+                                                                          // ScaffoldMessenger.of(
+                                                                          //         context)
+                                                                          //     .showSnackBar(
+                                                                          //   const SnackBar(
+                                                                          //       content: Text(
+                                                                          //           'จำนวนเงินไม่ถูกต้อง ',
+                                                                          //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                          // );
+                                                                        } else if (double.parse(pay1) <
+                                                                                0.00 ||
+                                                                            double.parse(pay2) <
+                                                                                0.00) {
+                                                                          _showMyDialogPay_Error(
+                                                                              'จำนวนเงินไม่ถูกต้อง ');
+                                                                          // ScaffoldMessenger.of(
+                                                                          //         context)
+                                                                          //     .showSnackBar(
+                                                                          //   const SnackBar(
+                                                                          //       content: Text(
+                                                                          //           'จำนวนเงินไม่ถูกต้อง',
+                                                                          //           style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                          // );
+                                                                        } else {
+                                                                          if (pamentpage == 0 &&
+                                                                              // Form_payment1.text ==
+                                                                              //     '' ||
+                                                                              paymentName1 == null) {
+                                                                            _showMyDialogPay_Error('กรุณาเลือกรูปแบบชำระ! ที่ 1');
+                                                                            // ScaffoldMessenger.of(
+                                                                            //         context)
+                                                                            //     .showSnackBar(
+                                                                            //   const SnackBar(
+                                                                            //       content:
+                                                                            //           Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                            // );
+                                                                          } else if (pamentpage == 1 &&
+                                                                                  // Form_payment2.text ==
+                                                                                  //     '' ||
+                                                                                  paymentName2 == null ||
+                                                                              paymentName1 == null) {
+                                                                            _showMyDialogPay_Error((paymentName1 == null)
+                                                                                ? 'กรุณาเลือกรูปแบบชำระ! ที่ 1'
+                                                                                : 'กรุณาเลือกรูปแบบชำระ! ที่ 2');
+                                                                            // ScaffoldMessenger.of(
+                                                                            //         context)
+                                                                            //     .showSnackBar(
+                                                                            //   SnackBar(
+                                                                            //       content: (paymentName1 == null)
+                                                                            //           ? Text('กรุณาเลือกรูปแบบชำระ! ที่ 1', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))
+                                                                            //           : Text('กรุณาเลือกรูปแบบชำระ! ที่ 2', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                            // );
+                                                                          } else {
+                                                                            print('${pamentpage}: ${paymentName1}////${paymentName2}');
+                                                                            if (paymentSer1 != '0' &&
+                                                                                paymentSer1 != null) {
+                                                                              if ((double.parse(pay1) + double.parse(pay2)) >= (sum_amt - sum_disamt) || (double.parse(pay1) + double.parse(pay2)) < (sum_amt - sum_disamt)) {
+                                                                                if ((sum_amt - sum_disamt) != 0) {
+                                                                                  if (paymentName1.toString().trim() == 'เงินโอน' || paymentName2.toString().trim() == 'เงินโอน') {
+                                                                                    if (base64_Slip != null) {
+                                                                                      try {
+                                                                                        final tableData00 = [
+                                                                                          for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                            [
+                                                                                              '${index + 1}',
+                                                                                              '${_InvoiceHistoryModels[index].date}',
+                                                                                              '${_InvoiceHistoryModels[index].descr}',
+                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                              '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                            ],
+                                                                                        ];
+                                                                                        OKuploadFile_Slip();
+                                                                                        in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                        Navigator.pop(context, 'OK');
+                                                                                      } catch (e) {}
+                                                                                    } else {
+                                                                                      _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                                                      // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                      //   const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                      // );
+                                                                                    }
+                                                                                  } else {
+                                                                                    try {
+                                                                                      final tableData00 = [
+                                                                                        for (int index = 0; index < _InvoiceHistoryModels.length; index++)
+                                                                                          [
+                                                                                            '${index + 1}',
+                                                                                            '${_InvoiceHistoryModels[index].date}',
+                                                                                            '${_InvoiceHistoryModels[index].descr}',
+                                                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
+                                                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
+                                                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
+                                                                                            '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
+                                                                                          ],
+                                                                                      ];
+                                                                                      // OKuploadFile_Slip();
+                                                                                      //_InvoiceHistoryModels
+
+                                                                                      in_Trans_invoice_refno(tableData00, newValuePDFimg);
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                    } catch (e) {}
+                                                                                  }
+                                                                                } else {
+                                                                                  _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                                                  // ScaffoldMessenger.of(context).showSnackBar(
+                                                                                  //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                  // );
+                                                                                }
                                                                               } else {
-                                                                                _showMyDialogPay_Error('กรุณาแนบหลักฐานการโอน(สลิป)!');
-                                                                                // ScaffoldMessenger.of(context).showSnackBar(
-                                                                                //   const SnackBar(content: Text('กรุณาแนบหลักฐานการโอน(สลิป)!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                                _showMyDialogPay_Error('กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                                                // ScaffoldMessenger.of(context)
+                                                                                //     .showSnackBar(
+                                                                                //   const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
                                                                                 // );
                                                                               }
                                                                             } else {
-                                                                              try {
-                                                                                final tableData00 = [
-                                                                                  for (int index = 0; index < _InvoiceHistoryModels.length; index++)
-                                                                                    [
-                                                                                      '${index + 1}',
-                                                                                      '${_InvoiceHistoryModels[index].date}',
-                                                                                      '${_InvoiceHistoryModels[index].descr}',
-                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].qty!))}',
-                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
-                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].vat!))}',
-                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pvat!))}',
-                                                                                      '${nFormat.format(double.parse(_InvoiceHistoryModels[index].amt!))}',
-                                                                                    ],
-                                                                                ];
-                                                                                // OKuploadFile_Slip();
-                                                                                //_InvoiceHistoryModels
-
-                                                                                in_Trans_invoice_refno(tableData00, newValuePDFimg);
-                                                                                Navigator.pop(context, 'OK');
-                                                                              } catch (e) {}
+                                                                              _showMyDialogPay_Error('กรุณาเลือกรูปแบบการชำระ!');
+                                                                              // ScaffoldMessenger.of(context)
+                                                                              //     .showSnackBar(
+                                                                              //   const SnackBar(
+                                                                              //       content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+                                                                              // );
                                                                             }
-                                                                          } else {
-                                                                            _showMyDialogPay_Error('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
-                                                                            // ScaffoldMessenger.of(context).showSnackBar(
-                                                                            //   const SnackBar(content: Text('จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                            // );
                                                                           }
-                                                                        } else {
-                                                                          _showMyDialogPay_Error(
-                                                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
-                                                                          // ScaffoldMessenger.of(context)
-                                                                          //     .showSnackBar(
-                                                                          //   const SnackBar(content: Text('กรุณากรอกจำนวนเงินให้ถูกต้อง!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                          // );
                                                                         }
-                                                                      } else {
-                                                                        _showMyDialogPay_Error(
-                                                                            'กรุณาเลือกรูปแบบการชำระ!');
-                                                                        // ScaffoldMessenger.of(context)
-                                                                        //     .showSnackBar(
-                                                                        //   const SnackBar(
-                                                                        //       content: Text('กรุณาเลือกรูปแบบการชำระ!', style: TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-                                                                        // );
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                },
-                                                                child: Container(
-                                                                    height: 50,
-                                                                    decoration: const BoxDecoration(
-                                                                      color: Colors
-                                                                          .orange,
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              10),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10)),
-                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                      },
+                                                                      child: Container(
+                                                                          height: 50,
+                                                                          decoration: const BoxDecoration(
+                                                                            color:
+                                                                                Colors.orange,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'รับชำระ',
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T),
+                                                                          ))),
                                                                     ),
-                                                                    padding: const EdgeInsets.all(8.0),
-                                                                    child: const Center(
-                                                                        child: Text(
-                                                                      'รับชำระ',
-                                                                      style: TextStyle(
-                                                                          color: PeopleChaoScreen_Color
-                                                                              .Colors_Text1_,
-                                                                          fontWeight: FontWeight
-                                                                              .bold,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T),
-                                                                    ))),
-                                                              ),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                                              ],
+                                            ),
+                                          )
+                                        : SizedBox(),
                                   ],
                                 ),
                               ),
@@ -9745,288 +11153,243 @@ class _AccountScreenState extends State<AccountScreen> {
                                                               SizedBox(
                                                                 height: 10,
                                                               ),
-                                                              Stack(
-                                                                children: [
-                                                                  InkWell(
-                                                                    child: Container(
-                                                                        width: 800,
-                                                                        height: 50,
-                                                                        decoration: BoxDecoration(
-                                                                          color:
-                                                                              Colors.blue[900],
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: const Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(8.0),
-                                                                        child: Row(
-                                                                          mainAxisAlignment:
-                                                                              MainAxisAlignment.center,
-                                                                          children: [
-                                                                            Container(
-                                                                                height: 50,
-                                                                                width: 100,
-                                                                                child: Image.asset(
-                                                                                  'images/prompay.png',
-                                                                                  height: 50,
-                                                                                  width: 100,
-                                                                                  fit: BoxFit.cover,
-                                                                                )),
-                                                                            const Center(
-                                                                                child: Text(
-                                                                              'Generator QR Code PromtPay',
-                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                            )),
-                                                                          ],
-                                                                        )),
-                                                                    onTap: (paymentName1.toString().trim() !=
-                                                                                'Online Payment' &&
-                                                                            paymentName2.toString().trim() !=
-                                                                                'Online Payment')
-                                                                        ? null
-                                                                        : () {
-                                                                            double
-                                                                                totalQr_ =
-                                                                                0.00;
-                                                                            if (paymentName1.toString().trim() == 'Online Payment' &&
-                                                                                paymentName2.toString().trim() == 'Online Payment') {
-                                                                              setState(() {
-                                                                                totalQr_ = 0.00;
-                                                                              });
-                                                                              setState(() {
-                                                                                totalQr_ = double.parse('${Form_payment1.text}') + double.parse('${Form_payment2.text}');
-                                                                              });
-                                                                            } else if (paymentName1.toString().trim() == 'Online Payment') {
-                                                                              setState(() {
-                                                                                totalQr_ = 0.00;
-                                                                              });
-                                                                              setState(() {
-                                                                                totalQr_ = double.parse('${Form_payment1.text}');
-                                                                              });
-                                                                            } else if (paymentName2.toString().trim() == 'Online Payment') {
-                                                                              setState(() {
-                                                                                totalQr_ = 0.00;
-                                                                              });
-                                                                              setState(() {
-                                                                                totalQr_ = double.parse('${Form_payment2.text}');
-                                                                              });
-                                                                            }
+                                                              (paymentName1.toString().trim() ==
+                                                                          'Online Payment' ||
+                                                                      paymentName2
+                                                                              .toString()
+                                                                              .trim() ==
+                                                                          'Online Payment')
+                                                                  ? Stack(
+                                                                      children: [
+                                                                        InkWell(
+                                                                          child: Container(
+                                                                              width: 800,
+                                                                              height: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.blue[900],
+                                                                                borderRadius: BorderRadius.only(topLeft: const Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  Container(
+                                                                                      height: 50,
+                                                                                      width: 100,
+                                                                                      child: Image.asset(
+                                                                                        'images/prompay.png',
+                                                                                        height: 50,
+                                                                                        width: 100,
+                                                                                        fit: BoxFit.cover,
+                                                                                      )),
+                                                                                  const Center(
+                                                                                      child: Text(
+                                                                                    'Generator QR Code PromtPay',
+                                                                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  )),
+                                                                                ],
+                                                                              )),
+                                                                          onTap: (paymentName1.toString().trim() != 'Online Payment' && paymentName2.toString().trim() != 'Online Payment')
+                                                                              ? null
+                                                                              : () {
+                                                                                  double totalQr_ = 0.00;
+                                                                                  if (paymentName1.toString().trim() == 'Online Payment' && paymentName2.toString().trim() == 'Online Payment') {
+                                                                                    setState(() {
+                                                                                      totalQr_ = 0.00;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      totalQr_ = double.parse('${Form_payment1.text}') + double.parse('${Form_payment2.text}');
+                                                                                    });
+                                                                                  } else if (paymentName1.toString().trim() == 'Online Payment') {
+                                                                                    setState(() {
+                                                                                      totalQr_ = 0.00;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      totalQr_ = double.parse('${Form_payment1.text}');
+                                                                                    });
+                                                                                  } else if (paymentName2.toString().trim() == 'Online Payment') {
+                                                                                    setState(() {
+                                                                                      totalQr_ = 0.00;
+                                                                                    });
+                                                                                    setState(() {
+                                                                                      totalQr_ = double.parse('${Form_payment2.text}');
+                                                                                    });
+                                                                                  }
 
-                                                                            showDialog<void>(
-                                                                              context: context,
-                                                                              barrierDismissible: false, // user must tap button!
-                                                                              builder: (BuildContext context) {
-                                                                                return AlertDialog(
-                                                                                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                                  title: Center(
-                                                                                      child: Container(
-                                                                                          decoration: BoxDecoration(
-                                                                                            color: Colors.blue[300],
-                                                                                            borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                          ),
-                                                                                          padding: const EdgeInsets.all(4.0),
-                                                                                          child: const Text(
-                                                                                            ' QR PromtPay',
-                                                                                            style: TextStyle(
-                                                                                              color: Colors.white,
-                                                                                              fontWeight: FontWeight.bold,
-                                                                                            ),
-                                                                                          ))),
-                                                                                  content: SingleChildScrollView(
-                                                                                    child: ListBody(
-                                                                                      children: <Widget>[
-                                                                                        //  '${Form_bussshop}',
-                                                                                        //   '${Form_address}',
-                                                                                        //   '${Form_tel}',
-                                                                                        //   '${Form_email}',
-                                                                                        //   '${Form_tax}',
-                                                                                        //   '${Form_nameshop}',
-                                                                                        Center(
-                                                                                          child: RepaintBoundary(
-                                                                                            key: qrImageKey,
-                                                                                            child: Container(
-                                                                                              color: Colors.white,
-                                                                                              padding: const EdgeInsets.fromLTRB(4, 8, 4, 2),
-                                                                                              child: Column(
-                                                                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  Text(
-                                                                                                    '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.red,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Center(
-                                                                                                    child: Container(
-                                                                                                      width: 220,
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.green[300],
-                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(8.0),
-                                                                                                      child: Center(
-                                                                                                        child: Text(
-                                                                                                          '$renTal_name',
+                                                                                  showDialog<void>(
+                                                                                    context: context,
+                                                                                    barrierDismissible: false, // user must tap button!
+                                                                                    builder: (BuildContext context) {
+                                                                                      return AlertDialog(
+                                                                                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                        // title: Center(
+                                                                                        //     child: Container(
+                                                                                        //         decoration: BoxDecoration(
+                                                                                        //           color: Colors.blue[300],
+                                                                                        //           borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        //         ),
+                                                                                        //         padding: const EdgeInsets.all(4.0),
+                                                                                        //         child: const Text(
+                                                                                        //           ' QR PromtPay',
+                                                                                        //           style: TextStyle(
+                                                                                        //             color: Colors.white,
+                                                                                        //             fontWeight: FontWeight.bold,
+                                                                                        //           ),
+                                                                                        //         ))),
+                                                                                        content: SingleChildScrollView(
+                                                                                          child: ListBody(
+                                                                                            children: <Widget>[
+                                                                                              //  '${Form_bussshop}',
+                                                                                              //   '${Form_address}',
+                                                                                              //   '${Form_tel}',
+                                                                                              //   '${Form_email}',
+                                                                                              //   '${Form_tax}',
+                                                                                              //   '${Form_nameshop}',
+                                                                                              Center(
+                                                                                                child: RepaintBoundary(
+                                                                                                  key: qrImageKey,
+                                                                                                  child: Container(
+                                                                                                    color: Colors.white,
+                                                                                                    padding: const EdgeInsets.fromLTRB(4, 8, 4, 2),
+                                                                                                    child: Column(
+                                                                                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                                      children: [
+                                                                                                        // Text(
+                                                                                                        //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                                                                        //   style: TextStyle(
+                                                                                                        //     color: Colors.red,
+                                                                                                        //     fontWeight: FontWeight.bold,
+                                                                                                        //   ),
+                                                                                                        // ),
+                                                                                                        Center(
+                                                                                                          child: Container(
+                                                                                                            width: 220,
+                                                                                                            decoration: BoxDecoration(
+                                                                                                              color: Colors.green[300],
+                                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                                            ),
+                                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                                            child: Center(
+                                                                                                              child: Text(
+                                                                                                                '$renTal_name',
+                                                                                                                style: TextStyle(
+                                                                                                                  color: Colors.white,
+                                                                                                                  fontSize: 13,
+                                                                                                                  fontWeight: FontWeight.bold,
+                                                                                                                ),
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        // Align(
+                                                                                                        //   alignment: Alignment
+                                                                                                        //       .centerLeft,
+                                                                                                        //   child: Text(
+                                                                                                        //     'คุณ : $Form_bussshop',
+                                                                                                        //     style:
+                                                                                                        //         TextStyle(
+                                                                                                        //       fontSize: 13,
+                                                                                                        //       fontWeight:
+                                                                                                        //           FontWeight
+                                                                                                        //               .bold,
+                                                                                                        //     ),
+                                                                                                        //   ),
+                                                                                                        // ),
+                                                                                                        Container(
+                                                                                                          height: 60,
+                                                                                                          width: 220,
+                                                                                                          child: Image.asset(
+                                                                                                            "images/thai_qr_payment.png",
+                                                                                                            height: 60,
+                                                                                                            width: 220,
+                                                                                                            fit: BoxFit.cover,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Container(
+                                                                                                          width: 200,
+                                                                                                          height: 200,
+                                                                                                          child: Center(
+                                                                                                            child: PrettyQr(
+                                                                                                              // typeNumber: 3,
+                                                                                                              image: AssetImage(
+                                                                                                                "images/Icon-chao.png",
+                                                                                                              ),
+                                                                                                              size: 200,
+                                                                                                              data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                                                                              errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                                                                              roundEdges: true,
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Text(
+                                                                                                          'พร้อมเพย์ : $selectedValue',
                                                                                                           style: TextStyle(
-                                                                                                            color: Colors.white,
                                                                                                             fontSize: 13,
                                                                                                             fontWeight: FontWeight.bold,
                                                                                                           ),
                                                                                                         ),
-                                                                                                      ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  // Align(
-                                                                                                  //   alignment: Alignment
-                                                                                                  //       .centerLeft,
-                                                                                                  //   child: Text(
-                                                                                                  //     'คุณ : $Form_bussshop',
-                                                                                                  //     style:
-                                                                                                  //         TextStyle(
-                                                                                                  //       fontSize: 13,
-                                                                                                  //       fontWeight:
-                                                                                                  //           FontWeight
-                                                                                                  //               .bold,
-                                                                                                  //     ),
-                                                                                                  //   ),
-                                                                                                  // ),
-                                                                                                  Container(
-                                                                                                    height: 60,
-                                                                                                    width: 220,
-                                                                                                    child: Image.asset(
-                                                                                                      "images/thai_qr_payment.png",
-                                                                                                      height: 60,
-                                                                                                      width: 220,
-                                                                                                      fit: BoxFit.cover,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Container(
-                                                                                                    width: 200,
-                                                                                                    height: 200,
-                                                                                                    child: Center(
-                                                                                                      child: PrettyQr(
-                                                                                                        // typeNumber: 3,
-                                                                                                        image: AssetImage(
-                                                                                                          "images/Icon-chao.png",
+                                                                                                        Text(
+                                                                                                          'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                                                                          style: TextStyle(
+                                                                                                            fontSize: 13,
+                                                                                                            fontWeight: FontWeight.bold,
+                                                                                                          ),
                                                                                                         ),
-                                                                                                        size: 200,
-                                                                                                        data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
-                                                                                                        errorCorrectLevel: QrErrorCorrectLevel.M,
-                                                                                                        roundEdges: true,
+                                                                                                        Text(
+                                                                                                          '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                                                                          style: TextStyle(
+                                                                                                            fontSize: 10,
+                                                                                                            fontWeight: FontWeight.bold,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                        Container(
+                                                                                                          color: Color(0xFFD9D9B7),
+                                                                                                          height: 60,
+                                                                                                          width: 220,
+                                                                                                          child: Image.asset(
+                                                                                                            "images/LOGOchao.png",
+                                                                                                            height: 70,
+                                                                                                            width: 220,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                              Center(
+                                                                                                child: Container(
+                                                                                                  width: 220,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.green,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () async {
+                                                                                                      // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                                                                      RenderRepaintBoundary boundary = qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                                                                                                      ui.Image image = await boundary.toImage();
+                                                                                                      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+                                                                                                      Uint8List bytes = byteData!.buffer.asUint8List();
+                                                                                                      html.Blob blob = html.Blob([bytes]);
+                                                                                                      String url = html.Url.createObjectUrlFromBlob(blob);
+
+                                                                                                      html.AnchorElement anchor = html.AnchorElement()
+                                                                                                        ..href = url
+                                                                                                        ..setAttribute('download', 'qrcode.png')
+                                                                                                        ..click();
+
+                                                                                                      html.Url.revokeObjectUrl(url);
+                                                                                                    },
+                                                                                                    child: const Text(
+                                                                                                      'Download QR Code',
+                                                                                                      style: TextStyle(
+                                                                                                        color: Colors.white,
+                                                                                                        fontWeight: FontWeight.bold,
                                                                                                       ),
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    'พร้อมเพย์ : $selectedValue',
-                                                                                                    style: TextStyle(
-                                                                                                      fontSize: 13,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
-                                                                                                    style: TextStyle(
-                                                                                                      fontSize: 13,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Text(
-                                                                                                    '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
-                                                                                                    style: TextStyle(
-                                                                                                      fontSize: 10,
-                                                                                                      fontWeight: FontWeight.bold,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                  Container(
-                                                                                                    color: Color(0xFFD9D9B7),
-                                                                                                    height: 60,
-                                                                                                    width: 220,
-                                                                                                    child: Image.asset(
-                                                                                                      "images/LOGOchao.png",
-                                                                                                      height: 70,
-                                                                                                      width: 220,
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        Center(
-                                                                                          child: Container(
-                                                                                            width: 220,
-                                                                                            decoration: const BoxDecoration(
-                                                                                              color: Colors.green,
-                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                            ),
-                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                            child: TextButton(
-                                                                                              onPressed: () async {
-                                                                                                // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
-
-                                                                                                RenderRepaintBoundary boundary = qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-                                                                                                ui.Image image = await boundary.toImage();
-                                                                                                ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-                                                                                                Uint8List bytes = byteData!.buffer.asUint8List();
-                                                                                                html.Blob blob = html.Blob([bytes]);
-                                                                                                String url = html.Url.createObjectUrlFromBlob(blob);
-
-                                                                                                html.AnchorElement anchor = html.AnchorElement()
-                                                                                                  ..href = url
-                                                                                                  ..setAttribute('download', 'qrcode.png')
-                                                                                                  ..click();
-
-                                                                                                html.Url.revokeObjectUrl(url);
-                                                                                              },
-                                                                                              child: const Text(
-                                                                                                'Download QR Code',
-                                                                                                style: TextStyle(
-                                                                                                  color: Colors.white,
-                                                                                                  fontWeight: FontWeight.bold,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          ),
-                                                                                        ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                  actions: <Widget>[
-                                                                                    Column(
-                                                                                      children: [
-                                                                                        const SizedBox(
-                                                                                          height: 5.0,
-                                                                                        ),
-                                                                                        const Divider(
-                                                                                          color: Colors.grey,
-                                                                                          height: 4.0,
-                                                                                        ),
-                                                                                        const SizedBox(
-                                                                                          height: 5.0,
-                                                                                        ),
-                                                                                        Padding(
-                                                                                          padding: const EdgeInsets.all(8.0),
-                                                                                          child: Row(
-                                                                                            mainAxisAlignment: MainAxisAlignment.end,
-                                                                                            children: [
-                                                                                              Container(
-                                                                                                width: 100,
-                                                                                                decoration: const BoxDecoration(
-                                                                                                  color: Colors.black,
-                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                ),
-                                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                                child: TextButton(
-                                                                                                  onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                  child: const Text(
-                                                                                                    'ปิด',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.white,
-                                                                                                      fontWeight: FontWeight.bold,
                                                                                                     ),
                                                                                                   ),
                                                                                                 ),
@@ -10034,45 +11397,72 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                                             ],
                                                                                           ),
                                                                                         ),
-                                                                                      ],
-                                                                                    ),
-                                                                                  ],
-                                                                                );
-                                                                              },
-                                                                            );
-                                                                          },
-                                                                  ),
-                                                                  if (paymentName1
-                                                                              .toString()
-                                                                              .trim() !=
-                                                                          'Online Payment' &&
-                                                                      paymentName2
-                                                                              .toString()
-                                                                              .trim() !=
-                                                                          'Online Payment')
-                                                                    Positioned(
-                                                                        top: 0,
-                                                                        left: 0,
-                                                                        child:
-                                                                            Container(
-                                                                          width:
-                                                                              800,
-                                                                          height:
-                                                                              50,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Colors.grey.withOpacity(0.5),
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                                          ),
-                                                                        )),
-                                                                ],
-                                                              ),
+                                                                                        actions: <Widget>[
+                                                                                          Column(
+                                                                                            children: [
+                                                                                              const SizedBox(
+                                                                                                height: 5.0,
+                                                                                              ),
+                                                                                              const Divider(
+                                                                                                color: Colors.grey,
+                                                                                                height: 4.0,
+                                                                                              ),
+                                                                                              const SizedBox(
+                                                                                                height: 5.0,
+                                                                                              ),
+                                                                                              Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: Row(
+                                                                                                  mainAxisAlignment: MainAxisAlignment.end,
+                                                                                                  children: [
+                                                                                                    Container(
+                                                                                                      width: 100,
+                                                                                                      decoration: const BoxDecoration(
+                                                                                                        color: Colors.black,
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: TextButton(
+                                                                                                        onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                        child: const Text(
+                                                                                                          'ปิด',
+                                                                                                          style: TextStyle(
+                                                                                                            color: Colors.white,
+                                                                                                            fontWeight: FontWeight.bold,
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  ],
+                                                                                                ),
+                                                                                              ),
+                                                                                            ],
+                                                                                          ),
+                                                                                        ],
+                                                                                      );
+                                                                                    },
+                                                                                  );
+                                                                                },
+                                                                        ),
+                                                                        if (paymentName1.toString().trim() !=
+                                                                                'Online Payment' &&
+                                                                            paymentName2.toString().trim() !=
+                                                                                'Online Payment')
+                                                                          Positioned(
+                                                                              top: 0,
+                                                                              left: 0,
+                                                                              child: Container(
+                                                                                width: 800,
+                                                                                height: 50,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.grey.withOpacity(0.5),
+                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                                                ),
+                                                                              )),
+                                                                      ],
+                                                                    )
+                                                                  : SizedBox(),
                                                               Row(
                                                                 children: [
                                                                   Expanded(

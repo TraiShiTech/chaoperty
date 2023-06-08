@@ -216,8 +216,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
   }
 
   Future<Null> read_GC_areak() async {
-    if (areakModels.isNotEmpty) {
-      areakModels.clear();
+    if (areaModels.isNotEmpty) {
+      areaModels.clear();
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
@@ -231,14 +231,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
       print(result);
       if (result != null) {
         for (var map in result) {
-          AreakModel areakModel = AreakModel.fromJson(map);
+          AreaModel areakModel = AreaModel.fromJson(map);
 
           setState(() {
             if (int.parse(areakModel.aserQout!) == 0) {
               if (zone == areakModel.zser) {
-                areakModels.add(areakModel);
+                areaModels.add(areakModel);
               } else if (zone == '0') {
-                areakModels.add(areakModel);
+                areaModels.add(areakModel);
               }
             }
           });
@@ -1649,206 +1649,196 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                           })),
                                 ),
                               ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                      onTap: () {}, child: const Text('')),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: StreamBuilder(
-                                      stream: Stream.periodic(
-                                          const Duration(seconds: 0)),
-                                      builder: (context, snapshot) {
-                                        return Container(
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                              (Responsive.isDesktop(context))
+                                  ? Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: InkWell(
+                                            onTap: () {},
+                                            child: const Text('')),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              (Responsive.isDesktop(context))
+                                  ? Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: StreamBuilder(
+                                            stream: Stream.periodic(
+                                                const Duration(seconds: 0)),
+                                            builder: (context, snapshot) {
+                                              return Container(
                                                 child: Row(
                                                   children: [
-                                                    const AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
-                                                      'พื้นที่ ',
-                                                      style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        // fontWeight: FontWeight.bold,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-
-                                                    InkWell(
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              AppbackgroundColor
-                                                                  .TiTile_Colors,
-                                                          borderRadius: const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                          border: Border.all(
-                                                              color:
-                                                                  Colors.black,
-                                                              width: 1),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          maxLines: 3,
-                                                          _selecteSer.length ==
-                                                                  0
-                                                              ? 'เลือก'
-                                                              : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                                          style: const TextStyle(
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Row(
+                                                        children: [
+                                                          const AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 15,
+                                                            'พื้นที่ ',
+                                                            style: TextStyle(
                                                               color: PeopleChaoScreen_Color
                                                                   .Colors_Text1_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
-                                                      onTap: () async {
-                                                        read_GC_areaSelect();
-                                                        showDialog<String>(
-                                                          barrierDismissible:
-                                                              false,
-                                                          context: context,
-                                                          builder: (BuildContext
-                                                                  context) =>
-                                                              AlertDialog(
-                                                            shape: const RoundedRectangleBorder(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
+                                                            ),
+                                                          ),
+                                                          InkWell(
+                                                            child: Container(
+                                                              width: 100,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppbackgroundColor
+                                                                    .TiTile_Colors,
+                                                                borderRadius: const BorderRadius
+                                                                        .only(
+                                                                    topLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    topRight: Radius
                                                                         .circular(
-                                                                            20.0))),
-                                                            title: const Center(
-                                                                child: Text(
-                                                              'เลือกพื้นที่',
-                                                              style: TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text1_,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontFamily:
-                                                                      FontWeight_
-                                                                          .Fonts_T),
-                                                            )),
-                                                            content:
-                                                                SingleChildScrollView(
-                                                              child: ListBody(
-                                                                children: <
-                                                                    Widget>[
-                                                                  StreamBuilder(
-                                                                      stream: Stream.periodic(const Duration(
-                                                                          seconds:
-                                                                              0)),
-                                                                      builder:
-                                                                          (context,
-                                                                              snapshot) {
-                                                                        return CheckboxGroup(
-                                                                            checked:
-                                                                                _selecteSerbool,
-                                                                            activeColor: Colors
-                                                                                .red,
-                                                                            checkColor: Colors
-                                                                                .white,
-                                                                            labels: <
-                                                                                String>[
-                                                                              for (var i = 0; i < areaModels.length; i++)
-                                                                                '${areaModels[i].lncode}',
-                                                                            ],
-                                                                            labelStyle:
-                                                                                const TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                              // fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T,
-                                                                            ),
-                                                                            onChange: (isChecked,
-                                                                                label,
-                                                                                index) {
-                                                                              if (isChecked == false) {
-                                                                                _selecteSer.remove(areaModels[index].ser);
-                                                                                _selecteZnSer.remove(areaModels[index].zser);
-
-                                                                                double areax = double.parse(areaModels[index].area!);
-                                                                                double rentx = double.parse(areaModels[index].rent!);
-                                                                                _area_sum = _area_sum - areax;
-                                                                                _area_rent_sum = _area_rent_sum - rentx;
-
-                                                                                if (isChecked == true) {
-                                                                                  setState(() {
-                                                                                    _area_sum = _area_sum + areax;
-                                                                                    _area_rent_sum = _area_rent_sum + rentx;
-                                                                                    _selecteSer.add(areaModels[index].ser);
-                                                                                    _selecteZnSer.add(areaModels[index].zser);
-                                                                                  });
-                                                                                }
-                                                                              } else {
-                                                                                double areax = double.parse(areaModels[index].area!);
-                                                                                double rentx = double.parse(areaModels[index].rent!);
-                                                                                if (isChecked == true) {
-                                                                                  setState(() {
-                                                                                    _area_sum = _area_sum + areax;
-                                                                                    _area_rent_sum = _area_rent_sum + rentx;
-                                                                                    _selecteSer.add(areaModels[index].ser);
-                                                                                    _selecteZnSer.add(areaModels[index].zser);
-                                                                                  });
-                                                                                }
-                                                                              }
-                                                                              print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                                                                            },
-                                                                            onSelected:
-                                                                                (List<String> selected) {
-                                                                              setState(() {
-                                                                                _selecteSerbool = selected;
-                                                                              });
-                                                                              print('SerGetBankModels_ : ${_selecteSerbool}');
-                                                                            });
-                                                                      })
-                                                                ],
+                                                                            10),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            10),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            10)),
+                                                                border: Border.all(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    width: 1),
+                                                              ),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 15,
+                                                                maxLines: 3,
+                                                                _selecteSer.length ==
+                                                                        0
+                                                                    ? 'เลือก'
+                                                                    : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                                style: const TextStyle(
+                                                                    color: PeopleChaoScreen_Color
+                                                                        .Colors_Text1_,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T),
                                                               ),
                                                             ),
-                                                            actions: <Widget>[
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .end,
-                                                                  children: [
+                                                            onTap: () async {
+                                                              // read_GC_areaSelect();
+                                                              read_GC_areak();
+                                                              showDialog<
+                                                                  String>(
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
+                                                                    context,
+                                                                builder: (BuildContext
+                                                                        context) =>
+                                                                    AlertDialog(
+                                                                  shape: const RoundedRectangleBorder(
+                                                                      borderRadius:
+                                                                          BorderRadius.all(
+                                                                              Radius.circular(20.0))),
+                                                                  title:
+                                                                      const Center(
+                                                                          child:
+                                                                              Text(
+                                                                    'เลือกพื้นที่',
+                                                                    style: TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text1_,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T),
+                                                                  )),
+                                                                  content:
+                                                                      SingleChildScrollView(
+                                                                    child:
+                                                                        ListBody(
+                                                                      children: <
+                                                                          Widget>[
+                                                                        StreamBuilder(
+                                                                            stream:
+                                                                                Stream.periodic(const Duration(seconds: 0)),
+                                                                            builder: (context, snapshot) {
+                                                                              return CheckboxGroup(
+                                                                                  checked: _selecteSerbool,
+                                                                                  activeColor: Colors.red,
+                                                                                  checkColor: Colors.white,
+                                                                                  labels: <String>[
+                                                                                    for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
+                                                                                  ],
+                                                                                  labelStyle: const TextStyle(
+                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T,
+                                                                                  ),
+                                                                                  onChange: (isChecked, label, index) {
+                                                                                    if (isChecked == false) {
+                                                                                      _selecteSer.remove(areaModels[index].ser);
+                                                                                      _selecteZnSer.remove(areaModels[index].zser);
+
+                                                                                      double areax = double.parse(areaModels[index].area!);
+                                                                                      double rentx = double.parse(areaModels[index].rent!);
+                                                                                      _area_sum = _area_sum - areax;
+                                                                                      _area_rent_sum = _area_rent_sum - rentx;
+
+                                                                                      if (isChecked == true) {
+                                                                                        setState(() {
+                                                                                          _area_sum = _area_sum + areax;
+                                                                                          _area_rent_sum = _area_rent_sum + rentx;
+                                                                                          _selecteSer.add(areaModels[index].ser);
+                                                                                          _selecteZnSer.add(areaModels[index].zser);
+                                                                                        });
+                                                                                      }
+                                                                                    } else {
+                                                                                      double areax = double.parse(areaModels[index].area!);
+                                                                                      double rentx = double.parse(areaModels[index].rent!);
+                                                                                      if (isChecked == true) {
+                                                                                        setState(() {
+                                                                                          _area_sum = _area_sum + areax;
+                                                                                          _area_rent_sum = _area_rent_sum + rentx;
+                                                                                          _selecteSer.add(areaModels[index].ser);
+                                                                                          _selecteZnSer.add(areaModels[index].zser);
+                                                                                        });
+                                                                                      }
+                                                                                    }
+                                                                                    print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                                                  },
+                                                                                  onSelected: (List<String> selected) {
+                                                                                    setState(() {
+                                                                                      _selecteSerbool = selected;
+                                                                                    });
+                                                                                    print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                                                  });
+                                                                            })
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  actions: <
+                                                                      Widget>[
                                                                     Padding(
                                                                       padding:
                                                                           const EdgeInsets.all(
@@ -1856,14 +1846,53 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                       child:
                                                                           Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment.center,
+                                                                            MainAxisAlignment.end,
                                                                         children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Container(
+                                                                                  width: 100,
+                                                                                  decoration: const BoxDecoration(
+                                                                                    color: Colors.green,
+                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: TextButton(
+                                                                                    onPressed: () {
+                                                                                      setState(() {
+                                                                                        No_Area_ = '';
+                                                                                        Status5Form_NoArea_.clear();
+                                                                                      });
+                                                                                      // setState(
+                                                                                      //     () {
+                                                                                      //   read_GC_areaSelectSer();
+                                                                                      // });
+                                                                                      Navigator.pop(context, 'OK');
+                                                                                    },
+                                                                                    child: const Text(
+                                                                                      'บันทึก',
+                                                                                      style: TextStyle(
+                                                                                        color: Colors.white,
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
                                                                           Container(
                                                                             width:
                                                                                 100,
                                                                             decoration:
                                                                                 const BoxDecoration(
-                                                                              color: Colors.green,
+                                                                              color: Colors.black,
                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                             ),
                                                                             padding:
@@ -1871,18 +1900,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             child:
                                                                                 TextButton(
                                                                               onPressed: () {
+                                                                                Navigator.pop(context);
                                                                                 setState(() {
-                                                                                  No_Area_ = '';
-                                                                                  Status5Form_NoArea_.clear();
+                                                                                  _selecteSer.clear();
+                                                                                  _selecteSerbool.clear();
                                                                                 });
-                                                                                // setState(
-                                                                                //     () {
-                                                                                //   read_GC_areaSelectSer();
-                                                                                // });
-                                                                                Navigator.pop(context, 'OK');
                                                                               },
                                                                               child: const Text(
-                                                                                'บันทึก',
+                                                                                'ยกเลิก',
                                                                                 style: TextStyle(
                                                                                   color: Colors.white,
                                                                                   fontWeight: FontWeight.bold,
@@ -1894,747 +1919,378 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         ],
                                                                       ),
                                                                     ),
-                                                                    Container(
+                                                                  ],
+                                                                ),
+                                                              );
+                                                            },
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                            }),
+                                      ),
+                                    )
+                                  : SizedBox(),
+                              Expanded(
+                                flex: (Responsive.isDesktop(context)) ? 1 : 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: (Responsive.isDesktop(context))
+                                      ? InkWell(
+                                          onTap: () {
+                                            // setState(() {
+                                            //   select_coutumerindex = 1;
+                                            // });
+                                            select_coutumerAll();
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                              border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Text(
+                                              'ค้นจากทะเบียน',
+                                              maxLines: 5,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                StreamBuilder(
+                                                    stream: Stream.periodic(
+                                                        const Duration(
+                                                            seconds: 0)),
+                                                    builder:
+                                                        (context, snapshot) {
+                                                      return Container(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .end,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  const AutoSizeText(
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        15,
+                                                                    'พื้นที่ ',
+                                                                    style:
+                                                                        TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                                  ),
+                                                                  InkWell(
+                                                                    child:
+                                                                        Container(
                                                                       width:
                                                                           100,
                                                                       decoration:
-                                                                          const BoxDecoration(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        borderRadius: BorderRadius.only(
+                                                                          BoxDecoration(
+                                                                        color: AppbackgroundColor
+                                                                            .TiTile_Colors,
+                                                                        borderRadius: const BorderRadius.only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            width: 1),
                                                                       ),
                                                                       padding:
                                                                           const EdgeInsets.all(
                                                                               8.0),
                                                                       child:
-                                                                          TextButton(
-                                                                        onPressed:
-                                                                            () {
-                                                                          Navigator.pop(
-                                                                              context);
-                                                                          setState(
-                                                                              () {
-                                                                            _selecteSer.clear();
-                                                                            _selecteSerbool.clear();
-                                                                          });
-                                                                        },
-                                                                        child:
-                                                                            const Text(
-                                                                          'ยกเลิก',
-                                                                          style:
-                                                                              TextStyle(
+                                                                          AutoSizeText(
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            15,
+                                                                        maxLines:
+                                                                            3,
+                                                                        _selecteSer.length ==
+                                                                                0
+                                                                            ? 'เลือก'
+                                                                            : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                                        style: const TextStyle(
                                                                             color:
-                                                                                Colors.white,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                          ),
-                                                                        ),
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T),
                                                                       ),
                                                                     ),
-                                                                  ],
-                                                                ),
+                                                                    onTap:
+                                                                        () async {
+                                                                      // read_GC_areaSelect();
+                                                                      read_GC_areak();
+                                                                      showDialog<
+                                                                          String>(
+                                                                        barrierDismissible:
+                                                                            false,
+                                                                        context:
+                                                                            context,
+                                                                        builder:
+                                                                            (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                          shape:
+                                                                              const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                          title: const Center(
+                                                                              child: Text(
+                                                                            'เลือกพื้นที่',
+                                                                            style: TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: FontWeight_.Fonts_T),
+                                                                          )),
+                                                                          content:
+                                                                              SingleChildScrollView(
+                                                                            child:
+                                                                                ListBody(
+                                                                              children: <Widget>[
+                                                                                StreamBuilder(
+                                                                                    stream: Stream.periodic(const Duration(seconds: 0)),
+                                                                                    builder: (context, snapshot) {
+                                                                                      return CheckboxGroup(
+                                                                                          checked: _selecteSerbool,
+                                                                                          activeColor: Colors.red,
+                                                                                          checkColor: Colors.white,
+                                                                                          labels: <String>[
+                                                                                            for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
+                                                                                          ],
+                                                                                          labelStyle: const TextStyle(
+                                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                            // fontWeight: FontWeight.bold,
+                                                                                            fontFamily: Font_.Fonts_T,
+                                                                                          ),
+                                                                                          onChange: (isChecked, label, index) {
+                                                                                            if (isChecked == false) {
+                                                                                              _selecteSer.remove(areaModels[index].ser);
+                                                                                              _selecteZnSer.remove(areaModels[index].zser);
+
+                                                                                              double areax = double.parse(areaModels[index].area!);
+                                                                                              double rentx = double.parse(areaModels[index].rent!);
+                                                                                              _area_sum = _area_sum - areax;
+                                                                                              _area_rent_sum = _area_rent_sum - rentx;
+
+                                                                                              if (isChecked == true) {
+                                                                                                setState(() {
+                                                                                                  _area_sum = _area_sum + areax;
+                                                                                                  _area_rent_sum = _area_rent_sum + rentx;
+                                                                                                  _selecteSer.add(areaModels[index].ser);
+                                                                                                  _selecteZnSer.add(areaModels[index].zser);
+                                                                                                });
+                                                                                              }
+                                                                                            } else {
+                                                                                              double areax = double.parse(areaModels[index].area!);
+                                                                                              double rentx = double.parse(areaModels[index].rent!);
+                                                                                              if (isChecked == true) {
+                                                                                                setState(() {
+                                                                                                  _area_sum = _area_sum + areax;
+                                                                                                  _area_rent_sum = _area_rent_sum + rentx;
+                                                                                                  _selecteSer.add(areaModels[index].ser);
+                                                                                                  _selecteZnSer.add(areaModels[index].zser);
+                                                                                                });
+                                                                                              }
+                                                                                            }
+                                                                                            print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                                                          },
+                                                                                          onSelected: (List<String> selected) {
+                                                                                            setState(() {
+                                                                                              _selecteSerbool = selected;
+                                                                                            });
+                                                                                            print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                                                          });
+                                                                                    })
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          actions: <
+                                                                              Widget>[
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                                children: [
+                                                                                  Padding(
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        Container(
+                                                                                          width: 100,
+                                                                                          decoration: const BoxDecoration(
+                                                                                            color: Colors.green,
+                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          ),
+                                                                                          padding: const EdgeInsets.all(8.0),
+                                                                                          child: TextButton(
+                                                                                            onPressed: () {
+                                                                                              setState(() {
+                                                                                                No_Area_ = '';
+                                                                                                Status5Form_NoArea_.clear();
+                                                                                              });
+                                                                                              // setState(
+                                                                                              //     () {
+                                                                                              //   read_GC_areaSelectSer();
+                                                                                              // });
+                                                                                              Navigator.pop(context, 'OK');
+                                                                                            },
+                                                                                            child: const Text(
+                                                                                              'บันทึก',
+                                                                                              style: TextStyle(
+                                                                                                color: Colors.white,
+                                                                                                fontWeight: FontWeight.bold,
+                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  ),
+                                                                                  Container(
+                                                                                    width: 100,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: TextButton(
+                                                                                      onPressed: () {
+                                                                                        Navigator.pop(context);
+                                                                                        setState(() {
+                                                                                          _selecteSer.clear();
+                                                                                          _selecteSerbool.clear();
+                                                                                        });
+                                                                                      },
+                                                                                      child: const Text(
+                                                                                        'ยกเลิก',
+                                                                                        style: TextStyle(
+                                                                                          color: Colors.white,
+                                                                                          fontWeight: FontWeight.bold,
+                                                                                          fontFamily: FontWeight_.Fonts_T,
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        );
-                                                      },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    }),
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    // setState(() {
+                                                    //   select_coutumerindex = 1;
+                                                    // });
+                                                    select_coutumerAll();
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      border: Border.all(
+                                                          color: Colors.black,
+                                                          width: 1),
                                                     ),
-
-                                                    // InkWell(
-                                                    //   // onTap: () {
-                                                    //   //   read_GC_areaSelect();
-                                                    //   // },
-                                                    //   child: Container(
-                                                    //     width: 100,
-                                                    //     decoration:
-                                                    //         BoxDecoration(
-                                                    //       color:
-                                                    //           AppbackgroundColor
-                                                    //               .TiTile_Colors,
-                                                    //       borderRadius: const BorderRadius
-                                                    //               .only(
-                                                    //           topLeft: Radius
-                                                    //               .circular(10),
-                                                    //           topRight: Radius
-                                                    //               .circular(10),
-                                                    //           bottomLeft: Radius
-                                                    //               .circular(10),
-                                                    //           bottomRight:
-                                                    //               Radius
-                                                    //                   .circular(
-                                                    //                       10)),
-                                                    //       border: Border.all(
-                                                    //           color:
-                                                    //               Colors.black,
-                                                    //           width: 1),
-                                                    //     ),
-                                                    //     padding:
-                                                    //         const EdgeInsets
-                                                    //             .all(8.0),
-                                                    //     child: PopupMenuButton(
-                                                    //       child: Center(
-                                                    //         child: Text(
-                                                    //           // minFontSize: 10,
-                                                    //           // maxFontSize: 15,
-                                                    //           maxLines: 2,
-                                                    //           (No_Area_ != '')
-                                                    //               ? '$No_Area_'
-                                                    //               : _selecteSer
-                                                    //                           .length ==
-                                                    //                       0
-                                                    //                   ? 'เลือก'
-                                                    //                   : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                                    //           style:
-                                                    //               const TextStyle(
-                                                    //             color: PeopleChaoScreen_Color
-                                                    //                 .Colors_Text1_,
-                                                    //             // fontWeight: FontWeight.bold,
-                                                    //             fontFamily:
-                                                    //                 FontWeight_
-                                                    //                     .Fonts_T,
-                                                    //             fontWeight:
-                                                    //                 FontWeight
-                                                    //                     .bold,
-                                                    //           ),
-                                                    //         ),
-                                                    //       ),
-                                                    //       itemBuilder:
-                                                    //           (BuildContext
-                                                    //                   context) =>
-                                                    //               [
-                                                    //         PopupMenuItem(
-                                                    //           child: InkWell(
-                                                    //               onTap:
-                                                    //                   () async {
-                                                    //                 setState(
-                                                    //                     () {
-                                                    //                   read_GC_areak();
-                                                    //                   No_Area_ =
-                                                    //                       'ไม่ระบุพื้นที่';
-                                                    //                   _selecteSer =
-                                                    //                       [];
-                                                    //                   _selecteSerbool =
-                                                    //                       [];
-
-                                                    //                   _area_sum =
-                                                    //                       _area_sum +
-                                                    //                           1;
-                                                    //                   _area_rent_sum =
-                                                    //                       _area_rent_sum +
-                                                    //                           1;
-                                                    //                   Status5Form_NoArea_ren
-                                                    //                       .clear();
-
-                                                    //                   // _formKey
-                                                    //                   //     .currentState!
-                                                    //                   //     .reset();
-                                                    //                   // Status4Form_nameshop
-                                                    //                   //     .text = '';
-                                                    //                   // Status4Form_typeshop
-                                                    //                   //     .text = '';
-                                                    //                   // Status4Form_bussshop
-                                                    //                   //     .text = '';
-                                                    //                   // Status4Form_bussscontact
-                                                    //                   //     .text = '';
-                                                    //                   _TransModels
-                                                    //                       .clear();
-                                                    //                   _TransModels =
-                                                    //                       [];
-                                                    //                   Form_payment1
-                                                    //                       .clear();
-                                                    //                   Form_payment2
-                                                    //                       .clear();
-                                                    //                 });
-                                                    //                 read_GC_areaSelect();
-                                                    //                 Navigator.pop(
-                                                    //                     context,
-                                                    //                     '');
-                                                    //               },
-                                                    //               child: Container(
-                                                    //                   padding: const EdgeInsets.all(10),
-                                                    //                   width: MediaQuery.of(context).size.width,
-                                                    //                   child: Row(
-                                                    //                     children: const [
-                                                    //                       Expanded(
-                                                    //                         child:
-                                                    //                             Text(
-                                                    //                           'ไม่ระบุพื้นที่',
-                                                    //                           style: TextStyle(
-                                                    //                               color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                    //                               // fontWeight:
-                                                    //                               //     FontWeight
-                                                    //                               //         .bold,
-                                                    //                               fontFamily: Font_.Fonts_T),
-                                                    //                         ),
-                                                    //                       )
-                                                    //                     ],
-                                                    //                   ))),
-                                                    //         ),
-                                                    //         PopupMenuItem(
-                                                    //           child: InkWell(
-                                                    //             child:
-                                                    //                 Container(
-                                                    //                     padding:
-                                                    //                         const EdgeInsets.all(
-                                                    //                             10),
-                                                    //                     width: MediaQuery.of(context)
-                                                    //                         .size
-                                                    //                         .width,
-                                                    //                     child:
-                                                    //                         Row(
-                                                    //                       children: const [
-                                                    //                         Expanded(
-                                                    //                           child: Text(
-                                                    //                             'เลือกพื้นที่',
-                                                    //                             style: TextStyle(
-                                                    //                                 color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                    //                                 // fontWeight:
-                                                    //                                 //     FontWeight
-                                                    //                                 //         .bold,
-                                                    //                                 fontFamily: Font_.Fonts_T),
-                                                    //                           ),
-                                                    //                         )
-                                                    //                       ],
-                                                    //                     )),
-                                                    //             onTap:
-                                                    //                 () async {
-                                                    //               setState(() {
-                                                    //                 No_Area_ =
-                                                    //                     '';
-                                                    //                 _TransModels
-                                                    //                     .clear();
-                                                    //                 _TransModels =
-                                                    //                     [];
-                                                    //                 Form_payment1
-                                                    //                     .clear();
-                                                    //                 Form_payment2
-                                                    //                     .clear();
-                                                    //                 read_GC_areak();
-                                                    //               });
-                                                    //               // _formKey
-                                                    //               //     .currentState!
-                                                    //               //     .reset();
-                                                    //               // Status4Form_nameshop
-                                                    //               //     .text = '';
-                                                    //               // Status4Form_typeshop
-                                                    //               //     .text = '';
-                                                    //               // Status4Form_bussshop
-                                                    //               //     .text = '';
-                                                    //               // Status4Form_bussscontact
-                                                    //               //     .text = '';
-                                                    //               Navigator.pop(
-                                                    //                   context,
-                                                    //                   '');
-                                                    //               showDialog<
-                                                    //                   String>(
-                                                    //                 barrierDismissible:
-                                                    //                     false,
-                                                    //                 context:
-                                                    //                     context,
-                                                    //                 builder: (BuildContext
-                                                    //                         context) =>
-                                                    //                     AlertDialog(
-                                                    //                   shape: const RoundedRectangleBorder(
-                                                    //                       borderRadius:
-                                                    //                           BorderRadius.all(Radius.circular(20.0))),
-                                                    //                   title: const Center(
-                                                    //                       child: Text(
-                                                    //                     'เลือกพื้นที่',
-                                                    //                     style:
-                                                    //                         TextStyle(
-                                                    //                       color:
-                                                    //                           PeopleChaoScreen_Color.Colors_Text1_,
-                                                    //                       // fontWeight: FontWeight.bold,
-                                                    //                       fontFamily:
-                                                    //                           FontWeight_.Fonts_T,
-                                                    //                       fontWeight:
-                                                    //                           FontWeight.bold,
-                                                    //                     ),
-                                                    //                   )),
-                                                    //                   content:
-                                                    //                       SingleChildScrollView(
-                                                    //                     child: ListBody(
-                                                    //                         children: <Widget>[
-                                                    //                           Container(
-                                                    //                               // width: 400,
-                                                    //                               child: StreamBuilder(
-                                                    //                                   stream: Stream.periodic(const Duration(seconds: 0)),
-                                                    //                                   builder: (context, snapshot) {
-                                                    //                                     return CheckboxGroup(
-                                                    //                                         checked: _selecteSerbool,
-                                                    //                                         activeColor: Colors.red,
-                                                    //                                         checkColor: Colors.white,
-                                                    //                                         labels: <String>[
-                                                    //                                           for (var i = 0; i < areakModels.length; i++) '${areakModels[i].type}',
-                                                    //                                         ],
-                                                    //                                         onChange: (isChecked, label, index) {
-                                                    //                                           setState(() {
-                                                    //                                             No_Area_ = '';
-                                                    //                                             Status5Form_NoArea_.clear();
-                                                    //                                           });
-                                                    //                                           if (isChecked == false) {
-                                                    //                                             _selecteSer.remove(areakModels[index].ser);
-
-                                                    //                                             double areax = double.parse(areakModels[index].area!);
-                                                    //                                             double rentx = double.parse(areakModels[index].rent!);
-                                                    //                                             _area_sum = _area_sum - areax;
-                                                    //                                             _area_rent_sum = _area_rent_sum - rentx;
-
-                                                    //                                             if (isChecked == true) {
-                                                    //                                               setState(() {
-                                                    //                                                 _area_sum = _area_sum + areax;
-                                                    //                                                 _area_rent_sum = _area_rent_sum + rentx;
-                                                    //                                                 _selecteSer.add(areakModels[index].ser);
-                                                    //                                               });
-                                                    //                                             }
-                                                    //                                           } else {
-                                                    //                                             double areax = double.parse(areakModels[index].area!);
-                                                    //                                             double rentx = double.parse(areakModels[index].rent!);
-                                                    //                                             if (isChecked == true) {
-                                                    //                                               setState(() {
-                                                    //                                                 _area_sum = _area_sum + areax;
-                                                    //                                                 _area_rent_sum = _area_rent_sum + rentx;
-                                                    //                                                 _selecteSer.add(areakModels[index].ser);
-                                                    //                                               });
-                                                    //                                             }
-                                                    //                                           }
-                                                    //                                           print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                                                    //                                         },
-                                                    //                                         onSelected: (List<String> selected) {
-                                                    //                                           setState(() {
-                                                    //                                             _selecteSerbool = selected;
-                                                    //                                           });
-                                                    //                                           print('SerGetBankModels_ : ${_selecteSerbool}');
-                                                    //                                         });
-                                                    //                                   }))
-                                                    //                         ]),
-                                                    //                   ),
-                                                    //                   actions: <
-                                                    //                       Widget>[
-                                                    //                     Padding(
-                                                    //                       padding:
-                                                    //                           const EdgeInsets.all(8.0),
-                                                    //                       child:
-                                                    //                           Row(
-                                                    //                         mainAxisAlignment:
-                                                    //                             MainAxisAlignment.end,
-                                                    //                         children: [
-                                                    //                           Padding(
-                                                    //                             padding: const EdgeInsets.all(8.0),
-                                                    //                             child: Row(
-                                                    //                               mainAxisAlignment: MainAxisAlignment.center,
-                                                    //                               children: [
-                                                    //                                 Container(
-                                                    //                                   width: 100,
-                                                    //                                   decoration: const BoxDecoration(
-                                                    //                                     color: Colors.green,
-                                                    //                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                    //                                   ),
-                                                    //                                   padding: const EdgeInsets.all(8.0),
-                                                    //                                   child: TextButton(
-                                                    //                                     onPressed: () {
-                                                    //                                       setState(() {
-                                                    //                                         No_Area_ = '';
-                                                    //                                         Status5Form_NoArea_.clear();
-                                                    //                                       });
-                                                    //                                       // setState(
-                                                    //                                       //     () {
-                                                    //                                       //   read_GC_areaSelectSer();
-                                                    //                                       // });
-                                                    //                                       Navigator.pop(context, 'OK');
-                                                    //                                     },
-                                                    //                                     child: const Text(
-                                                    //                                       'บันทึก',
-                                                    //                                       style: TextStyle(
-                                                    //                                         color: Colors.white,
-                                                    //                                         fontWeight: FontWeight.bold,
-                                                    //                                         fontFamily: FontWeight_.Fonts_T,
-                                                    //                                       ),
-                                                    //                                     ),
-                                                    //                                   ),
-                                                    //                                 ),
-                                                    //                               ],
-                                                    //                             ),
-                                                    //                           ),
-                                                    //                           Container(
-                                                    //                             width: 100,
-                                                    //                             decoration: const BoxDecoration(
-                                                    //                               color: Colors.black,
-                                                    //                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                    //                             ),
-                                                    //                             padding: const EdgeInsets.all(8.0),
-                                                    //                             child: TextButton(
-                                                    //                               onPressed: () {
-                                                    //                                 Navigator.pop(context);
-                                                    //                                 // setState(
-                                                    //                                 //     () {
-                                                    //                                 //   cQuotModels
-                                                    //                                 //       .clear();
-                                                    //                                 //   _selecteSer
-                                                    //                                 //       .clear();
-                                                    //                                 //   _selecteSerbool
-                                                    //                                 //       .clear();
-                                                    //                                 // });
-                                                    //                               },
-                                                    //                               child: const Text(
-                                                    //                                 'ยกเลิก',
-                                                    //                                 style: TextStyle(
-                                                    //                                   color: Colors.white,
-                                                    //                                   fontWeight: FontWeight.bold,
-                                                    //                                   fontFamily: FontWeight_.Fonts_T,
-                                                    //                                 ),
-                                                    //                               ),
-                                                    //                             ),
-                                                    //                           ),
-                                                    //                         ],
-                                                    //                       ),
-                                                    //                     ),
-                                                    //                   ],
-                                                    //                 ),
-                                                    //               );
-                                                    //             },
-                                                    //           ),
-                                                    //         ),
-                                                    //       ],
-                                                    //     ),
-                                                    //   ),
-                                                    // ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      }),
-                                ),
-                              ),
-                              // Expanded(
-                              //   flex: 1,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.all(8.0),
-                              //     child: StreamBuilder(
-                              //         stream: Stream.periodic(
-                              //             const Duration(seconds: 0)),
-                              //         builder: (context, snapshot) {
-                              //           return Container(
-                              //             child: Row(
-                              //               children: [
-                              //                 Padding(
-                              //                   padding:
-                              //                       const EdgeInsets.all(8.0),
-                              //                   child: Row(
-                              //                     children: [
-                              //                       const AutoSizeText(
-                              //                         minFontSize: 10,
-                              //                         maxFontSize: 15,
-                              //                         'รหัสพื้นที่ ',
-                              //                         style: TextStyle(
-                              //                           color:
-                              //                               PeopleChaoScreen_Color
-                              //                                   .Colors_Text1_,
-                              //                           // fontWeight: FontWeight.bold,
-                              //                           fontFamily:
-                              //                               FontWeight_.Fonts_T,
-                              //                           fontWeight:
-                              //                               FontWeight.bold,
-                              //                         ),
-                              //                       ),
-
-                              //                       InkWell(
-                              //                         child: Container(
-                              //                           width: 100,
-                              //                           decoration:
-                              //                               BoxDecoration(
-                              //                             color:
-                              //                                 AppbackgroundColor
-                              //                                     .TiTile_Colors,
-                              //                             borderRadius: const BorderRadius
-                              //                                     .only(
-                              //                                 topLeft: Radius
-                              //                                     .circular(10),
-                              //                                 topRight: Radius
-                              //                                     .circular(10),
-                              //                                 bottomLeft: Radius
-                              //                                     .circular(10),
-                              //                                 bottomRight:
-                              //                                     Radius
-                              //                                         .circular(
-                              //                                             10)),
-                              //                             border: Border.all(
-                              //                                 color:
-                              //                                     Colors.black,
-                              //                                 width: 1),
-                              //                           ),
-                              //                           padding:
-                              //                               const EdgeInsets
-                              //                                   .all(8.0),
-                              //                           child: AutoSizeText(
-                              //                             minFontSize: 10,
-                              //                             maxFontSize: 15,
-                              //                             maxLines: 1,
-                              //                             _selecteSer.length ==
-                              //                                     0
-                              //                                 ? 'เลือก'
-                              //                                 : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                              //                             style:
-                              //                                 const TextStyle(
-                              //                               color: PeopleChaoScreen_Color
-                              //                                   .Colors_Text1_,
-                              //                               // fontWeight: FontWeight.bold,
-                              //                               fontFamily:
-                              //                                   FontWeight_
-                              //                                       .Fonts_T,
-                              //                               fontWeight:
-                              //                                   FontWeight.bold,
-                              //                             ),
-                              //                           ),
-                              //                         ),
-                              //                         onTap: () {
-                              //                           showDialog<String>(
-                              //                             barrierDismissible:
-                              //                                 false,
-                              //                             context: context,
-                              //                             builder: (BuildContext
-                              //                                     context) =>
-                              //                                 AlertDialog(
-                              //                               shape: const RoundedRectangleBorder(
-                              //                                   borderRadius: BorderRadius
-                              //                                       .all(Radius
-                              //                                           .circular(
-                              //                                               20.0))),
-                              //                               title: const Center(
-                              //                                   child: Text(
-                              //                                 'เลือกพื้นที่',
-                              //                                 style: TextStyle(
-                              //                                   color: PeopleChaoScreen_Color
-                              //                                       .Colors_Text1_,
-                              //                                   // fontWeight: FontWeight.bold,
-                              //                                   fontFamily:
-                              //                                       FontWeight_
-                              //                                           .Fonts_T,
-                              //                                   fontWeight:
-                              //                                       FontWeight
-                              //                                           .bold,
-                              //                                 ),
-                              //                               )),
-                              //                               content:
-                              //                                   SingleChildScrollView(
-                              //                                 child: ListBody(
-                              //                                     children: <
-                              //                                         Widget>[
-                              //                                       Container(
-                              //                                           // width: 400,
-                              //                                           child: StreamBuilder(
-                              //                                               stream: Stream.periodic(const Duration(seconds: 0)),
-                              //                                               builder: (context, snapshot) {
-                              //                                                 return CheckboxGroup(
-                              //                                                     checked: _selecteSerbool,
-                              //                                                     activeColor: Colors.red,
-                              //                                                     checkColor: Colors.white,
-                              //                                                     labels: <String>[
-                              //                                                       for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
-                              //                                                     ],
-                              //                                                     onChange: (isChecked, label, index) {
-                              //                                                       if (isChecked == false) {
-                              //                                                         _selecteSer.remove(areaModels[index].ser);
-
-                              //                                                         double areax = double.parse(areaModels[index].area!);
-                              //                                                         double rentx = double.parse(areaModels[index].rent!);
-                              //                                                         _area_sum = _area_sum - areax;
-                              //                                                         _area_rent_sum = _area_rent_sum - rentx;
-
-                              //                                                         if (isChecked == true) {
-                              //                                                           setState(() {
-                              //                                                             _area_sum = _area_sum + areax;
-                              //                                                             _area_rent_sum = _area_rent_sum + rentx;
-                              //                                                             _selecteSer.add(areaModels[index].ser);
-                              //                                                           });
-                              //                                                         }
-                              //                                                       } else {
-                              //                                                         double areax = double.parse(areaModels[index].area!);
-                              //                                                         double rentx = double.parse(areaModels[index].rent!);
-                              //                                                         if (isChecked == true) {
-                              //                                                           setState(() {
-                              //                                                             _area_sum = _area_sum + areax;
-                              //                                                             _area_rent_sum = _area_rent_sum + rentx;
-                              //                                                             _selecteSer.add(areaModels[index].ser);
-                              //                                                           });
-                              //                                                         }
-                              //                                                       }
-                              //                                                       print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                              //                                                     },
-                              //                                                     onSelected: (List<String> selected) {
-                              //                                                       setState(() {
-                              //                                                         _selecteSerbool = selected;
-                              //                                                       });
-                              //                                                       print('SerGetBankModels_ : ${_selecteSerbool}');
-                              //                                                     });
-                              //                                               }))
-                              //                                     ]),
-                              //                               ),
-                              //                               actions: <Widget>[
-                              //                                 Padding(
-                              //                                   padding:
-                              //                                       const EdgeInsets
-                              //                                               .all(
-                              //                                           8.0),
-                              //                                   child: Row(
-                              //                                     mainAxisAlignment:
-                              //                                         MainAxisAlignment
-                              //                                             .end,
-                              //                                     children: [
-                              //                                       Padding(
-                              //                                         padding:
-                              //                                             const EdgeInsets.all(
-                              //                                                 8.0),
-                              //                                         child:
-                              //                                             Row(
-                              //                                           mainAxisAlignment:
-                              //                                               MainAxisAlignment.center,
-                              //                                           children: [
-                              //                                             Container(
-                              //                                               width:
-                              //                                                   100,
-                              //                                               decoration:
-                              //                                                   const BoxDecoration(
-                              //                                                 color: Colors.green,
-                              //                                                 borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                              //                                               ),
-                              //                                               padding:
-                              //                                                   const EdgeInsets.all(8.0),
-                              //                                               child:
-                              //                                                   TextButton(
-                              //                                                 onPressed: () {
-                              //                                                   // setState(
-                              //                                                   //     () {
-                              //                                                   //   read_GC_areaSelectSer();
-                              //                                                   // });
-                              //                                                   Navigator.pop(context, 'OK');
-                              //                                                 },
-                              //                                                 child: const Text(
-                              //                                                   'บันทึก',
-                              //                                                   style: TextStyle(
-                              //                                                     color: Colors.white,
-                              //                                                     fontWeight: FontWeight.bold,
-                              //                                                     fontFamily: FontWeight_.Fonts_T,
-                              //                                                   ),
-                              //                                                 ),
-                              //                                               ),
-                              //                                             ),
-                              //                                           ],
-                              //                                         ),
-                              //                                       ),
-                              //                                       Container(
-                              //                                         width:
-                              //                                             100,
-                              //                                         decoration:
-                              //                                             const BoxDecoration(
-                              //                                           color: Colors
-                              //                                               .black,
-                              //                                           borderRadius: BorderRadius.only(
-                              //                                               topLeft:
-                              //                                                   Radius.circular(10),
-                              //                                               topRight: Radius.circular(10),
-                              //                                               bottomLeft: Radius.circular(10),
-                              //                                               bottomRight: Radius.circular(10)),
-                              //                                         ),
-                              //                                         padding:
-                              //                                             const EdgeInsets.all(
-                              //                                                 8.0),
-                              //                                         child:
-                              //                                             TextButton(
-                              //                                           onPressed:
-                              //                                               () {
-                              //                                             Navigator.pop(
-                              //                                                 context);
-                              //                                             // setState(
-                              //                                             //     () {
-                              //                                             //   cQuotModels
-                              //                                             //       .clear();
-                              //                                             //   _selecteSer
-                              //                                             //       .clear();
-                              //                                             //   _selecteSerbool
-                              //                                             //       .clear();
-                              //                                             // });
-                              //                                           },
-                              //                                           child:
-                              //                                               const Text(
-                              //                                             'ยกเลิก',
-                              //                                             style:
-                              //                                                 TextStyle(
-                              //                                               color:
-                              //                                                   Colors.white,
-                              //                                               fontWeight:
-                              //                                                   FontWeight.bold,
-                              //                                               fontFamily:
-                              //                                                   FontWeight_.Fonts_T,
-                              //                                             ),
-                              //                                           ),
-                              //                                         ),
-                              //                                       ),
-                              //                                     ],
-                              //                                   ),
-                              //                                 ),
-                              //                               ],
-                              //                             ),
-                              //                           );
-                              //                         },
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                 ),
-                              //               ],
-                              //             ),
-                              //           );
-                              //         }),
-                              //   ),
-                              // ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      // setState(() {
-                                      //   select_coutumerindex = 1;
-                                      // });
-                                      select_coutumerAll();
-                                    },
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.grey,
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: const Text(
+                                                      'ค้นจากทะเบียน',
+                                                      maxLines: 5,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        //fontSize: 10.0
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            )
+                                          ],
                                         ),
-                                        border: Border.all(
-                                            color: Colors.black, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
-                                        'ค้นจากทะเบียน',
-                                        maxLines: 5,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                          //fontSize: 10.0
-                                        ),
-                                      ),
-                                    ),
-                                  ),
                                 ),
                               ),
                             ],
@@ -3872,7 +3528,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                           ],
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height * 0.6,
+                          height: (Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.height * 0.6
+                              : MediaQuery.of(context).size.height * 0.76,
                           decoration: const BoxDecoration(
                             color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: BorderRadius.only(
@@ -4148,7 +3806,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                           ],
                         ),
                         Container(
-                          height: 290,
+                          height: (Responsive.isDesktop(context))
+                              ? 290
+                              : MediaQuery.of(context).size.height * 0.6,
                           decoration: const BoxDecoration(
                             color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: BorderRadius.only(
@@ -4789,311 +4449,166 @@ class _LockpayScreenState extends State<LockpayScreen> {
                       ])),
                 ),
               ),
-              Expanded(
-                flex: 4,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    width: 800,
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 3,
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.green[200],
-                                  borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(0),
-                                    bottomRight: Radius.circular(0),
-                                  ),
-                                  // border: Border.all(
-                                  //     color: Colors.grey, width: 1),
-                                ),
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    _selecteSerbool.length == 0
-                                        ? 'ใบเสร็จรับเงิน'
-                                        : 'ใบเสร็จรับเงิน ', //${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Center(
-                                  child: Text(
-                                    'ยอดชำระรวม',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 4,
-                              child: Container(
-                                height: 50,
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Text(
-                                    // '${nFormat.format(sum_amt - sum_disamt)}',
-                                    '${nFormat.format(sum_amt - sum_disamt)}',
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Center(
-                                  child: Row(
-                                    children: [
-                                      const Text(
-                                        'การชำระ',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            // fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                      IconButton(
-                                        onPressed: () {
-                                          setState(() {
-                                            if (pamentpage == 1) {
-                                              pamentpage = 0;
-                                              Form_payment2.clear();
-                                              // Form_payment1.text = (sum_amt -
-                                              //         double.parse(
-                                              //             sum_disamtx.text))
-                                              //     .toStringAsFixed(2)
-                                              //     .toString();
-                                            } else {
-                                              pamentpage = 1;
-                                            }
-                                          });
-                                          if (pamentpage == 0) {
-                                            setState(() {
-                                              Form_payment2.clear();
-                                              Form_payment2.text = '';
-                                              paymentName2 = null;
-                                            });
-                                          } else {}
-                                        },
-                                        icon: pamentpage == 0
-                                            ? Icon(
-                                                Icons.add_circle_outline,
-                                                color: Colors.green,
-                                              )
-                                            : const Icon(
-                                                Icons.remove_circle_outline,
-                                                color: Colors.red,
-                                              ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: Row(
+              (Responsive.isDesktop(context))
+                  ? Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 800,
+                          child: Column(
+                            children: [
+                              Row(
                                 children: [
                                   Expanded(
+                                    flex: 3,
                                     child: Container(
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[200],
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(0),
+                                          bottomRight: Radius.circular(0),
                                         ),
-                                        // border: Border.all(color: Colors.grey, width: 1),
+                                        // border: Border.all(
+                                        //     color: Colors.grey, width: 1),
                                       ),
                                       padding: const EdgeInsets.all(8.0),
-                                      child: DropdownButtonFormField2(
-                                        decoration: InputDecoration(
-                                          //Add isDense true and zero Padding.
-                                          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.zero,
-                                          border: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                          ),
-                                          //Add more decoration as you want here
-                                          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                        ),
-                                        isExpanded: true,
-                                        // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
-                                        hint: Row(
-                                          children: [
-                                            Text(
-                                              '$paymentName1',
-                                              style: TextStyle(
-                                                  fontSize: 14,
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
-                                            ),
-                                          ],
-                                        ),
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.black45,
-                                        ),
-                                        iconSize: 25,
-                                        buttonHeight: 42,
-                                        buttonPadding: const EdgeInsets.only(
-                                            left: 10, right: 10),
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        items: _PayMentModels.map((item) =>
-                                            DropdownMenuItem<String>(
-                                              onTap: () {
-                                                setState(() {
-                                                  selectedValue = item.bno!;
-                                                });
-                                                print(
-                                                    '**/*/*   --- ${selectedValue}');
-                                              },
-                                              value:
-                                                  '${item.ser}:${item.ptname}',
-                                              child: Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      '${item.ptname!}',
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Text(
-                                                      '${item.bno!}',
-                                                      textAlign: TextAlign.end,
-                                                      style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          // fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
-                                                  ),
-                                                ],
+                                      child: Center(
+                                        child: Text(
+                                          _selecteSerbool.length == 0
+                                              ? 'ใบเสร็จรับเงิน'
+                                              : 'ใบเสร็จรับเงิน ', //${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
                                               ),
-                                            )).toList(),
-                                        onChanged: (value) async {
-                                          print(value);
-                                          // Do something when changing the item if you want.
-
-                                          var zones = value!.indexOf(':');
-                                          var rtnameSer =
-                                              value.substring(0, zones);
-                                          var rtnameName =
-                                              value.substring(zones + 1);
-                                          // print(
-                                          //     'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                          setState(() {
-                                            paymentSer1 = rtnameSer.toString();
-                                            // paymentName1 =
-                                            //     rtnameName.toString();
-
-                                            if (rtnameSer.toString() == '0') {
-                                              paymentName1 = null;
-                                            } else {
-                                              paymentName1 =
-                                                  rtnameName.toString();
-                                            }
-
-                                            if (rtnameSer.toString() == '0') {
-                                              Form_payment1.clear();
-                                            } else {
-                                              Form_payment1.text =
-                                                  (sum_amt - sum_disamt)
-                                                      .toStringAsFixed(2)
-                                                      .toString();
-                                            }
-                                          });
-                                          print(
-                                              'mmmmm ${rtnameSer.toString()} $rtnameName');
-                                          // print(
-                                          //     'pppppp $paymentSer1 $paymentName1');
-                                          // print('Form_payment1.text');
-                                          // print(Form_payment1.text);
-                                          // print(Form_payment2.text);
-                                          // print('Form_payment1.text');
-                                        },
-                                        // onSaved: (value) {
-
-                                        // },
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  pamentpage == 0
-                                      ? SizedBox()
-                                      : Expanded(
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: Text(
+                                          'ยอดชำระรวม',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          // '${nFormat.format(sum_amt - sum_disamt)}',
+                                          '${nFormat.format(sum_amt - sum_disamt)}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            const Text(
+                                              'การชำระ',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (pamentpage == 1) {
+                                                    pamentpage = 0;
+                                                    Form_payment2.clear();
+                                                    // Form_payment1.text = (sum_amt -
+                                                    //         double.parse(
+                                                    //             sum_disamtx.text))
+                                                    //     .toStringAsFixed(2)
+                                                    //     .toString();
+                                                  } else {
+                                                    pamentpage = 1;
+                                                  }
+                                                });
+                                                if (pamentpage == 0) {
+                                                  setState(() {
+                                                    Form_payment2.clear();
+                                                    Form_payment2.text = '';
+                                                    paymentName2 = null;
+                                                  });
+                                                } else {}
+                                              },
+                                              icon: pamentpage == 0
+                                                  ? Icon(
+                                                      Icons.add_circle_outline,
+                                                      color: Colors.green,
+                                                    )
+                                                  : const Icon(
+                                                      Icons
+                                                          .remove_circle_outline,
+                                                      color: Colors.red,
+                                                    ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
                                           child: Container(
                                             decoration: const BoxDecoration(
                                               color: AppbackgroundColor
@@ -5123,9 +4638,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               isExpanded: true,
                                               // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
                                               hint: Row(
-                                                children: const [
+                                                children: [
                                                   Text(
-                                                    'เลือก',
+                                                    '$paymentName1',
                                                     style: TextStyle(
                                                         fontSize: 14,
                                                         color:
@@ -5153,6 +4668,14 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               items: _PayMentModels.map(
                                                   (item) =>
                                                       DropdownMenuItem<String>(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            selectedValue =
+                                                                item.bno!;
+                                                          });
+                                                          print(
+                                                              '**/*/*   --- ${selectedValue}');
+                                                        },
                                                         value:
                                                             '${item.ser}:${item.ptname}',
                                                         child: Row(
@@ -5187,6 +4710,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                         ),
                                                       )).toList(),
                                               onChanged: (value) async {
+                                                print(value);
                                                 // Do something when changing the item if you want.
 
                                                 var zones = value!.indexOf(':');
@@ -5194,35 +4718,40 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                     value.substring(0, zones);
                                                 var rtnameName =
                                                     value.substring(zones + 1);
-                                                print(
-                                                    'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                // print(
+                                                //     'mmmmm ${rtnameSer.toString()} $rtnameName');
                                                 setState(() {
-                                                  paymentSer2 =
+                                                  paymentSer1 =
                                                       rtnameSer.toString();
-                                                  // paymentName2 =
+                                                  // paymentName1 =
                                                   //     rtnameName.toString();
 
                                                   if (rtnameSer.toString() ==
                                                       '0') {
-                                                    paymentName2 = null;
+                                                    paymentName1 = null;
                                                   } else {
-                                                    paymentName2 =
+                                                    paymentName1 =
                                                         rtnameName.toString();
                                                   }
 
                                                   if (rtnameSer.toString() ==
                                                       '0') {
-                                                    Form_payment2.clear();
+                                                    Form_payment1.clear();
                                                   } else {
-                                                    Form_payment2.text =
+                                                    Form_payment1.text =
                                                         (sum_amt - sum_disamt)
                                                             .toStringAsFixed(2)
                                                             .toString();
                                                   }
                                                 });
-
                                                 print(
-                                                    'pppppp $paymentSer2 $paymentName2');
+                                                    'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                // print(
+                                                //     'pppppp $paymentSer1 $paymentName1');
+                                                // print('Form_payment1.text');
+                                                // print(Form_payment1.text);
+                                                // print(Form_payment2.text);
+                                                // print('Form_payment1.text');
                                               },
                                               // onSaved: (value) {
 
@@ -5230,161 +4759,198 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             ),
                                           ),
                                         ),
+                                        pamentpage == 0
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(6),
+                                                    ),
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child:
+                                                      DropdownButtonFormField2(
+                                                    decoration: InputDecoration(
+                                                      //Add isDense true and zero Padding.
+                                                      //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      //Add more decoration as you want here
+                                                      //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                    ),
+                                                    isExpanded: true,
+                                                    // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                    hint: Row(
+                                                      children: const [
+                                                        Text(
+                                                          'เลือก',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    icon: const Icon(
+                                                      Icons.arrow_drop_down,
+                                                      color: Colors.black45,
+                                                    ),
+                                                    iconSize: 25,
+                                                    buttonHeight: 42,
+                                                    buttonPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    ),
+                                                    items: _PayMentModels.map(
+                                                        (item) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value:
+                                                                  '${item.ser}:${item.ptname}',
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      '${item.ptname!}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      '${item.bno!}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )).toList(),
+                                                    onChanged: (value) async {
+                                                      // Do something when changing the item if you want.
+
+                                                      var zones =
+                                                          value!.indexOf(':');
+                                                      var rtnameSer = value
+                                                          .substring(0, zones);
+                                                      var rtnameName = value
+                                                          .substring(zones + 1);
+                                                      print(
+                                                          'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                      setState(() {
+                                                        paymentSer2 = rtnameSer
+                                                            .toString();
+                                                        // paymentName2 =
+                                                        //     rtnameName.toString();
+
+                                                        if (rtnameSer
+                                                                .toString() ==
+                                                            '0') {
+                                                          paymentName2 = null;
+                                                        } else {
+                                                          paymentName2 =
+                                                              rtnameName
+                                                                  .toString();
+                                                        }
+
+                                                        if (rtnameSer
+                                                                .toString() ==
+                                                            '0') {
+                                                          Form_payment2.clear();
+                                                        } else {
+                                                          Form_payment2
+                                                              .text = (sum_amt -
+                                                                  sum_disamt)
+                                                              .toStringAsFixed(
+                                                                  2)
+                                                              .toString();
+                                                        }
+                                                      });
+
+                                                      print(
+                                                          'pppppp $paymentSer2 $paymentName2');
+                                                    },
+                                                    // onSaved: (value) {
+
+                                                    // },
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                color: AppbackgroundColor.Sub_Abg_Colors,
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Center(
-                                  child: Text(
-                                    'จำนวนเงิน',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text1_,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: FontWeight_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              flex: 4,
-                              child: Row(
+                              Row(
                                 children: [
                                   Expanded(
+                                    flex: 1,
                                     child: Container(
                                       height: 50,
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6),
-                                        ),
-                                        // border: Border.all(color: Colors.grey, width: 1),
-                                      ),
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
                                       padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(
-                                        keyboardType: TextInputType.number,
-                                        controller: Form_payment1,
-                                        onChanged: (value) async {
-                                          if (pamentpage == 1) {
-                                            setState(() {
-                                              Form_payment2.clear();
-                                              Form_payment2.text = '';
-                                            });
-                                          }
-                                          final currentCursorPosition =
-                                              Form_payment1.selection.start;
-
-                                          // Update the text of the controller
-                                          if (paymentSer2 != null) {
-                                            setState(() {
-                                              Form_payment2.text =
-                                                  '${(sum_amt - sum_disamt) - double.parse(value)}';
-                                            });
-                                          }
-
-                                          // Set the new cursor position
-                                          final newCursorPosition =
-                                              currentCursorPosition +
-                                                  (value.length -
-                                                      Form_payment1
-                                                          .text.length);
-                                          Form_payment1.selection =
-                                              TextSelection.fromPosition(
-                                                  TextPosition(
-                                                      offset:
-                                                          newCursorPosition));
-                                        },
-                                        onFieldSubmitted: (value) {
-                                          var money1 = double.parse(value);
-                                          var money2 = (sum_amt - sum_disamt);
-                                          var money3 = (money2 - money1)
-                                              .toStringAsFixed(2)
-                                              .toString();
-                                          setState(() {
-                                            if (paymentSer2 == null) {
-                                              Form_payment1.text = (money1)
-                                                  .toStringAsFixed(2)
-                                                  .toString();
-                                            } else {
-                                              Form_payment1.text = (money1)
-                                                  .toStringAsFixed(2)
-                                                  .toString();
-                                              Form_payment2.text = money3;
-                                            }
-                                          });
-                                        },
-                                        // maxLength: 13,
-                                        cursorColor: Colors.green,
-                                        decoration: InputDecoration(
-                                            fillColor:
-                                                Colors.white.withOpacity(0.3),
-                                            filled: true,
-                                            // prefixIcon:
-                                            //     const Icon(Icons.person, color: Colors.black),
-                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                            focusedBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
+                                      child: const Center(
+                                        child: Text(
+                                          'จำนวนเงิน',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
                                               ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            enabledBorder:
-                                                const OutlineInputBorder(
-                                              borderRadius: BorderRadius.only(
-                                                topRight: Radius.circular(15),
-                                                topLeft: Radius.circular(15),
-                                                bottomRight:
-                                                    Radius.circular(15),
-                                                bottomLeft: Radius.circular(15),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                            // labelText: 'ระบุอายุสัญญา',
-                                            labelStyle: const TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T)),
-                                        inputFormatters: <TextInputFormatter>[
-                                          // for below version 2 use this
-                                          FilteringTextInputFormatter.allow(
-                                              RegExp(r'[0-9 .]')),
-                                          // for version 2 and greater youcan also use this
-                                          // FilteringTextInputFormatter.digitsOnly
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                  pamentpage == 0
-                                      ? SizedBox()
-                                      : Expanded(
+                                  Expanded(
+                                    flex: 4,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
                                           child: Container(
                                             height: 50,
                                             decoration: const BoxDecoration(
@@ -5402,16 +4968,22 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             child: TextFormField(
                                               keyboardType:
                                                   TextInputType.number,
-                                              controller: Form_payment2,
+                                              controller: Form_payment1,
                                               onChanged: (value) async {
+                                                if (pamentpage == 1) {
+                                                  setState(() {
+                                                    Form_payment2.clear();
+                                                    Form_payment2.text = '';
+                                                  });
+                                                }
                                                 final currentCursorPosition =
-                                                    Form_payment2
+                                                    Form_payment1
                                                         .selection.start;
 
                                                 // Update the text of the controller
-                                                if (paymentSer1 != null) {
+                                                if (paymentSer2 != null) {
                                                   setState(() {
-                                                    Form_payment1.text =
+                                                    Form_payment2.text =
                                                         '${(sum_amt - sum_disamt) - double.parse(value)}';
                                                   });
                                                 }
@@ -5420,9 +4992,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                 final newCursorPosition =
                                                     currentCursorPosition +
                                                         (value.length -
-                                                            Form_payment2
+                                                            Form_payment1
                                                                 .text.length);
-                                                Form_payment2.selection =
+                                                Form_payment1.selection =
                                                     TextSelection.fromPosition(
                                                         TextPosition(
                                                             offset:
@@ -5437,17 +5009,17 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                     .toStringAsFixed(2)
                                                     .toString();
                                                 setState(() {
-                                                  if (paymentSer1 == null) {
-                                                    Form_payment2.text =
+                                                  if (paymentSer2 == null) {
+                                                    Form_payment1.text =
                                                         (money1)
                                                             .toStringAsFixed(2)
                                                             .toString();
                                                   } else {
-                                                    Form_payment2.text =
+                                                    Form_payment1.text =
                                                         (money1)
                                                             .toStringAsFixed(2)
                                                             .toString();
-                                                    Form_payment1.text = money3;
+                                                    Form_payment2.text = money3;
                                                   }
                                                 });
                                               },
@@ -5515,309 +5087,2624 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             ),
                                           ),
                                         ),
+                                        pamentpage == 0
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(6),
+                                                    ),
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: Form_payment2,
+                                                    onChanged: (value) async {
+                                                      final currentCursorPosition =
+                                                          Form_payment2
+                                                              .selection.start;
+
+                                                      // Update the text of the controller
+                                                      if (paymentSer1 != null) {
+                                                        setState(() {
+                                                          Form_payment1.text =
+                                                              '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                        });
+                                                      }
+
+                                                      // Set the new cursor position
+                                                      final newCursorPosition =
+                                                          currentCursorPosition +
+                                                              (value.length -
+                                                                  Form_payment2
+                                                                      .text
+                                                                      .length);
+                                                      Form_payment2.selection =
+                                                          TextSelection
+                                                              .fromPosition(
+                                                                  TextPosition(
+                                                                      offset:
+                                                                          newCursorPosition));
+                                                    },
+                                                    onFieldSubmitted: (value) {
+                                                      var money1 =
+                                                          double.parse(value);
+                                                      var money2 = (sum_amt -
+                                                          sum_disamt);
+                                                      var money3 = (money2 -
+                                                              money1)
+                                                          .toStringAsFixed(2)
+                                                          .toString();
+                                                      setState(() {
+                                                        if (paymentSer1 ==
+                                                            null) {
+                                                          Form_payment2.text =
+                                                              (money1)
+                                                                  .toStringAsFixed(
+                                                                      2)
+                                                                  .toString();
+                                                        } else {
+                                                          Form_payment2.text =
+                                                              (money1)
+                                                                  .toStringAsFixed(
+                                                                      2)
+                                                                  .toString();
+                                                          Form_payment1.text =
+                                                              money3;
+                                                        }
+                                                      });
+                                                    },
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon:
+                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        // labelText: 'ระบุอายุสัญญา',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
+                                                    inputFormatters: <
+                                                        TextInputFormatter>[
+                                                      // for below version 2 use this
+                                                      FilteringTextInputFormatter
+                                                          .allow(RegExp(
+                                                              r'[0-9 .]')),
+                                                      // for version 2 and greater youcan also use this
+                                                      // FilteringTextInputFormatter.digitsOnly
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Row(
+                              Row(
                                 children: [
                                   Expanded(
-                                    child: Container(
-                                      height: 50,
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
-                                        child: Text(
-                                          'วันที่ทำรายการ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
+                                    flex: 4,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height: 50,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                              child: Text(
+                                                'วันที่ทำรายการ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    ),
                                               ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        Expanded(
+                                          child: Container(
+                                              height: 50,
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  // color: Colors.green,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    DateTime? newDate =
+                                                        await showDatePicker(
+                                                      locale: const Locale(
+                                                          'th', 'TH'),
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: -50)),
+                                                      lastDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: 365)),
+                                                      builder:
+                                                          (context, child) {
+                                                        return Theme(
+                                                          data:
+                                                              Theme.of(context)
+                                                                  .copyWith(
+                                                            colorScheme:
+                                                                const ColorScheme
+                                                                    .light(
+                                                              primary: AppBarColors
+                                                                  .ABar_Colors, // header background color
+                                                              onPrimary: Colors
+                                                                  .white, // header text color
+                                                              onSurface: Colors
+                                                                  .black, // body text color
+                                                            ),
+                                                            textButtonTheme:
+                                                                TextButtonThemeData(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                primary: Colors
+                                                                    .black, // button text color
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: child!,
+                                                        );
+                                                      },
+                                                    );
+
+                                                    if (newDate == null) {
+                                                      return;
+                                                    } else {
+                                                      String start = DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(newDate);
+                                                      String end = DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .format(newDate);
+
+                                                      print('$start $end');
+                                                      setState(() {
+                                                        Value_newDateY1 = start;
+                                                        Value_newDateD1 = end;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: AutoSizeText(
+                                                      Value_newDateD1 == ''
+                                                          ? 'เลือกวันที่'
+                                                          : '$Value_newDateD1',
+                                                      minFontSize: 16,
+                                                      maxFontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Expanded(
-                                    child: Container(
+                                    flex: 4,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height: 50,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                              child: Text(
+                                                'วันที่ชำระ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: 50,
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  // color: Colors.green,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    DateTime? newDate =
+                                                        await showDatePicker(
+                                                      locale: const Locale(
+                                                          'th', 'TH'),
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: -50)),
+                                                      lastDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: 365)),
+                                                      builder:
+                                                          (context, child) {
+                                                        return Theme(
+                                                          data:
+                                                              Theme.of(context)
+                                                                  .copyWith(
+                                                            colorScheme:
+                                                                const ColorScheme
+                                                                    .light(
+                                                              primary: AppBarColors
+                                                                  .ABar_Colors, // header background color
+                                                              onPrimary: Colors
+                                                                  .white, // header text color
+                                                              onSurface: Colors
+                                                                  .black, // body text color
+                                                            ),
+                                                            textButtonTheme:
+                                                                TextButtonThemeData(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                primary: Colors
+                                                                    .black, // button text color
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: child!,
+                                                        );
+                                                      },
+                                                    );
+
+                                                    if (newDate == null) {
+                                                      return;
+                                                    } else {
+                                                      String start = DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(newDate);
+                                                      String end = DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .format(newDate);
+
+                                                      print('$start $end');
+                                                      setState(() {
+                                                        Value_newDateY = start;
+                                                        Value_newDateD = end;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: AutoSizeText(
+                                                      Value_newDateD == ''
+                                                          ? 'เลือกวันที่'
+                                                          : '$Value_newDateD',
+                                                      minFontSize: 16,
+                                                      maxFontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              //  print(
+                              //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
+                              //             print(
+                              //                 'pppppp $paymentSer1 $paymentName1');
+                              if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                  paymentName2.toString().trim() == 'เงินโอน' ||
+                                  paymentName1.toString().trim() ==
+                                      'Online Payment' ||
+                                  paymentName2.toString().trim() ==
+                                      'Online Payment')
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
                                         height: 50,
                                         color:
                                             AppbackgroundColor.Sub_Abg_Colors,
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            // color: Colors.green,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                            ),
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
+                                        child: const Center(
+                                          child: Text(
+                                            ' เวลา/หลักฐาน',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
                                           ),
-                                          child: InkWell(
-                                            onTap: () async {
-                                              DateTime? newDate =
-                                                  await showDatePicker(
-                                                locale:
-                                                    const Locale('th', 'TH'),
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime.now().add(
-                                                    const Duration(days: -50)),
-                                                lastDate: DateTime.now().add(
-                                                    const Duration(days: 365)),
-                                                builder: (context, child) {
-                                                  return Theme(
-                                                    data: Theme.of(context)
-                                                        .copyWith(
-                                                      colorScheme:
-                                                          const ColorScheme
-                                                              .light(
-                                                        primary: AppBarColors
-                                                            .ABar_Colors, // header background color
-                                                        onPrimary: Colors
-                                                            .white, // header text color
-                                                        onSurface: Colors
-                                                            .black, // body text color
-                                                      ),
-                                                      textButtonTheme:
-                                                          TextButtonThemeData(
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                          primary: Colors
-                                                              .black, // button text color
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: child!,
-                                                  );
-                                                },
-                                              );
-
-                                              if (newDate == null) {
-                                                return;
-                                              } else {
-                                                String start =
-                                                    DateFormat('yyyy-MM-dd')
-                                                        .format(newDate);
-                                                String end =
-                                                    DateFormat('dd-MM-yyyy')
-                                                        .format(newDate);
-
-                                                print('$start $end');
-                                                setState(() {
-                                                  Value_newDateY1 = start;
-                                                  Value_newDateD1 = end;
-                                                });
-                                              }
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: AutoSizeText(
-                                                Value_newDateD1 == ''
-                                                    ? 'เลือกวันที่'
-                                                    : '$Value_newDateD1',
-                                                minFontSize: 16,
-                                                maxFontSize: 20,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                            ),
-                                          ),
-                                        )),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Expanded(
-                              flex: 4,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      height: 50,
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
-                                        child: Text(
-                                          'วันที่ชำระ',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
-                                              ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Expanded(
-                                    child: Container(
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        width: 100,
                                         height: 50,
                                         color:
                                             AppbackgroundColor.Sub_Abg_Colors,
                                         padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            // color: Colors.green,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              topLeft: Radius.circular(15),
-                                              topRight: Radius.circular(15),
-                                              bottomLeft: Radius.circular(15),
-                                              bottomRight: Radius.circular(15),
-                                            ),
-                                            border: Border.all(
-                                                color: Colors.grey, width: 1),
-                                          ),
-                                          child: InkWell(
-                                            onTap: () async {
-                                              DateTime? newDate =
-                                                  await showDatePicker(
-                                                locale:
-                                                    const Locale('th', 'TH'),
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime.now().add(
-                                                    const Duration(days: -50)),
-                                                lastDate: DateTime.now().add(
-                                                    const Duration(days: 365)),
-                                                builder: (context, child) {
-                                                  return Theme(
-                                                    data: Theme.of(context)
-                                                        .copyWith(
-                                                      colorScheme:
-                                                          const ColorScheme
-                                                              .light(
-                                                        primary: AppBarColors
-                                                            .ABar_Colors, // header background color
-                                                        onPrimary: Colors
-                                                            .white, // header text color
-                                                        onSurface: Colors
-                                                            .black, // body text color
-                                                      ),
-                                                      textButtonTheme:
-                                                          TextButtonThemeData(
-                                                        style: TextButton
-                                                            .styleFrom(
-                                                          primary: Colors
-                                                              .black, // button text color
-                                                        ),
-                                                      ),
+                                        child: Center(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(0),
                                                     ),
-                                                    child: child!,
-                                                  );
-                                                },
-                                              );
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  // padding: const EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: Form_time,
+                                                    onChanged: (value) {
+                                                      setState(() {});
+                                                    },
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon:
+                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        hintText: '00:00:00',
+                                                        // helperText: '00:00:00',
+                                                        // labelText: '00:00:00',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
 
-                                              if (newDate == null) {
-                                                return;
-                                              } else {
-                                                String start =
-                                                    DateFormat('yyyy-MM-dd')
-                                                        .format(newDate);
-                                                String end =
-                                                    DateFormat('dd-MM-yyyy')
-                                                        .format(newDate);
-
-                                                print('$start $end');
-                                                setState(() {
-                                                  Value_newDateY = start;
-                                                  Value_newDateD = end;
-                                                });
-                                              }
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.all(5.0),
-                                              child: AutoSizeText(
-                                                Value_newDateD == ''
-                                                    ? 'เลือกวันที่'
-                                                    : '$Value_newDateD',
-                                                minFontSize: 16,
-                                                maxFontSize: 20,
-                                                textAlign: TextAlign.center,
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    // fontWeight: FontWeight.bold,
-                                                    fontFamily: Font_.Fonts_T),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
+                                                    inputFormatters: [
+                                                      MaskedInputFormatter(
+                                                          '##:##:##'),
+                                                      // FilteringTextInputFormatter.allow(
+                                                      //     RegExp(r'[0-9]')),
+                                                    ],
+                                                    // inputFormatters: <TextInputFormatter>[
+                                                    //   // for below version 2 use this
+                                                    //   FilteringTextInputFormatter.allow(
+                                                    //       RegExp(r'[0-9 .]')),
+                                                    //   // for version 2 and greater youcan also use this
+                                                    //   // FilteringTextInputFormatter.digitsOnly
+                                                    // ],
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    (base64_Slip == null)
+                                                        ? uploadFile_Slip()
+                                                        : showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10.0))),
+                                                                title:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  'มีไฟล์ slip อยู่แล้ว',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                )),
+                                                                content:
+                                                                    SingleChildScrollView(
+                                                                  child:
+                                                                      ListBody(
+                                                                    children: const <
+                                                                        Widget>[
+                                                                      Text(
+                                                                        'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: <
+                                                                    Widget>[
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.red[600],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ลบไฟล์',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () async {
+                                                                            setState(() {
+                                                                              base64_Slip = null;
+                                                                            });
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: Colors.black,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                  },
+                                                  child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: const Text(
+                                                      'เพิ่มไฟล์',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T
+                                                          //fontSize: 10.0
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        )),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                  paymentName2.toString().trim() == 'เงินโอน' ||
+                                  paymentName1.toString().trim() ==
+                                      'Online Payment' ||
+                                  paymentName2.toString().trim() ==
+                                      'Online Payment')
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(0),
+                                      topRight: Radius.circular(0),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0),
+                                    ),
+                                    // border: Border.all(color: Colors.grey, width: 1),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                        //  print(
-                        //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
-                        //             print(
-                        //                 'pppppp $paymentSer1 $paymentName1');
-                        if (paymentName1.toString().trim() == 'เงินโอน' ||
-                            paymentName2.toString().trim() == 'เงินโอน' ||
-                            paymentName1.toString().trim() ==
-                                'Online Payment' ||
-                            paymentName2.toString().trim() == 'Online Payment')
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Container(
-                                  height: 50,
-                                  color: AppbackgroundColor.Sub_Abg_Colors,
                                   padding: const EdgeInsets.all(8.0),
-                                  child: const Center(
-                                    child: Text(
-                                      ' เวลา/หลักฐาน',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text1_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T
-                                          //fontSize: 10.0
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Text(
+                                                  (base64_Slip != null)
+                                                      ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว '
+                                                      : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: (base64_Slip !=
+                                                              null)
+                                                          ? Colors.green[600]
+                                                          : Colors.red[600],
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.all(2.0),
+                                              //   child: Text(
+                                              //     (base64_Slip != null) ? '$base64_Slip' : '',
+                                              //     textAlign: TextAlign.start,
+                                              //     style: TextStyle(
+                                              //         color: Colors.blue[600],
+                                              //         fontWeight: FontWeight.bold,
+                                              //         fontFamily: FontWeight_.Fonts_T,
+                                              //         fontSize: 10.0),
+                                              //   ),
+                                              // ),
+                                            ],
                                           ),
-                                    ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            // String Url =
+                                            //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
+                                            // print(Url);
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title: const Center(
+                                                    child: Text(
+                                                      '',
+                                                      maxLines: 1,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontSize: 12.0),
+                                                    ),
+                                                  ),
+                                                  content: Stack(
+                                                    alignment: Alignment.center,
+                                                    children: <Widget>[
+                                                      Image.memory(
+                                                        base64Decode(base64_Slip
+                                                            .toString()),
+                                                        // height: 200,
+                                                        // fit: BoxFit.cover,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  actions: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        // Padding(
+                                                        //   padding:
+                                                        //       const EdgeInsets.all(8.0),
+                                                        //   child: Container(
+                                                        //     width: 100,
+                                                        //     decoration: const BoxDecoration(
+                                                        //       color: Colors.green,
+                                                        //       borderRadius:
+                                                        //           BorderRadius.only(
+                                                        //               topLeft: Radius
+                                                        //                   .circular(10),
+                                                        //               topRight:
+                                                        //                   Radius.circular(
+                                                        //                       10),
+                                                        //               bottomLeft:
+                                                        //                   Radius.circular(
+                                                        //                       10),
+                                                        //               bottomRight:
+                                                        //                   Radius.circular(
+                                                        //                       10)),
+                                                        //     ),
+                                                        //     padding:
+                                                        //         const EdgeInsets.all(8.0),
+                                                        //     child: TextButton(
+                                                        //       onPressed: () async {
+                                                        //         // downloadImage2();
+                                                        //         // downloadImage(Url);
+                                                        //         // Navigator.pop(
+                                                        //         //     context, 'OK');
+                                                        //       },
+                                                        //       child: const Text(
+                                                        //         'ดาวน์โหลด',
+                                                        //         style: TextStyle(
+                                                        //             color: Colors.white,
+                                                        //             fontWeight:
+                                                        //                 FontWeight.bold,
+                                                        //             fontFamily: FontWeight_
+                                                        //                 .Fonts_T),
+                                                        //       ),
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.black,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      'OK'),
+                                                              child: const Text(
+                                                                'ปิด',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                            );
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                              // border: Border.all(
+                                              //     color: Colors.grey, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Text(
+                                              'เรียกดูไฟล์',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Container(
-                                  width: 100,
-                                  height: 50,
+                              Container(
+                                height: 10,
+                                decoration: BoxDecoration(
                                   color: AppbackgroundColor.Sub_Abg_Colors,
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Center(
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(0),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  // border: Border.all(
+                                  //     color: Colors.grey, width: 1),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       flex: 1,
+                              //       child: Container(
+                              //         height: 50,
+                              //         decoration: BoxDecoration(
+                              //           color: Colors.green[200],
+                              //           borderRadius: const BorderRadius.only(
+                              //             topLeft: Radius.circular(10),
+                              //             topRight: Radius.circular(10),
+                              //             bottomLeft: Radius.circular(0),
+                              //             bottomRight: Radius.circular(0),
+                              //           ),
+                              //           // border: Border.all(
+                              //           //     color: Colors.grey, width: 1),
+                              //         ),
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: const Center(
+                              //           child: Text(
+                              //             'รูปแบบบิล',
+                              //             textAlign: TextAlign.center,
+                              //             style: TextStyle(
+                              //                 color: PeopleChaoScreen_Color
+                              //                     .Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T
+                              //                 //fontSize: 10.0
+                              //                 ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       flex: 1,
+                              //       child: Container(
+                              //         height: 50,
+                              //         color: AppbackgroundColor.Sub_Abg_Colors,
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: Container(
+                              //           decoration: BoxDecoration(
+                              //             color: AppbackgroundColor.Sub_Abg_Colors,
+                              //             borderRadius: const BorderRadius.only(
+                              //                 topLeft: Radius.circular(10),
+                              //                 topRight: Radius.circular(10),
+                              //                 bottomLeft: Radius.circular(10),
+                              //                 bottomRight: Radius.circular(10)),
+                              //             border: Border.all(
+                              //                 color: Colors.grey, width: 1),
+                              //           ),
+                              //           width: 120,
+                              //           child: DropdownButtonFormField2(
+                              //             decoration: InputDecoration(
+                              //               isDense: true,
+                              //               contentPadding: EdgeInsets.zero,
+                              //               border: OutlineInputBorder(
+                              //                 borderRadius: BorderRadius.circular(10),
+                              //               ),
+                              //             ),
+                              //             isExpanded: true,
+                              //             hint: Text(
+                              //               bills_name_.toString(),
+                              //               maxLines: 1,
+                              //               style: const TextStyle(
+                              //                   fontSize: 14,
+                              //                   color: PeopleChaoScreen_Color
+                              //                       .Colors_Text2_,
+                              //                   //fontWeight: FontWeight.bold,
+                              //                   fontFamily: Font_.Fonts_T),
+                              //             ),
+                              //             icon: const Icon(
+                              //               Icons.arrow_drop_down,
+                              //               color:
+                              //                   PeopleChaoScreen_Color.Colors_Text2_,
+                              //             ),
+                              //             style: const TextStyle(
+                              //                 color: Colors.green,
+                              //                 fontFamily: Font_.Fonts_T),
+                              //             iconSize: 30,
+                              //             buttonHeight: 40,
+                              //             // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                              //             dropdownDecoration: BoxDecoration(
+                              //               borderRadius: BorderRadius.circular(10),
+                              //             ),
+                              //             items: bill_tser == '1'
+                              //                 ? Default_.map((item) =>
+                              //                     DropdownMenuItem<String>(
+                              //                       value: item,
+                              //                       child: Text(
+                              //                         item,
+                              //                         style: const TextStyle(
+                              //                             fontSize: 14,
+                              //                             color:
+                              //                                 PeopleChaoScreen_Color
+                              //                                     .Colors_Text2_,
+                              //                             //fontWeight: FontWeight.bold,
+                              //                             fontFamily: Font_.Fonts_T),
+                              //                       ),
+                              //                     )).toList()
+                              //                 : Default2_.map((item) =>
+                              //                     DropdownMenuItem<String>(
+                              //                       value: item,
+                              //                       child: Text(
+                              //                         item,
+                              //                         style: const TextStyle(
+                              //                             fontSize: 14,
+                              //                             color:
+                              //                                 PeopleChaoScreen_Color
+                              //                                     .Colors_Text2_,
+                              //                             //fontWeight: FontWeight.bold,
+                              //                             fontFamily: Font_.Fonts_T),
+                              //                       ),
+                              //                     )).toList(),
+
+                              //             onChanged: (value) async {
+                              //               var bill_set =
+                              //                   value == 'บิลธรรมดา' ? 'P' : 'F';
+                              //               setState(() {
+                              //                 bills_name_ = bill_set;
+                              //               });
+                              //             },
+                              //             // onSaved: (value) {
+                              //             //   // selectedValue = value.toString();
+                              //             // },
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.white,
+                                      // height: 100,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.33,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'หมายเหตุ',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ],
+                                          ),
+                                          TextFormField(
+                                            // keyboardType: TextInputType.name,
+                                            controller: Form_note,
+
+                                            maxLines: 2,
+                                            // maxLength: 13,
+                                            cursorColor: Colors.green,
+                                            decoration: InputDecoration(
+                                              fillColor:
+                                                  Colors.white.withOpacity(0.3),
+                                              filled: true,
+                                              // prefixIcon:
+                                              //     const Icon(Icons.person, color: Colors.black),
+                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              // labelText: 'ระบุชื่อร้านค้า',
+                                              labelStyle: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              (paymentName1.toString().trim() ==
+                                          'Online Payment' ||
+                                      paymentName2.toString().trim() ==
+                                          'Online Payment')
+                                  ? Stack(
+                                      children: [
+                                        InkWell(
+                                          child: Container(
+                                              width: 800,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[900],
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        const Radius.circular(
+                                                            10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      height: 50,
+                                                      width: 100,
+                                                      child: Image.asset(
+                                                        'images/prompay.png',
+                                                        height: 50,
+                                                        width: 100,
+                                                        fit: BoxFit.cover,
+                                                      )),
+                                                  const Center(
+                                                      child: Text(
+                                                    'Generator QR Code PromtPay',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  )),
+                                                ],
+                                              )),
+                                          onTap:
+                                              (paymentName1.toString().trim() !=
+                                                          'Online Payment' &&
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() !=
+                                                          'Online Payment')
+                                                  ? null
+                                                  : () {
+                                                      double totalQr_ = 0.00;
+                                                      if (paymentName1
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'Online Payment' &&
+                                                          paymentName2
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                                  '${Form_payment1.text}') +
+                                                              double.parse(
+                                                                  '${Form_payment2.text}');
+                                                        });
+                                                      } else if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                              '${Form_payment1.text}');
+                                                        });
+                                                      } else if (paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                              '${Form_payment2.text}');
+                                                        });
+                                                      }
+
+                                                      showDialog<void>(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false, // user must tap button!
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            20.0))),
+                                                            // title: Center(
+                                                            //     child: Container(
+                                                            //         decoration: BoxDecoration(
+                                                            //           color: Colors.blue[300],
+                                                            //           borderRadius:
+                                                            //               const BorderRadius
+                                                            //                       .only(
+                                                            //                   topLeft: Radius
+                                                            //                       .circular(10),
+                                                            //                   topRight: Radius
+                                                            //                       .circular(10),
+                                                            //                   bottomLeft: Radius
+                                                            //                       .circular(10),
+                                                            //                   bottomRight:
+                                                            //                       Radius
+                                                            //                           .circular(
+                                                            //                               10)),
+                                                            //         ),
+                                                            //         padding:
+                                                            //             const EdgeInsets.all(
+                                                            //                 4.0),
+                                                            //         child: const Text(
+                                                            //           ' QR PromtPay',
+                                                            //           style: TextStyle(
+                                                            //             color: Colors.white,
+                                                            //             fontWeight:
+                                                            //                 FontWeight.bold,
+                                                            //           ),
+                                                            //         ))),
+                                                            content:
+                                                                SingleChildScrollView(
+                                                              child: ListBody(
+                                                                children: <
+                                                                    Widget>[
+                                                                  //  '${Form_bussshop}',
+                                                                  //   '${Form_address}',
+                                                                  //   '${Form_tel}',
+                                                                  //   '${Form_email}',
+                                                                  //   '${Form_tax}',
+                                                                  //   '${Form_nameshop}',
+                                                                  Center(
+                                                                    child:
+                                                                        RepaintBoundary(
+                                                                      key:
+                                                                          qrImageKey,
+                                                                      child:
+                                                                          Container(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                            4,
+                                                                            8,
+                                                                            4,
+                                                                            2),
+                                                                        child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            // Text(
+                                                                            //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                                            //   style: TextStyle(
+                                                                            //     color:
+                                                                            //         Colors.red,
+                                                                            //     fontWeight:
+                                                                            //         FontWeight
+                                                                            //             .bold,
+                                                                            //   ),
+                                                                            // ),
+                                                                            Center(
+                                                                              child: Container(
+                                                                                width: 220,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.green[300],
+                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    '$renTal_name',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontSize: 13,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            // Align(
+                                                                            //   alignment: Alignment
+                                                                            //       .centerLeft,
+                                                                            //   child: Text(
+                                                                            //     'คุณ : $Form_bussshop',
+                                                                            //     style:
+                                                                            //         TextStyle(
+                                                                            //       fontSize: 13,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //     ),
+                                                                            //   ),
+                                                                            // ),
+                                                                            Container(
+                                                                              height: 60,
+                                                                              width: 220,
+                                                                              child: Image.asset(
+                                                                                "images/thai_qr_payment.png",
+                                                                                height: 60,
+                                                                                width: 220,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                              width: 200,
+                                                                              height: 200,
+                                                                              child: Center(
+                                                                                child: PrettyQr(
+                                                                                  // typeNumber: 3,
+                                                                                  image: AssetImage(
+                                                                                    "images/Icon-chao.png",
+                                                                                  ),
+                                                                                  size: 200,
+                                                                                  data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                                                  roundEdges: true,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              'พร้อมเพย์ : $selectedValue',
+                                                                              style: TextStyle(
+                                                                                fontSize: 13,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                                              style: TextStyle(
+                                                                                fontSize: 13,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                                              style: TextStyle(
+                                                                                fontSize: 10,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                              color: Color(0xFFD9D9B7),
+                                                                              height: 60,
+                                                                              width: 220,
+                                                                              child: Image.asset(
+                                                                                "images/LOGOchao.png",
+                                                                                height: 70,
+                                                                                width: 220,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  Center(
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          220,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: Colors
+                                                                            .green,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(0),
+                                                                            topRight: Radius.circular(0),
+                                                                            bottomLeft: Radius.circular(10),
+                                                                            bottomRight: Radius.circular(10)),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                                          RenderRepaintBoundary
+                                                                              boundary =
+                                                                              qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                                                                          ui.Image
+                                                                              image =
+                                                                              await boundary.toImage();
+                                                                          ByteData?
+                                                                              byteData =
+                                                                              await image.toByteData(format: ui.ImageByteFormat.png);
+                                                                          Uint8List
+                                                                              bytes =
+                                                                              byteData!.buffer.asUint8List();
+                                                                          html.Blob
+                                                                              blob =
+                                                                              html.Blob([
+                                                                            bytes
+                                                                          ]);
+                                                                          String
+                                                                              url =
+                                                                              html.Url.createObjectUrlFromBlob(blob);
+
+                                                                          html.AnchorElement
+                                                                              anchor =
+                                                                              html.AnchorElement()
+                                                                                ..href = url
+                                                                                ..setAttribute('download', 'qrcode.png')
+                                                                                ..click();
+
+                                                                          html.Url.revokeObjectUrl(
+                                                                              url);
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'Download QR Code',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            actions: <Widget>[
+                                                              Column(
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 5.0,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    height: 4.0,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5.0,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              100,
+                                                                          decoration:
+                                                                              const BoxDecoration(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(context, 'OK'),
+                                                                            child:
+                                                                                const Text(
+                                                                              'ปิด',
+                                                                              style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                        ),
+                                        if (paymentName1.toString().trim() !=
+                                                'Online Payment' &&
+                                            paymentName2.toString().trim() !=
+                                                'Online Payment')
+                                          Positioned(
+                                              top: 0,
+                                              left: 0,
+                                              child: Container(
+                                                width: 800,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                ),
+                                              )),
+                                      ],
+                                    )
+                                  : SizedBox(),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      // child: InkWell(
+                                      //   onTap: () {
+                                      //   },
+                                      //   child: Container(
+                                      //     height: 50,
+                                      //     decoration: const BoxDecoration(
+                                      //       color: Colors.green,
+                                      //       borderRadius: BorderRadius.only(
+                                      //           topLeft: Radius.circular(10),
+                                      //           topRight: Radius.circular(10),
+                                      //           bottomLeft: Radius.circular(10),
+                                      //           bottomRight: Radius.circular(10)),
+                                      //       // border: Border.all(color: Colors.white, width: 1),
+                                      //     ),
+                                      //     padding: const EdgeInsets.all(8.0),
+                                      //     child: Center(
+                                      //       child: select_page == 2
+                                      //           ? const Text(
+                                      //               'พิมพ์ซ้ำ',
+                                      //               style: TextStyle(
+                                      //                   color: PeopleChaoScreen_Color
+                                      //                       .Colors_Text1_,
+                                      //                   fontWeight: FontWeight.bold,
+                                      //                   fontFamily:
+                                      //                       FontWeight_.Fonts_T),
+                                      //             )
+                                      //           //
+                                      //           : const Text(
+                                      //               'พิมพ์ใบเสร็จชั่วคราว',
+                                      //               style: TextStyle(
+                                      //                   color: PeopleChaoScreen_Color
+                                      //                       .Colors_Text1_,
+                                      //                   fontWeight: FontWeight.bold,
+                                      //                   fontFamily:
+                                      //                       FontWeight_.Fonts_T),
+                                      //             ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ),
+                                  ),
+                                  // Expanded(
+                                  //   flex: 2,
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(8.0),
+                                  //     child: InkWell(
+                                  //       onTap: () {},
+                                  //       child: Container(
+                                  //           height: 50,
+                                  //           decoration: const BoxDecoration(
+                                  //             color: Colors.green,
+                                  //             borderRadius: BorderRadius.only(
+                                  //                 topLeft: Radius.circular(10),
+                                  //                 topRight: Radius.circular(10),
+                                  //                 bottomLeft: Radius.circular(10),
+                                  //                 bottomRight: Radius.circular(10)),
+                                  //             // border: Border.all(color: Colors.white, width: 1),
+                                  //           ),
+                                  //           padding: const EdgeInsets.all(8.0),
+                                  //           child: const Center(
+                                  //               child: Text(
+                                  //             'พิมพ์',
+                                  //             style: TextStyle(
+                                  //                 color: PeopleChaoScreen_Color
+                                  //                     .Colors_Text1_,
+                                  //                 fontWeight: FontWeight.bold,
+                                  //                 fontFamily: FontWeight_.Fonts_T),
+                                  //           ))),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          var pay1;
+                                          var pay2;
+                                          if (_Form_nameshop != null) {
+                                            Status4Form_nameshop.text =
+                                                _Form_nameshop.toString();
+                                            Status4Form_typeshop.text =
+                                                _Form_typeshop.toString();
+                                            Status4Form_bussshop.text =
+                                                _Form_bussshop.toString();
+                                            Status4Form_bussscontact.text =
+                                                _Form_bussscontact.toString();
+                                            Status4Form_address.text =
+                                                _Form_address.toString();
+                                            Status4Form_tel.text =
+                                                _Form_tel.toString();
+                                            Status4Form_email.text =
+                                                _Form_email.toString();
+                                            Status4Form_tax.text =
+                                                _Form_tax == null
+                                                    ? "-"
+                                                    : _Form_tax.toString();
+                                          }
+
+                                          //----------------------------------->
+
+                                          setState(() {
+                                            Slip_status = '2';
+                                          });
+
+                                          List newValuePDFimg = [];
+                                          for (int index = 0;
+                                              index < 1;
+                                              index++) {
+                                            if (renTalModels[index]
+                                                    .imglogo!
+                                                    .trim() ==
+                                                '') {
+                                              // newValuePDFimg.add(
+                                              //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                            } else {
+                                              newValuePDFimg.add(
+                                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                            }
+                                          }
+                                          if (pamentpage == 0) {
+                                            setState(() {
+                                              Form_payment2.text = '';
+                                            });
+                                          }
+                                          setState(() {
+                                            pay1 = Form_payment1.text == ''
+                                                ? '0.00'
+                                                : Form_payment1.text;
+                                            pay2 = Form_payment2.text == ''
+                                                ? '0.00'
+                                                : Form_payment2.text;
+                                          });
+
+                                          print(
+                                              '${double.parse(pay1) + double.parse(pay2)} /// ${(sum_amt - sum_disamt)}****${Form_payment1.text}***${Form_payment2.text}');
+                                          print(
+                                              '************************************++++');
+                                          print(
+                                              '>>1>  ${Form_payment1.text} //// $pay1//***${double.parse(pay1)}');
+                                          print(
+                                              '>>2>  ${Form_payment2.text} //// $pay2 //***${double.parse(pay2)}');
+
+                                          print(
+                                              '${(sum_amt - sum_disamt)}//****${double.parse(pay1) + double.parse(pay2)}');
+                                          print(
+                                              '************************************++++');
+
+                                          if ((double.parse(pay1) +
+                                                  double.parse(pay2) !=
+                                              (sum_amt - sum_disamt))) {
+                                            _showMyDialogPay_Error(
+                                                'จำนวนเงินไม่ถูกต้อง ');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text(
+                                            //           'จำนวนเงินไม่ถูกต้อง ',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
+                                          } else if (double.parse(pay1) <
+                                                  0.00 ||
+                                              double.parse(pay2) < 0.00) {
+                                            _showMyDialogPay_Error(
+                                                'จำนวนเงินไม่ถูกต้อง');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
+                                          } else {
+                                            if (paymentSer1 != '0' &&
+                                                paymentSer1 != null) {
+                                              if ((double.parse(pay1) +
+                                                          double.parse(pay2)) >=
+                                                      (sum_amt - sum_disamt) ||
+                                                  (double.parse(pay1) +
+                                                          double.parse(pay2)) <
+                                                      (sum_amt - sum_disamt)) {
+                                                if ((sum_amt - sum_disamt) !=
+                                                    0) {
+                                                  if (select_page == 0) {
+                                                    print('(select_page == 0)');
+                                                    if (paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน') {
+                                                      if (base64_Slip != null) {
+                                                        final tableData00 = [
+                                                          for (int index = 0;
+                                                              index <
+                                                                  _TransModels
+                                                                      .length;
+                                                              index++)
+                                                            [
+                                                              '${index + 1}',
+                                                              '${_TransModels[index].name}',
+                                                              '${_TransModels[index].tqty}',
+                                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
+                                                            ],
+                                                        ];
+                                                        String Area_ =
+                                                            '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+
+                                                        try {
+                                                          print(
+                                                              'tableData00.length');
+                                                          print(tableData00
+                                                              .length);
+                                                          in_Trans(
+                                                              newValuePDFimg);
+                                                        } catch (e) {}
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {
+                                                      try {
+                                                        in_Trans(
+                                                            newValuePDFimg);
+                                                        // OKuploadFile_Slip();
+                                                      } catch (e) {}
+                                                      // try {
+
+                                                      //   // in_Trans();ใช้
+                                                      // } catch (e) {}
+                                                    }
+                                                  } else if (select_page == 1) {
+                                                    if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment') {
+                                                      if (base64_Slip != null) {
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {}
+                                                  } else if (select_page == 2) {
+                                                    if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment') {
+                                                      if (base64_Slip != null) {
+                                                        try {
+                                                          // OKuploadFile_Slip();
+                                                          //TransReBillHistoryModel
+
+                                                          // await in_Trans_re_invoice_refno(
+                                                          //     newValuePDFimg);
+                                                        } catch (e) {}
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {
+                                                      try {
+                                                        // OKuploadFile_Slip();
+                                                        //TransReBillHistoryModel
+
+                                                        // await in_Trans_re_invoice_refno(
+                                                        //     newValuePDFimg);
+                                                      } catch (e) {}
+                                                    }
+                                                  }
+                                                } else {
+                                                  _showMyDialogPay_Error(
+                                                      'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors.white,
+                                                  //               fontFamily:
+                                                  //                   Font_.Fonts_T))),
+                                                  // );
+                                                }
+                                              } else {
+                                                _showMyDialogPay_Error(
+                                                    'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                                //           style: TextStyle(
+                                                //               color: Colors.white,
+                                                //               fontFamily:
+                                                //                   Font_.Fonts_T))),
+                                                // );
+                                              }
+                                            } else {
+                                              _showMyDialogPay_Error(
+                                                  'กรุณาเลือกรูปแบบการชำระ!');
+                                              // ScaffoldMessenger.of(context)
+                                              //     .showSnackBar(
+                                              //   const SnackBar(
+                                              //       content: Text(
+                                              //           'กรุณาเลือกรูปแบบการชำระ!',
+                                              //           style: TextStyle(
+                                              //               color: Colors.white,
+                                              //               fontFamily:
+                                              //                   Font_.Fonts_T))),
+                                              // );
+                                            }
+                                          }
+                                        },
+                                        child: Container(
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              // border: Border.all(color: Colors.white, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                                child: Text(
+                                              'รับชำระ',
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ))),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )
+                  : SizedBox(),
+            ],
+          ),
+          (Responsive.isDesktop(context))
+              ? SizedBox()
+              : Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 800,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 3,
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.green[200],
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(0),
+                                          bottomRight: Radius.circular(0),
+                                        ),
+                                        // border: Border.all(
+                                        //     color: Colors.grey, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          _selecteSerbool.length == 0
+                                              ? 'ใบเสร็จรับเงิน'
+                                              : 'ใบเสร็จรับเงิน ', //${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: Text(
+                                          'ยอดชำระรวม',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Text(
+                                          // '${nFormat.format(sum_amt - sum_disamt)}',
+                                          '${nFormat.format(sum_amt - sum_disamt)}',
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            const Text(
+                                              'การชำระ',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (pamentpage == 1) {
+                                                    pamentpage = 0;
+                                                    Form_payment2.clear();
+                                                    // Form_payment1.text = (sum_amt -
+                                                    //         double.parse(
+                                                    //             sum_disamtx.text))
+                                                    //     .toStringAsFixed(2)
+                                                    //     .toString();
+                                                  } else {
+                                                    pamentpage = 1;
+                                                  }
+                                                });
+                                                if (pamentpage == 0) {
+                                                  setState(() {
+                                                    Form_payment2.clear();
+                                                    Form_payment2.text = '';
+                                                    paymentName2 = null;
+                                                  });
+                                                } else {}
+                                              },
+                                              icon: pamentpage == 0
+                                                  ? Icon(
+                                                      Icons.add_circle_outline,
+                                                      color: Colors.green,
+                                                    )
+                                                  : const Icon(
+                                                      Icons
+                                                          .remove_circle_outline,
+                                                      color: Colors.red,
+                                                    ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 3,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(6),
+                                                topRight: Radius.circular(6),
+                                                bottomLeft: Radius.circular(6),
+                                                bottomRight: Radius.circular(6),
+                                              ),
+                                              // border: Border.all(color: Colors.grey, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: DropdownButtonFormField2(
+                                              decoration: InputDecoration(
+                                                //Add isDense true and zero Padding.
+                                                //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                isDense: true,
+                                                contentPadding: EdgeInsets.zero,
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                ),
+                                                //Add more decoration as you want here
+                                                //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                              ),
+                                              isExpanded: true,
+                                              // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                              hint: Row(
+                                                children: [
+                                                  Text(
+                                                    '$paymentName1',
+                                                    style: TextStyle(
+                                                        fontSize: 14,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ],
+                                              ),
+                                              icon: const Icon(
+                                                Icons.arrow_drop_down,
+                                                color: Colors.black45,
+                                              ),
+                                              iconSize: 25,
+                                              buttonHeight: 42,
+                                              buttonPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 10, right: 10),
+                                              dropdownDecoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                              ),
+                                              items: _PayMentModels.map(
+                                                  (item) =>
+                                                      DropdownMenuItem<String>(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            selectedValue =
+                                                                item.bno!;
+                                                          });
+                                                          print(
+                                                              '**/*/*   --- ${selectedValue}');
+                                                        },
+                                                        value:
+                                                            '${item.ser}:${item.ptname}',
+                                                        child: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(
+                                                                '${item.ptname!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style: const TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Text(
+                                                                '${item.bno!}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                style: const TextStyle(
+                                                                    fontSize: 14,
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )).toList(),
+                                              onChanged: (value) async {
+                                                print(value);
+                                                // Do something when changing the item if you want.
+
+                                                var zones = value!.indexOf(':');
+                                                var rtnameSer =
+                                                    value.substring(0, zones);
+                                                var rtnameName =
+                                                    value.substring(zones + 1);
+                                                // print(
+                                                //     'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                setState(() {
+                                                  paymentSer1 =
+                                                      rtnameSer.toString();
+                                                  // paymentName1 =
+                                                  //     rtnameName.toString();
+
+                                                  if (rtnameSer.toString() ==
+                                                      '0') {
+                                                    paymentName1 = null;
+                                                  } else {
+                                                    paymentName1 =
+                                                        rtnameName.toString();
+                                                  }
+
+                                                  if (rtnameSer.toString() ==
+                                                      '0') {
+                                                    Form_payment1.clear();
+                                                  } else {
+                                                    Form_payment1.text =
+                                                        (sum_amt - sum_disamt)
+                                                            .toStringAsFixed(2)
+                                                            .toString();
+                                                  }
+                                                });
+                                                print(
+                                                    'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                // print(
+                                                //     'pppppp $paymentSer1 $paymentName1');
+                                                // print('Form_payment1.text');
+                                                // print(Form_payment1.text);
+                                                // print(Form_payment2.text);
+                                                // print('Form_payment1.text');
+                                              },
+                                              // onSaved: (value) {
+
+                                              // },
+                                            ),
+                                          ),
+                                        ),
+                                        pamentpage == 0
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Container(
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(6),
+                                                    ),
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child:
+                                                      DropdownButtonFormField2(
+                                                    decoration: InputDecoration(
+                                                      //Add isDense true and zero Padding.
+                                                      //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                                      isDense: true,
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
+                                                      //Add more decoration as you want here
+                                                      //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                                    ),
+                                                    isExpanded: true,
+                                                    // disabledHint: Icon(Icons.time_to_leave, color: Colors.black),
+                                                    hint: Row(
+                                                      children: const [
+                                                        Text(
+                                                          'เลือก',
+                                                          style: TextStyle(
+                                                              fontSize: 14,
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                              // fontWeight: FontWeight.bold,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    icon: const Icon(
+                                                      Icons.arrow_drop_down,
+                                                      color: Colors.black45,
+                                                    ),
+                                                    iconSize: 25,
+                                                    buttonHeight: 42,
+                                                    buttonPadding:
+                                                        const EdgeInsets.only(
+                                                            left: 10,
+                                                            right: 10),
+                                                    dropdownDecoration:
+                                                        BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                    ),
+                                                    items: _PayMentModels.map(
+                                                        (item) =>
+                                                            DropdownMenuItem<
+                                                                String>(
+                                                              value:
+                                                                  '${item.ser}:${item.ptname}',
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      '${item.ptname!}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .start,
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      '${item.bno!}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .end,
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14,
+                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )).toList(),
+                                                    onChanged: (value) async {
+                                                      // Do something when changing the item if you want.
+
+                                                      var zones =
+                                                          value!.indexOf(':');
+                                                      var rtnameSer = value
+                                                          .substring(0, zones);
+                                                      var rtnameName = value
+                                                          .substring(zones + 1);
+                                                      print(
+                                                          'mmmmm ${rtnameSer.toString()} $rtnameName');
+                                                      setState(() {
+                                                        paymentSer2 = rtnameSer
+                                                            .toString();
+                                                        // paymentName2 =
+                                                        //     rtnameName.toString();
+
+                                                        if (rtnameSer
+                                                                .toString() ==
+                                                            '0') {
+                                                          paymentName2 = null;
+                                                        } else {
+                                                          paymentName2 =
+                                                              rtnameName
+                                                                  .toString();
+                                                        }
+
+                                                        if (rtnameSer
+                                                                .toString() ==
+                                                            '0') {
+                                                          Form_payment2.clear();
+                                                        } else {
+                                                          Form_payment2
+                                                              .text = (sum_amt -
+                                                                  sum_disamt)
+                                                              .toStringAsFixed(
+                                                                  2)
+                                                              .toString();
+                                                        }
+                                                      });
+
+                                                      print(
+                                                          'pppppp $paymentSer2 $paymentName2');
+                                                    },
+                                                    // onSaved: (value) {
+
+                                                    // },
+                                                  ),
+                                                ),
+                                              ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 50,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: Text(
+                                          'จำนวนเงิน',
+                                          textAlign: TextAlign.end,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text1_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 4,
                                     child: Row(
                                       children: [
                                         Expanded(
@@ -5829,18 +7716,69 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                               borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(6),
                                                 topRight: Radius.circular(6),
-                                                bottomLeft: Radius.circular(0),
-                                                bottomRight: Radius.circular(0),
+                                                bottomLeft: Radius.circular(6),
+                                                bottomRight: Radius.circular(6),
                                               ),
                                               // border: Border.all(color: Colors.grey, width: 1),
                                             ),
-                                            // padding: const EdgeInsets.all(8.0),
+                                            padding: const EdgeInsets.all(8.0),
                                             child: TextFormField(
                                               keyboardType:
                                                   TextInputType.number,
-                                              controller: Form_time,
-                                              onChanged: (value) {
-                                                setState(() {});
+                                              controller: Form_payment1,
+                                              onChanged: (value) async {
+                                                if (pamentpage == 1) {
+                                                  setState(() {
+                                                    Form_payment2.clear();
+                                                    Form_payment2.text = '';
+                                                  });
+                                                }
+                                                final currentCursorPosition =
+                                                    Form_payment1
+                                                        .selection.start;
+
+                                                // Update the text of the controller
+                                                if (paymentSer2 != null) {
+                                                  setState(() {
+                                                    Form_payment2.text =
+                                                        '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                  });
+                                                }
+
+                                                // Set the new cursor position
+                                                final newCursorPosition =
+                                                    currentCursorPosition +
+                                                        (value.length -
+                                                            Form_payment1
+                                                                .text.length);
+                                                Form_payment1.selection =
+                                                    TextSelection.fromPosition(
+                                                        TextPosition(
+                                                            offset:
+                                                                newCursorPosition));
+                                              },
+                                              onFieldSubmitted: (value) {
+                                                var money1 =
+                                                    double.parse(value);
+                                                var money2 =
+                                                    (sum_amt - sum_disamt);
+                                                var money3 = (money2 - money1)
+                                                    .toStringAsFixed(2)
+                                                    .toString();
+                                                setState(() {
+                                                  if (paymentSer2 == null) {
+                                                    Form_payment1.text =
+                                                        (money1)
+                                                            .toStringAsFixed(2)
+                                                            .toString();
+                                                  } else {
+                                                    Form_payment1.text =
+                                                        (money1)
+                                                            .toStringAsFixed(2)
+                                                            .toString();
+                                                    Form_payment2.text = money3;
+                                                  }
+                                                });
                                               },
                                               // maxLength: 13,
                                               cursorColor: Colors.green,
@@ -5887,9 +7825,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                       color: Colors.grey,
                                                     ),
                                                   ),
-                                                  hintText: '00:00:00',
-                                                  // helperText: '00:00:00',
-                                                  // labelText: '00:00:00',
+                                                  // labelText: 'ระบุอายุสัญญา',
                                                   labelStyle: const TextStyle(
                                                       color:
                                                           PeopleChaoScreen_Color
@@ -5897,180 +7833,195 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                       // fontWeight: FontWeight.bold,
                                                       fontFamily:
                                                           Font_.Fonts_T)),
-
-                                              inputFormatters: [
-                                                MaskedInputFormatter(
-                                                    '##:##:##'),
-                                                // FilteringTextInputFormatter.allow(
-                                                //     RegExp(r'[0-9]')),
+                                              inputFormatters: <
+                                                  TextInputFormatter>[
+                                                // for below version 2 use this
+                                                FilteringTextInputFormatter
+                                                    .allow(RegExp(r'[0-9 .]')),
+                                                // for version 2 and greater youcan also use this
+                                                // FilteringTextInputFormatter.digitsOnly
                                               ],
-                                              // inputFormatters: <TextInputFormatter>[
-                                              //   // for below version 2 use this
-                                              //   FilteringTextInputFormatter.allow(
-                                              //       RegExp(r'[0-9 .]')),
-                                              //   // for version 2 and greater youcan also use this
-                                              //   // FilteringTextInputFormatter.digitsOnly
-                                              // ],
                                             ),
                                           ),
                                         ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        Expanded(
-                                          child: InkWell(
-                                            onTap: () {
-                                              (base64_Slip == null)
-                                                  ? uploadFile_Slip()
-                                                  : showDialog<void>(
-                                                      context: context,
-                                                      barrierDismissible:
-                                                          false, // user must tap button!
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                          shape: const RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          10.0))),
-                                                          title: const Center(
-                                                              child: Text(
-                                                            'มีไฟล์ slip อยู่แล้ว',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text1_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T),
-                                                          )),
-                                                          content:
-                                                              SingleChildScrollView(
-                                                            child: ListBody(
-                                                              children: const <
-                                                                  Widget>[
-                                                                Text(
-                                                                  'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ),
-                                                              ],
-                                                            ),
+                                        pamentpage == 0
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(6),
+                                                    ),
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: Form_payment2,
+                                                    onChanged: (value) async {
+                                                      final currentCursorPosition =
+                                                          Form_payment2
+                                                              .selection.start;
+
+                                                      // Update the text of the controller
+                                                      if (paymentSer1 != null) {
+                                                        setState(() {
+                                                          Form_payment1.text =
+                                                              '${(sum_amt - sum_disamt) - double.parse(value)}';
+                                                        });
+                                                      }
+
+                                                      // Set the new cursor position
+                                                      final newCursorPosition =
+                                                          currentCursorPosition +
+                                                              (value.length -
+                                                                  Form_payment2
+                                                                      .text
+                                                                      .length);
+                                                      Form_payment2.selection =
+                                                          TextSelection
+                                                              .fromPosition(
+                                                                  TextPosition(
+                                                                      offset:
+                                                                          newCursorPosition));
+                                                    },
+                                                    onFieldSubmitted: (value) {
+                                                      var money1 =
+                                                          double.parse(value);
+                                                      var money2 = (sum_amt -
+                                                          sum_disamt);
+                                                      var money3 = (money2 -
+                                                              money1)
+                                                          .toStringAsFixed(2)
+                                                          .toString();
+                                                      setState(() {
+                                                        if (paymentSer1 ==
+                                                            null) {
+                                                          Form_payment2.text =
+                                                              (money1)
+                                                                  .toStringAsFixed(
+                                                                      2)
+                                                                  .toString();
+                                                        } else {
+                                                          Form_payment2.text =
+                                                              (money1)
+                                                                  .toStringAsFixed(
+                                                                      2)
+                                                                  .toString();
+                                                          Form_payment1.text =
+                                                              money3;
+                                                        }
+                                                      });
+                                                    },
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon:
+                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
                                                           ),
-                                                          actions: <Widget>[
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    child: Container(
-                                                                        width: 100,
-                                                                        decoration: BoxDecoration(
-                                                                          color:
-                                                                              Colors.red[600],
-                                                                          borderRadius: const BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(8.0),
-                                                                        child: const Center(
-                                                                            child: Text(
-                                                                          'ลบไฟล์',
-                                                                          style: TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ))),
-                                                                    onTap:
-                                                                        () async {
-                                                                      setState(
-                                                                          () {
-                                                                        base64_Slip =
-                                                                            null;
-                                                                      });
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    child: Container(
-                                                                        width: 100,
-                                                                        decoration: const BoxDecoration(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          borderRadius: BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(8.0),
-                                                                        child: const Center(
-                                                                            child: Text(
-                                                                          'ปิด',
-                                                                          style: TextStyle(
-                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ))),
-                                                                    onTap: () {
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                            },
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(10),
-                                                  bottomRight:
-                                                      Radius.circular(10),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        // labelText: 'ระบุอายุสัญญา',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
+                                                    inputFormatters: <
+                                                        TextInputFormatter>[
+                                                      // for below version 2 use this
+                                                      FilteringTextInputFormatter
+                                                          .allow(RegExp(
+                                                              r'[0-9 .]')),
+                                                      // for version 2 and greater youcan also use this
+                                                      // FilteringTextInputFormatter.digitsOnly
+                                                    ],
+                                                  ),
                                                 ),
-                                                // border: Border.all(
-                                                //     color: Colors.grey, width: 1),
                                               ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: const Text(
-                                                'เพิ่มไฟล์',
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 4,
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            height: 50,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                              child: Text(
+                                                'วันที่ทำรายการ',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color:
@@ -6085,932 +8036,1413 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                             ),
                                           ),
                                         ),
+                                        Expanded(
+                                          child: Container(
+                                              height: 50,
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  // color: Colors.green,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    DateTime? newDate =
+                                                        await showDatePicker(
+                                                      locale: const Locale(
+                                                          'th', 'TH'),
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: -50)),
+                                                      lastDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: 365)),
+                                                      builder:
+                                                          (context, child) {
+                                                        return Theme(
+                                                          data:
+                                                              Theme.of(context)
+                                                                  .copyWith(
+                                                            colorScheme:
+                                                                const ColorScheme
+                                                                    .light(
+                                                              primary: AppBarColors
+                                                                  .ABar_Colors, // header background color
+                                                              onPrimary: Colors
+                                                                  .white, // header text color
+                                                              onSurface: Colors
+                                                                  .black, // body text color
+                                                            ),
+                                                            textButtonTheme:
+                                                                TextButtonThemeData(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                primary: Colors
+                                                                    .black, // button text color
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: child!,
+                                                        );
+                                                      },
+                                                    );
+
+                                                    if (newDate == null) {
+                                                      return;
+                                                    } else {
+                                                      String start = DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(newDate);
+                                                      String end = DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .format(newDate);
+
+                                                      print('$start $end');
+                                                      setState(() {
+                                                        Value_newDateY1 = start;
+                                                        Value_newDateD1 = end;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: AutoSizeText(
+                                                      Value_newDateD1 == ''
+                                                          ? 'เลือกวันที่'
+                                                          : '$Value_newDateD1',
+                                                      minFontSize: 16,
+                                                      maxFontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
                                       ],
                                     ),
                                   ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        if (paymentName1.toString().trim() == 'เงินโอน' ||
-                            paymentName2.toString().trim() == 'เงินโอน' ||
-                            paymentName1.toString().trim() ==
-                                'Online Payment' ||
-                            paymentName2.toString().trim() == 'Online Payment')
-                          Container(
-                            decoration: const BoxDecoration(
-                              color: AppbackgroundColor.Sub_Abg_Colors,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(0),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                              // border: Border.all(color: Colors.grey, width: 1),
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                  Expanded(
+                                    flex: 4,
+                                    child: Row(
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(2.0),
+                                        Expanded(
+                                          child: Container(
+                                            height: 50,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                              child: Text(
+                                                'วันที่ชำระ',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          child: Container(
+                                              height: 50,
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  // color: Colors.green,
+                                                  borderRadius:
+                                                      const BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(15),
+                                                    topRight:
+                                                        Radius.circular(15),
+                                                    bottomLeft:
+                                                        Radius.circular(15),
+                                                    bottomRight:
+                                                        Radius.circular(15),
+                                                  ),
+                                                  border: Border.all(
+                                                      color: Colors.grey,
+                                                      width: 1),
+                                                ),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    DateTime? newDate =
+                                                        await showDatePicker(
+                                                      locale: const Locale(
+                                                          'th', 'TH'),
+                                                      context: context,
+                                                      initialDate:
+                                                          DateTime.now(),
+                                                      firstDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: -50)),
+                                                      lastDate: DateTime.now()
+                                                          .add(const Duration(
+                                                              days: 365)),
+                                                      builder:
+                                                          (context, child) {
+                                                        return Theme(
+                                                          data:
+                                                              Theme.of(context)
+                                                                  .copyWith(
+                                                            colorScheme:
+                                                                const ColorScheme
+                                                                    .light(
+                                                              primary: AppBarColors
+                                                                  .ABar_Colors, // header background color
+                                                              onPrimary: Colors
+                                                                  .white, // header text color
+                                                              onSurface: Colors
+                                                                  .black, // body text color
+                                                            ),
+                                                            textButtonTheme:
+                                                                TextButtonThemeData(
+                                                              style: TextButton
+                                                                  .styleFrom(
+                                                                primary: Colors
+                                                                    .black, // button text color
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: child!,
+                                                        );
+                                                      },
+                                                    );
+
+                                                    if (newDate == null) {
+                                                      return;
+                                                    } else {
+                                                      String start = DateFormat(
+                                                              'yyyy-MM-dd')
+                                                          .format(newDate);
+                                                      String end = DateFormat(
+                                                              'dd-MM-yyyy')
+                                                          .format(newDate);
+
+                                                      print('$start $end');
+                                                      setState(() {
+                                                        Value_newDateY = start;
+                                                        Value_newDateD = end;
+                                                      });
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: AutoSizeText(
+                                                      Value_newDateD == ''
+                                                          ? 'เลือกวันที่'
+                                                          : '$Value_newDateD',
+                                                      minFontSize: 16,
+                                                      maxFontSize: 20,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              //  print(
+                              //                 'mmmmm ${rtnameSer.toString()} $rtnameName');
+                              //             print(
+                              //                 'pppppp $paymentSer1 $paymentName1');
+                              if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                  paymentName2.toString().trim() == 'เงินโอน' ||
+                                  paymentName1.toString().trim() ==
+                                      'Online Payment' ||
+                                  paymentName2.toString().trim() ==
+                                      'Online Payment')
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        height: 50,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: const Center(
                                           child: Text(
-                                            (base64_Slip != null)
-                                                ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว '
-                                                : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
-                                            textAlign: TextAlign.start,
+                                            ' เวลา/หลักฐาน',
+                                            textAlign: TextAlign.center,
                                             style: TextStyle(
-                                                color: (base64_Slip != null)
-                                                    ? Colors.green[600]
-                                                    : Colors.red[600],
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily: FontWeight_.Fonts_T
                                                 //fontSize: 10.0
                                                 ),
                                           ),
                                         ),
-                                        // Padding(
-                                        //   padding: const EdgeInsets.all(2.0),
-                                        //   child: Text(
-                                        //     (base64_Slip != null) ? '$base64_Slip' : '',
-                                        //     textAlign: TextAlign.start,
-                                        //     style: TextStyle(
-                                        //         color: Colors.blue[600],
-                                        //         fontWeight: FontWeight.bold,
-                                        //         fontFamily: FontWeight_.Fonts_T,
-                                        //         fontSize: 10.0),
-                                        //   ),
-                                        // ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 1,
-                                  child: InkWell(
-                                    onTap: () async {
-                                      // String Url =
-                                      //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
-                                      // print(Url);
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                            title: const Center(
-                                              child: Text(
-                                                '',
-                                                maxLines: 1,
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontSize: 12.0),
-                                              ),
-                                            ),
-                                            content: Stack(
-                                              alignment: Alignment.center,
-                                              children: <Widget>[
-                                                Image.memory(
-                                                  base64Decode(
-                                                      base64_Slip.toString()),
-                                                  // height: 200,
-                                                  // fit: BoxFit.cover,
+                                    Expanded(
+                                      flex: 4,
+                                      child: Container(
+                                        width: 100,
+                                        height: 50,
+                                        color:
+                                            AppbackgroundColor.Sub_Abg_Colors,
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 50,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(0),
+                                                      bottomRight:
+                                                          Radius.circular(0),
+                                                    ),
+                                                    // border: Border.all(color: Colors.grey, width: 1),
+                                                  ),
+                                                  // padding: const EdgeInsets.all(8.0),
+                                                  child: TextFormField(
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    controller: Form_time,
+                                                    onChanged: (value) {
+                                                      setState(() {});
+                                                    },
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon:
+                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        hintText: '00:00:00',
+                                                        // helperText: '00:00:00',
+                                                        // labelText: '00:00:00',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T)),
+
+                                                    inputFormatters: [
+                                                      MaskedInputFormatter(
+                                                          '##:##:##'),
+                                                      // FilteringTextInputFormatter.allow(
+                                                      //     RegExp(r'[0-9]')),
+                                                    ],
+                                                    // inputFormatters: <TextInputFormatter>[
+                                                    //   // for below version 2 use this
+                                                    //   FilteringTextInputFormatter.allow(
+                                                    //       RegExp(r'[0-9 .]')),
+                                                    //   // for version 2 and greater youcan also use this
+                                                    //   // FilteringTextInputFormatter.digitsOnly
+                                                    // ],
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
-                                            actions: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  // Padding(
-                                                  //   padding:
-                                                  //       const EdgeInsets.all(8.0),
-                                                  //   child: Container(
-                                                  //     width: 100,
-                                                  //     decoration: const BoxDecoration(
-                                                  //       color: Colors.green,
-                                                  //       borderRadius:
-                                                  //           BorderRadius.only(
-                                                  //               topLeft: Radius
-                                                  //                   .circular(10),
-                                                  //               topRight:
-                                                  //                   Radius.circular(
-                                                  //                       10),
-                                                  //               bottomLeft:
-                                                  //                   Radius.circular(
-                                                  //                       10),
-                                                  //               bottomRight:
-                                                  //                   Radius.circular(
-                                                  //                       10)),
-                                                  //     ),
-                                                  //     padding:
-                                                  //         const EdgeInsets.all(8.0),
-                                                  //     child: TextButton(
-                                                  //       onPressed: () async {
-                                                  //         // downloadImage2();
-                                                  //         // downloadImage(Url);
-                                                  //         // Navigator.pop(
-                                                  //         //     context, 'OK');
-                                                  //       },
-                                                  //       child: const Text(
-                                                  //         'ดาวน์โหลด',
-                                                  //         style: TextStyle(
-                                                  //             color: Colors.white,
-                                                  //             fontWeight:
-                                                  //                 FontWeight.bold,
-                                                  //             fontFamily: FontWeight_
-                                                  //                 .Fonts_T),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ),
-                                                  // ),
-                                                  Padding(
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Expanded(
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    (base64_Slip == null)
+                                                        ? uploadFile_Slip()
+                                                        : showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10.0))),
+                                                                title:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  'มีไฟล์ slip อยู่แล้ว',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                )),
+                                                                content:
+                                                                    SingleChildScrollView(
+                                                                  child:
+                                                                      ListBody(
+                                                                    children: const <
+                                                                        Widget>[
+                                                                      Text(
+                                                                        'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: <
+                                                                    Widget>[
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.red[600],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ลบไฟล์',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () async {
+                                                                            setState(() {
+                                                                              base64_Slip = null;
+                                                                            });
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: Colors.black,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () {
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                  },
+                                                  child: Container(
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(10),
+                                                      ),
+                                                      // border: Border.all(
+                                                      //     color: Colors.grey, width: 1),
+                                                    ),
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: TextButton(
-                                                        onPressed: () =>
-                                                            Navigator.pop(
-                                                                context, 'OK'),
-                                                        child: const Text(
-                                                          'ปิด',
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T),
-                                                        ),
-                                                      ),
+                                                    child: const Text(
+                                                      'เพิ่มไฟล์',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T
+                                                          //fontSize: 10.0
+                                                          ),
                                                     ),
                                                   ),
-                                                ],
+                                                ),
                                               ),
-                                            ]),
-                                      );
-                                    },
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.blue,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10),
-                                        ),
-                                        // border: Border.all(
-                                        //     color: Colors.grey, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Text(
-                                        'เรียกดูไฟล์',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                              ],
-                            ),
-                          ),
-                        Container(
-                          height: 10,
-                          decoration: BoxDecoration(
-                            color: AppbackgroundColor.Sub_Abg_Colors,
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                            ),
-                            // border: Border.all(
-                            //     color: Colors.grey, width: 1),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       flex: 1,
-                        //       child: Container(
-                        //         height: 50,
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.green[200],
-                        //           borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(10),
-                        //             topRight: Radius.circular(10),
-                        //             bottomLeft: Radius.circular(0),
-                        //             bottomRight: Radius.circular(0),
-                        //           ),
-                        //           // border: Border.all(
-                        //           //     color: Colors.grey, width: 1),
-                        //         ),
-                        //         padding: const EdgeInsets.all(8.0),
-                        //         child: const Center(
-                        //           child: Text(
-                        //             'รูปแบบบิล',
-                        //             textAlign: TextAlign.center,
-                        //             style: TextStyle(
-                        //                 color: PeopleChaoScreen_Color
-                        //                     .Colors_Text1_,
-                        //                 fontWeight: FontWeight.bold,
-                        //                 fontFamily: FontWeight_.Fonts_T
-                        //                 //fontSize: 10.0
-                        //                 ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       flex: 1,
-                        //       child: Container(
-                        //         height: 50,
-                        //         color: AppbackgroundColor.Sub_Abg_Colors,
-                        //         padding: const EdgeInsets.all(8.0),
-                        //         child: Container(
-                        //           decoration: BoxDecoration(
-                        //             color: AppbackgroundColor.Sub_Abg_Colors,
-                        //             borderRadius: const BorderRadius.only(
-                        //                 topLeft: Radius.circular(10),
-                        //                 topRight: Radius.circular(10),
-                        //                 bottomLeft: Radius.circular(10),
-                        //                 bottomRight: Radius.circular(10)),
-                        //             border: Border.all(
-                        //                 color: Colors.grey, width: 1),
-                        //           ),
-                        //           width: 120,
-                        //           child: DropdownButtonFormField2(
-                        //             decoration: InputDecoration(
-                        //               isDense: true,
-                        //               contentPadding: EdgeInsets.zero,
-                        //               border: OutlineInputBorder(
-                        //                 borderRadius: BorderRadius.circular(10),
-                        //               ),
-                        //             ),
-                        //             isExpanded: true,
-                        //             hint: Text(
-                        //               bills_name_.toString(),
-                        //               maxLines: 1,
-                        //               style: const TextStyle(
-                        //                   fontSize: 14,
-                        //                   color: PeopleChaoScreen_Color
-                        //                       .Colors_Text2_,
-                        //                   //fontWeight: FontWeight.bold,
-                        //                   fontFamily: Font_.Fonts_T),
-                        //             ),
-                        //             icon: const Icon(
-                        //               Icons.arrow_drop_down,
-                        //               color:
-                        //                   PeopleChaoScreen_Color.Colors_Text2_,
-                        //             ),
-                        //             style: const TextStyle(
-                        //                 color: Colors.green,
-                        //                 fontFamily: Font_.Fonts_T),
-                        //             iconSize: 30,
-                        //             buttonHeight: 40,
-                        //             // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
-                        //             dropdownDecoration: BoxDecoration(
-                        //               borderRadius: BorderRadius.circular(10),
-                        //             ),
-                        //             items: bill_tser == '1'
-                        //                 ? Default_.map((item) =>
-                        //                     DropdownMenuItem<String>(
-                        //                       value: item,
-                        //                       child: Text(
-                        //                         item,
-                        //                         style: const TextStyle(
-                        //                             fontSize: 14,
-                        //                             color:
-                        //                                 PeopleChaoScreen_Color
-                        //                                     .Colors_Text2_,
-                        //                             //fontWeight: FontWeight.bold,
-                        //                             fontFamily: Font_.Fonts_T),
-                        //                       ),
-                        //                     )).toList()
-                        //                 : Default2_.map((item) =>
-                        //                     DropdownMenuItem<String>(
-                        //                       value: item,
-                        //                       child: Text(
-                        //                         item,
-                        //                         style: const TextStyle(
-                        //                             fontSize: 14,
-                        //                             color:
-                        //                                 PeopleChaoScreen_Color
-                        //                                     .Colors_Text2_,
-                        //                             //fontWeight: FontWeight.bold,
-                        //                             fontFamily: Font_.Fonts_T),
-                        //                       ),
-                        //                     )).toList(),
-
-                        //             onChanged: (value) async {
-                        //               var bill_set =
-                        //                   value == 'บิลธรรมดา' ? 'P' : 'F';
-                        //               setState(() {
-                        //                 bills_name_ = bill_set;
-                        //               });
-                        //             },
-                        //             // onSaved: (value) {
-                        //             //   // selectedValue = value.toString();
-                        //             // },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                color: Colors.white,
-                                // height: 100,
-                                width: MediaQuery.of(context).size.width * 0.33,
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'หมายเหตุ',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: Font_.Fonts_T),
-                                        ),
-                                      ],
-                                    ),
-                                    TextFormField(
-                                      // keyboardType: TextInputType.name,
-                                      controller: Form_note,
-
-                                      maxLines: 2,
-                                      // maxLength: 13,
-                                      cursorColor: Colors.green,
-                                      decoration: InputDecoration(
-                                        fillColor:
-                                            Colors.white.withOpacity(0.3),
-                                        filled: true,
-                                        // prefixIcon:
-                                        //     const Icon(Icons.person, color: Colors.black),
-                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                        focusedBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
+                                            ],
                                           ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.black,
-                                          ),
-                                        ),
-                                        enabledBorder: const OutlineInputBorder(
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(15),
-                                            topLeft: Radius.circular(15),
-                                            bottomRight: Radius.circular(15),
-                                            bottomLeft: Radius.circular(15),
-                                          ),
-                                          borderSide: BorderSide(
-                                            width: 1,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        // labelText: 'ระบุชื่อร้านค้า',
-                                        labelStyle: const TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        (paymentName1.toString().trim() == 'Online Payment' ||
-                                paymentName2.toString().trim() ==
-                                    'Online Payment')
-                            ? Stack(
-                                children: [
-                                  InkWell(
-                                    child: Container(
-                                        width: 800,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                          color: Colors.blue[900],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft:
-                                                  const Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                          // border: Border.all(color: Colors.white, width: 1),
-                                        ),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                                height: 50,
-                                                width: 100,
-                                                child: Image.asset(
-                                                  'images/prompay.png',
-                                                  height: 50,
-                                                  width: 100,
-                                                  fit: BoxFit.cover,
-                                                )),
-                                            const Center(
+                              if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                  paymentName2.toString().trim() == 'เงินโอน' ||
+                                  paymentName1.toString().trim() ==
+                                      'Online Payment' ||
+                                  paymentName2.toString().trim() ==
+                                      'Online Payment')
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(0),
+                                      topRight: Radius.circular(0),
+                                      bottomLeft: Radius.circular(0),
+                                      bottomRight: Radius.circular(0),
+                                    ),
+                                    // border: Border.all(color: Colors.grey, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
                                                 child: Text(
-                                              'Generator QR Code PromtPay',
+                                                  (base64_Slip != null)
+                                                      ? 'สถานะหลักฐาน : เลือกไฟล์แล้ว '
+                                                      : 'สถานะหลักฐาน : ยังไม่ได้เลือกไฟล์',
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: (base64_Slip !=
+                                                              null)
+                                                          ? Colors.green[600]
+                                                          : Colors.red[600],
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T
+                                                      //fontSize: 10.0
+                                                      ),
+                                                ),
+                                              ),
+                                              // Padding(
+                                              //   padding: const EdgeInsets.all(2.0),
+                                              //   child: Text(
+                                              //     (base64_Slip != null) ? '$base64_Slip' : '',
+                                              //     textAlign: TextAlign.start,
+                                              //     style: TextStyle(
+                                              //         color: Colors.blue[600],
+                                              //         fontWeight: FontWeight.bold,
+                                              //         fontFamily: FontWeight_.Fonts_T,
+                                              //         fontSize: 10.0),
+                                              //   ),
+                                              // ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: InkWell(
+                                          onTap: () async {
+                                            // String Url =
+                                            //     await '${MyConstant().domain}/files/kad_taii/slip/$name_slip';
+                                            // print(Url);
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) => AlertDialog(
+                                                  title: const Center(
+                                                    child: Text(
+                                                      '',
+                                                      maxLines: 1,
+                                                      textAlign:
+                                                          TextAlign.start,
+                                                      style: TextStyle(
+                                                          color: Colors.black,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontSize: 12.0),
+                                                    ),
+                                                  ),
+                                                  content: Stack(
+                                                    alignment: Alignment.center,
+                                                    children: <Widget>[
+                                                      Image.memory(
+                                                        base64Decode(base64_Slip
+                                                            .toString()),
+                                                        // height: 200,
+                                                        // fit: BoxFit.cover,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  actions: <Widget>[
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        // Padding(
+                                                        //   padding:
+                                                        //       const EdgeInsets.all(8.0),
+                                                        //   child: Container(
+                                                        //     width: 100,
+                                                        //     decoration: const BoxDecoration(
+                                                        //       color: Colors.green,
+                                                        //       borderRadius:
+                                                        //           BorderRadius.only(
+                                                        //               topLeft: Radius
+                                                        //                   .circular(10),
+                                                        //               topRight:
+                                                        //                   Radius.circular(
+                                                        //                       10),
+                                                        //               bottomLeft:
+                                                        //                   Radius.circular(
+                                                        //                       10),
+                                                        //               bottomRight:
+                                                        //                   Radius.circular(
+                                                        //                       10)),
+                                                        //     ),
+                                                        //     padding:
+                                                        //         const EdgeInsets.all(8.0),
+                                                        //     child: TextButton(
+                                                        //       onPressed: () async {
+                                                        //         // downloadImage2();
+                                                        //         // downloadImage(Url);
+                                                        //         // Navigator.pop(
+                                                        //         //     context, 'OK');
+                                                        //       },
+                                                        //       child: const Text(
+                                                        //         'ดาวน์โหลด',
+                                                        //         style: TextStyle(
+                                                        //             color: Colors.white,
+                                                        //             fontWeight:
+                                                        //                 FontWeight.bold,
+                                                        //             fontFamily: FontWeight_
+                                                        //                 .Fonts_T),
+                                                        //       ),
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.black,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextButton(
+                                                              onPressed: () =>
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      'OK'),
+                                                              child: const Text(
+                                                                'ปิด',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    fontFamily:
+                                                                        FontWeight_
+                                                                            .Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ]),
+                                            );
+                                          },
+                                          child: Container(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10),
+                                              ),
+                                              // border: Border.all(
+                                              //     color: Colors.grey, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Text(
+                                              'เรียกดูไฟล์',
+                                              textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  color: Colors.white,
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
                                                   fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            )),
-                                          ],
-                                        )),
-                                    onTap:
-                                        (paymentName1.toString().trim() !=
-                                                    'Online Payment' &&
-                                                paymentName2
-                                                        .toString()
-                                                        .trim() !=
-                                                    'Online Payment')
-                                            ? null
-                                            : () {
-                                                double totalQr_ = 0.00;
-                                                if (paymentName1
-                                                            .toString()
-                                                            .trim() ==
-                                                        'Online Payment' &&
-                                                    paymentName2
-                                                            .toString()
-                                                            .trim() ==
-                                                        'Online Payment') {
-                                                  setState(() {
-                                                    totalQr_ = 0.00;
-                                                  });
-                                                  setState(() {
-                                                    totalQr_ = double.parse(
-                                                            '${Form_payment1.text}') +
-                                                        double.parse(
-                                                            '${Form_payment2.text}');
-                                                  });
-                                                } else if (paymentName1
-                                                        .toString()
-                                                        .trim() ==
-                                                    'Online Payment') {
-                                                  setState(() {
-                                                    totalQr_ = 0.00;
-                                                  });
-                                                  setState(() {
-                                                    totalQr_ = double.parse(
-                                                        '${Form_payment1.text}');
-                                                  });
-                                                } else if (paymentName2
-                                                        .toString()
-                                                        .trim() ==
-                                                    'Online Payment') {
-                                                  setState(() {
-                                                    totalQr_ = 0.00;
-                                                  });
-                                                  setState(() {
-                                                    totalQr_ = double.parse(
-                                                        '${Form_payment2.text}');
-                                                  });
-                                                }
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              Container(
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  color: AppbackgroundColor.Sub_Abg_Colors,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(0),
+                                    topRight: Radius.circular(0),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  ),
+                                  // border: Border.all(
+                                  //     color: Colors.grey, width: 1),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       flex: 1,
+                              //       child: Container(
+                              //         height: 50,
+                              //         decoration: BoxDecoration(
+                              //           color: Colors.green[200],
+                              //           borderRadius: const BorderRadius.only(
+                              //             topLeft: Radius.circular(10),
+                              //             topRight: Radius.circular(10),
+                              //             bottomLeft: Radius.circular(0),
+                              //             bottomRight: Radius.circular(0),
+                              //           ),
+                              //           // border: Border.all(
+                              //           //     color: Colors.grey, width: 1),
+                              //         ),
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: const Center(
+                              //           child: Text(
+                              //             'รูปแบบบิล',
+                              //             textAlign: TextAlign.center,
+                              //             style: TextStyle(
+                              //                 color: PeopleChaoScreen_Color
+                              //                     .Colors_Text1_,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 fontFamily: FontWeight_.Fonts_T
+                              //                 //fontSize: 10.0
+                              //                 ),
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     Expanded(
+                              //       flex: 1,
+                              //       child: Container(
+                              //         height: 50,
+                              //         color: AppbackgroundColor.Sub_Abg_Colors,
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         child: Container(
+                              //           decoration: BoxDecoration(
+                              //             color: AppbackgroundColor.Sub_Abg_Colors,
+                              //             borderRadius: const BorderRadius.only(
+                              //                 topLeft: Radius.circular(10),
+                              //                 topRight: Radius.circular(10),
+                              //                 bottomLeft: Radius.circular(10),
+                              //                 bottomRight: Radius.circular(10)),
+                              //             border: Border.all(
+                              //                 color: Colors.grey, width: 1),
+                              //           ),
+                              //           width: 120,
+                              //           child: DropdownButtonFormField2(
+                              //             decoration: InputDecoration(
+                              //               isDense: true,
+                              //               contentPadding: EdgeInsets.zero,
+                              //               border: OutlineInputBorder(
+                              //                 borderRadius: BorderRadius.circular(10),
+                              //               ),
+                              //             ),
+                              //             isExpanded: true,
+                              //             hint: Text(
+                              //               bills_name_.toString(),
+                              //               maxLines: 1,
+                              //               style: const TextStyle(
+                              //                   fontSize: 14,
+                              //                   color: PeopleChaoScreen_Color
+                              //                       .Colors_Text2_,
+                              //                   //fontWeight: FontWeight.bold,
+                              //                   fontFamily: Font_.Fonts_T),
+                              //             ),
+                              //             icon: const Icon(
+                              //               Icons.arrow_drop_down,
+                              //               color:
+                              //                   PeopleChaoScreen_Color.Colors_Text2_,
+                              //             ),
+                              //             style: const TextStyle(
+                              //                 color: Colors.green,
+                              //                 fontFamily: Font_.Fonts_T),
+                              //             iconSize: 30,
+                              //             buttonHeight: 40,
+                              //             // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                              //             dropdownDecoration: BoxDecoration(
+                              //               borderRadius: BorderRadius.circular(10),
+                              //             ),
+                              //             items: bill_tser == '1'
+                              //                 ? Default_.map((item) =>
+                              //                     DropdownMenuItem<String>(
+                              //                       value: item,
+                              //                       child: Text(
+                              //                         item,
+                              //                         style: const TextStyle(
+                              //                             fontSize: 14,
+                              //                             color:
+                              //                                 PeopleChaoScreen_Color
+                              //                                     .Colors_Text2_,
+                              //                             //fontWeight: FontWeight.bold,
+                              //                             fontFamily: Font_.Fonts_T),
+                              //                       ),
+                              //                     )).toList()
+                              //                 : Default2_.map((item) =>
+                              //                     DropdownMenuItem<String>(
+                              //                       value: item,
+                              //                       child: Text(
+                              //                         item,
+                              //                         style: const TextStyle(
+                              //                             fontSize: 14,
+                              //                             color:
+                              //                                 PeopleChaoScreen_Color
+                              //                                     .Colors_Text2_,
+                              //                             //fontWeight: FontWeight.bold,
+                              //                             fontFamily: Font_.Fonts_T),
+                              //                       ),
+                              //                     )).toList(),
 
-                                                showDialog<void>(
-                                                  context: context,
-                                                  barrierDismissible:
-                                                      false, // user must tap button!
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return AlertDialog(
-                                                      shape: const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      20.0))),
-                                                      // title: Center(
-                                                      //     child: Container(
-                                                      //         decoration: BoxDecoration(
-                                                      //           color: Colors.blue[300],
-                                                      //           borderRadius:
-                                                      //               const BorderRadius
-                                                      //                       .only(
-                                                      //                   topLeft: Radius
-                                                      //                       .circular(10),
-                                                      //                   topRight: Radius
-                                                      //                       .circular(10),
-                                                      //                   bottomLeft: Radius
-                                                      //                       .circular(10),
-                                                      //                   bottomRight:
-                                                      //                       Radius
-                                                      //                           .circular(
-                                                      //                               10)),
-                                                      //         ),
-                                                      //         padding:
-                                                      //             const EdgeInsets.all(
-                                                      //                 4.0),
-                                                      //         child: const Text(
-                                                      //           ' QR PromtPay',
-                                                      //           style: TextStyle(
-                                                      //             color: Colors.white,
-                                                      //             fontWeight:
-                                                      //                 FontWeight.bold,
-                                                      //           ),
-                                                      //         ))),
-                                                      content:
-                                                          SingleChildScrollView(
-                                                        child: ListBody(
-                                                          children: <Widget>[
-                                                            //  '${Form_bussshop}',
-                                                            //   '${Form_address}',
-                                                            //   '${Form_tel}',
-                                                            //   '${Form_email}',
-                                                            //   '${Form_tax}',
-                                                            //   '${Form_nameshop}',
-                                                            Center(
-                                                              child:
-                                                                  RepaintBoundary(
-                                                                key: qrImageKey,
-                                                                child:
-                                                                    Container(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .fromLTRB(
-                                                                          4,
-                                                                          8,
-                                                                          4,
-                                                                          2),
-                                                                  child: Column(
-                                                                    crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .center,
-                                                                    children: [
-                                                                      // Text(
-                                                                      //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
-                                                                      //   style: TextStyle(
-                                                                      //     color:
-                                                                      //         Colors.red,
-                                                                      //     fontWeight:
-                                                                      //         FontWeight
-                                                                      //             .bold,
-                                                                      //   ),
-                                                                      // ),
-                                                                      Center(
+                              //             onChanged: (value) async {
+                              //               var bill_set =
+                              //                   value == 'บิลธรรมดา' ? 'P' : 'F';
+                              //               setState(() {
+                              //                 bills_name_ = bill_set;
+                              //               });
+                              //             },
+                              //             // onSaved: (value) {
+                              //             //   // selectedValue = value.toString();
+                              //             // },
+                              //           ),
+                              //         ),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      color: Colors.white,
+                                      // height: 100,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.33,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'หมายเหตุ',
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ],
+                                          ),
+                                          TextFormField(
+                                            // keyboardType: TextInputType.name,
+                                            controller: Form_note,
+
+                                            maxLines: 2,
+                                            // maxLength: 13,
+                                            cursorColor: Colors.green,
+                                            decoration: InputDecoration(
+                                              fillColor:
+                                                  Colors.white.withOpacity(0.3),
+                                              filled: true,
+                                              // prefixIcon:
+                                              //     const Icon(Icons.person, color: Colors.black),
+                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                              focusedBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                              enabledBorder:
+                                                  const OutlineInputBorder(
+                                                borderRadius: BorderRadius.only(
+                                                  topRight: Radius.circular(15),
+                                                  topLeft: Radius.circular(15),
+                                                  bottomRight:
+                                                      Radius.circular(15),
+                                                  bottomLeft:
+                                                      Radius.circular(15),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                              // labelText: 'ระบุชื่อร้านค้า',
+                                              labelStyle: const TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text2_,
+                                                // fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              (paymentName1.toString().trim() ==
+                                          'Online Payment' ||
+                                      paymentName2.toString().trim() ==
+                                          'Online Payment')
+                                  ? Stack(
+                                      children: [
+                                        InkWell(
+                                          child: Container(
+                                              width: 800,
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[900],
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        const Radius.circular(
+                                                            10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                      height: 50,
+                                                      width: 100,
+                                                      child: Image.asset(
+                                                        'images/prompay.png',
+                                                        height: 50,
+                                                        width: 100,
+                                                        fit: BoxFit.cover,
+                                                      )),
+                                                  const Center(
+                                                      child: Text(
+                                                    'Generator QR Code PromtPay',
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  )),
+                                                ],
+                                              )),
+                                          onTap:
+                                              (paymentName1.toString().trim() !=
+                                                          'Online Payment' &&
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() !=
+                                                          'Online Payment')
+                                                  ? null
+                                                  : () {
+                                                      double totalQr_ = 0.00;
+                                                      if (paymentName1
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'Online Payment' &&
+                                                          paymentName2
+                                                                  .toString()
+                                                                  .trim() ==
+                                                              'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                                  '${Form_payment1.text}') +
+                                                              double.parse(
+                                                                  '${Form_payment2.text}');
+                                                        });
+                                                      } else if (paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                              '${Form_payment1.text}');
+                                                        });
+                                                      } else if (paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
+                                                        setState(() {
+                                                          totalQr_ = 0.00;
+                                                        });
+                                                        setState(() {
+                                                          totalQr_ = double.parse(
+                                                              '${Form_payment2.text}');
+                                                        });
+                                                      }
+
+                                                      showDialog<void>(
+                                                        context: context,
+                                                        barrierDismissible:
+                                                            false, // user must tap button!
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            shape: const RoundedRectangleBorder(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            20.0))),
+                                                            // title: Center(
+                                                            //     child: Container(
+                                                            //         decoration: BoxDecoration(
+                                                            //           color: Colors.blue[300],
+                                                            //           borderRadius:
+                                                            //               const BorderRadius
+                                                            //                       .only(
+                                                            //                   topLeft: Radius
+                                                            //                       .circular(10),
+                                                            //                   topRight: Radius
+                                                            //                       .circular(10),
+                                                            //                   bottomLeft: Radius
+                                                            //                       .circular(10),
+                                                            //                   bottomRight:
+                                                            //                       Radius
+                                                            //                           .circular(
+                                                            //                               10)),
+                                                            //         ),
+                                                            //         padding:
+                                                            //             const EdgeInsets.all(
+                                                            //                 4.0),
+                                                            //         child: const Text(
+                                                            //           ' QR PromtPay',
+                                                            //           style: TextStyle(
+                                                            //             color: Colors.white,
+                                                            //             fontWeight:
+                                                            //                 FontWeight.bold,
+                                                            //           ),
+                                                            //         ))),
+                                                            content:
+                                                                SingleChildScrollView(
+                                                              child: ListBody(
+                                                                children: <
+                                                                    Widget>[
+                                                                  //  '${Form_bussshop}',
+                                                                  //   '${Form_address}',
+                                                                  //   '${Form_tel}',
+                                                                  //   '${Form_email}',
+                                                                  //   '${Form_tax}',
+                                                                  //   '${Form_nameshop}',
+                                                                  Center(
+                                                                    child:
+                                                                        RepaintBoundary(
+                                                                      key:
+                                                                          qrImageKey,
+                                                                      child:
+                                                                          Container(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                            4,
+                                                                            8,
+                                                                            4,
+                                                                            2),
                                                                         child:
+                                                                            Column(
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment.center,
+                                                                          children: [
+                                                                            // Text(
+                                                                            //   '*** กำลังทดลอง ห้ามใช้งาน จ่ายจริง',
+                                                                            //   style: TextStyle(
+                                                                            //     color:
+                                                                            //         Colors.red,
+                                                                            //     fontWeight:
+                                                                            //         FontWeight
+                                                                            //             .bold,
+                                                                            //   ),
+                                                                            // ),
+                                                                            Center(
+                                                                              child: Container(
+                                                                                width: 220,
+                                                                                decoration: BoxDecoration(
+                                                                                  color: Colors.green[300],
+                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                ),
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Center(
+                                                                                  child: Text(
+                                                                                    '$renTal_name',
+                                                                                    style: TextStyle(
+                                                                                      color: Colors.white,
+                                                                                      fontSize: 13,
+                                                                                      fontWeight: FontWeight.bold,
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            // Align(
+                                                                            //   alignment: Alignment
+                                                                            //       .centerLeft,
+                                                                            //   child: Text(
+                                                                            //     'คุณ : $Form_bussshop',
+                                                                            //     style:
+                                                                            //         TextStyle(
+                                                                            //       fontSize: 13,
+                                                                            //       fontWeight:
+                                                                            //           FontWeight
+                                                                            //               .bold,
+                                                                            //     ),
+                                                                            //   ),
+                                                                            // ),
                                                                             Container(
-                                                                          width:
-                                                                              220,
-                                                                          decoration:
-                                                                              BoxDecoration(
-                                                                            color:
-                                                                                Colors.green[300],
-                                                                            borderRadius: BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(0),
-                                                                                bottomRight: Radius.circular(0)),
-                                                                          ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              Center(
-                                                                            child:
-                                                                                Text(
-                                                                              '$renTal_name',
+                                                                              height: 60,
+                                                                              width: 220,
+                                                                              child: Image.asset(
+                                                                                "images/thai_qr_payment.png",
+                                                                                height: 60,
+                                                                                width: 220,
+                                                                                fit: BoxFit.cover,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                              width: 200,
+                                                                              height: 200,
+                                                                              child: Center(
+                                                                                child: PrettyQr(
+                                                                                  // typeNumber: 3,
+                                                                                  image: AssetImage(
+                                                                                    "images/Icon-chao.png",
+                                                                                  ),
+                                                                                  size: 200,
+                                                                                  data: generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
+                                                                                  errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                                                  roundEdges: true,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              'พร้อมเพย์ : $selectedValue',
                                                                               style: TextStyle(
-                                                                                color: Colors.white,
                                                                                 fontSize: 13,
                                                                                 fontWeight: FontWeight.bold,
                                                                               ),
                                                                             ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      // Align(
-                                                                      //   alignment: Alignment
-                                                                      //       .centerLeft,
-                                                                      //   child: Text(
-                                                                      //     'คุณ : $Form_bussshop',
-                                                                      //     style:
-                                                                      //         TextStyle(
-                                                                      //       fontSize: 13,
-                                                                      //       fontWeight:
-                                                                      //           FontWeight
-                                                                      //               .bold,
-                                                                      //     ),
-                                                                      //   ),
-                                                                      // ),
-                                                                      Container(
-                                                                        height:
-                                                                            60,
-                                                                        width:
-                                                                            220,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          "images/thai_qr_payment.png",
-                                                                          height:
-                                                                              60,
-                                                                          width:
-                                                                              220,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        width:
-                                                                            200,
-                                                                        height:
-                                                                            200,
-                                                                        child:
-                                                                            Center(
-                                                                          child:
-                                                                              PrettyQr(
-                                                                            // typeNumber: 3,
-                                                                            image:
-                                                                                AssetImage(
-                                                                              "images/Icon-chao.png",
+                                                                            Text(
+                                                                              'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
+                                                                              style: TextStyle(
+                                                                                fontSize: 13,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
                                                                             ),
-                                                                            size:
-                                                                                200,
-                                                                            data:
-                                                                                generateQRCode(promptPayID: "$selectedValue", amount: totalQr_),
-                                                                            errorCorrectLevel:
-                                                                                QrErrorCorrectLevel.M,
-                                                                            roundEdges:
-                                                                                true,
-                                                                          ),
+                                                                            Text(
+                                                                              '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
+                                                                              style: TextStyle(
+                                                                                fontSize: 10,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                            Container(
+                                                                              color: Color(0xFFD9D9B7),
+                                                                              height: 60,
+                                                                              width: 220,
+                                                                              child: Image.asset(
+                                                                                "images/LOGOchao.png",
+                                                                                height: 70,
+                                                                                width: 220,
+                                                                              ),
+                                                                            ),
+                                                                          ],
                                                                         ),
                                                                       ),
-                                                                      Text(
-                                                                        'พร้อมเพย์ : $selectedValue',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              13,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        'จำนวนเงิน : ${nFormat.format(totalQr_)} บาท',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              13,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                      Text(
-                                                                        '( ทำรายการ : $Value_newDateD1 / ชำระ : $Value_newDateD )',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              10,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
-                                                                        ),
-                                                                      ),
-                                                                      Container(
-                                                                        color: Color(
-                                                                            0xFFD9D9B7),
-                                                                        height:
-                                                                            60,
-                                                                        width:
-                                                                            220,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          "images/LOGOchao.png",
-                                                                          height:
-                                                                              70,
-                                                                          width:
-                                                                              220,
-                                                                        ),
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            Center(
-                                                              child: Container(
-                                                                width: 220,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .green,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              0),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              0),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    TextButton(
-                                                                  onPressed:
-                                                                      () async {
-                                                                    // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
-
-                                                                    RenderRepaintBoundary
-                                                                        boundary =
-                                                                        qrImageKey
-                                                                            .currentContext!
-                                                                            .findRenderObject() as RenderRepaintBoundary;
-                                                                    ui.Image
-                                                                        image =
-                                                                        await boundary
-                                                                            .toImage();
-                                                                    ByteData?
-                                                                        byteData =
-                                                                        await image.toByteData(
-                                                                            format:
-                                                                                ui.ImageByteFormat.png);
-                                                                    Uint8List
-                                                                        bytes =
-                                                                        byteData!
-                                                                            .buffer
-                                                                            .asUint8List();
-                                                                    html.Blob
-                                                                        blob =
-                                                                        html.Blob([
-                                                                      bytes
-                                                                    ]);
-                                                                    String url = html
-                                                                            .Url
-                                                                        .createObjectUrlFromBlob(
-                                                                            blob);
-
-                                                                    html.AnchorElement
-                                                                        anchor =
-                                                                        html.AnchorElement()
-                                                                          ..href =
-                                                                              url
-                                                                          ..setAttribute(
-                                                                              'download',
-                                                                              'qrcode.png')
-                                                                          ..click();
-
-                                                                    html.Url
-                                                                        .revokeObjectUrl(
-                                                                            url);
-                                                                  },
-                                                                  child:
-                                                                      const Text(
-                                                                    'Download QR Code',
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: Colors
-                                                                          .white,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      actions: <Widget>[
-                                                        Column(
-                                                          children: [
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            const Divider(
-                                                              color:
-                                                                  Colors.grey,
-                                                              height: 4.0,
-                                                            ),
-                                                            const SizedBox(
-                                                              height: 5.0,
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .end,
-                                                                children: [
-                                                                  Container(
-                                                                    width: 100,
-                                                                    decoration:
-                                                                        const BoxDecoration(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topLeft: Radius.circular(
-                                                                              10),
-                                                                          topRight: Radius.circular(
-                                                                              10),
-                                                                          bottomLeft: Radius.circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                              Radius.circular(10)),
-                                                                    ),
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
+                                                                  Center(
                                                                     child:
-                                                                        TextButton(
-                                                                      onPressed: () => Navigator.pop(
-                                                                          context,
-                                                                          'OK'),
+                                                                        Container(
+                                                                      width:
+                                                                          220,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: Colors
+                                                                            .green,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(0),
+                                                                            topRight: Radius.circular(0),
+                                                                            bottomLeft: Radius.circular(10),
+                                                                            bottomRight: Radius.circular(10)),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
                                                                       child:
-                                                                          const Text(
-                                                                        'ปิด',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.white,
-                                                                          fontWeight:
-                                                                              FontWeight.bold,
+                                                                          TextButton(
+                                                                        onPressed:
+                                                                            () async {
+                                                                          // String qrCodeData = generateQRCode(promptPayID: "0613544026", amount: 1234.56);
+
+                                                                          RenderRepaintBoundary
+                                                                              boundary =
+                                                                              qrImageKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+                                                                          ui.Image
+                                                                              image =
+                                                                              await boundary.toImage();
+                                                                          ByteData?
+                                                                              byteData =
+                                                                              await image.toByteData(format: ui.ImageByteFormat.png);
+                                                                          Uint8List
+                                                                              bytes =
+                                                                              byteData!.buffer.asUint8List();
+                                                                          html.Blob
+                                                                              blob =
+                                                                              html.Blob([
+                                                                            bytes
+                                                                          ]);
+                                                                          String
+                                                                              url =
+                                                                              html.Url.createObjectUrlFromBlob(blob);
+
+                                                                          html.AnchorElement
+                                                                              anchor =
+                                                                              html.AnchorElement()
+                                                                                ..href = url
+                                                                                ..setAttribute('download', 'qrcode.png')
+                                                                                ..click();
+
+                                                                          html.Url.revokeObjectUrl(
+                                                                              url);
+                                                                        },
+                                                                        child:
+                                                                            const Text(
+                                                                          'Download QR Code',
+                                                                          style:
+                                                                              TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
@@ -7018,437 +9450,515 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 ],
                                                               ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
+                                                            actions: <Widget>[
+                                                              Column(
+                                                                children: [
+                                                                  const SizedBox(
+                                                                    height: 5.0,
+                                                                  ),
+                                                                  const Divider(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    height: 4.0,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5.0,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child: Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .end,
+                                                                      children: [
+                                                                        Container(
+                                                                          width:
+                                                                              100,
+                                                                          decoration:
+                                                                              const BoxDecoration(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                          ),
+                                                                          padding:
+                                                                              const EdgeInsets.all(8.0),
+                                                                          child:
+                                                                              TextButton(
+                                                                            onPressed: () =>
+                                                                                Navigator.pop(context, 'OK'),
+                                                                            child:
+                                                                                const Text(
+                                                                              'ปิด',
+                                                                              style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontWeight: FontWeight.bold,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                        ),
+                                        if (paymentName1.toString().trim() !=
+                                                'Online Payment' &&
+                                            paymentName2.toString().trim() !=
+                                                'Online Payment')
+                                          Positioned(
+                                              top: 0,
+                                              left: 0,
+                                              child: Container(
+                                                width: 800,
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  10),
+                                                          bottomRight:
+                                                              Radius.circular(
+                                                                  10)),
+                                                  // border: Border.all(color: Colors.white, width: 1),
+                                                ),
+                                              )),
+                                      ],
+                                    )
+                                  : SizedBox(),
+                              Row(
+                                children: [
+                                  const Expanded(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      // child: InkWell(
+                                      //   onTap: () {
+                                      //   },
+                                      //   child: Container(
+                                      //     height: 50,
+                                      //     decoration: const BoxDecoration(
+                                      //       color: Colors.green,
+                                      //       borderRadius: BorderRadius.only(
+                                      //           topLeft: Radius.circular(10),
+                                      //           topRight: Radius.circular(10),
+                                      //           bottomLeft: Radius.circular(10),
+                                      //           bottomRight: Radius.circular(10)),
+                                      //       // border: Border.all(color: Colors.white, width: 1),
+                                      //     ),
+                                      //     padding: const EdgeInsets.all(8.0),
+                                      //     child: Center(
+                                      //       child: select_page == 2
+                                      //           ? const Text(
+                                      //               'พิมพ์ซ้ำ',
+                                      //               style: TextStyle(
+                                      //                   color: PeopleChaoScreen_Color
+                                      //                       .Colors_Text1_,
+                                      //                   fontWeight: FontWeight.bold,
+                                      //                   fontFamily:
+                                      //                       FontWeight_.Fonts_T),
+                                      //             )
+                                      //           //
+                                      //           : const Text(
+                                      //               'พิมพ์ใบเสร็จชั่วคราว',
+                                      //               style: TextStyle(
+                                      //                   color: PeopleChaoScreen_Color
+                                      //                       .Colors_Text1_,
+                                      //                   fontWeight: FontWeight.bold,
+                                      //                   fontFamily:
+                                      //                       FontWeight_.Fonts_T),
+                                      //             ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                    ),
                                   ),
-                                  if (paymentName1.toString().trim() !=
-                                          'Online Payment' &&
-                                      paymentName2.toString().trim() !=
-                                          'Online Payment')
-                                    Positioned(
-                                        top: 0,
-                                        left: 0,
-                                        child: Container(
-                                          width: 800,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            // border: Border.all(color: Colors.white, width: 1),
-                                          ),
-                                        )),
-                                ],
-                              )
-                            : SizedBox(),
-                        Row(
-                          children: [
-                            const Expanded(
-                              flex: 4,
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                // child: InkWell(
-                                //   onTap: () {
-                                //   },
-                                //   child: Container(
-                                //     height: 50,
-                                //     decoration: const BoxDecoration(
-                                //       color: Colors.green,
-                                //       borderRadius: BorderRadius.only(
-                                //           topLeft: Radius.circular(10),
-                                //           topRight: Radius.circular(10),
-                                //           bottomLeft: Radius.circular(10),
-                                //           bottomRight: Radius.circular(10)),
-                                //       // border: Border.all(color: Colors.white, width: 1),
-                                //     ),
-                                //     padding: const EdgeInsets.all(8.0),
-                                //     child: Center(
-                                //       child: select_page == 2
-                                //           ? const Text(
-                                //               'พิมพ์ซ้ำ',
-                                //               style: TextStyle(
-                                //                   color: PeopleChaoScreen_Color
-                                //                       .Colors_Text1_,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontFamily:
-                                //                       FontWeight_.Fonts_T),
-                                //             )
-                                //           //
-                                //           : const Text(
-                                //               'พิมพ์ใบเสร็จชั่วคราว',
-                                //               style: TextStyle(
-                                //                   color: PeopleChaoScreen_Color
-                                //                       .Colors_Text1_,
-                                //                   fontWeight: FontWeight.bold,
-                                //                   fontFamily:
-                                //                       FontWeight_.Fonts_T),
-                                //             ),
-                                //     ),
-                                //   ),
-                                // ),
-                              ),
-                            ),
-                            // Expanded(
-                            //   flex: 2,
-                            //   child: Padding(
-                            //     padding: const EdgeInsets.all(8.0),
-                            //     child: InkWell(
-                            //       onTap: () {},
-                            //       child: Container(
-                            //           height: 50,
-                            //           decoration: const BoxDecoration(
-                            //             color: Colors.green,
-                            //             borderRadius: BorderRadius.only(
-                            //                 topLeft: Radius.circular(10),
-                            //                 topRight: Radius.circular(10),
-                            //                 bottomLeft: Radius.circular(10),
-                            //                 bottomRight: Radius.circular(10)),
-                            //             // border: Border.all(color: Colors.white, width: 1),
-                            //           ),
-                            //           padding: const EdgeInsets.all(8.0),
-                            //           child: const Center(
-                            //               child: Text(
-                            //             'พิมพ์',
-                            //             style: TextStyle(
-                            //                 color: PeopleChaoScreen_Color
-                            //                     .Colors_Text1_,
-                            //                 fontWeight: FontWeight.bold,
-                            //                 fontFamily: FontWeight_.Fonts_T),
-                            //           ))),
-                            //     ),
-                            //   ),
-                            // ),
-                            Expanded(
-                              flex: 4,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () async {
-                                    var pay1;
-                                    var pay2;
-                                    if (_Form_nameshop != null) {
-                                      Status4Form_nameshop.text =
-                                          _Form_nameshop.toString();
-                                      Status4Form_typeshop.text =
-                                          _Form_typeshop.toString();
-                                      Status4Form_bussshop.text =
-                                          _Form_bussshop.toString();
-                                      Status4Form_bussscontact.text =
-                                          _Form_bussscontact.toString();
-                                      Status4Form_address.text =
-                                          _Form_address.toString();
-                                      Status4Form_tel.text =
-                                          _Form_tel.toString();
-                                      Status4Form_email.text =
-                                          _Form_email.toString();
-                                      Status4Form_tax.text = _Form_tax == null
-                                          ? "-"
-                                          : _Form_tax.toString();
-                                    }
+                                  // Expanded(
+                                  //   flex: 2,
+                                  //   child: Padding(
+                                  //     padding: const EdgeInsets.all(8.0),
+                                  //     child: InkWell(
+                                  //       onTap: () {},
+                                  //       child: Container(
+                                  //           height: 50,
+                                  //           decoration: const BoxDecoration(
+                                  //             color: Colors.green,
+                                  //             borderRadius: BorderRadius.only(
+                                  //                 topLeft: Radius.circular(10),
+                                  //                 topRight: Radius.circular(10),
+                                  //                 bottomLeft: Radius.circular(10),
+                                  //                 bottomRight: Radius.circular(10)),
+                                  //             // border: Border.all(color: Colors.white, width: 1),
+                                  //           ),
+                                  //           padding: const EdgeInsets.all(8.0),
+                                  //           child: const Center(
+                                  //               child: Text(
+                                  //             'พิมพ์',
+                                  //             style: TextStyle(
+                                  //                 color: PeopleChaoScreen_Color
+                                  //                     .Colors_Text1_,
+                                  //                 fontWeight: FontWeight.bold,
+                                  //                 fontFamily: FontWeight_.Fonts_T),
+                                  //           ))),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () async {
+                                          var pay1;
+                                          var pay2;
+                                          if (_Form_nameshop != null) {
+                                            Status4Form_nameshop.text =
+                                                _Form_nameshop.toString();
+                                            Status4Form_typeshop.text =
+                                                _Form_typeshop.toString();
+                                            Status4Form_bussshop.text =
+                                                _Form_bussshop.toString();
+                                            Status4Form_bussscontact.text =
+                                                _Form_bussscontact.toString();
+                                            Status4Form_address.text =
+                                                _Form_address.toString();
+                                            Status4Form_tel.text =
+                                                _Form_tel.toString();
+                                            Status4Form_email.text =
+                                                _Form_email.toString();
+                                            Status4Form_tax.text =
+                                                _Form_tax == null
+                                                    ? "-"
+                                                    : _Form_tax.toString();
+                                          }
 
-                                    //----------------------------------->
+                                          //----------------------------------->
 
-                                    setState(() {
-                                      Slip_status = '2';
-                                    });
+                                          setState(() {
+                                            Slip_status = '2';
+                                          });
 
-                                    List newValuePDFimg = [];
-                                    for (int index = 0; index < 1; index++) {
-                                      if (renTalModels[index].imglogo!.trim() ==
-                                          '') {
-                                        // newValuePDFimg.add(
-                                        //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                      } else {
-                                        newValuePDFimg.add(
-                                            '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                      }
-                                    }
-                                    if (pamentpage == 0) {
-                                      setState(() {
-                                        Form_payment2.text = '';
-                                      });
-                                    }
-                                    setState(() {
-                                      pay1 = Form_payment1.text == ''
-                                          ? '0.00'
-                                          : Form_payment1.text;
-                                      pay2 = Form_payment2.text == ''
-                                          ? '0.00'
-                                          : Form_payment2.text;
-                                    });
-
-                                    print(
-                                        '${double.parse(pay1) + double.parse(pay2)} /// ${(sum_amt - sum_disamt)}****${Form_payment1.text}***${Form_payment2.text}');
-                                    print(
-                                        '************************************++++');
-                                    print(
-                                        '>>1>  ${Form_payment1.text} //// $pay1//***${double.parse(pay1)}');
-                                    print(
-                                        '>>2>  ${Form_payment2.text} //// $pay2 //***${double.parse(pay2)}');
-
-                                    print(
-                                        '${(sum_amt - sum_disamt)}//****${double.parse(pay1) + double.parse(pay2)}');
-                                    print(
-                                        '************************************++++');
-
-                                    if ((double.parse(pay1) +
-                                            double.parse(pay2) !=
-                                        (sum_amt - sum_disamt))) {
-                                      _showMyDialogPay_Error(
-                                          'จำนวนเงินไม่ถูกต้อง ');
-                                      // ScaffoldMessenger.of(context)
-                                      //     .showSnackBar(
-                                      //   const SnackBar(
-                                      //       content: Text(
-                                      //           'จำนวนเงินไม่ถูกต้อง ',
-                                      //           style: TextStyle(
-                                      //               color: Colors.white,
-                                      //               fontFamily:
-                                      //                   Font_.Fonts_T))),
-                                      // );
-                                    } else if (double.parse(pay1) < 0.00 ||
-                                        double.parse(pay2) < 0.00) {
-                                      _showMyDialogPay_Error(
-                                          'จำนวนเงินไม่ถูกต้อง');
-                                      // ScaffoldMessenger.of(context)
-                                      //     .showSnackBar(
-                                      //   const SnackBar(
-                                      //       content: Text('จำนวนเงินไม่ถูกต้อง',
-                                      //           style: TextStyle(
-                                      //               color: Colors.white,
-                                      //               fontFamily:
-                                      //                   Font_.Fonts_T))),
-                                      // );
-                                    } else {
-                                      if (paymentSer1 != '0' &&
-                                          paymentSer1 != null) {
-                                        if ((double.parse(pay1) +
-                                                    double.parse(pay2)) >=
-                                                (sum_amt - sum_disamt) ||
-                                            (double.parse(pay1) +
-                                                    double.parse(pay2)) <
-                                                (sum_amt - sum_disamt)) {
-                                          if ((sum_amt - sum_disamt) != 0) {
-                                            if (select_page == 0) {
-                                              print('(select_page == 0)');
-                                              if (paymentName1
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน' ||
-                                                  paymentName2
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน') {
-                                                if (base64_Slip != null) {
-                                                  final tableData00 = [
-                                                    for (int index = 0;
-                                                        index <
-                                                            _TransModels.length;
-                                                        index++)
-                                                      [
-                                                        '${index + 1}',
-                                                        '${_TransModels[index].name}',
-                                                        '${_TransModels[index].tqty}',
-                                                        '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
-                                                      ],
-                                                  ];
-                                                  String Area_ =
-                                                      '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
-
-                                                  try {
-                                                    print('tableData00.length');
-                                                    print(tableData00.length);
-                                                    in_Trans(newValuePDFimg);
-                                                  } catch (e) {}
-                                                } else {
-                                                  _showMyDialogPay_Error(
-                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
-                                                  // ScaffoldMessenger.of(context)
-                                                  //     .showSnackBar(
-                                                  //   const SnackBar(
-                                                  //       content: Text(
-                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                  //           style: TextStyle(
-                                                  //               color:
-                                                  //                   Colors.white,
-                                                  //               fontFamily: Font_
-                                                  //                   .Fonts_T))),
-                                                  // );
-                                                }
-                                              } else {
-                                                try {
-                                                  in_Trans(newValuePDFimg);
-                                                  // OKuploadFile_Slip();
-                                                } catch (e) {}
-                                                // try {
-
-                                                //   // in_Trans();ใช้
-                                                // } catch (e) {}
-                                              }
-                                            } else if (select_page == 1) {
-                                              if (paymentName1.toString().trim() == 'เงินโอน' ||
-                                                  paymentName2
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน' ||
-                                                  paymentName1
-                                                          .toString()
-                                                          .trim() ==
-                                                      'Online Payment' ||
-                                                  paymentName2
-                                                          .toString()
-                                                          .trim() ==
-                                                      'Online Payment') {
-                                                if (base64_Slip != null) {
-                                                } else {
-                                                  _showMyDialogPay_Error(
-                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
-                                                  // ScaffoldMessenger.of(context)
-                                                  //     .showSnackBar(
-                                                  //   const SnackBar(
-                                                  //       content: Text(
-                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                  //           style: TextStyle(
-                                                  //               color:
-                                                  //                   Colors.white,
-                                                  //               fontFamily: Font_
-                                                  //                   .Fonts_T))),
-                                                  // );
-                                                }
-                                              } else {}
-                                            } else if (select_page == 2) {
-                                              if (paymentName1.toString().trim() == 'เงินโอน' ||
-                                                  paymentName2
-                                                          .toString()
-                                                          .trim() ==
-                                                      'เงินโอน' ||
-                                                  paymentName1
-                                                          .toString()
-                                                          .trim() ==
-                                                      'Online Payment' ||
-                                                  paymentName2
-                                                          .toString()
-                                                          .trim() ==
-                                                      'Online Payment') {
-                                                if (base64_Slip != null) {
-                                                  try {
-                                                    // OKuploadFile_Slip();
-                                                    //TransReBillHistoryModel
-
-                                                    // await in_Trans_re_invoice_refno(
-                                                    //     newValuePDFimg);
-                                                  } catch (e) {}
-                                                } else {
-                                                  _showMyDialogPay_Error(
-                                                      'กรุณาแนบหลักฐานการโอน(สลิป)!');
-                                                  // ScaffoldMessenger.of(context)
-                                                  //     .showSnackBar(
-                                                  //   const SnackBar(
-                                                  //       content: Text(
-                                                  //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
-                                                  //           style: TextStyle(
-                                                  //               color:
-                                                  //                   Colors.white,
-                                                  //               fontFamily: Font_
-                                                  //                   .Fonts_T))),
-                                                  // );
-                                                }
-                                              } else {
-                                                try {
-                                                  // OKuploadFile_Slip();
-                                                  //TransReBillHistoryModel
-
-                                                  // await in_Trans_re_invoice_refno(
-                                                  //     newValuePDFimg);
-                                                } catch (e) {}
-                                              }
+                                          List newValuePDFimg = [];
+                                          for (int index = 0;
+                                              index < 1;
+                                              index++) {
+                                            if (renTalModels[index]
+                                                    .imglogo!
+                                                    .trim() ==
+                                                '') {
+                                              // newValuePDFimg.add(
+                                              //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                            } else {
+                                              newValuePDFimg.add(
+                                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                             }
-                                          } else {
+                                          }
+                                          if (pamentpage == 0) {
+                                            setState(() {
+                                              Form_payment2.text = '';
+                                            });
+                                          }
+                                          setState(() {
+                                            pay1 = Form_payment1.text == ''
+                                                ? '0.00'
+                                                : Form_payment1.text;
+                                            pay2 = Form_payment2.text == ''
+                                                ? '0.00'
+                                                : Form_payment2.text;
+                                          });
+
+                                          print(
+                                              '${double.parse(pay1) + double.parse(pay2)} /// ${(sum_amt - sum_disamt)}****${Form_payment1.text}***${Form_payment2.text}');
+                                          print(
+                                              '************************************++++');
+                                          print(
+                                              '>>1>  ${Form_payment1.text} //// $pay1//***${double.parse(pay1)}');
+                                          print(
+                                              '>>2>  ${Form_payment2.text} //// $pay2 //***${double.parse(pay2)}');
+
+                                          print(
+                                              '${(sum_amt - sum_disamt)}//****${double.parse(pay1) + double.parse(pay2)}');
+                                          print(
+                                              '************************************++++');
+
+                                          if ((double.parse(pay1) +
+                                                  double.parse(pay2) !=
+                                              (sum_amt - sum_disamt))) {
                                             _showMyDialogPay_Error(
-                                                'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                'จำนวนเงินไม่ถูกต้อง ');
                                             // ScaffoldMessenger.of(context)
                                             //     .showSnackBar(
                                             //   const SnackBar(
                                             //       content: Text(
-                                            //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                            //           'จำนวนเงินไม่ถูกต้อง ',
                                             //           style: TextStyle(
                                             //               color: Colors.white,
                                             //               fontFamily:
                                             //                   Font_.Fonts_T))),
                                             // );
+                                          } else if (double.parse(pay1) <
+                                                  0.00 ||
+                                              double.parse(pay2) < 0.00) {
+                                            _showMyDialogPay_Error(
+                                                'จำนวนเงินไม่ถูกต้อง');
+                                            // ScaffoldMessenger.of(context)
+                                            //     .showSnackBar(
+                                            //   const SnackBar(
+                                            //       content: Text('จำนวนเงินไม่ถูกต้อง',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily:
+                                            //                   Font_.Fonts_T))),
+                                            // );
+                                          } else {
+                                            if (paymentSer1 != '0' &&
+                                                paymentSer1 != null) {
+                                              if ((double.parse(pay1) +
+                                                          double.parse(pay2)) >=
+                                                      (sum_amt - sum_disamt) ||
+                                                  (double.parse(pay1) +
+                                                          double.parse(pay2)) <
+                                                      (sum_amt - sum_disamt)) {
+                                                if ((sum_amt - sum_disamt) !=
+                                                    0) {
+                                                  if (select_page == 0) {
+                                                    print('(select_page == 0)');
+                                                    if (paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน') {
+                                                      if (base64_Slip != null) {
+                                                        final tableData00 = [
+                                                          for (int index = 0;
+                                                              index <
+                                                                  _TransModels
+                                                                      .length;
+                                                              index++)
+                                                            [
+                                                              '${index + 1}',
+                                                              '${_TransModels[index].name}',
+                                                              '${_TransModels[index].tqty}',
+                                                              '${nFormat.format(double.parse(_TransModels[index].pvat!))}'
+                                                            ],
+                                                        ];
+                                                        String Area_ =
+                                                            '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+
+                                                        try {
+                                                          print(
+                                                              'tableData00.length');
+                                                          print(tableData00
+                                                              .length);
+                                                          in_Trans(
+                                                              newValuePDFimg);
+                                                        } catch (e) {}
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {
+                                                      try {
+                                                        in_Trans(
+                                                            newValuePDFimg);
+                                                        // OKuploadFile_Slip();
+                                                      } catch (e) {}
+                                                      // try {
+
+                                                      //   // in_Trans();ใช้
+                                                      // } catch (e) {}
+                                                    }
+                                                  } else if (select_page == 1) {
+                                                    if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment') {
+                                                      if (base64_Slip != null) {
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {}
+                                                  } else if (select_page == 2) {
+                                                    if (paymentName1.toString().trim() == 'เงินโอน' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'เงินโอน' ||
+                                                        paymentName1
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment' ||
+                                                        paymentName2
+                                                                .toString()
+                                                                .trim() ==
+                                                            'Online Payment') {
+                                                      if (base64_Slip != null) {
+                                                        try {
+                                                          // OKuploadFile_Slip();
+                                                          //TransReBillHistoryModel
+
+                                                          // await in_Trans_re_invoice_refno(
+                                                          //     newValuePDFimg);
+                                                        } catch (e) {}
+                                                      } else {
+                                                        _showMyDialogPay_Error(
+                                                            'กรุณาแนบหลักฐานการโอน(สลิป)!');
+                                                        // ScaffoldMessenger.of(context)
+                                                        //     .showSnackBar(
+                                                        //   const SnackBar(
+                                                        //       content: Text(
+                                                        //           'กรุณาแนบหลักฐานการโอน(สลิป)!',
+                                                        //           style: TextStyle(
+                                                        //               color:
+                                                        //                   Colors.white,
+                                                        //               fontFamily: Font_
+                                                        //                   .Fonts_T))),
+                                                        // );
+                                                      }
+                                                    } else {
+                                                      try {
+                                                        // OKuploadFile_Slip();
+                                                        //TransReBillHistoryModel
+
+                                                        // await in_Trans_re_invoice_refno(
+                                                        //     newValuePDFimg);
+                                                      } catch (e) {}
+                                                    }
+                                                  }
+                                                } else {
+                                                  _showMyDialogPay_Error(
+                                                      'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!');
+                                                  // ScaffoldMessenger.of(context)
+                                                  //     .showSnackBar(
+                                                  //   const SnackBar(
+                                                  //       content: Text(
+                                                  //           'จำนวนเงินไม่ถูกต้อง กรุณาเลือกรายการชำระ!',
+                                                  //           style: TextStyle(
+                                                  //               color: Colors.white,
+                                                  //               fontFamily:
+                                                  //                   Font_.Fonts_T))),
+                                                  // );
+                                                }
+                                              } else {
+                                                _showMyDialogPay_Error(
+                                                    'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
+                                                // ScaffoldMessenger.of(context)
+                                                //     .showSnackBar(
+                                                //   const SnackBar(
+                                                //       content: Text(
+                                                //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
+                                                //           style: TextStyle(
+                                                //               color: Colors.white,
+                                                //               fontFamily:
+                                                //                   Font_.Fonts_T))),
+                                                // );
+                                              }
+                                            } else {
+                                              _showMyDialogPay_Error(
+                                                  'กรุณาเลือกรูปแบบการชำระ!');
+                                              // ScaffoldMessenger.of(context)
+                                              //     .showSnackBar(
+                                              //   const SnackBar(
+                                              //       content: Text(
+                                              //           'กรุณาเลือกรูปแบบการชำระ!',
+                                              //           style: TextStyle(
+                                              //               color: Colors.white,
+                                              //               fontFamily:
+                                              //                   Font_.Fonts_T))),
+                                              // );
+                                            }
                                           }
-                                        } else {
-                                          _showMyDialogPay_Error(
-                                              'กรุณากรอกจำนวนเงินให้ถูกต้อง!');
-                                          // ScaffoldMessenger.of(context)
-                                          //     .showSnackBar(
-                                          //   const SnackBar(
-                                          //       content: Text(
-                                          //           'กรุณากรอกจำนวนเงินให้ถูกต้อง!',
-                                          //           style: TextStyle(
-                                          //               color: Colors.white,
-                                          //               fontFamily:
-                                          //                   Font_.Fonts_T))),
-                                          // );
-                                        }
-                                      } else {
-                                        _showMyDialogPay_Error(
-                                            'กรุณาเลือกรูปแบบการชำระ!');
-                                        // ScaffoldMessenger.of(context)
-                                        //     .showSnackBar(
-                                        //   const SnackBar(
-                                        //       content: Text(
-                                        //           'กรุณาเลือกรูปแบบการชำระ!',
-                                        //           style: TextStyle(
-                                        //               color: Colors.white,
-                                        //               fontFamily:
-                                        //                   Font_.Fonts_T))),
-                                        // );
-                                      }
-                                    }
-                                  },
-                                  child: Container(
-                                      height: 50,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.orange,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        // border: Border.all(color: Colors.white, width: 1),
+                                        },
+                                        child: Container(
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.orange,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              // border: Border.all(color: Colors.white, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: const Center(
+                                                child: Text(
+                                              'รับชำระ',
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ))),
                                       ),
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: const Center(
-                                          child: Text(
-                                        'รับชำระ',
-                                        style: TextStyle(
-                                            color: PeopleChaoScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T),
-                                      ))),
-                                ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+                      ),
+                    )
+                  ],
+                )
         ]));
   }
 
@@ -7756,6 +10266,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
           Form_payment2.clear();
           Form_time.clear();
           Form_note.clear();
+          _area_rent_sum = 0.00;
           // Value_newDateY = null;
           pamentpage = 0;
           bills_name_ = 'บิลธรรมดา';

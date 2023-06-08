@@ -297,7 +297,7 @@ class PdfgenReceiptLock {
                       pw.Text(
                         (Slip_status.toString() == '1')
                             ? 'ใบรับเงินชั่วคราว'
-                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ',
+                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
                         style: pw.TextStyle(
                           fontSize: 10.00,
                           fontWeight: pw.FontWeight.bold,

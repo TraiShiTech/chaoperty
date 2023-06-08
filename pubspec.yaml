@@ -100,14 +100,14 @@ dependencies:
   pretty_qr_code: ^2.0.3
   image_downloader_web: ^2.0.2
   fast_image_resizer: ^0.0.2
-  
+  path: ^1.7.0
+  image: ^4.0.17
+  device_info: ^2.0.0
   
   flutter_localizations:
     sdk: flutter
   http: ^0.13.5
   crypto: ^3.0.2
-  flutter_file_dialog: ^3.0.0
-  
 
 dev_dependencies:
   flutter_test:
@@ -134,8 +134,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
-
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

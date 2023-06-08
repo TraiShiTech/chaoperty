@@ -65,7 +65,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
   List<RenTalModel> renTalModels = [];
   List<PackageModel> packageModels = [];
   ///////---------------------------------------------------->
-  List Status = ['สิทธิการเข้าถึง'];
+  List Status = ['ข้อมูลผู้ใช้'];
   List Style_Area_thi = [
     'คอมมูนิตี้มอลล์',
     'ออฟฟิศให้เช่า',
@@ -723,7 +723,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(0, 8, 2, 0),
                       child: Container(
-                        width: 150,
+                        width: 220,
                         decoration: BoxDecoration(
                           color: AppbackgroundColor.TiTile_Colors,
                           borderRadius: const BorderRadius.only(
@@ -739,10 +739,10 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
                             AutoSizeText(
-                              'สิทธิการเข้าถึง',
+                              'ตั้งค่า/จัดการข้อมูลส่วนตัว',
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 8,
-                              maxFontSize: 20,
+                              maxFontSize: 18,
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                                 color: ReportScreen_Color.Colors_Text1_,
@@ -768,51 +768,51 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: InkWell(
-                  onTap: () {
-                    setState(() {
-                      Status_ = 8;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.tealAccent[700],
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                        bottomLeft: Radius.circular(10),
-                        bottomRight: Radius.circular(10),
-                      ),
-                      border: Border.all(color: Colors.white, width: 2),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    width: 120,
-                    // height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '🔰 ',
-                          style: TextStyle(
-                              // color:
-                              //     (Status_ == 7) ? Colors.black : Colors.black,
-                              fontFamily: FontWeight_.Fonts_T),
-                        ),
-                        Text(
-                          'ติดต่อผู้ดูแล',
-                          style: TextStyle(
-                              // decoration: TextDecoration.underline,
-                              color:
-                                  (Status_ == 8) ? Colors.black : Colors.black,
-                              fontFamily: FontWeight_.Fonts_T),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+              // Padding(
+              //   padding: const EdgeInsets.all(8.0),
+              //   child: InkWell(
+              //     onTap: () {
+              //       setState(() {
+              //         Status_ = 8;
+              //       });
+              //     },
+              //     child: Container(
+              //       decoration: BoxDecoration(
+              //         color: Colors.tealAccent[700],
+              //         borderRadius: const BorderRadius.only(
+              //           topLeft: Radius.circular(10),
+              //           topRight: Radius.circular(10),
+              //           bottomLeft: Radius.circular(10),
+              //           bottomRight: Radius.circular(10),
+              //         ),
+              //         border: Border.all(color: Colors.white, width: 2),
+              //       ),
+              //       padding: const EdgeInsets.all(8.0),
+              //       width: 120,
+              //       // height: 30,
+              //       child: Row(
+              //         mainAxisAlignment: MainAxisAlignment.center,
+              //         children: [
+              //           Text(
+              //             '🔰 ',
+              //             style: TextStyle(
+              //                 // color:
+              //                 //     (Status_ == 7) ? Colors.black : Colors.black,
+              //                 fontFamily: FontWeight_.Fonts_T),
+              //           ),
+              //           Text(
+              //             'ติดต่อผู้ดูแล',
+              //             style: TextStyle(
+              //                 // decoration: TextDecoration.underline,
+              //                 color:
+              //                     (Status_ == 8) ? Colors.black : Colors.black,
+              //                 fontFamily: FontWeight_.Fonts_T),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // )
             ],
           ),
           Padding(
@@ -861,7 +861,7 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: (i + 1 == 1)
-                                              ? Colors.green
+                                              ? Colors.purpleAccent
                                               : (i + 1 == 2)
                                                   ? Colors.blue
                                                   : (i + 1 == 3)
@@ -901,42 +901,42 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          Status_ = 7;
-                        });
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.purpleAccent,
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                          border: (Status_ == 6)
-                              ? Border.all(color: Colors.white, width: 1)
-                              : null,
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        width: 120,
-                        // height: 30,
-                        child: Center(
-                          child: Text(
-                            'ข้อมูลผู้ใช้งาน',
-                            style: TextStyle(
-                                color: (Status_ == 7)
-                                    ? Colors.white
-                                    : Colors.black,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: InkWell(
+                  //     onTap: () {
+                  //       setState(() {
+                  //         Status_ = 7;
+                  //       });
+                  //     },
+                  //     child: Container(
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.purpleAccent,
+                  //         borderRadius: const BorderRadius.only(
+                  //             topLeft: Radius.circular(10),
+                  //             topRight: Radius.circular(10),
+                  //             bottomLeft: Radius.circular(10),
+                  //             bottomRight: Radius.circular(10)),
+                  //         border: (Status_ == 6)
+                  //             ? Border.all(color: Colors.white, width: 1)
+                  //             : null,
+                  //       ),
+                  //       padding: const EdgeInsets.all(8.0),
+                  //       width: 120,
+                  //       // height: 30,
+                  //       child: Center(
+                  //         child: Text(
+                  //           'ข้อมูลผู้ใช้งาน',
+                  //           style: TextStyle(
+                  //               color: (Status_ == 7)
+                  //                   ? Colors.white
+                  //                   : Colors.black,
+                  //               fontFamily: FontWeight_.Fonts_T),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -950,7 +950,8 @@ class _SettingUserScreenState extends State<SettingUserScreen> {
   Widget BodyHome_Web() {
     return Column(
       children: [
-        (Status_ == 1) ? Status5_Web() : Status7_Web()
+        USerInformation()
+        // (Status_ == 1) ? Status5_Web() : Status7_Web()
         // (Status_ == 1)
         //     ? Status1_Web()
         //     : (Status_ == 2)

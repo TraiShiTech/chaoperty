@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../CRC_16_Prompay/generate_qrcode.dart';
 import '../Constant/Myconstant.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetCFinnancetrans_Model.dart';
 import '../Model/GetContractf_Model.dart';
 import '../Model/GetInvoice_Model.dart';
@@ -577,20 +578,25 @@ class _PaysState extends State<Pays> {
         });
         print('rrrrrrrrrrrrrrfalse');
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
-                  style: TextStyle(
-                      color: Colors.white, fontFamily: Font_.Fonts_T))),
-        );
+        setState(() {
+          red_Trans_select2();
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //       content: Text(
+        //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+        //           style: TextStyle(
+        //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+        // );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('มีผู้ใช้อื่นกำลังทำรายการอยู่....',
-                style:
-                    TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+      //           style:
+      //               TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      // );
       print('rrrrrrrrrrrrrr $e');
     }
   }
@@ -8014,6 +8020,17 @@ class _PaysState extends State<Pays> {
                                       } else {
                                         if (select_page == 2) {
                                           // print('object963');
+                                          Insert_log.Insert_logs(
+                                              'บัญชี',
+                                              (select_page == 2)
+                                                  ? (Slip_status.toString() ==
+                                                          '1')
+                                                      ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                      : 'พิมพ์ซ้ำ:$cFinn '
+                                                  : (Slip_status.toString() ==
+                                                          '1')
+                                                      ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                      : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
                                           PdfgenReceipt.exportPDF_Receipt2(
                                               context,
                                               Slip_status,
@@ -8082,6 +8099,19 @@ class _PaysState extends State<Pays> {
                                                   ];
                                                   //_InvoiceHistoryModels
                                                   in_Trans_invoice_refno_p();
+                                                  Insert_log.Insert_logs(
+                                                      'บัญชี',
+                                                      (select_page == 2)
+                                                          ? (Slip_status
+                                                                      .toString() ==
+                                                                  '1')
+                                                              ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                              : 'พิมพ์ซ้ำ:$cFinn '
+                                                          : (Slip_status
+                                                                      .toString() ==
+                                                                  '1')
+                                                              ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                              : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
                                                   PdfgenReceipt.exportPDF_Receipt1(
                                                       numinvoice,
                                                       tableData00,
@@ -8120,6 +8150,19 @@ class _PaysState extends State<Pays> {
                                                   //TransReBillHistoryModel
                                                   // in_Trans_re_invoice_refno();
                                                   //พิมพ์ซ้ำ
+                                                  Insert_log.Insert_logs(
+                                                      'บัญชี',
+                                                      (select_page == 2)
+                                                          ? (Slip_status
+                                                                      .toString() ==
+                                                                  '1')
+                                                              ? 'พิมพ์ซ้ำ:$numinvoice '
+                                                              : 'พิมพ์ซ้ำ:$cFinn '
+                                                          : (Slip_status
+                                                                      .toString() ==
+                                                                  '1')
+                                                              ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                                                              : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
                                                   PdfgenReceipt.exportPDF_Receipt2(
                                                       context,
                                                       Slip_status,
@@ -9242,6 +9285,15 @@ class _PaysState extends State<Pays> {
           print(
               ' in_Trans_invoice_P///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
+        Insert_log.Insert_logs(
+            'บัญชี',
+            (select_page == 2)
+                ? (Slip_status.toString() == '1')
+                    ? 'พิมพ์ซ้ำ:$numinvoice '
+                    : 'พิมพ์ซ้ำ:$cFinn '
+                : (Slip_status.toString() == '1')
+                    ? 'พิมพ์ใบเสร็จชั่วคราว:$numinvoice '
+                    : 'พิมพ์ใบเสร็จชั่วคราว:$cFinn ');
         PdfgenReceipt.exportPDF_Receipt(
             tableData00,
             context,
@@ -9369,6 +9421,12 @@ class _PaysState extends State<Pays> {
           print(
               'in_Trans_invoice///bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
+
+        Insert_log.Insert_logs(
+            'บัญชี',
+            (Slip_status.toString() == '1')
+                ? 'รับชำระ:$numinvoice '
+                : 'รับชำระ:$cFinn ');
         PdfgenReceipt.exportPDF_Receipt(
             tableData00,
             context,
@@ -9548,6 +9606,12 @@ class _PaysState extends State<Pays> {
           print('zzzzasaaa123454>>>>  $cFinn');
           print('bnobnobnobno123454>>>>  ${cFinnancetransModel.bno}');
         }
+
+        Insert_log.Insert_logs(
+            'บัญชี',
+            (Slip_status.toString() == '1')
+                ? 'รับชำระ:$numinvoice '
+                : 'รับชำระ:$cFinn ');
         PdfgenReceipt.exportPDF_Receipt1(
             cFinn,
             tableData00,
@@ -9666,6 +9730,12 @@ class _PaysState extends State<Pays> {
         // int in_1 = int.parse(pSer1.toString());
         // int in_2 = int.parse(pSer2.toString()); 0897791278
         // _PayMentModels[in_].bno;
+
+        Insert_log.Insert_logs(
+            'บัญชี',
+            (Slip_status.toString() == '1')
+                ? 'รับชำระ:$numinvoice '
+                : 'รับชำระ:$cFinn ');
         PdfgenReceipt.exportPDF_Receipt2(
           context,
           Slip_status,

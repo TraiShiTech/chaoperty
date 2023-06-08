@@ -109,7 +109,7 @@ class Pdfgen_historybill {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        '$renTal_name',
+                        '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
                           fontSize: 14.0,
@@ -208,7 +208,7 @@ class Pdfgen_historybill {
             ),
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
             pw.Container(
-              decoration: pw.BoxDecoration(
+              decoration: const pw.BoxDecoration(
                 color: PdfColors.green100,
                 border: pw.Border(
                   bottom: pw.BorderSide(color: PdfColors.green900),
@@ -406,15 +406,15 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
                       child: pw.Center(
                         child: pw.Text(
-                          '${_TransReBillModels[index].cid}',
+                          '${_TransReBillModels[index]}',
                           maxLines: 2,
                           textAlign: pw.TextAlign.left,
                           style: pw.TextStyle(
@@ -430,9 +430,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -454,9 +454,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -478,9 +478,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -504,9 +504,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -528,9 +528,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -554,9 +554,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -580,9 +580,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -606,9 +606,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -630,9 +630,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: const pw.Border(
+                        border: pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),

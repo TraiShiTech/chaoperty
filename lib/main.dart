@@ -17,6 +17,7 @@ void main() {
 ///----------------------------------------------------->
 /// flutter build web --web-renderer html --release
 ///  flutter build web --release --no-sound-null-safety
+/// flutter build web --web-renderer html --release --no-sound-null-safety
 ///  flutter build web --web-renderer html --release --dart-define=web-browser-flag=--disable-web-security (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 ///  flutter build web --web-renderer html --release --no-sound-null-safety --dart-define=web-browser-flag=--disable-web-security (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 ///  flutter build web --release --web-renderer=html --dart-define=web-browser-flag=--disable-web-security
@@ -26,7 +27,7 @@ void main() {
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
-//----------------------------------------------------->git commit -m "Up Add custo"
+//----------------------------------------------------->
 //----(Git Hub)
 //1.----> git add .
 //2.------> git remote set-url origin https://github.com/TraiShiTech/chaoperty.git

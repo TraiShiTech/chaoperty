@@ -2611,30 +2611,33 @@ class _HistoryBillsState extends State<HistoryBills> {
                                     flex: 4,
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      // child: InkWell(
-                                      //   onTap: () {},
-                                      //   child: Container(
-                                      //       height: 50,
-                                      //       decoration: const BoxDecoration(
-                                      //         color: Colors.orange,
-                                      //         borderRadius: BorderRadius.only(
-                                      //             topLeft: Radius.circular(10),
-                                      //             topRight: Radius.circular(10),
-                                      //             bottomLeft: Radius.circular(10),
-                                      //             bottomRight: Radius.circular(10)),
-                                      //         // border: Border.all(color: Colors.white, width: 1),
-                                      //       ),
-                                      //       padding: EdgeInsets.all(8.0),
-                                      //       child: Center(
-                                      //           child: Text(
-                                      //         'ลดหนี้',
-                                      //         style: TextStyle(
-                                      //             color: PeopleChaoScreen_Color
-                                      //                 .Colors_Text1_,
-                                      //             fontWeight: FontWeight.bold,
-                                      //             fontFamily: FontWeight_.Fonts_T),
-                                      //       ))),
-                                      // ),
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                            height: 50,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.blue,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              // border: Border.all(color: Colors.white, width: 1),
+                                            ),
+                                            padding: EdgeInsets.all(8.0),
+                                            child: Center(
+                                                child: Text(
+                                              'พิมพ์เอกสาร',
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ))),
+                                      ),
                                     ),
                                   ),
                                   numdoctax != ''

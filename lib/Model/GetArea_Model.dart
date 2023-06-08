@@ -26,6 +26,14 @@ class AreaModel {
   String? cname_q;
   String? custno;
   String? zn;
+  String? datex;
+  String? timex;
+  String? cser;
+  String? aser;
+  String? aserQout;
+  String? type;
+  String? sdate;
+  String? dataUpdate;
 
   AreaModel(
       {this.ser,
@@ -54,7 +62,15 @@ class AreaModel {
       this.cname,
       this.cname_q,
       this.custno,
-      this.zn});
+      this.zn,
+      this.datex,
+      this.timex,
+      this.cser,
+      this.aser,
+      this.aserQout,
+      this.type,
+      this.sdate,
+      this.dataUpdate});
 
   AreaModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -83,7 +99,16 @@ class AreaModel {
     cname = json['cname'];
     cname_q = json['cname_q'];
     custno = json['custno'];
-    zn= json['zn'];
+    zn = json['zn'];
+
+    datex = json['datex'];
+    timex = json['timex'];
+    cser = json['cser'];
+    aser = json['aser'];
+    aserQout = json['aser_qout'];
+    type = json['type'];
+    sdate = json['sdate'];
+    dataUpdate = json['data_update'];
   }
 
   Map<String, dynamic> toJson() {
@@ -115,6 +140,14 @@ class AreaModel {
     data['cname_q'] = this.cname_q;
     data['custno'] = this.custno;
     data['zn'] = this.zn;
+    data['datex'] = this.datex;
+    data['timex'] = this.timex;
+    data['cser'] = this.cser;
+    data['aser'] = this.aser;
+    data['aser_qout'] = this.aserQout;
+    data['type'] = this.type;
+    data['sdate'] = this.sdate;
+    data['data_update'] = this.dataUpdate;
     return data;
   }
 }

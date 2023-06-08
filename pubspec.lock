@@ -89,6 +89,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
+  bidi:
+    dependency: transitive
+    description:
+      name: bidi
+      sha256: dc00274c7edabae2ab30c676e736ea1eb0b1b7a1b436cb5fe372e431ccb39ab0
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.6"
   boolean_selector:
     dependency: transitive
     description:
@@ -217,6 +225,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  device_info:
+    dependency: "direct main"
+    description:
+      name: device_info
+      sha256: f4a8156cb7b7480d969cb734907d18b333c8f0bc0b1ad0b342cdcecf30d62c48
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.3"
+  device_info_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_platform_interface
+      sha256: b148e0bf9640145d09a4f8dea96614076f889e7f7f8b5ecab1c7e5c2dbc73c1b
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.1"
   device_info_plus:
     dependency: transitive
     description:
@@ -414,14 +438,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.1+1"
-  flutter_file_dialog:
-    dependency: "direct main"
-    description:
-      name: flutter_file_dialog
-      sha256: "94c4bc7c2e52fa6b73f4ff2f12e790b47a2564270c4c5b4a3b1d33b8d7236590"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.0"
   flutter_limited_checkbox:
     dependency: "direct main"
     description:
@@ -558,13 +574,13 @@ packages:
     source: hosted
     version: "1.0.1+1"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
-      sha256: "8e9d133755c3e84c73288363e6343157c383a0c6c56fc51afcc5d4d7180306d6"
+      sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0"
+    version: "4.0.17"
   image_downloader_web:
     dependency: "direct main"
     description:
@@ -702,7 +718,7 @@ packages:
     source: hosted
     version: "0.20.0"
   path:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path
       sha256: db9d4f58c908a4ba5953fcee2ae317c94889433e5024c27ce74a37f94267945b
@@ -777,10 +793,18 @@ packages:
     dependency: "direct main"
     description:
       name: pdf
-      sha256: "10659b915e65832b106f6d1d213e09b789cc1f24bf282ee911e49db35b96be4d"
+      sha256: "586d3debf5432e5377044754032cfa53ab45e9abf371d4865e9ad5019570e246"
       url: "https://pub.dev"
     source: hosted
-    version: "3.8.4"
+    version: "3.10.1"
+  pdf_widget_wrapper:
+    dependency: transitive
+    description:
+      name: pdf_widget_wrapper
+      sha256: "754867bf32c4683da29ccc6bf31250905431fb0818a7258c153e21cd627b3212"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   pdfjs:
     dependency: "direct main"
     description:
@@ -897,10 +921,10 @@ packages:
     dependency: "direct main"
     description:
       name: printing
-      sha256: "4df9e22bd4cb2ecea67183e5b328711b10276127b8878d9d5cb60ccd4c24a77c"
+      sha256: "6aa86779d51f1c60608defee7b231e1133ab9b00f63b3b71abfa85cb39898571"
       url: "https://pub.dev"
     source: hosted
-    version: "5.9.3"
+    version: "5.10.4"
   printx:
     dependency: transitive
     description:
@@ -1158,18 +1182,18 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_xlsio
-      sha256: ea1a931b5c3cb59c762657fda406f13710fcea58b9eacfb48a4f7dbd82818702
+      sha256: a23f38bbfc3266f6bd9531370976a1184c176a7b217e4fb6c60608429fae3b3f
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.43-beta"
+    version: "20.4.52-beta"
   syncfusion_officecore:
     dependency: transitive
     description:
       name: syncfusion_officecore
-      sha256: f8aefb9eab8d7854a8a72b08d84996e61ceeccce600ac4dcefc12b8ceadd6ef3
+      sha256: aef933b35a4c6eff044c8a9b992ad98bb9493d954d2ac7505c460fa2f53d458b
       url: "https://pub.dev"
     source: hosted
-    version: "20.4.43-beta"
+    version: "20.4.52-beta"
   syncfusion_pdfviewer_macos:
     dependency: transitive
     description:
@@ -1420,4 +1444,4 @@ packages:
     version: "6.1.0"
 sdks:
   dart: ">=2.19.0 <3.0.0"
-  flutter: ">=3.3.0"
+  flutter: ">=3.7.0"

@@ -22,8 +22,17 @@ class _BureauScreenState extends State<BureauScreen> {
   @override
   int Status_ = 1;
 
+  int? _message1;
+
+  void updateMessage(int newMessage) {
+    setState(() {
+      _message1 = newMessage;
+      Status_ = newMessage;
+    });
+  }
+
   // List Status = ['ทะเบียนลูกค้า', 'ทะเบียนมิเตอร์', 'ประวัติการใช้งาน'];
-  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน', 'เพิ่มข้อมูลลูกค้า'];
+  List Status = ['ทะเบียนลูกค้า', 'ประวัติการใช้งาน'];
   Widget build(BuildContext context) {
     return Container(
       // color: AppbackgroundColor.Sub_Abg_Colors,
@@ -153,9 +162,13 @@ class _BureauScreenState extends State<BureauScreen> {
         ),
         (Status_ == 1)
             ? CustomerScreen()
-            : (Status_ == 2)
-                ? SystemlogScreen()
-                : Add_Custo_Screen()
+            :
+            // (Status_ == 2)
+            //     ? Add_Custo_Screen(
+            //         updateMessage: updateMessage,
+            //       )
+            //     :
+            SystemlogScreen()
       ]),
     );
   }

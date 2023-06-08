@@ -2369,30 +2369,32 @@ class _AccessrightsState extends State<Accessrights> {
                                   itemCount: userModels.length,
                                   itemBuilder:
                                       (BuildContext context, int index) {
-                                    // List<String> value = [
-                                    //   for (int i = 0;
-                                    //       i < perMissionModels.length;
-                                    //       i++)
-                                    //     '${perMissionModels[i].perm}',
-                                    // ];
-                                    // String valueindex =
-                                    //     '${userModels[index].permission}';
-                                    // List<String> splitValues = valueindex.split(',');
+                                    List<String> value = [
+                                      for (int i = 0;
+                                          i < perMissionModels.length;
+                                          i++)
+                                        '${perMissionModels[i].perm}',
+                                    ];
+                                    String valueindex =
+                                        '${userModels[index].permission}';
+                                    List<String> splitValues =
+                                        valueindex.split(',');
 
-                                    // String newValue = '';
+                                    String newValue = '';
 
-                                    // for (String index in splitValues) {
-                                    //   if (index == '0') {
-                                    //     for (int i2 = 0;
-                                    //         i2 < value.length - 1;
-                                    //         i2++) {
-                                    //       newValue = newValue + value[i2] + ',';
-                                    //     }
-                                    //   } else {
-                                    //     int i = int.parse(index);
-                                    //     newValue = newValue + value[i - 1] + ',';
-                                    //   }
-                                    // }
+                                    for (String index in splitValues) {
+                                      if (index == '0') {
+                                        for (int i2 = 0;
+                                            i2 < value.length - 1;
+                                            i2++) {
+                                          newValue = newValue + value[i2] + ',';
+                                        }
+                                      } else {
+                                        int i = int.parse(index);
+                                        newValue =
+                                            newValue + value[i - 1] + ',';
+                                      }
+                                    }
                                     return Material(
                                       color: tappedIndex_ == index.toString()
                                           ? tappedIndex_Color.tappedIndex_Colors
@@ -2454,13 +2456,15 @@ class _AccessrightsState extends State<Accessrights> {
                                                       ),
                                                 ),
                                               ),
-                                              const Expanded(
+                                              Expanded(
                                                 flex: 2,
                                                 child: Text(
+                                                  '${newValue}',
+                                                  // '${userModels[index].permission} ',
                                                   // (newValue.endsWith(','))
                                                   //     ? '${newValue.substring(0, newValue.length - 1)}'
                                                   //     : '${newValue}',
-                                                  'ผู้เช่า',
+                                                  //  'ผู้เช่า',
                                                   maxLines: 2,
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(

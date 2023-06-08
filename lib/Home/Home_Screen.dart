@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -21,6 +22,8 @@ import '../Model/GetCustomer_Model.dart';
 import '../Model/GetNote_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
+import '../Model/GetZoneAll_Model.dart';
+import '../Model/GetZone_Model.dart';
 import '../Model/Get_maintenance_model.dart';
 import '../Model/Get_tenant_tow_model.dart';
 import '../Model/trans_re_bill_model.dart';
@@ -54,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<TransReBillModel> _TransReBillModels = [];
   List<MaintenanceModel> maintenanceModels = [];
   String? renTal_user, renTal_name, sernote;
+  int app_port = 0;
 ///////////------------------------------------------->
   @override
   void initState() {
@@ -604,15 +608,306 @@ class _HomeScreenState extends State<HomeScreen> {
                 renTal_user == null
                     ? Container(
                         width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.width * 0.3,
-                        child: const Center(
-                          child: Text(
-                            'กรุณาเลือกสถานที่',
-                            style: TextStyle(
-                              color: HomeScreen_Color.Colors_Text2_,
-                              fontFamily: Font_.Fonts_T,
+                        height: MediaQuery.of(context).size.width * 0.45,
+                        child: ListView(
+                          children: [
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        'กรุณาเลือกสถานที่',
+                                        style: TextStyle(
+                                          color: HomeScreen_Color.Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.width *
+                                        0.25,
+                                    color: Colors.transparent,
+                                    child: GridView.count(
+                                      crossAxisCount:
+                                          (Responsive.isDesktop(context))
+                                              ? 8
+                                              : 4,
+                                      children: [
+                                        Card(
+                                            color:
+                                                AppbackgroundColor.Abg_Colors,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                            ),
+                                            child: InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  app_port = 1;
+                                                });
+                                              },
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .Sub_Abg_Colors,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    50),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    50),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    50),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    50)),
+                                                  ),
+                                                  // color: Colors.white,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.1,
+                                                  height: 50,
+                                                  child: Center(
+                                                      child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Icon(Icons.add)
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          AutoSizeText(
+                                                            'เพิ่มสถานที่',
+                                                            minFontSize: 10,
+                                                            maxFontSize: 18,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              // fontSize: 20,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                            ),
+                                                            maxLines: 4,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ))),
+                                            )),
+                                        for (int i = 0;
+                                            i < renTalModels.length;
+                                            i++)
+                                          Card(
+                                              color:
+                                                  AppbackgroundColor.Abg_Colors,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(50),
+                                              ),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  var renTalSer =
+                                                      renTalModels[i].ser;
+                                                  var renTalName =
+                                                      renTalModels[i].pn;
+                                                  print(
+                                                      'mmmmm ${renTalSer.toString()} $renTalName');
+
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  preferences.setString(
+                                                      'renTalSer',
+                                                      renTalSer.toString());
+                                                  preferences.setString(
+                                                      'renTalName',
+                                                      renTalName.toString());
+                                                  String? _route = preferences
+                                                      .getString('route');
+
+                                                  preferences.remove('zoneSer');
+                                                  preferences
+                                                      .remove('zonesName');
+                                                  preferences
+                                                      .remove('zonePSer');
+                                                  preferences
+                                                      .remove('zonesPName');
+
+                                                  MaterialPageRoute route =
+                                                      MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        AdminScafScreen(
+                                                            route: _route),
+                                                  );
+                                                  Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      route,
+                                                      (route) => false);
+                                                },
+                                                child: Container(
+                                                    // color: Colors.green.shade200,
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.green.shade200,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                                  .only(
+                                                              topLeft: Radius
+                                                                  .circular(50),
+                                                              topRight: Radius
+                                                                  .circular(50),
+                                                              bottomLeft: Radius
+                                                                  .circular(50),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          50)),
+                                                    ),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.1,
+                                                    height: 50,
+                                                    child: renTalModels[i]
+                                                                    .imglogo ==
+                                                                null ||
+                                                            renTalModels[i]
+                                                                    .imglogo ==
+                                                                'null'
+                                                        ? Center(
+                                                            child: AutoSizeText(
+                                                            '${renTalModels[i].pn}',
+                                                            minFontSize: 10,
+                                                            maxFontSize: 18,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                              // fontSize: 20,
+                                                              fontFamily:
+                                                                  Font_.Fonts_T,
+                                                              color: PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                            ),
+                                                            maxLines: 4,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ))
+                                                        : Center(
+                                                            child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              renTalModels[i].imglogo ==
+                                                                          null ||
+                                                                      renTalModels[i]
+                                                                              .imglogo ==
+                                                                          'null'
+                                                                  ? SizedBox()
+                                                                  : Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .center,
+                                                                      children: [
+                                                                        // Container(
+                                                                        //   width: 100,
+                                                                        //   height: 60,
+                                                                        //   decoration: BoxDecoration(
+                                                                        //     image: DecorationImage(
+                                                                        //       image: NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                        //     ),
+                                                                        //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                        //   ),
+                                                                        // ),
+                                                                        CircleAvatar(
+                                                                          radius:
+                                                                              25,
+                                                                          backgroundImage:
+                                                                              NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                          backgroundColor:
+                                                                              Colors.transparent,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                              SizedBox(
+                                                                height: 5,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  AutoSizeText(
+                                                                    '${renTalModels[i].pn}',
+                                                                    minFontSize:
+                                                                        10,
+                                                                    maxFontSize:
+                                                                        18,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style:
+                                                                        TextStyle(
+                                                                      // fontSize: 20,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T,
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                    ),
+                                                                    maxLines: 4,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ))),
+                                              )),
+                                      ],
+                                    )),
+                                (app_port == 1)
+                                    ? Row(
+                                        children: [
+                                          Expanded(
+                                            child: Body4(),
+                                          )
+                                        ],
+                                      )
+                                    : SizedBox()
+                              ],
                             ),
-                          ),
+                          ],
                         ),
                       )
                     : Expanded(
@@ -4480,6 +4775,436 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  List<ZoneModel> zoneModels = [];
+  List<AreaModel> areaModels = [];
+
+  List<ZoneAllModel> zoneAllModels = [];
+  int SerBody_Step3_ = 0;
+  String Value_lacotion_ = '';
+  String Value_Area_ = '';
+  int Value_AreaSer_ = 0; //ลักษณะพื้นที่เช่า
+  String Value_Rent_ = '';
+  int Value_RentSer_ = 0; //ชื่การคิดค่าเช่า
+  String Value_Usage_ = '';
+  int Value_UsageSer_ = 0; //การใช้งาน
+
+  String Value_Zone_ = ''; //ชื่อโซนชั้น
+  String Value_QTYROOM_ = ''; //จำนวนห้อง
+
+  int activeStep = 0; // stepper
+  int upperBound = 1; // stepper
+
+  String? lncodeser, areaser, lnser, rentser, serUser, serzn, qtyzn;
+
+  Widget Body4() {
+    final Body3_formKey_1 = GlobalKey<FormState>();
+    final Body3_formKey_2 = GlobalKey<FormState>();
+
+    bool _isObscure = true;
+    // bool _validate = false;
+    final Body3Form1_text = TextEditingController();
+    final Body3Form2_text = TextEditingController();
+    final Body3Form3_text = TextEditingController();
+    return Container(
+      // color: Colors.grey[100],
+      // height: MediaQuery.of(context).size.height,
+
+      child: Column(
+        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Form(
+              key: Body3_formKey_1,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.add),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          'เพิ่มสถานที่',
+                          minFontSize: 16,
+                          maxFontSize: 25,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: SingupScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          'ชื่อสถานที่',
+                          minFontSize: 5,
+                          maxFontSize: 15,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: SingupScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 4,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 2,
+                            child: TextFormField(
+                              keyboardType: TextInputType.number,
+                              controller: Body3Form1_text,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                }
+                                // if (int.parse(value.toString()) < 13) {
+                                //   return '< 13';
+                                // }
+                                return null;
+                              },
+                              // maxLength: 13,
+                              cursorColor: Colors.green,
+                              decoration: InputDecoration(
+                                  fillColor: Colors.white.withOpacity(0.3),
+                                  filled: true,
+                                  // prefixIcon:
+                                  //     const Icon(Icons.person_pin, color: Colors.black),
+                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                  focusedBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  errorStyle:
+                                      TextStyle(fontFamily: Font_.Fonts_T),
+                                  enabledBorder: const OutlineInputBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(15),
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    borderSide: BorderSide(
+                                      width: 1,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  labelText: 'ชื่อสถานที่ (ภาษาอังกฤษเท่านั่น)',
+                                  labelStyle:
+                                      const TextStyle(color: Colors.black54)),
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter(
+                                    RegExp("[@.!#%&'*+/=?^`{|}~]"),
+                                    allow: false),
+                                // // for below version 2 use this
+                                // FilteringTextInputFormatter.deny(
+                                //     RegExp("[' ']")),
+
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[A-Z a-z 1-9]')),
+                                FilteringTextInputFormatter.deny(
+                                    RegExp("[ก-ฮ ' ']")),
+                                // for version 2 and greater youcan also use this
+                                // FilteringTextInputFormatter.digitsOnly
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () async {
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              var Value_Email_ = preferences.getString('email');
+                              if (Body3_formKey_1.currentState!.validate()) {
+                                String dab = Body3Form1_text.text;
+                                int txser = Value_AreaSer_ + 1;
+                                int tser = Value_RentSer_ + 1;
+                                int rtser = Value_UsageSer_ + 1;
+
+                                String url =
+                                    '${MyConstant().domain}/CR_resister.php?isAdd=true&txser=$txser&tser=$tser&rtser=$rtser&dab=$dab&email=$Value_Email_';
+
+                                try {
+                                  var response = await http.get(Uri.parse(url));
+
+                                  var result = json.decode(response.body);
+                                  print(result);
+                                  if (result.toString() != 'Not data') {
+                                    setState(() {
+                                      Body3Form2_text.text = 'A';
+                                      Body3Form3_text.text = '2';
+                                    });
+                                    for (var map in result) {
+                                      RenTalModel userModel =
+                                          RenTalModel.fromJson(map);
+                                      setState(() {
+                                        // SerBody_Step3_ = 1;
+                                        Value_lacotion_ = Body3Form1_text.text;
+                                        Value_Zone_ = Body3Form2_text.text;
+                                        Value_QTYROOM_ = Body3Form3_text.text;
+                                      });
+                                    }
+                                    upZoneTable();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              'ชื่อสถานที่นี้มีผู้ใช้ท่านอื่นใช้แล้ว กรุณาใช้ชื่ออื่น')),
+                                    );
+                                  }
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'ชื่อสถานที่นี้มีผู้ใช้ท่านอื่นใช้แล้ว กรุณาใช้ชื่ออื่น')),
+                                  );
+                                }
+                              }
+                            },
+                            child: Container(
+                              height: 50,
+                              width: MediaQuery.of(context).size.width / 5,
+                              decoration: BoxDecoration(
+                                color: Colors.green[900],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Center(
+                                child: AutoSizeText(
+                                  'เพิ่ม',
+                                  minFontSize: 5,
+                                  maxFontSize: 15,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () async {
+                              setState(() {
+                                app_port = 0;
+                              });
+                            },
+                            child: Container(
+                              height: 50,
+                              width: MediaQuery.of(context).size.width / 5,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[900],
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Center(
+                                child: AutoSizeText(
+                                  'ยกเลิก',
+                                  minFontSize: 5,
+                                  maxFontSize: 15,
+                                  maxLines: 1,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: FontWeight_.Fonts_T),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          '*** บันทึกพื้นที่เริ่มต้น 2 พื้นที่',
+                          minFontSize: 5,
+                          maxFontSize: 15,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.red,
+                              // color: SingupScreen_Color.Colors_Text1_,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<Null> upZoneTable() async {
+    if (zoneModels != 0) {
+      setState(() {
+        zoneModels.clear();
+      });
+    }
+    print('ชื่อสถานที่ : $Value_lacotion_');
+    print('โซนชั้น : $Value_Zone_');
+    print('จำนวนห้อง : $Value_QTYROOM_');
+    String location = Value_lacotion_;
+    String zone = Value_Zone_;
+    String qtyroom = Value_QTYROOM_;
+
+    // String location = Value_lacotion_;
+    // String zone = 'A';
+    // String qtyroom = '2';
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var seruser = preferences.getString('ser');
+    String? nameuser = seruser;
+
+    String url =
+        '${MyConstant().domain}/InC_Zone.php?isAdd=true&location=$location&zone=$zone&qtyroom=$qtyroom&nameuser=$nameuser';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result.toString());
+
+      if (result.toString() != 'Not data') {
+        for (var map in result) {
+          ZoneModel zoneModel = ZoneModel.fromJson(map);
+          var serznx = zoneModel.ser;
+          var qtyznx = zoneModel.qty;
+          setState(() {
+            serzn = serznx;
+            qtyzn = qtyznx;
+            zoneModels.add(zoneModel);
+          });
+        }
+        upAreaTable();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('การเชื่อมต่อผิดพลาด',
+                  style: TextStyle(
+                      color: Colors.black, fontFamily: Font_.Fonts_T))),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('การเชื่อมต่อผิดพลาด',
+                style:
+                    TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T))),
+      );
+    }
+  }
+
+  Future<Null> upAreaTable() async {
+    if (areaModels != 0) {
+      setState(() {
+        areaModels.clear();
+      });
+    }
+
+    String? zone = serzn;
+    String location = Value_lacotion_;
+    String? nameuser = serUser;
+
+    for (var iz = 0; iz < int.parse(qtyzn!); iz++) {
+      String? zoneln = '$Value_Zone_ ${iz + 1}';
+      String? codeln = '${iz + 1}';
+      String url =
+          '${MyConstant().domain}/InC_Area.php?isAdd=true&zoneln=$zoneln&zone=$zone&codeln=$codeln&location=$location&nameuser=$nameuser';
+
+      try {
+        var response = await http.get(Uri.parse(url));
+
+        var result = json.decode(response.body);
+        print(result.toString());
+
+        if (result.toString() != 'Not data') {
+          for (var map in result) {
+            AreaModel areaModel = AreaModel.fromJson(map);
+            setState(() {
+              areaModels.add(areaModel);
+            });
+          }
+
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          String? _route = preferences.getString('route');
+          MaterialPageRoute materialPageRoute = MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  AdminScafScreen(route: _route));
+          Navigator.pushAndRemoveUntil(
+              context, materialPageRoute, (route) => false);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+                content: Text('การเชื่อมต่อผิดพลาด',
+                    style: TextStyle(
+                        color: Colors.black, fontFamily: Font_.Fonts_T))),
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('การเชื่อมต่อผิดพลาด',
+                  style: TextStyle(
+                      color: Colors.black, fontFamily: Font_.Fonts_T))),
+        );
+      }
+    }
+  }
+
 /////////////---------------------------------------------------------->
   Widget BodyHome_mobile() {
     return (serBody_modile_wiget == 1)
@@ -4497,9 +5222,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: renTal_user == null
                               ? Container(
                                   width: MediaQuery.of(context).size.width,
-                                  height:
-                                      MediaQuery.of(context).size.width * 0.3,
-                                  child: Column(
+                                  height: MediaQuery.of(context).size.height,
+                                  padding: EdgeInsets.all(8),
+                                  child: ListView(
                                     children: [
                                       Row(
                                         mainAxisAlignment:
@@ -4654,17 +5379,313 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width:
                                             MediaQuery.of(context).size.width,
                                         height:
-                                            MediaQuery.of(context).size.width *
-                                                0.3,
-                                        child: const Center(
-                                          child: Text(
-                                            'กรุณาเลือกสถานที่',
-                                            style: TextStyle(
-                                              color: HomeScreen_Color
-                                                  .Colors_Text2_,
-                                              fontFamily: Font_.Fonts_T,
+                                            MediaQuery.of(context).size.width,
+                                        child: ListView(
+                                          children: [
+                                            Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Center(
+                                                      child: Text(
+                                                        'กรุณาเลือกสถานที่',
+                                                        style: TextStyle(
+                                                          color: HomeScreen_Color
+                                                              .Colors_Text2_,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.25,
+                                                    color: Colors.transparent,
+                                                    child: GridView.count(
+                                                      crossAxisCount:
+                                                          (Responsive.isDesktop(
+                                                                  context))
+                                                              ? 8
+                                                              : 4,
+                                                      children: [
+                                                        Card(
+                                                            color:
+                                                                AppbackgroundColor
+                                                                    .Abg_Colors,
+                                                            shape:
+                                                                RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50),
+                                                            ),
+                                                            child: InkWell(
+                                                              onTap: () async {
+                                                                setState(() {
+                                                                  app_port = 1;
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: AppbackgroundColor
+                                                                        .Sub_Abg_Colors,
+                                                                    borderRadius: const BorderRadius
+                                                                            .only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                50),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                50),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                50),
+                                                                        bottomRight:
+                                                                            Radius.circular(50)),
+                                                                  ),
+                                                                  // color: Colors.white,
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.1,
+                                                                  height: 50,
+                                                                  child: Center(
+                                                                      child:
+                                                                          Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Icon(Icons
+                                                                              .add)
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          AutoSizeText(
+                                                                            'เพิ่มสถานที่',
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                18,
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              // fontSize: 20,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            ),
+                                                                            maxLines:
+                                                                                4,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ))),
+                                                            )),
+                                                        for (int i = 0;
+                                                            i <
+                                                                renTalModels
+                                                                    .length;
+                                                            i++)
+                                                          Card(
+                                                              color:
+                                                                  AppbackgroundColor
+                                                                      .Abg_Colors,
+                                                              shape:
+                                                                  RoundedRectangleBorder(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            50),
+                                                              ),
+                                                              child: InkWell(
+                                                                onTap:
+                                                                    () async {
+                                                                  var renTalSer =
+                                                                      renTalModels[
+                                                                              i]
+                                                                          .ser;
+                                                                  var renTalName =
+                                                                      renTalModels[
+                                                                              i]
+                                                                          .pn;
+                                                                  print(
+                                                                      'mmmmm ${renTalSer.toString()} $renTalName');
+
+                                                                  SharedPreferences
+                                                                      preferences =
+                                                                      await SharedPreferences
+                                                                          .getInstance();
+                                                                  preferences.setString(
+                                                                      'renTalSer',
+                                                                      renTalSer
+                                                                          .toString());
+                                                                  preferences.setString(
+                                                                      'renTalName',
+                                                                      renTalName
+                                                                          .toString());
+                                                                  String?
+                                                                      _route =
+                                                                      preferences
+                                                                          .getString(
+                                                                              'route');
+
+                                                                  preferences
+                                                                      .remove(
+                                                                          'zoneSer');
+                                                                  preferences
+                                                                      .remove(
+                                                                          'zonesName');
+                                                                  preferences
+                                                                      .remove(
+                                                                          'zonePSer');
+                                                                  preferences
+                                                                      .remove(
+                                                                          'zonesPName');
+
+                                                                  MaterialPageRoute
+                                                                      route =
+                                                                      MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        AdminScafScreen(
+                                                                            route:
+                                                                                _route),
+                                                                  );
+                                                                  Navigator.pushAndRemoveUntil(
+                                                                      context,
+                                                                      route,
+                                                                      (route) =>
+                                                                          false);
+                                                                },
+                                                                child: Container(
+                                                                    // color: Colors.green.shade200,
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors
+                                                                          .green
+                                                                          .shade200,
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              50),
+                                                                          topRight: Radius.circular(
+                                                                              50),
+                                                                          bottomLeft: Radius.circular(
+                                                                              50),
+                                                                          bottomRight:
+                                                                              Radius.circular(50)),
+                                                                    ),
+                                                                    width: MediaQuery.of(context).size.width * 0.1,
+                                                                    height: 50,
+                                                                    child: renTalModels[i].imglogo == null || renTalModels[i].imglogo == 'null'
+                                                                        ? Center(
+                                                                            child: AutoSizeText(
+                                                                            '${renTalModels[i].pn}',
+                                                                            minFontSize:
+                                                                                10,
+                                                                            maxFontSize:
+                                                                                18,
+                                                                            textAlign:
+                                                                                TextAlign.center,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              // fontSize: 20,
+                                                                              fontFamily: Font_.Fonts_T,
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            ),
+                                                                            maxLines:
+                                                                                4,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                          ))
+                                                                        : Center(
+                                                                            child: Column(
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
+                                                                            children: [
+                                                                              renTalModels[i].imglogo == null || renTalModels[i].imglogo == 'null'
+                                                                                  ? SizedBox()
+                                                                                  : Row(
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                      children: [
+                                                                                        // Container(
+                                                                                        //   width: 100,
+                                                                                        //   height: 60,
+                                                                                        //   decoration: BoxDecoration(
+                                                                                        //     image: DecorationImage(
+                                                                                        //       image: NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                                        //     ),
+                                                                                        //     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                        //   ),
+                                                                                        // ),
+                                                                                        CircleAvatar(
+                                                                                          radius: 25,
+                                                                                          backgroundImage: NetworkImage('${MyConstant().domain}/files/${renTalModels[i].dbn}/logo/${renTalModels[i].imglogo}'),
+                                                                                          backgroundColor: Colors.transparent,
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                              SizedBox(
+                                                                                height: 5,
+                                                                              ),
+                                                                              Row(
+                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                children: [
+                                                                                  AutoSizeText(
+                                                                                    '${renTalModels[i].pn}',
+                                                                                    minFontSize: 10,
+                                                                                    maxFontSize: 18,
+                                                                                    textAlign: TextAlign.center,
+                                                                                    style: TextStyle(
+                                                                                      // fontSize: 20,
+                                                                                      fontFamily: Font_.Fonts_T,
+                                                                                      color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                    ),
+                                                                                    maxLines: 4,
+                                                                                    overflow: TextOverflow.ellipsis,
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                            ],
+                                                                          ))),
+                                                              )),
+                                                      ],
+                                                    )),
+                                                (app_port == 1)
+                                                    ? Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: Body4(),
+                                                          )
+                                                        ],
+                                                      )
+                                                    : SizedBox()
+                                              ],
                                             ),
-                                          ),
+                                          ],
                                         ),
                                       )
                                     ],

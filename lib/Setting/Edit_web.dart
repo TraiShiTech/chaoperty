@@ -155,13 +155,12 @@ class _EditwebScreenState extends State<EditwebScreen> {
 
   @override
   void initState() {
-    super.initState();
-
     signInThread();
     read_GC_rental();
     read_GC_area();
     read_GC_rentaldata();
     read_GC_rental_img();
+    super.initState();
   }
 
   void _launchURL() async {

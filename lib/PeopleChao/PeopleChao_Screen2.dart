@@ -164,7 +164,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                       child: Row(
                         children: [
                           Text(
-                            'สถานะ : ${widget.Get_Value_status}',
+                            'สถานะ : ',
                             style: TextStyle(
                                 color: AdminScafScreen_Color.Colors_Text1_,
                                 fontWeight: FontWeight.bold,

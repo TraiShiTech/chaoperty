@@ -22,15 +22,18 @@ import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import 'Add_Custo_Screen.dart';
 
 class CustomerScreen extends StatefulWidget {
-  const CustomerScreen({super.key});
+  final updateMessage1;
+  const CustomerScreen({super.key, this.updateMessage1});
 
   @override
   State<CustomerScreen> createState() => _CustomerScreenState();
 }
 
 class _CustomerScreenState extends State<CustomerScreen> {
+  int Status_cuspang = 0;
   var nFormat = NumberFormat("#,##0.00", "en_US");
   var nFormat2 = NumberFormat("#,##0", "en_US");
   List<CustomerModel> customerModels = [];
@@ -78,6 +81,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
   final Form_tax_ = TextEditingController();
   @override
   void initState() {
+    Status_cuspang = 0;
     super.initState();
     checkPreferance();
     select_coutumer();
@@ -1717,97 +1721,495 @@ class _CustomerScreenState extends State<CustomerScreen> {
             ));
   }
 
+  int? _message;
+  void updateMessage(int newMessage) {
+    setState(() {
+      _message = newMessage;
+      Status_cuspang = newMessage;
+      checkPreferance();
+      select_coutumer();
+      read_GC_type();
+    });
+  }
+
 ///////////------------------------------------------------>
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: MediaQuery.of(context).size.height / 2.5,
-                // decoration: const BoxDecoration(
-                //   color: AppbackgroundColor.Sub_Abg_Colors,
-                //   borderRadius: BorderRadius.only(
-                //       topLeft: Radius.circular(10),
-                //       topRight: Radius.circular(10),
-                //       bottomLeft: Radius.circular(10),
-                //       bottomRight: Radius.circular(10)),
-                // ),
-                child: ScrollConfiguration(
-                  behavior:
-                      ScrollConfiguration.of(context).copyWith(dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  }),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width / 1.18
-                              : 800,
+    return (Status_cuspang == 1)
+        ? Add_Custo_Screen(
+            updateMessage: updateMessage,
+          )
+        : Expanded(
+            child: Column(
+              children: [
+                Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 2.5,
+                      // decoration: const BoxDecoration(
+                      //   color: AppbackgroundColor.Sub_Abg_Colors,
+                      //   borderRadius: BorderRadius.only(
+                      //       topLeft: Radius.circular(10),
+                      //       topRight: Radius.circular(10),
+                      //       bottomLeft: Radius.circular(10),
+                      //       bottomRight: Radius.circular(10)),
+                      // ),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: const BoxDecoration(
-                                      color: AppbackgroundColor.Sub_Abg_Colors,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: const BoxDecoration(
-                                              color: AppbackgroundColor
-                                                  .TiTile_Colors,
-                                              borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10),
-                                                  topRight: Radius.circular(10),
-                                                  bottomLeft:
-                                                      Radius.circular(0),
-                                                  bottomRight:
-                                                      Radius.circular(0)),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                const Expanded(
-                                                  flex: 1,
-                                                  child: AutoSizeText(
-                                                    minFontSize: 10,
-                                                    maxFontSize: 15,
-                                                    'รายชื่อผู้เช่า :',
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                        color:
-                                                            CustomerScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T
-                                                        //fontSize: 10.0
-                                                        //fontSize: 10.0
-                                                        ),
+                              Container(
+                                width: (Responsive.isDesktop(context))
+                                    ? MediaQuery.of(context).size.width / 1.18
+                                    : 800,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: const BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: AppbackgroundColor
+                                                        .TiTile_Colors,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    0),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    0)),
                                                   ),
-                                                ),
-                                                Expanded(
-                                                  flex: 3,
-                                                  child: Container(
+                                                  child: Row(
+                                                    children: [
+                                                      const Expanded(
+                                                        flex: 1,
+                                                        child: AutoSizeText(
+                                                          minFontSize: 10,
+                                                          maxFontSize: 15,
+                                                          'รายชื่อผู้เช่า :',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: CustomerScreen_Color
+                                                                  .Colors_Text1_,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T
+                                                              //fontSize: 10.0
+                                                              //fontSize: 10.0
+                                                              ),
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: Container(
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            child:
+                                                                _searchBar()),
+                                                      ),
+                                                    ],
+                                                  )),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              5),
                                                       decoration:
                                                           const BoxDecoration(
-                                                        color: Colors.white,
+                                                        color:
+                                                            AppbackgroundColor
+                                                                .TiTile_Colors,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                topRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            0)),
+                                                      ),
+                                                      child: Row(
+                                                        children: const [
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              'รหัสสมาชิก',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              'ชื่อร้าน',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                          Expanded(
+                                                            flex: 1,
+                                                            child: AutoSizeText(
+                                                              minFontSize: 10,
+                                                              maxFontSize: 18,
+                                                              'ชื่อผู่เช่า/บริษัท',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: TextStyle(
+                                                                  color: CustomerScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T
+                                                                  //fontSize: 10.0
+                                                                  //fontSize: 10.0
+                                                                  ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  // decoration: const BoxDecoration(
+                                                  //   color: AppbackgroundColor.Sub_Abg_Colors,
+                                                  //   borderRadius: BorderRadius.only(
+                                                  //       topLeft: Radius.circular(0),
+                                                  //       topRight: Radius.circular(0),
+                                                  //       bottomLeft: Radius.circular(0),
+                                                  //       bottomRight: Radius.circular(0)),
+                                                  //   // border: Border.all(color: Colors.grey, width: 1),
+                                                  // ),
+                                                  child: ListView.builder(
+                                                      physics:
+                                                          const AlwaysScrollableScrollPhysics(),
+                                                      shrinkWrap: true,
+                                                      itemCount:
+                                                          customerModels.length,
+                                                      itemBuilder:
+                                                          (BuildContext context,
+                                                              int index) {
+                                                        return Material(
+                                                          color: tappedIndex_ ==
+                                                                  index
+                                                                      .toString()
+                                                              ? tappedIndex_Color
+                                                                  .tappedIndex_Colors
+                                                              : AppbackgroundColor
+                                                                  .Sub_Abg_Colors,
+                                                          child: Container(
+                                                            // color: tappedIndex_ ==
+                                                            //         index.toString()
+                                                            //     ? tappedIndex_Color
+                                                            //         .tappedIndex_Colors
+                                                            //         .withOpacity(0.5)
+                                                            //     : null,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(5),
+                                                            child: ListTile(
+                                                              onTap: () async {
+                                                                String custno_ =
+                                                                    customerModels[index].custno ==
+                                                                            null
+                                                                        ? ''
+                                                                        : '${customerModels[index].custno}';
+                                                                setState(() {
+                                                                  Total_amtbill =
+                                                                      0;
+                                                                  Total_doctax =
+                                                                      0;
+                                                                  Total_late_payment =
+                                                                      0;
+                                                                  Total_early_payment =
+                                                                      0;
+                                                                  Total_ontime_payment =
+                                                                      0;
+                                                                  Total_tenant =
+                                                                      0;
+                                                                  addAreaCusto1 =
+                                                                      [];
+                                                                  addAreaCusto2 =
+                                                                      [];
+                                                                  addAreaCusto3 =
+                                                                      [];
+                                                                  addAreaCusto4 =
+                                                                      [];
+                                                                  addrtname =
+                                                                      [];
+                                                                });
+                                                                red_Trans_bill(
+                                                                    custno_);
+                                                                read_GC_tenant1(
+                                                                    custno_);
+                                                                read_GC_tenant(
+                                                                    custno_);
+                                                                read_GC_Contract(
+                                                                    custno_);
+                                                                setState(() {
+                                                                  tappedIndex_ =
+                                                                      index
+                                                                          .toString();
+                                                                  tappedIndex_2 =
+                                                                      '';
+                                                                  _Form_Ser =
+                                                                      '${customerModels[index].ser}';
+
+                                                                  _verticalGroupValue =
+                                                                      '${customerModels[index].type}'; // ประเภท
+
+                                                                  Form_nameshop_
+                                                                      .text = (customerModels[index]
+                                                                              .scname
+                                                                              .toString() ==
+                                                                          'null')
+                                                                      ? ''
+                                                                      : '${customerModels[index].scname}';
+                                                                  Form_typeshop_
+                                                                          .text =
+                                                                      '${customerModels[index].stype}';
+                                                                  Form_bussshop_
+                                                                          .text =
+                                                                      '${customerModels[index].cname}';
+                                                                  Form_bussscontact_
+                                                                          .text =
+                                                                      '${customerModels[index].attn}';
+                                                                  Form_address_
+                                                                          .text =
+                                                                      '${customerModels[index].addr1}';
+                                                                  Form_tel_
+                                                                          .text =
+                                                                      '${customerModels[index].tel}';
+                                                                  Form_email_
+                                                                          .text =
+                                                                      '${customerModels[index].email}';
+                                                                  Form_tax_
+                                                                      .text = customerModels[index]
+                                                                              .tax ==
+                                                                          'null'
+                                                                      ? "-"
+                                                                      : '${customerModels[index].tax}';
+                                                                });
+
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        typeModels
+                                                                            .length;
+                                                                    i++) {
+                                                                  print(
+                                                                      '--------------------------------------');
+                                                                  print(customerModels[
+                                                                          index]
+                                                                      .type
+                                                                      .toString());
+                                                                  print(typeModels[
+                                                                          i]
+                                                                      .type
+                                                                      .toString());
+                                                                  print(
+                                                                      '--------------------------------------');
+                                                                  if (customerModels[
+                                                                              index]
+                                                                          .type
+                                                                          .toString() ==
+                                                                      typeModels[
+                                                                              i]
+                                                                          .type
+                                                                          .toString()) {
+                                                                    setState(
+                                                                        () {
+                                                                      Value_AreaSer_ =
+                                                                          int.parse(typeModels[i].ser.toString()) -
+                                                                              1;
+                                                                    });
+                                                                  } else {}
+                                                                }
+
+                                                                // Navigator.pop(context);
+                                                              },
+                                                              title: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          18,
+                                                                      customerModels[index].custno ==
+                                                                              null
+                                                                          ? ''
+                                                                          : '${customerModels[index].custno}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: CustomerScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          18,
+                                                                      '${customerModels[index].scname}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: CustomerScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                  Expanded(
+                                                                    flex: 1,
+                                                                    child:
+                                                                        AutoSizeText(
+                                                                      minFontSize:
+                                                                          10,
+                                                                      maxFontSize:
+                                                                          18,
+                                                                      '${customerModels[index].cname}',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: const TextStyle(
+                                                                          color: CustomerScreen_Color.Colors_Text2_,
+                                                                          // fontWeight: FontWeight.bold,
+                                                                          fontFamily: Font_.Fonts_T),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      }),
+                                                ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.end,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        Status_cuspang = 1;
+                                                      });
+                                                    },
+                                                    child: Container(
+                                                      width: 100,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8),
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.orange[300],
                                                         borderRadius:
                                                             BorderRadius.only(
                                                                 topLeft: Radius
@@ -1823,42 +2225,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     .circular(
                                                                         10)),
                                                       ),
-                                                      child: _searchBar()),
-                                                ),
-                                              ],
-                                            )),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              flex: 1,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(5),
-                                                decoration: const BoxDecoration(
-                                                  color: AppbackgroundColor
-                                                      .TiTile_Colors,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  0),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  0),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  0)),
-                                                ),
-                                                child: Row(
-                                                  children: const [
-                                                    Expanded(
-                                                      flex: 1,
                                                       child: AutoSizeText(
                                                         minFontSize: 10,
                                                         maxFontSize: 18,
-                                                        'รหัสสมาชิก',
+                                                        'เพิ่ม',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: TextStyle(
@@ -1873,2090 +2243,1839 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             //fontSize: 10.0
                                                             ),
                                                       ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        'ชื่อร้าน',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: AutoSizeText(
-                                                        minFontSize: 10,
-                                                        maxFontSize: 18,
-                                                        'ชื่อผู่เช่า/บริษัท',
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        style: TextStyle(
-                                                            color: CustomerScreen_Color
-                                                                .Colors_Text1_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T
-                                                            //fontSize: 10.0
-                                                            //fontSize: 10.0
-                                                            ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        Expanded(
-                                            child: Container(
-                                          // decoration: const BoxDecoration(
-                                          //   color: AppbackgroundColor.Sub_Abg_Colors,
-                                          //   borderRadius: BorderRadius.only(
-                                          //       topLeft: Radius.circular(0),
-                                          //       topRight: Radius.circular(0),
-                                          //       bottomLeft: Radius.circular(0),
-                                          //       bottomRight: Radius.circular(0)),
-                                          //   // border: Border.all(color: Colors.grey, width: 1),
-                                          // ),
-                                          child: ListView.builder(
-                                              physics:
-                                                  const AlwaysScrollableScrollPhysics(),
-                                              shrinkWrap: true,
-                                              itemCount: customerModels.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Material(
-                                                  color: tappedIndex_ ==
-                                                          index.toString()
-                                                      ? tappedIndex_Color
-                                                          .tappedIndex_Colors
-                                                      : AppbackgroundColor
-                                                          .Sub_Abg_Colors,
-                                                  child: Container(
-                                                    // color: tappedIndex_ ==
-                                                    //         index.toString()
-                                                    //     ? tappedIndex_Color
-                                                    //         .tappedIndex_Colors
-                                                    //         .withOpacity(0.5)
-                                                    //     : null,
-                                                    padding:
-                                                        const EdgeInsets.all(5),
-                                                    child: ListTile(
-                                                      onTap: () async {
-                                                        String custno_ =
-                                                            customerModels[index]
-                                                                        .custno ==
-                                                                    null
-                                                                ? ''
-                                                                : '${customerModels[index].custno}';
-                                                        setState(() {
-                                                          Total_amtbill = 0;
-                                                          Total_doctax = 0;
-                                                          Total_late_payment =
-                                                              0;
-                                                          Total_early_payment =
-                                                              0;
-                                                          Total_ontime_payment =
-                                                              0;
-                                                          Total_tenant = 0;
-                                                          addAreaCusto1 = [];
-                                                          addAreaCusto2 = [];
-                                                          addAreaCusto3 = [];
-                                                          addAreaCusto4 = [];
-                                                          addrtname = [];
-                                                        });
-                                                        red_Trans_bill(custno_);
-                                                        read_GC_tenant1(
-                                                            custno_);
-                                                        read_GC_tenant(custno_);
-                                                        read_GC_Contract(
-                                                            custno_);
-                                                        setState(() {
-                                                          tappedIndex_ =
-                                                              index.toString();
-                                                          tappedIndex_2 = '';
-                                                          _Form_Ser =
-                                                              '${customerModels[index].ser}';
-
-                                                          _verticalGroupValue =
-                                                              '${customerModels[index].type}'; // ประเภท
-
-                                                          Form_nameshop_
-                                                              .text = (customerModels[
-                                                                          index]
-                                                                      .scname
-                                                                      .toString() ==
-                                                                  'null')
-                                                              ? ''
-                                                              : '${customerModels[index].scname}';
-                                                          Form_typeshop_.text =
-                                                              '${customerModels[index].stype}';
-                                                          Form_bussshop_.text =
-                                                              '${customerModels[index].cname}';
-                                                          Form_bussscontact_
-                                                                  .text =
-                                                              '${customerModels[index].attn}';
-                                                          Form_address_.text =
-                                                              '${customerModels[index].addr1}';
-                                                          Form_tel_.text =
-                                                              '${customerModels[index].tel}';
-                                                          Form_email_.text =
-                                                              '${customerModels[index].email}';
-                                                          Form_tax_
-                                                              .text = customerModels[
-                                                                          index]
-                                                                      .tax ==
-                                                                  'null'
-                                                              ? "-"
-                                                              : '${customerModels[index].tax}';
-                                                        });
-
-                                                        for (int i = 0;
-                                                            i <
-                                                                typeModels
-                                                                    .length;
-                                                            i++) {
-                                                          print(
-                                                              '--------------------------------------');
-                                                          print(customerModels[
-                                                                  index]
-                                                              .type
-                                                              .toString());
-                                                          print(typeModels[i]
-                                                              .type
-                                                              .toString());
-                                                          print(
-                                                              '--------------------------------------');
-                                                          if (customerModels[
-                                                                      index]
-                                                                  .type
-                                                                  .toString() ==
-                                                              typeModels[i]
-                                                                  .type
-                                                                  .toString()) {
-                                                            setState(() {
-                                                              Value_AreaSer_ =
-                                                                  int.parse(typeModels[
-                                                                              i]
-                                                                          .ser
-                                                                          .toString()) -
-                                                                      1;
-                                                            });
-                                                          } else {}
-                                                        }
-
-                                                        // Navigator.pop(context);
-                                                      },
-                                                      title: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              customerModels[index]
-                                                                          .custno ==
-                                                                      null
-                                                                  ? ''
-                                                                  : '${customerModels[index].custno}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: CustomerScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              '${customerModels[index].scname}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: CustomerScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 18,
-                                                              '${customerModels[index].cname}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      color: CustomerScreen_Color
-                                                                          .Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              padding: const EdgeInsets.all(5),
-                                              decoration: const BoxDecoration(
-                                                color: AppbackgroundColor
-                                                    .TiTile_Colors,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(0),
-                                                    bottomRight:
-                                                        Radius.circular(0)),
-                                              ),
-                                              child: Row(
-                                                children: const [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 18,
-                                                      'ข้อมูล',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T
-                                                          //fontSize: 10.0
-                                                          //fontSize: 10.0
-                                                          ),
                                                     ),
                                                   ),
                                                 ],
-                                              )),
-                                          Expanded(
-                                            child: Container(
-                                              child: SingleChildScrollView(
-                                                child: Column(
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 2,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: const BoxDecoration(
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                    padding:
+                                                        const EdgeInsets.all(5),
+                                                    decoration:
+                                                        const BoxDecoration(
+                                                      color: AppbackgroundColor
+                                                          .TiTile_Colors,
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(0),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          0)),
+                                                    ),
+                                                    child: Row(
+                                                      children: const [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: AutoSizeText(
+                                                            minFontSize: 10,
+                                                            maxFontSize: 18,
+                                                            'ข้อมูล',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T
+                                                                //fontSize: 10.0
+                                                                //fontSize: 10.0
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    )),
+                                                Expanded(
+                                                  child: Container(
+                                                    child:
+                                                        SingleChildScrollView(
+                                                      child: Column(
                                                         children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ประเภท',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ประเภท',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
                                                                   ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            4.0),
+                                                                    child:
+                                                                        // (Value_AreaSer_ !=
+                                                                        //         null)
+                                                                        //     ? Container(
+                                                                        //         decoration:
+                                                                        //             BoxDecoration(
+                                                                        //           color: Colors
+                                                                        //               .white
+                                                                        //               .withOpacity(0.3),
+                                                                        //           borderRadius:
+                                                                        //               const BorderRadius.only(
+                                                                        //             topLeft:
+                                                                        //                 Radius.circular(15),
+                                                                        //             topRight:
+                                                                        //                 Radius.circular(15),
+                                                                        //             bottomLeft:
+                                                                        //                 Radius.circular(15),
+                                                                        //             bottomRight:
+                                                                        //                 Radius.circular(15),
+                                                                        //           ),
+                                                                        //           border: Border.all(
+                                                                        //               color:
+                                                                        //                   Colors.grey,
+                                                                        //               width: 1),
+                                                                        //         ),
+                                                                        //         padding:
+                                                                        //             const EdgeInsets.all(
+                                                                        //                 8.0),
+                                                                        //         child: StreamBuilder(
+                                                                        //             stream: Stream.periodic(const Duration(seconds: 0)),
+                                                                        //             builder: (context, snapshot) {
+                                                                        //               return RadioGroup<TypeModel>.builder(
+                                                                        //                 direction: Axis.horizontal,
+                                                                        //                 groupValue: typeModels.elementAt(Value_AreaSer_!.toInt()),
+                                                                        //                 horizontalAlignment: MainAxisAlignment.spaceAround,
+                                                                        //                 onChanged: (value) {
+                                                                        //                   print(int.parse(value!.ser!) - 1);
+                                                                        //                   print(value.type!);
+                                                                        //                   setState(() {
+                                                                        //                     Value_AreaSer_ = int.parse(value.ser!) - 1;
+                                                                        //                     _verticalGroupValue = value.type!;
+                                                                        //                   });
+                                                                        //                   Save_FormText();
+                                                                        //                 },
+                                                                        //                 items: typeModels,
+                                                                        //                 textStyle: const TextStyle(
+                                                                        //                   fontSize: 15,
+                                                                        //                   color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                        //                 ),
+                                                                        //                 itemBuilder: (typeXModels) => RadioButtonBuilder(
+                                                                        //                   typeXModels.type!,
+                                                                        //                 ),
+                                                                        //               );
+                                                                        //             }))
+                                                                        //     :
+                                                                        Container(
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        borderRadius:
+                                                                            const BorderRadius.only(
+                                                                          topLeft:
+                                                                              Radius.circular(15),
+                                                                          topRight:
+                                                                              Radius.circular(15),
+                                                                          bottomLeft:
+                                                                              Radius.circular(15),
+                                                                          bottomRight:
+                                                                              Radius.circular(15),
+                                                                        ),
+                                                                        border: Border.all(
+                                                                            color:
+                                                                                Colors.grey,
+                                                                            width: 1),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              5),
+                                                                      child:
+                                                                          Text(
+                                                                        '$_verticalGroupValue',
+                                                                        textAlign:
+                                                                            TextAlign.start,
+                                                                        style: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    '',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            4.0),
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
-                                                              child:
-                                                                  // (Value_AreaSer_ !=
-                                                                  //         null)
-                                                                  //     ? Container(
-                                                                  //         decoration:
-                                                                  //             BoxDecoration(
-                                                                  //           color: Colors
-                                                                  //               .white
-                                                                  //               .withOpacity(0.3),
-                                                                  //           borderRadius:
-                                                                  //               const BorderRadius.only(
-                                                                  //             topLeft:
-                                                                  //                 Radius.circular(15),
-                                                                  //             topRight:
-                                                                  //                 Radius.circular(15),
-                                                                  //             bottomLeft:
-                                                                  //                 Radius.circular(15),
-                                                                  //             bottomRight:
-                                                                  //                 Radius.circular(15),
-                                                                  //           ),
-                                                                  //           border: Border.all(
-                                                                  //               color:
-                                                                  //                   Colors.grey,
-                                                                  //               width: 1),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ชื่อร้านค้า',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_nameshop_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ประเภทร้านค้า',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_typeshop_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_typeshop ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_typeshop',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
                                                                   //         ),
-                                                                  //         padding:
-                                                                  //             const EdgeInsets.all(
-                                                                  //                 8.0),
-                                                                  //         child: StreamBuilder(
-                                                                  //             stream: Stream.periodic(const Duration(seconds: 0)),
-                                                                  //             builder: (context, snapshot) {
-                                                                  //               return RadioGroup<TypeModel>.builder(
-                                                                  //                 direction: Axis.horizontal,
-                                                                  //                 groupValue: typeModels.elementAt(Value_AreaSer_!.toInt()),
-                                                                  //                 horizontalAlignment: MainAxisAlignment.spaceAround,
-                                                                  //                 onChanged: (value) {
-                                                                  //                   print(int.parse(value!.ser!) - 1);
-                                                                  //                   print(value.type!);
-                                                                  //                   setState(() {
-                                                                  //                     Value_AreaSer_ = int.parse(value.ser!) - 1;
-                                                                  //                     _verticalGroupValue = value.type!;
-                                                                  //                   });
-                                                                  //                   Save_FormText();
-                                                                  //                 },
-                                                                  //                 items: typeModels,
-                                                                  //                 textStyle: const TextStyle(
-                                                                  //                   fontSize: 15,
-                                                                  //                   color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                  //                 ),
-                                                                  //                 itemBuilder: (typeXModels) => RadioButtonBuilder(
-                                                                  //                   typeXModels.type!,
-                                                                  //                 ),
-                                                                  //               );
-                                                                  //             }))
-                                                                  //     :
-                                                                  Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            15),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            15),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            15),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            15),
-                                                                  ),
-                                                                  border: Border.all(
-                                                                      color: Colors
-                                                                          .grey,
-                                                                      width: 1),
+                                                                  //   ),
+                                                                  // ),
                                                                 ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(5),
-                                                                child: Text(
-                                                                  '$_verticalGroupValue',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ชื่อผู้เช่า/บริษัท',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
                                                                       ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_bussshop_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      onChanged:
+                                                                          (value) {
+                                                                        if (_verticalGroupValue.toString().trim() ==
+                                                                            'ส่วนตัว/บุคคลธรรมดา') {
+                                                                          setState(
+                                                                              () {
+                                                                            Form_bussscontact_.text =
+                                                                                Form_bussshop_.text;
+                                                                          });
+                                                                        } else {}
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
+
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_bussshop ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_bussshop',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
                                                                 ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(4.0),
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ชื่อบุคคลติดต่อ',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_bussscontact_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      onChanged:
+                                                                          (value) {
+                                                                        if (_verticalGroupValue.toString().trim() ==
+                                                                            'ส่วนตัว/บุคคลธรรมดา') {
+                                                                          setState(
+                                                                              () {
+                                                                            Form_bussshop_.text =
+                                                                                Form_bussscontact_.text;
+                                                                          });
+                                                                        } else {}
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_bussscontact ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_bussscontact',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ที่อยู่',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 5,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_address_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_address ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_address',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'เบอร์โทร',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_tel_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_tel ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_tel',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'อีเมล',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_email_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  // Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_email ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_email',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(4.0),
+                                                            child: Row(
+                                                              children: [
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    'ID/TAX ID',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        TextFormField(
+                                                                      keyboardType:
+                                                                          TextInputType
+                                                                              .number,
+                                                                      showCursor:
+                                                                          true, //add this line
+                                                                      // readOnly: true,
+                                                                      controller:
+                                                                          Form_tax_,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      // onChanged:
+                                                                      //     (value) {
+                                                                      //   Form_tax_
+                                                                      //       .addListener(
+                                                                      //           () {
+                                                                      //     print(Form_tax_
+                                                                      //         .text
+                                                                      //         .toString());
+
+                                                                      //     // Save the email to the database here
+                                                                      //   });
+                                                                      // },
+                                                                      onFieldSubmitted:
+                                                                          (value) async {
+                                                                        Save_FormText();
+                                                                      },
+                                                                      // maxLines: 2,
+                                                                      decoration:
+                                                                          InputDecoration(
+                                                                        fillColor: Colors
+                                                                            .white
+                                                                            .withOpacity(0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelStyle: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+
+                                                                  //  Container(
+                                                                  //   decoration:
+                                                                  //       BoxDecoration(
+                                                                  //     color: Colors
+                                                                  //         .white
+                                                                  //         .withOpacity(
+                                                                  //             0.3),
+                                                                  //     borderRadius:
+                                                                  //         const BorderRadius
+                                                                  //             .only(
+                                                                  //       topLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       topRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomLeft: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //       bottomRight: Radius
+                                                                  //           .circular(
+                                                                  //               15),
+                                                                  //     ),
+                                                                  //     border: Border.all(
+                                                                  //         color: Colors
+                                                                  //             .grey,
+                                                                  //         width: 1),
+                                                                  //   ),
+                                                                  //   padding:
+                                                                  //       const EdgeInsets
+                                                                  //           .all(5),
+                                                                  //   child: Text(
+                                                                  //     (_Form_tax ==
+                                                                  //             null)
+                                                                  //         ? ''
+                                                                  //         : '$_Form_tax',
+                                                                  //     textAlign:
+                                                                  //         TextAlign
+                                                                  //             .start,
+                                                                  //     style: const TextStyle(
+                                                                  //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                  //         // fontWeight: FontWeight.bold,
+                                                                  //         fontFamily: Font_.Fonts_T
+                                                                  //         //fontSize: 10.0
+                                                                  //         ),
+                                                                  //   ),
+                                                                  // ),
+                                                                ),
+                                                                const Expanded(
+                                                                  flex: 1,
+                                                                  child: Text(
+                                                                    '',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: TextStyle(
+                                                                        color: CustomerScreen_Color.Colors_Text2_,
+                                                                        // fontWeight: FontWeight.bold,
+                                                                        fontFamily: Font_.Fonts_T
+                                                                        //fontSize: 10.0
+                                                                        ),
+                                                                  ),
+                                                                ),
+                                                                Expanded(
+                                                                  flex: 2,
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                      // color: Colors.green,
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(6),
+                                                                        topRight:
+                                                                            Radius.circular(6),
+                                                                        bottomLeft:
+                                                                            Radius.circular(6),
+                                                                        bottomRight:
+                                                                            Radius.circular(6),
+                                                                      ),
+                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                    ),
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    // child: Icon(Icons.check_box_outline_blank),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 30,
+                                                          )
                                                         ],
                                                       ),
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ชื่อร้านค้า',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_nameshop_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ประเภทร้านค้า',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_typeshop_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_typeshop ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_typeshop',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ชื่อผู้เช่า/บริษัท',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_bussshop_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                onChanged:
-                                                                    (value) {
-                                                                  if (_verticalGroupValue
-                                                                          .toString()
-                                                                          .trim() ==
-                                                                      'ส่วนตัว/บุคคลธรรมดา') {
-                                                                    setState(
-                                                                        () {
-                                                                      Form_bussscontact_
-                                                                              .text =
-                                                                          Form_bussshop_
-                                                                              .text;
-                                                                    });
-                                                                  } else {}
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_bussshop ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_bussshop',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ชื่อบุคคลติดต่อ',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_bussscontact_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                onChanged:
-                                                                    (value) {
-                                                                  if (_verticalGroupValue
-                                                                          .toString()
-                                                                          .trim() ==
-                                                                      'ส่วนตัว/บุคคลธรรมดา') {
-                                                                    setState(
-                                                                        () {
-                                                                      Form_bussshop_
-                                                                              .text =
-                                                                          Form_bussscontact_
-                                                                              .text;
-                                                                    });
-                                                                  } else {}
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_bussscontact ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_bussscontact',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ที่อยู่',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 5,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_address_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_address ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_address',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'เบอร์โทร',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_tel_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_tel ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_tel',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'อีเมล',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_email_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            // Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_email ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_email',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4.0),
-                                                      child: Row(
-                                                        children: [
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              'ID/TAX ID',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .start,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child:
-                                                                  TextFormField(
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .number,
-                                                                showCursor:
-                                                                    true, //add this line
-                                                                // readOnly: true,
-                                                                controller:
-                                                                    Form_tax_,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                // onChanged:
-                                                                //     (value) {
-                                                                //   Form_tax_
-                                                                //       .addListener(
-                                                                //           () {
-                                                                //     print(Form_tax_
-                                                                //         .text
-                                                                //         .toString());
-
-                                                                //     // Save the email to the database here
-                                                                //   });
-                                                                // },
-                                                                onFieldSubmitted:
-                                                                    (value) async {
-                                                                  Save_FormText();
-                                                                },
-                                                                // maxLines: 2,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelStyle: const TextStyle(
-                                                                      color: CustomerScreen_Color.Colors_Text2_,
-                                                                      // fontWeight: FontWeight.bold,
-                                                                      fontFamily: Font_.Fonts_T
-                                                                      //fontSize: 10.0
-                                                                      ),
-                                                                ),
-                                                              ),
-                                                            ),
-
-                                                            //  Container(
-                                                            //   decoration:
-                                                            //       BoxDecoration(
-                                                            //     color: Colors
-                                                            //         .white
-                                                            //         .withOpacity(
-                                                            //             0.3),
-                                                            //     borderRadius:
-                                                            //         const BorderRadius
-                                                            //             .only(
-                                                            //       topLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       topRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomLeft: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //       bottomRight: Radius
-                                                            //           .circular(
-                                                            //               15),
-                                                            //     ),
-                                                            //     border: Border.all(
-                                                            //         color: Colors
-                                                            //             .grey,
-                                                            //         width: 1),
-                                                            //   ),
-                                                            //   padding:
-                                                            //       const EdgeInsets
-                                                            //           .all(5),
-                                                            //   child: Text(
-                                                            //     (_Form_tax ==
-                                                            //             null)
-                                                            //         ? ''
-                                                            //         : '$_Form_tax',
-                                                            //     textAlign:
-                                                            //         TextAlign
-                                                            //             .start,
-                                                            //     style: const TextStyle(
-                                                            //         color: CustomerScreen_Color.Colors_Text2_,
-                                                            //         // fontWeight: FontWeight.bold,
-                                                            //         fontFamily: Font_.Fonts_T
-                                                            //         //fontSize: 10.0
-                                                            //         ),
-                                                            //   ),
-                                                            // ),
-                                                          ),
-                                                          const Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                          Expanded(
-                                                            flex: 2,
-                                                            child: Container(
-                                                              decoration:
-                                                                  const BoxDecoration(
-                                                                // color: Colors.green,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          6),
-                                                                ),
-                                                                // border: Border.all(color: Colors.grey, width: 1),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              // child: Icon(Icons.check_box_outline_blank),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 30,
-                                                    )
-                                                  ],
+                                                  ),
                                                 ),
+                                                Container(
+                                                    child: Row(
+                                                  children: [
+                                                    const Expanded(
+                                                      flex: 2,
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 18,
+                                                        '',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T
+                                                            //fontSize: 10.0
+                                                            //fontSize: 10.0
+                                                            ),
+                                                      ),
+                                                    ),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: Container(
+                                                        child:
+                                                            const AutoSizeText(
+                                                          minFontSize: 8,
+                                                          maxFontSize: 12,
+                                                          '**กด Enter ทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล',
+                                                          textAlign:
+                                                              TextAlign.end,
+                                                          style: TextStyle(
+                                                              color: Colors.red,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T
+                                                              //fontSize: 10.0
+                                                              //fontSize: 10.0
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppbackgroundColor.Sub_Abg_Colors,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      child: ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Container(
+                                width: (Responsive.isDesktop(context))
+                                    ? MediaQuery.of(context).size.width * 0.86
+                                    : 500,
+                                padding: const EdgeInsets.all(8),
+                                // decoration: const BoxDecoration(
+                                //   color: AppbackgroundColor.Sub_Abg_Colors,
+                                //   borderRadius: BorderRadius.only(
+                                //       topLeft: Radius.circular(10),
+                                //       topRight: Radius.circular(10),
+                                //       bottomLeft: Radius.circular(10),
+                                //       bottomRight: Radius.circular(10)),
+                                // ),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: const BoxDecoration(
+                                          color:
+                                              AppbackgroundColor.TiTile_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0)),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            const Expanded(
+                                              flex: 1,
+                                              child: AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 18,
+                                                'ประวัติบิล',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: CustomerScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    //fontSize: 10.0
+                                                    ),
                                               ),
                                             ),
-                                          ),
-                                          Container(
-                                              child: Row(
-                                            children: [
-                                              const Expanded(
-                                                flex: 2,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 18,
-                                                  '',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color:
-                                                          CustomerScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                              Expanded(
-                                                flex: 1,
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: InkWell(
                                                 child: Container(
+                                                  padding:
+                                                      const EdgeInsets.all(5),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.white60,
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                    border: Border.all(
+                                                        color: Colors.white,
+                                                        width: 1),
+                                                  ),
                                                   child: const AutoSizeText(
-                                                    minFontSize: 8,
-                                                    maxFontSize: 12,
-                                                    '**กด Enter ทุกครั้งที่มีการเปลี่ยนแปลงข้อมูล',
-                                                    textAlign: TextAlign.end,
+                                                    minFontSize: 10,
+                                                    maxFontSize: 18,
+                                                    'เรียกดูเพิ่มเติม',
+                                                    textAlign: TextAlign.center,
                                                     style: TextStyle(
-                                                        color: Colors.red,
+                                                        // decoration:
+                                                        //     TextDecoration.underline,
+                                                        color:
+                                                            CustomerScreen_Color
+                                                                .Colors_Text1_,
                                                         fontWeight:
                                                             FontWeight.bold,
                                                         fontFamily:
@@ -3966,118 +4085,1135 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                         ),
                                                   ),
                                                 ),
+                                                onTap: () {
+                                                  showDialog<void>(
+                                                    context: context,
+                                                    barrierDismissible:
+                                                        false, // user must tap button!
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return AlertDialog(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                        title: const Center(
+                                                          child: Text(
+                                                            'รายละเอียดเพิ่มเติม',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(
+                                                                color: CustomerScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontSize: 20.0
+                                                                //fontSize: 10.0
+                                                                ),
+                                                          ),
+                                                        ),
+                                                        content: Container(
+                                                          width: (Responsive
+                                                                  .isDesktop(
+                                                                      context))
+                                                              ? MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.4
+                                                              : MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width,
+                                                          child:
+                                                              SingleChildScrollView(
+                                                            child: (_TransReBillModels
+                                                                        .length <
+                                                                    1)
+                                                                ? SizedBox(
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          AutoSizeText(
+                                                                        (tappedIndex_ ==
+                                                                                '')
+                                                                            ? 'กรุณาเลือกรายชื่อก่อน'
+                                                                            : 'ไม่พบข้อมูล',
+                                                                        textAlign:
+                                                                            TextAlign.center,
+                                                                        style: const TextStyle(
+                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                            // fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T
+                                                                            //fontSize: 10.0
+                                                                            //fontSize: 10.0
+                                                                            ),
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : ListBody(
+                                                                    children: <
+                                                                        Widget>[
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'ใบกำกับภาษี :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat2.format(Total_doctax)} ',
+                                                                                // '$Total_doctax',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'ชำระก่อนกำหนด :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: Colors.grey[200],
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat2.format(Total_early_payment)} ครั้ง',
+                                                                                // '$Total_amtbill',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'ชำระตรงกำหนด :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: Colors.grey[200],
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat2.format(Total_ontime_payment)} ครั้ง',
+                                                                                // '$Total_amtbill',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'ชำระเกินกำหนด :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: Colors.grey[200],
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat2.format(Total_late_payment)} ครั้ง',
+                                                                                // '$Total_amtbill',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'รายการค้างชำระ :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: Colors.grey[200],
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat2.format(Total_tenant)} รายการ ',
+                                                                                // '$Total_amtbill',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: AppbackgroundColor.TiTile_Colors,
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'ยอดชำระรวม :',
+                                                                                textAlign: TextAlign.start,
+                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              color: Colors.grey[200],
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                '${nFormat.format(Total_amtbill)} บาท ',
+                                                                                // '$Total_amtbill',
+                                                                                textAlign: TextAlign.end,
+                                                                                style: const TextStyle(
+                                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                                    // fontWeight:
+                                                                                    //     FontWeight
+                                                                                    //         .bold,
+                                                                                    fontFamily: Font_.Fonts_T
+                                                                                    //fontSize: 10.0
+                                                                                    //fontSize: 10.0
+                                                                                    ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'ประเภทการเช่า:',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 10, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      addrtname.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.white54,
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${addrtname[index]}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'หมดสัญญา:',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      addAreaCusto1.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.red[300],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${addAreaCusto1[index]}',
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'ใกล้หมดสัญญา :',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      addAreaCusto2.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.orange[300],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${addAreaCusto2[index]}',
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'เช่าอยู่ :',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      addAreaCusto3.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.green[300],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${addAreaCusto3[index]}',
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'เสนอราคา :',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      addAreaCusto4.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.blue[300],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        child: Center(
+                                                                                          child: Text(
+                                                                                            '${addAreaCusto4[index]}',
+                                                                                            textAlign: TextAlign.end,
+                                                                                            style: const TextStyle(
+                                                                                                color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T
+                                                                                                //fontSize: 10.0
+                                                                                                ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                      Row(
+                                                                        children: [
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: AppbackgroundColor.TiTile_Colors,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Align(
+                                                                                alignment: Alignment.centerLeft,
+                                                                                child: Text(
+                                                                                  'ยกเลิกสัญญา:',
+                                                                                  textAlign: TextAlign.start,
+                                                                                  style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                      //fontSize: 10.0
+                                                                                      //fontSize: 10.0
+                                                                                      ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          Expanded(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              height: (!Responsive.isDesktop(context)) ? 80 : 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.grey[200],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors
+                                                                                //         .white,
+                                                                                //     width:
+                                                                                //         1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: ScrollConfiguration(
+                                                                                behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
+                                                                                  PointerDeviceKind.touch,
+                                                                                  PointerDeviceKind.mouse,
+                                                                                }),
+                                                                                child: ResponsiveGridList(
+                                                                                    rowMainAxisAlignment: MainAxisAlignment.end,
+                                                                                    horizontalGridSpacing: 5, // Horizontal space between grid items
+
+                                                                                    horizontalGridMargin: 5, // Horizontal space around the grid
+                                                                                    verticalGridMargin: 5, // Vertical space around the grid
+                                                                                    minItemWidth: 15, // The minimum item width (can be smaller, if the layout constraints are smaller)
+                                                                                    minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
+                                                                                    maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens /  Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>ลบ(${areaModels[index].lncode} : ${areaModels[index].ln})');
+                                                                                    listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+                                                                                    children: List.generate(
+                                                                                      contractModels.length,
+                                                                                      (index) => Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.white54,
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          border: Border.all(color: Colors.white, width: 1),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(2.0),
+                                                                                        child: PopupMenuButton(
+                                                                                          tooltip: 'เหตุผล : ${contractModels[index].cc_remark}',
+                                                                                          child: Center(
+                                                                                            child: Text(
+                                                                                              '${contractModels[index].cid} >',
+                                                                                              textAlign: TextAlign.center,
+                                                                                              style: const TextStyle(
+                                                                                                  color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                  // fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T
+                                                                                                  //fontSize: 10.0
+                                                                                                  ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          itemBuilder: (BuildContext context) => [
+                                                                                            PopupMenuItem(
+                                                                                              mouseCursor: MaterialStateMouseCursor.textable,
+                                                                                              child: InkWell(
+                                                                                                  onTap: () {
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  child: Container(
+                                                                                                      color: Colors.white,
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      width: MediaQuery.of(context).size.width,
+                                                                                                      child: Text(
+                                                                                                        'เหตุผล : ${contractModels[index].cc_remark}',
+                                                                                                        style: const TextStyle(
+                                                                                                            color: CustomerScreen_Color.Colors_Text2_,
+                                                                                                            //fontWeight: FontWeight.bold,
+                                                                                                            fontFamily: Font_.Fonts_T),
+                                                                                                      ))),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+
+                                                                                        // Center(
+                                                                                        //   child: Text(
+                                                                                        //     '${contractModels[index].cid} >',
+                                                                                        //     textAlign: TextAlign.center,
+                                                                                        //     style: const TextStyle(
+                                                                                        //         color: CustomerScreen_Color.Colors_Text2_,
+                                                                                        //         // fontWeight: FontWeight.bold,
+                                                                                        //         fontFamily: Font_.Fonts_T
+                                                                                        //         //fontSize: 10.0
+                                                                                        //         ),
+                                                                                        //   ),
+                                                                                        // ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ),
+                                                                              // Text(
+                                                                              //   '${addAreaCusto}  ',
+                                                                              //   // '$Total_amtbill',
+                                                                              //   textAlign:
+                                                                              //       TextAlign
+                                                                              //           .end,
+                                                                              //   style: const TextStyle(
+                                                                              //       color: CustomerScreen_Color
+                                                                              //           .Colors_Text1_,
+                                                                              //       fontWeight:
+                                                                              //           FontWeight
+                                                                              //               .bold,
+                                                                              //       fontFamily:
+                                                                              //           FontWeight_.Fonts_T
+                                                                              //       //fontSize: 10.0
+                                                                              //       //fontSize: 10.0
+                                                                              //       ),
+                                                                              // ),
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                          ),
+                                                        ),
+                                                        actions: <Widget>[
+                                                          Center(
+                                                            child: Container(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              width: 200,
+                                                              child: InkWell(
+                                                                onTap: () {
+                                                                  Navigator.pop(
+                                                                      context);
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(6),
+                                                                              topRight: Radius.circular(6),
+                                                                              bottomLeft: Radius.circular(6),
+                                                                              bottomRight: Radius.circular(6)),
+                                                                          border: Border.all(
+                                                                              color: Colors.grey,
+                                                                              width: 1),
+                                                                        ),
+                                                                        child:
+                                                                            Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: const [
+                                                                            Padding(
+                                                                              padding: EdgeInsets.all(8.0),
+                                                                              child: Icon(Icons.highlight_off, color: Colors.white),
+                                                                            ),
+                                                                            Padding(
+                                                                              padding: EdgeInsets.all(8.0),
+                                                                              child: Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(
+                                                                                  color: Colors.white,
+                                                                                  // fontWeight:
+                                                                                  //     FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  );
+                                                },
                                               ),
-                                            ],
-                                          )),
-                                        ],
-                                      )),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: AppbackgroundColor.Sub_Abg_Colors,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                ),
-                child: ScrollConfiguration(
-                  behavior:
-                      ScrollConfiguration.of(context).copyWith(dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  }),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        Container(
-                          width: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.width * 0.86
-                              : 500,
-                          padding: const EdgeInsets.all(8),
-                          // decoration: const BoxDecoration(
-                          //   color: AppbackgroundColor.Sub_Abg_Colors,
-                          //   borderRadius: BorderRadius.only(
-                          //       topLeft: Radius.circular(10),
-                          //       topRight: Radius.circular(10),
-                          //       bottomLeft: Radius.circular(10),
-                          //       bottomRight: Radius.circular(10)),
-                          // ),
-                          child: Column(
-                            children: [
-                              Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: const BoxDecoration(
-                                    color: AppbackgroundColor.TiTile_Colors,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(0),
-                                        bottomRight: Radius.circular(0)),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        flex: 1,
-                                        child: AutoSizeText(
-                                          minFontSize: 10,
-                                          maxFontSize: 18,
-                                          'ประวัติบิล',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: CustomerScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              //fontSize: 10.0
-                                              //fontSize: 10.0
-                                              ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(4.0),
-                                        child: InkWell(
-                                          child: Container(
-                                            padding: const EdgeInsets.all(5),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white60,
-                                              borderRadius:
-                                                  const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(10),
-                                                      topRight:
-                                                          Radius.circular(10),
-                                                      bottomLeft:
-                                                          Radius.circular(10),
-                                                      bottomRight:
-                                                          Radius.circular(10)),
-                                              border: Border.all(
-                                                  color: Colors.white,
-                                                  width: 1),
                                             ),
-                                            child: const AutoSizeText(
+                                          ],
+                                        )),
+                                    Container(
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: const BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(0),
+                                            topRight: Radius.circular(0),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0)),
+                                      ),
+                                      child: Row(
+                                        children: const [
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
                                               minFontSize: 10,
                                               maxFontSize: 18,
-                                              'เรียกดูเพิ่มเติม',
+                                              'เลขที่ใบเสร็จ',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
-                                                  // decoration:
-                                                  //     TextDecoration.underline,
                                                   color: CustomerScreen_Color
                                                       .Colors_Text1_,
                                                   fontWeight: FontWeight.bold,
@@ -4088,1707 +5224,437 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                   ),
                                             ),
                                           ),
-                                          onTap: () {
-                                            showDialog<void>(
-                                              context: context,
-                                              barrierDismissible:
-                                                  false, // user must tap button!
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  title: const Center(
-                                                    child: Text(
-                                                      'รายละเอียดเพิ่มเติม',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                          color:
-                                                              CustomerScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                          fontSize: 20.0
-                                                          //fontSize: 10.0
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  content: Container(
-                                                    width: (Responsive
-                                                            .isDesktop(context))
-                                                        ? MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.4
-                                                        : MediaQuery.of(context)
-                                                            .size
-                                                            .width,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child:
-                                                          (_TransReBillModels
-                                                                      .length <
-                                                                  1)
-                                                              ? SizedBox(
-                                                                  child: Center(
-                                                                    child:
-                                                                        AutoSizeText(
-                                                                      (tappedIndex_ ==
-                                                                              '')
-                                                                          ? 'กรุณาเลือกรายชื่อก่อน'
-                                                                          : 'ไม่พบข้อมูล',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .center,
-                                                                      style: const TextStyle(
-                                                                          color: CustomerScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T
-                                                                          //fontSize: 10.0
-                                                                          //fontSize: 10.0
-                                                                          ),
-                                                                    ),
-                                                                  ),
-                                                                )
-                                                              : ListBody(
-                                                                  children: <
-                                                                      Widget>[
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ใบกำกับภาษี :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat2.format(Total_doctax)} ',
-                                                                              // '$Total_doctax',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                AppbackgroundColor.TiTile_Colors,
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ชำระก่อนกำหนด :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat2.format(Total_early_payment)} ครั้ง',
-                                                                              // '$Total_amtbill',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                AppbackgroundColor.TiTile_Colors,
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ชำระตรงกำหนด :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat2.format(Total_ontime_payment)} ครั้ง',
-                                                                              // '$Total_amtbill',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                AppbackgroundColor.TiTile_Colors,
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ชำระเกินกำหนด :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat2.format(Total_late_payment)} ครั้ง',
-                                                                              // '$Total_amtbill',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                AppbackgroundColor.TiTile_Colors,
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'รายการค้างชำระ :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat2.format(Total_tenant)} รายการ ',
-                                                                              // '$Total_amtbill',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                AppbackgroundColor.TiTile_Colors,
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Text(
-                                                                              'ยอดชำระรวม :',
-                                                                              textAlign: TextAlign.start,
-                                                                              style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            color:
-                                                                                Colors.grey[200],
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Text(
-                                                                              '${nFormat.format(Total_amtbill)} บาท ',
-                                                                              // '$Total_amtbill',
-                                                                              textAlign: TextAlign.end,
-                                                                              style: const TextStyle(
-                                                                                  color: CustomerScreen_Color.Colors_Text2_,
-                                                                                  // fontWeight:
-                                                                                  //     FontWeight
-                                                                                  //         .bold,
-                                                                                  fontFamily: Font_.Fonts_T
-                                                                                  //fontSize: 10.0
-                                                                                  //fontSize: 10.0
-                                                                                  ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'ประเภทการเช่า:',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 10, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    addrtname.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.white54,
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${addrtname[index]}',
-                                                                                          textAlign: TextAlign.center,
-                                                                                          style: const TextStyle(
-                                                                                              color: CustomerScreen_Color.Colors_Text2_,
-                                                                                              // fontWeight: FontWeight.bold,
-                                                                                              fontFamily: Font_.Fonts_T
-                                                                                              //fontSize: 10.0
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'หมดสัญญา:',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    addAreaCusto1.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.red[300],
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${addAreaCusto1[index]}',
-                                                                                          textAlign: TextAlign.end,
-                                                                                          style: const TextStyle(
-                                                                                              color: CustomerScreen_Color.Colors_Text2_,
-                                                                                              // fontWeight: FontWeight.bold,
-                                                                                              fontFamily: Font_.Fonts_T
-                                                                                              //fontSize: 10.0
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'ใกล้หมดสัญญา :',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    addAreaCusto2.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.orange[300],
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${addAreaCusto2[index]}',
-                                                                                          textAlign: TextAlign.end,
-                                                                                          style: const TextStyle(
-                                                                                              color: CustomerScreen_Color.Colors_Text2_,
-                                                                                              // fontWeight: FontWeight.bold,
-                                                                                              fontFamily: Font_.Fonts_T
-                                                                                              //fontSize: 10.0
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'เช่าอยู่ :',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    addAreaCusto3.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.green[300],
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${addAreaCusto3[index]}',
-                                                                                          textAlign: TextAlign.end,
-                                                                                          style: const TextStyle(
-                                                                                              color: CustomerScreen_Color.Colors_Text2_,
-                                                                                              // fontWeight: FontWeight.bold,
-                                                                                              fontFamily: Font_.Fonts_T
-                                                                                              //fontSize: 10.0
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'เสนอราคา :',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 5, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 5, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 2 : 5, // The maximum items to show in a single row. Can be useful on large screens
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    addAreaCusto4.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.blue[300],
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      child: Center(
-                                                                                        child: Text(
-                                                                                          '${addAreaCusto4[index]}',
-                                                                                          textAlign: TextAlign.end,
-                                                                                          style: const TextStyle(
-                                                                                              color: CustomerScreen_Color.Colors_Text2_,
-                                                                                              // fontWeight: FontWeight.bold,
-                                                                                              fontFamily: Font_.Fonts_T
-                                                                                              //fontSize: 10.0
-                                                                                              ),
-                                                                                        ),
-                                                                                      ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    Row(
-                                                                      children: [
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: AppbackgroundColor.TiTile_Colors,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                const Align(
-                                                                              alignment: Alignment.centerLeft,
-                                                                              child: Text(
-                                                                                'ยกเลิกสัญญา:',
-                                                                                textAlign: TextAlign.start,
-                                                                                style: TextStyle(color: CustomerScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
-                                                                                    //fontSize: 10.0
-                                                                                    //fontSize: 10.0
-                                                                                    ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                        Expanded(
-                                                                          flex:
-                                                                              1,
-                                                                          child:
-                                                                              Container(
-                                                                            height: (!Responsive.isDesktop(context))
-                                                                                ? 80
-                                                                                : 50,
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              color: Colors.grey[200],
-                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(0), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0)),
-                                                                              // border: Border.all(
-                                                                              //     color: Colors
-                                                                              //         .white,
-                                                                              //     width:
-                                                                              //         1),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                ScrollConfiguration(
-                                                                              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                                                                                PointerDeviceKind.touch,
-                                                                                PointerDeviceKind.mouse,
-                                                                              }),
-                                                                              child: ResponsiveGridList(
-                                                                                  rowMainAxisAlignment: MainAxisAlignment.end,
-                                                                                  horizontalGridSpacing: 5, // Horizontal space between grid items
-
-                                                                                  horizontalGridMargin: 5, // Horizontal space around the grid
-                                                                                  verticalGridMargin: 5, // Vertical space around the grid
-                                                                                  minItemWidth: 15, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                                                                                  minItemsPerRow: 1, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                                                                                  maxItemsPerRow: (!Responsive.isDesktop(context)) ? 1 : 3, // The maximum items to show in a single row. Can be useful on large screens /  Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>ลบ(${areaModels[index].lncode} : ${areaModels[index].ln})');
-                                                                                  listViewBuilderOptions: ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                                                                                  children: List.generate(
-                                                                                    contractModels.length,
-                                                                                    (index) => Container(
-                                                                                      decoration: BoxDecoration(
-                                                                                        color: Colors.white54,
-                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                        border: Border.all(color: Colors.white, width: 1),
-                                                                                      ),
-                                                                                      padding: const EdgeInsets.all(2.0),
-                                                                                      child: PopupMenuButton(
-                                                                                        tooltip: 'เหตุผล : ${contractModels[index].cc_remark}',
-                                                                                        child: Center(
-                                                                                          child: Text(
-                                                                                            '${contractModels[index].cid} >',
-                                                                                            textAlign: TextAlign.center,
-                                                                                            style: const TextStyle(
-                                                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                                                // fontWeight: FontWeight.bold,
-                                                                                                fontFamily: Font_.Fonts_T
-                                                                                                //fontSize: 10.0
-                                                                                                ),
-                                                                                          ),
-                                                                                        ),
-                                                                                        itemBuilder: (BuildContext context) => [
-                                                                                          PopupMenuItem(
-                                                                                            mouseCursor: MaterialStateMouseCursor.textable,
-                                                                                            child: InkWell(
-                                                                                                onTap: () {
-                                                                                                  Navigator.pop(context);
-                                                                                                },
-                                                                                                child: Container(
-                                                                                                    color: Colors.white,
-                                                                                                    padding: const EdgeInsets.all(10),
-                                                                                                    width: MediaQuery.of(context).size.width,
-                                                                                                    child: Text(
-                                                                                                      'เหตุผล : ${contractModels[index].cc_remark}',
-                                                                                                      style: const TextStyle(
-                                                                                                          color: CustomerScreen_Color.Colors_Text2_,
-                                                                                                          //fontWeight: FontWeight.bold,
-                                                                                                          fontFamily: Font_.Fonts_T),
-                                                                                                    ))),
-                                                                                          ),
-                                                                                        ],
-                                                                                      ),
-
-                                                                                      // Center(
-                                                                                      //   child: Text(
-                                                                                      //     '${contractModels[index].cid} >',
-                                                                                      //     textAlign: TextAlign.center,
-                                                                                      //     style: const TextStyle(
-                                                                                      //         color: CustomerScreen_Color.Colors_Text2_,
-                                                                                      //         // fontWeight: FontWeight.bold,
-                                                                                      //         fontFamily: Font_.Fonts_T
-                                                                                      //         //fontSize: 10.0
-                                                                                      //         ),
-                                                                                      //   ),
-                                                                                      // ),
-                                                                                    ),
-                                                                                  )),
-                                                                            ),
-                                                                            // Text(
-                                                                            //   '${addAreaCusto}  ',
-                                                                            //   // '$Total_amtbill',
-                                                                            //   textAlign:
-                                                                            //       TextAlign
-                                                                            //           .end,
-                                                                            //   style: const TextStyle(
-                                                                            //       color: CustomerScreen_Color
-                                                                            //           .Colors_Text1_,
-                                                                            //       fontWeight:
-                                                                            //           FontWeight
-                                                                            //               .bold,
-                                                                            //       fontFamily:
-                                                                            //           FontWeight_.Fonts_T
-                                                                            //       //fontSize: 10.0
-                                                                            //       //fontSize: 10.0
-                                                                            //       ),
-                                                                            // ),
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                    ),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    Center(
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        width: 200,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                          child: Container(
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Colors
-                                                                    .black,
-                                                                borderRadius: const BorderRadius
-                                                                        .only(
-                                                                    topLeft:
-                                                                        Radius.circular(
-                                                                            6),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            6),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            6),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            6)),
-                                                                border: Border.all(
-                                                                    color: Colors
-                                                                        .grey,
-                                                                    width: 1),
-                                                              ),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: const [
-                                                                  Padding(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Icon(
-                                                                        Icons
-                                                                            .highlight_off,
-                                                                        color: Colors
-                                                                            .white),
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        EdgeInsets.all(
-                                                                            8.0),
-                                                                    child: Text(
-                                                                      'ปิด',
-                                                                      style:
-                                                                          TextStyle(
-                                                                        color: Colors
-                                                                            .white,
-                                                                        // fontWeight:
-                                                                        //     FontWeight.bold,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              )),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  )),
-                              Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  color: AppbackgroundColor.TiTile_Colors,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(0),
-                                      topRight: Radius.circular(0),
-                                      bottomLeft: Radius.circular(0),
-                                      bottomRight: Radius.circular(0)),
-                                ),
-                                child: Row(
-                                  children: const [
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'เลขที่ใบเสร็จ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    // Expanded(
-                                    //   flex: 1,
-                                    //   child: AutoSizeText(
-                                    //     minFontSize: 10,
-                                    //     maxFontSize: 18,
-                                    //     'ชื่อร้าน',
-                                    //     textAlign: TextAlign.center,
-                                    //     style: TextStyle(
-                                    //         color: CustomerScreen_Color.Colors_Text1_,
-                                    //         fontWeight: FontWeight.bold,
-                                    //         fontFamily: FontWeight_.Fonts_T
-                                    //         //fontSize: 10.0
-                                    //         //fontSize: 10.0
-                                    //         ),
-                                    //   ),
-                                    // ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'กำหนดชำระ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'วันที่ชำระ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'รหัสพื้นที่',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'จำนวนเงิน',
-                                        textAlign: TextAlign.right,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'สถานะ',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                    Expanded(
-                                      flex: 1,
-                                      child: AutoSizeText(
-                                        minFontSize: 10,
-                                        maxFontSize: 18,
-                                        'เรียกดู',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: CustomerScreen_Color
-                                                .Colors_Text1_,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: FontWeight_.Fonts_T
-                                            //fontSize: 10.0
-                                            //fontSize: 10.0
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Container(
-                                  // padding: const EdgeInsets.all(10),
-                                  decoration: const BoxDecoration(
-                                    // color: AppbackgroundColor.TiTile_Colors,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(0),
-                                        topRight: Radius.circular(0),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10)),
-                                  ),
-                                  child: (_TransReBillModels.length < 1)
-                                      ? SizedBox(
-                                          child: Center(
+                                          // Expanded(
+                                          //   flex: 1,
+                                          //   child: AutoSizeText(
+                                          //     minFontSize: 10,
+                                          //     maxFontSize: 18,
+                                          //     'ชื่อร้าน',
+                                          //     textAlign: TextAlign.center,
+                                          //     style: TextStyle(
+                                          //         color: CustomerScreen_Color.Colors_Text1_,
+                                          //         fontWeight: FontWeight.bold,
+                                          //         fontFamily: FontWeight_.Fonts_T
+                                          //         //fontSize: 10.0
+                                          //         //fontSize: 10.0
+                                          //         ),
+                                          //   ),
+                                          // ),
+                                          Expanded(
+                                            flex: 1,
                                             child: AutoSizeText(
-                                              (tappedIndex_ == '')
-                                                  ? 'กรุณาเลือกรายชื่อก่อน'
-                                                  : 'ไม่พบข้อมูล',
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'กำหนดชำระ',
                                               textAlign: TextAlign.center,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   color: CustomerScreen_Color
-                                                      .Colors_Text2_,
-                                                  // fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
                                                   //fontSize: 10.0
                                                   //fontSize: 10.0
                                                   ),
                                             ),
                                           ),
-                                        )
-                                      : ListView.builder(
-                                          itemCount: _TransReBillModels.length,
-                                          itemBuilder: (BuildContext context,
-                                              int index) {
-                                            return Material(
-                                              color: tappedIndex_2 ==
-                                                      index.toString()
-                                                  ? tappedIndex_Color
-                                                      .tappedIndex_Colors
-                                                  : AppbackgroundColor
-                                                      .Sub_Abg_Colors,
-                                              child: Container(
-                                                // color: tappedIndex_2 ==
-                                                //         index.toString()
-                                                //     ? tappedIndex_Color
-                                                //         .tappedIndex_Colors
-                                                //         .withOpacity(0.5)
-                                                //     : null,
-                                                child: ListTile(
-                                                  onTap: () {
-                                                    setState(() {
-                                                      tappedIndex_2 =
-                                                          index.toString();
-                                                    });
-                                                  },
-                                                  title: Row(
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 18,
-                                                          _TransReBillModels[
-                                                                          index]
-                                                                      .doctax ==
-                                                                  ''
-                                                              ? '${_TransReBillModels[index].docno}'
-                                                              : '${_TransReBillModels[index].doctax}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'วันที่ชำระ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'รหัสพื้นที่',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'จำนวนเงิน',
+                                              textAlign: TextAlign.right,
+                                              style: TextStyle(
+                                                  color: CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'สถานะ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 18,
+                                              'เรียกดู',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: CustomerScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        // padding: const EdgeInsets.all(10),
+                                        decoration: const BoxDecoration(
+                                          // color: AppbackgroundColor.TiTile_Colors,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(0),
+                                              topRight: Radius.circular(0),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        child: (_TransReBillModels.length < 1)
+                                            ? SizedBox(
+                                                child: Center(
+                                                  child: AutoSizeText(
+                                                    (tappedIndex_ == '')
+                                                        ? 'กรุณาเลือกรายชื่อก่อน'
+                                                        : 'ไม่พบข้อมูล',
+                                                    textAlign: TextAlign.center,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            CustomerScreen_Color
+                                                                .Colors_Text2_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T
+                                                        //fontSize: 10.0
+                                                        //fontSize: 10.0
                                                         ),
-                                                      ),
-                                                      // Expanded(
-                                                      //   flex: 1,
-                                                      //   child: AutoSizeText(
-                                                      //     minFontSize: 10,
-                                                      //     maxFontSize: 18,
-                                                      //     '${_TransReBillModels[index].sname}',
-                                                      //     textAlign: TextAlign.center,
-                                                      //     style: const TextStyle(
-                                                      //         color: CustomerScreen_Color
-                                                      //             .Colors_Text2_,
-                                                      //         // fontWeight: FontWeight.bold,
-                                                      //         fontFamily: Font_.Fonts_T
-                                                      //         //fontSize: 10.0
-                                                      //         //fontSize: 10.0
-                                                      //         ),
-                                                      //   ),
-                                                      // ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 18,
-                                                          '${_TransReBillModels[index].date}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 18,
-                                                          '${_TransReBillModels[index].pdate}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 18,
-                                                          (_TransReBillModels[
-                                                                          index]
-                                                                      .ln ==
-                                                                  null)
-                                                              ? (_TransReBillModels[
-                                                                              index]
-                                                                          .room_number
-                                                                          .toString() ==
-                                                                      '')
-                                                                  ? 'ไม่ระบุ'
-                                                                  : '${_TransReBillModels[index].room_number}'
-                                                              : '${_TransReBillModels[index].ln}',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                      .fromLTRB(
-                                                                  0, 0, 0, 0),
-                                                          child: AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 18,
-                                                            '${nFormat.format(double.parse(_TransReBillModels[index].total_bill.toString()))}',
-                                                            // '${_TransReBillModels[index].total_bill}',
-                                                            textAlign:
-                                                                TextAlign.right,
-                                                            style: const TextStyle(
-                                                                color: CustomerScreen_Color.Colors_Text2_,
-                                                                // fontWeight: FontWeight.bold,
-                                                                fontFamily: Font_.Fonts_T
-                                                                //fontSize: 10.0
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 18,
-                                                          (_TransReBillModels[
-                                                                          index]
-                                                                      .doctax ==
-                                                                  '')
-                                                              ? '-'
-                                                              : 'ใบกำกับภาษี',
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: CustomerScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  // fontWeight: FontWeight.bold,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 1,
-                                                        child: InkWell(
-                                                          child: Container(
-                                                            decoration:
-                                                                const BoxDecoration(
-                                                              color: Colors.red,
-                                                              borderRadius: BorderRadius.only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomLeft: Radius
-                                                                      .circular(
-                                                                          10),
-                                                                  bottomRight: Radius
-                                                                      .circular(
-                                                                          10)),
-                                                            ),
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(4.0),
-                                                            child: const Center(
-                                                              child: Text(
-                                                                'เรียกดู',
+                                                  ),
+                                                ),
+                                              )
+                                            : ListView.builder(
+                                                itemCount:
+                                                    _TransReBillModels.length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index) {
+                                                  return Material(
+                                                    color: tappedIndex_2 ==
+                                                            index.toString()
+                                                        ? tappedIndex_Color
+                                                            .tappedIndex_Colors
+                                                        : AppbackgroundColor
+                                                            .Sub_Abg_Colors,
+                                                    child: Container(
+                                                      // color: tappedIndex_2 ==
+                                                      //         index.toString()
+                                                      //     ? tappedIndex_Color
+                                                      //         .tappedIndex_Colors
+                                                      //         .withOpacity(0.5)
+                                                      //     : null,
+                                                      child: ListTile(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            tappedIndex_2 =
+                                                                index
+                                                                    .toString();
+                                                          });
+                                                        },
+                                                        title: Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                _TransReBillModels[index]
+                                                                            .doctax ==
+                                                                        ''
+                                                                    ? '${_TransReBillModels[index].docno}'
+                                                                    : '${_TransReBillModels[index].doctax}',
                                                                 textAlign:
                                                                     TextAlign
                                                                         .center,
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T
+                                                                style: const TextStyle(
+                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T
                                                                     //fontSize: 10.0
                                                                     //fontSize: 10.0
                                                                     ),
                                                               ),
                                                             ),
-                                                          ),
-                                                          onTap: () async {
-                                                            setState(() {
-                                                              tappedIndex_2 =
-                                                                  index
-                                                                      .toString();
-                                                              red_Trans_select(
-                                                                  index);
-                                                              red_Invoice(
-                                                                  index);
-                                                            });
+                                                            // Expanded(
+                                                            //   flex: 1,
+                                                            //   child: AutoSizeText(
+                                                            //     minFontSize: 10,
+                                                            //     maxFontSize: 18,
+                                                            //     '${_TransReBillModels[index].sname}',
+                                                            //     textAlign: TextAlign.center,
+                                                            //     style: const TextStyle(
+                                                            //         color: CustomerScreen_Color
+                                                            //             .Colors_Text2_,
+                                                            //         // fontWeight: FontWeight.bold,
+                                                            //         fontFamily: Font_.Fonts_T
+                                                            //         //fontSize: 10.0
+                                                            //         //fontSize: 10.0
+                                                            //         ),
+                                                            //   ),
+                                                            // ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                '${_TransReBillModels[index].date}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                '${_TransReBillModels[index].pdate}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                (_TransReBillModels[index]
+                                                                            .ln ==
+                                                                        null)
+                                                                    ? (_TransReBillModels[index].room_number.toString() ==
+                                                                            '')
+                                                                        ? 'ไม่ระบุ'
+                                                                        : '${_TransReBillModels[index].room_number}'
+                                                                    : '${_TransReBillModels[index].ln}',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .fromLTRB(
+                                                                        0,
+                                                                        0,
+                                                                        0,
+                                                                        0),
+                                                                child:
+                                                                    AutoSizeText(
+                                                                  minFontSize:
+                                                                      10,
+                                                                  maxFontSize:
+                                                                      18,
+                                                                  '${nFormat.format(double.parse(_TransReBillModels[index].total_bill.toString()))}',
+                                                                  // '${_TransReBillModels[index].total_bill}',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .right,
+                                                                  style: const TextStyle(
+                                                                      color: CustomerScreen_Color.Colors_Text2_,
+                                                                      // fontWeight: FontWeight.bold,
+                                                                      fontFamily: Font_.Fonts_T
+                                                                      //fontSize: 10.0
+                                                                      //fontSize: 10.0
+                                                                      ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 18,
+                                                                (_TransReBillModels[index]
+                                                                            .doctax ==
+                                                                        '')
+                                                                    ? '-'
+                                                                    : 'ใบกำกับภาษี',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: const TextStyle(
+                                                                    color: CustomerScreen_Color.Colors_Text2_,
+                                                                    // fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T
+                                                                    //fontSize: 10.0
+                                                                    //fontSize: 10.0
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: InkWell(
+                                                                child:
+                                                                    Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          4.0),
+                                                                  child:
+                                                                      const Center(
+                                                                    child: Text(
+                                                                      'เรียกดู',
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .white,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T
+                                                                          //fontSize: 10.0
+                                                                          //fontSize: 10.0
+                                                                          ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                onTap:
+                                                                    () async {
+                                                                  setState(() {
+                                                                    tappedIndex_2 =
+                                                                        index
+                                                                            .toString();
+                                                                    red_Trans_select(
+                                                                        index);
+                                                                    red_Invoice(
+                                                                        index);
+                                                                  });
 
-                                                            checkshowDialog(
-                                                                index);
-                                                          },
+                                                                  checkshowDialog(
+                                                                      index);
+                                                                },
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ),
+                                                    ),
+                                                  );
+                                                },
                                               ),
-                                            );
-                                          },
-                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }

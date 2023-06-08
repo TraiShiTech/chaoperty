@@ -271,7 +271,7 @@ class Pdfgen_BillingNoteInvlice {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        '$renTal_name',
+                        '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
                           fontSize: 14.0,
@@ -656,7 +656,8 @@ class Pdfgen_BillingNoteInvlice {
                                     children: [
                                       pw.Expanded(
                                         child: pw.Text(
-                                          'ส่วนลด/Discount(${(double.parse('$DisC') / double.parse(' $Sum_SubTotal')) * 100.00} %)',
+                                          'ส่วนลด/Discount',
+                                          // 'ส่วนลด/Discount(${(double.parse('$DisC') / double.parse(' $Sum_SubTotal')) * 100.00} %)',
                                           style: pw.TextStyle(
                                               fontSize: 10,
                                               fontWeight: pw.FontWeight.bold,

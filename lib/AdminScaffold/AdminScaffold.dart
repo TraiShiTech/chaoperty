@@ -33,6 +33,7 @@ import 'package:http/http.dart' as http;
 import '../Report_cm/Report_cm_Screen.dart';
 import '../Responsive/responsive.dart';
 
+import '../Setting/Access_Rights.dart';
 import '../Setting/SettingScreen.dart';
 import '../Setting/SettingScreen_user.dart';
 import '../Setting/ttt.dart';
@@ -1670,9 +1671,12 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                   ? ReportScreen()
                                   : (Value_Route == 'ทะเบียน')
                                       ? const BureauScreen()
-                                      : (Value_Route == 'สิทธิการเข้าถึง')
-                                          ? const SettingUserScreen()
-                                          : const SettingScreen(),
+                                      : (Value_Route == 'ตั้งค่า')
+                                          ? const SettingScreen()
+                                          : (Value_Route ==
+                                                  'จัดการข้อมูลส่วนตัว')
+                                              ? const SettingUserScreen()
+                                              : const SettingUserScreen(),
     );
   }
 
@@ -2327,11 +2331,42 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                             padding: const EdgeInsets.all(8.0),
                                             child: TextButton(
                                               onPressed: () async {
+                                                deall_Trans_select();
                                                 SharedPreferences preferences =
                                                     await SharedPreferences
                                                         .getInstance();
-                                                preferences.clear();
-                                                routToService(SignInScreen());
+                                                var ser = preferences
+                                                    .getString('ser');
+                                                var on = '0';
+                                                String url =
+                                                    '${MyConstant().domain}/U_user_onoff.php?isAdd=true&ser=$ser&on=$on';
+
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+                                                  if (result.toString() ==
+                                                      'true') {
+                                                    SharedPreferences
+                                                        preferences =
+                                                        await SharedPreferences
+                                                            .getInstance();
+                                                    preferences.clear();
+                                                    routToService(
+                                                        SignInScreen());
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                          content: Text(
+                                                              '(ผิดพลาด)')),
+                                                    );
+                                                  }
+                                                } catch (e) {}
                                               },
                                               child: const Text(
                                                 'ยืนยัน',
@@ -2465,6 +2500,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                     'route', perMissionModels[i].perm!.trim().toString());
                 setState(() {
                   Value_Route = perMissionModels[i].perm!.trim();
+                  print(Value_Route);
                   Navigator.pop(context);
                 });
               } else {
@@ -2476,6 +2512,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               }
             }
           }
+          print(Value_Route);
         },
         header: Container(
           color: AppBarColors.ABar_Colors,
@@ -2584,9 +2621,12 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                   ? ReportScreen()
                                   : (Value_Route == 'ทะเบียน')
                                       ? const BureauScreen()
-                                      : (Value_Route == 'สิทธิการเข้าถึง')
-                                          ? const SettingUserScreen()
-                                          : const SettingScreen(),
+                                      : (Value_Route == 'ตั้งค่า')
+                                          ? const SettingScreen()
+                                          : (Value_Route ==
+                                                  'จัดการข้อมูลส่วนตัว')
+                                              ? const Accessrights()
+                                              : const Accessrights(),
     );
   }
 

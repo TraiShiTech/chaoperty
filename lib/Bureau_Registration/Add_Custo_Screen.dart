@@ -16,7 +16,8 @@ import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
 class Add_Custo_Screen extends StatefulWidget {
-  const Add_Custo_Screen({super.key});
+  final updateMessage;
+  const Add_Custo_Screen({super.key, this.updateMessage});
 
   @override
   State<Add_Custo_Screen> createState() => _Add_Custo_ScreenState();
@@ -163,12 +164,68 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
         ),
         child: Column(
           children: [
+            InkWell(
+              onTap: () {
+                widget.updateMessage(0);
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 8, 8, 0),
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 8, 2, 0),
+                    child: Container(
+                      width: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.red[700],
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
+                        ),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                      padding: const EdgeInsets.all(5.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          AutoSizeText(
+                            ' <  ',
+                            overflow: TextOverflow.ellipsis,
+                            minFontSize: 8,
+                            maxFontSize: 20,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                            ),
+                          ),
+                          AutoSizeText(
+                            'ย้อนกลับ ',
+                            overflow: TextOverflow.ellipsis,
+                            minFontSize: 8,
+                            maxFontSize: 20,
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             Form(
               key: _formKey,
               child: Container(
                 // color: Colors.red,
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.75,
+                height: MediaQuery.of(context).size.height * 0.7,
                 // height: 450,
                 child: SingleChildScrollView(
                   child: Column(
@@ -1189,6 +1246,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                                   //     Status5Form_NoArea_.text = '';
                                   //   });
                                   // } catch (e) {}
+
                                   String url =
                                       '${MyConstant().domain}/InC_CustoAdd_Bureau.php?isAdd=true&ren=$ren';
 
@@ -1245,6 +1303,7 @@ class _Add_Custo_ScreenState extends State<Add_Custo_Screen> {
                                     print('$value');
                                     var result = json.decode(value.body);
                                     print('$result ');
+                                    widget.updateMessage(0);
                                     setState(() {
                                       Status4Form_nameshop.clear();
                                       Status4Form_typeshop.clear();

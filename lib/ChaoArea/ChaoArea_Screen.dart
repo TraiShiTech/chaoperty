@@ -1628,13 +1628,21 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   ? Body_bid(context)
                   : (Ser_Body == 2)
                       ? Body_Renew(context)
-                      : PeopleChaoScreen2(
-                          Get_Value_cid: Value_cid,
-                          Get_Value_NameShop_index: ser_cidtan,
-                          Get_Value_status: 1,
-                          Get_Value_indexpage: '0',
-                          updateMessage: updateMessage,
-                        )
+                      : (Ser_Body == 3)
+                          ? PeopleChaoScreen2(
+                              Get_Value_cid: Value_cid,
+                              Get_Value_NameShop_index: ser_cidtan,
+                              Get_Value_status: 1,
+                              Get_Value_indexpage: '0',
+                              updateMessage: updateMessage,
+                            )
+                          : PeopleChaoScreen2(
+                              Get_Value_cid: Value_cid,
+                              Get_Value_NameShop_index: ser_cidtan,
+                              Get_Value_status: 1,
+                              Get_Value_indexpage: '3',
+                              updateMessage: updateMessage,
+                            )
         ],
       ),
     );
@@ -3059,6 +3067,34 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                         Expanded(
                             child: Text(
                           'เช่าอยู่: ${areaModels[index].cid}',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                              //fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T),
+                        ))
+                      ],
+                    ))),
+          ),
+        if (areaModels[index].quantity == '1')
+          PopupMenuItem(
+            child: InkWell(
+                onTap: () async {
+                  setState(() {
+                    Ser_Body = 4;
+                    Value_cid = areaModels[index].cid;
+                    ser_cidtan = '1';
+                  });
+                  Navigator.pop(context);
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                          'รับชำระ: ${areaModels[index].cid}',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               color: PeopleChaoScreen_Color.Colors_Text2_,

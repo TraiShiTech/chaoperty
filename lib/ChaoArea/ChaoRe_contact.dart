@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -4035,8 +4035,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                         fontFamily:
                                                             Font_.Fonts_T,
                                                       )),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
+                                                  inputFormatters: <TextInputFormatter>[
                                                     // for below version 2 use this
                                                     FilteringTextInputFormatter
                                                         .allow(
@@ -11954,44 +11953,45 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                     preferences.getString('renTalName');
 
                                 Pdfgen_Agreement.exportPDF_Agreement(
-                                  context,
-                                  '{widget.Get_Value_NameShop_index}',
-                                  '${Get_Value_cid}',
-                                  _verticalGroupValue,
-                                  Form_nameshop.text,
-                                  Form_typeshop.text,
-                                  Form_bussshop.text,
-                                  Form_bussscontact.text,
-                                  Form_address.text,
-                                  Form_tel.text,
-                                  Form_email.text,
-                                  Form_tax.text,
-                                  '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                  // '$Form_ln',
-                                  '$zone_name',
-                                  // '$Form_zn.',
-                                  '${nFormat.format(_area_sum)}',
-                                  // '$Form_area',
-                                  '$Form_qty',
-                                  '$Value_DateTime_Step2',
-                                  //  '$Form_sdate',
-                                  '$Value_DateTime_end',
-                                  //  '$Form_ldate',
-                                  '$Value_rental_count_',
-                                  // 'Form_period.text',
-                                  '${Value_rental_type_}',
-                                  // 'Form_rtname.text',
-                                  quotxSelectModels,
-                                  '_TransModels',
-                                  '$renTal_name',
-                                  '${renTalModels[0].bill_addr}',
-                                  '${renTalModels[0].bill_email}',
-                                  '${renTalModels[0].bill_tel}',
-                                  '${renTalModels[0].bill_tax}',
-                                  '${renTalModels[0].bill_name}',
-                                  newValuePDFimg,
-                                  // (ser_user == null) ? '' : ser_user
-                                );
+                                    context,
+                                    '{widget.Get_Value_NameShop_index}',
+                                    '${Get_Value_cid}',
+                                    _verticalGroupValue,
+                                    Form_nameshop.text,
+                                    Form_typeshop.text,
+                                    Form_bussshop.text,
+                                    Form_bussscontact.text,
+                                    Form_address.text,
+                                    Form_tel.text,
+                                    Form_email.text,
+                                    Form_tax.text,
+                                    '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                    // '$Form_ln',
+                                    '$zone_name',
+                                    // '$Form_zn.',
+                                    '${nFormat.format(_area_sum)}',
+                                    // '$Form_area',
+                                    '$Form_qty',
+                                    '$Value_DateTime_Step2',
+                                    //  '$Form_sdate',
+                                    '$Value_DateTime_end',
+                                    //  '$Form_ldate',
+                                    '$Value_rental_count_',
+                                    // 'Form_period.text',
+                                    '${Value_rental_type_}',
+                                    // 'Form_rtname.text',
+                                    quotxSelectModels,
+                                    '_TransModels',
+                                    '$renTal_name',
+                                    '${renTalModels[0].bill_addr}',
+                                    '${renTalModels[0].bill_email}',
+                                    '${renTalModels[0].bill_tel}',
+                                    '${renTalModels[0].bill_tax}',
+                                    '${renTalModels[0].bill_name}',
+                                    newValuePDFimg,
+                                    ''
+                                    // (ser_user == null) ? '' : ser_user
+                                    );
                               },
                             ),
                           ),

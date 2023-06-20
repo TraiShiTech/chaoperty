@@ -2537,8 +2537,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                                     content:
                                                         SingleChildScrollView(
                                                       child: ListBody(
-                                                        children: const <
-                                                            Widget>[
+                                                        children: const <Widget>[
                                                           Text(
                                                             'มีเอกสารสำเนาบัตรประชาชนอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
                                                             style: TextStyle(
@@ -3104,38 +3103,53 @@ class _RentalInformationState extends State<RentalInformation> {
                                       var renTal_name =
                                           preferences.getString('renTalName');
 
+                                      final tableData00 = [
+                                        for (int index = 0;
+                                            index < quotxSelectModels.length;
+                                            index++)
+                                          [
+                                            '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                            '${quotxSelectModels[index].expname}',
+                                            '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                            '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                          ],
+                                      ];
+
                                       Pdfgen_Agreement.exportPDF_Agreement(
-                                        context,
-                                        '${widget.Get_Value_NameShop_index}',
-                                        '${widget.Get_Value_cid}',
-                                        _verticalGroupValue,
-                                        Form_nameshop.text,
-                                        Form_typeshop.text,
-                                        Form_bussshop.text,
-                                        Form_bussscontact.text,
-                                        Form_address.text,
-                                        Form_tel.text,
-                                        Form_email.text,
-                                        Form_tax.text,
-                                        Form_ln.text,
-                                        Form_zn.text,
-                                        Form_area.text,
-                                        Form_qty.text,
-                                        Form_sdate.text,
-                                        Form_ldate.text,
-                                        Form_period.text,
-                                        Form_rtname.text,
-                                        quotxSelectModels,
-                                        _TransModels,
-                                        '$renTal_name',
-                                        '${renTalModels[0].bill_addr}',
-                                        '${renTalModels[0].bill_email}',
-                                        '${renTalModels[0].bill_tel}',
-                                        '${renTalModels[0].bill_tax}',
-                                        '${renTalModels[0].bill_name}',
-                                        newValuePDFimg,
-                                        // (ser_user == null) ? '' : ser_user
-                                      );
+                                          context,
+                                          '${widget.Get_Value_NameShop_index}',
+                                          '${widget.Get_Value_cid}',
+                                          _verticalGroupValue,
+                                          Form_nameshop.text,
+                                          Form_typeshop.text,
+                                          Form_bussshop.text,
+                                          Form_bussscontact.text,
+                                          Form_address.text,
+                                          Form_tel.text,
+                                          Form_email.text,
+                                          Form_tax.text,
+                                          Form_ln.text,
+                                          Form_zn.text,
+                                          Form_area.text,
+                                          Form_qty.text,
+                                          Form_sdate.text,
+                                          Form_ldate.text,
+                                          Form_period.text,
+                                          Form_rtname.text,
+                                          quotxSelectModels,
+                                          _TransModels,
+                                          '$renTal_name',
+                                          '${renTalModels[0].bill_addr}',
+                                          '${renTalModels[0].bill_email}',
+                                          '${renTalModels[0].bill_tel}',
+                                          '${renTalModels[0].bill_tax}',
+                                          '${renTalModels[0].bill_name}',
+                                          newValuePDFimg,
+                                          tableData00
+
+                                          // (ser_user == null) ? '' : ser_user
+                                          );
                                     },
                                   ),
                                 ),
@@ -3150,488 +3164,488 @@ class _RentalInformationState extends State<RentalInformation> {
                   //   flex: 1,
                   //   child: Text(''),
                   // ),
-                  Expanded(
-                    flex: 2,
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'เอกสารสัญญาเช่า(เซ็นแล้ว)',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: PeopleChaoScreen_Color.Colors_Text2_,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: FontWeight_.Fonts_T
-                                  //fontSize: 10.0
-                                  ),
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: 60,
-                                    decoration: const BoxDecoration(
-                                      // color: Colors.orange[600],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            (cxname_lease != null)
-                                                ? 'พบเอกสาร'
-                                                : 'ไม่พบเอกสาร',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: (cxname_lease != null)
-                                                    ? Colors.black
-                                                    : Colors.red,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                          Text(
-                                            (cxname_lease != null)
-                                                ? '$cxname_lease'
-                                                : '',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.blue[800],
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                                fontSize: 8.0),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue[400],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: const Center(
-                                        child: Text(
-                                          'อัพโหลดไฟล์(PDF)',
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text2_,
-                                              // fontWeight: FontWeight.bold,
-                                              fontFamily: Font_.Fonts_T
-                                              //fontSize: 10.0
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      // uploadFile_Agreement();
+                  // Expanded(
+                  //   flex: 2,
+                  //   child: Container(
+                  //     child: Column(
+                  //       children: [
+                  //         Padding(
+                  //           padding: EdgeInsets.all(8.0),
+                  //           child: Text(
+                  //             'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+                  //             textAlign: TextAlign.start,
+                  //             style: TextStyle(
+                  //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+                  //                 fontWeight: FontWeight.bold,
+                  //                 fontFamily: FontWeight_.Fonts_T
+                  //                 //fontSize: 10.0
+                  //                 ),
+                  //           ),
+                  //         ),
+                  //         Row(
+                  //           children: [
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: Container(
+                  //                   height: 60,
+                  //                   decoration: const BoxDecoration(
+                  //                     // color: Colors.orange[600],
+                  //                     borderRadius: BorderRadius.only(
+                  //                         topLeft: Radius.circular(10),
+                  //                         topRight: Radius.circular(10),
+                  //                         bottomLeft: Radius.circular(10),
+                  //                         bottomRight: Radius.circular(10)),
+                  //                   ),
+                  //                   child: Center(
+                  //                     child: Column(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.center,
+                  //                       children: [
+                  //                         Text(
+                  //                           (cxname_lease != null)
+                  //                               ? 'พบเอกสาร'
+                  //                               : 'ไม่พบเอกสาร',
+                  //                           textAlign: TextAlign.start,
+                  //                           style: TextStyle(
+                  //                               color: (cxname_lease != null)
+                  //                                   ? Colors.black
+                  //                                   : Colors.red,
+                  //                               // fontWeight: FontWeight.bold,
+                  //                               fontFamily: Font_.Fonts_T
+                  //                               //fontSize: 10.0
+                  //                               ),
+                  //                         ),
+                  //                         Text(
+                  //                           (cxname_lease != null)
+                  //                               ? '$cxname_lease'
+                  //                               : '',
+                  //                           textAlign: TextAlign.start,
+                  //                           style: TextStyle(
+                  //                               color: Colors.blue[800],
+                  //                               // fontWeight: FontWeight.bold,
+                  //                               fontFamily: Font_.Fonts_T,
+                  //                               fontSize: 8.0),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Row(
+                  //           children: [
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: InkWell(
+                  //                   child: Container(
+                  //                     height: 40,
+                  //                     decoration: BoxDecoration(
+                  //                       color: Colors.blue[400],
+                  //                       borderRadius: const BorderRadius.only(
+                  //                           topLeft: Radius.circular(10),
+                  //                           topRight: Radius.circular(10),
+                  //                           bottomLeft: Radius.circular(10),
+                  //                           bottomRight: Radius.circular(10)),
+                  //                     ),
+                  //                     child: const Center(
+                  //                       child: Text(
+                  //                         'อัพโหลดไฟล์(PDF)',
+                  //                         textAlign: TextAlign.start,
+                  //                         style: TextStyle(
+                  //                             color: PeopleChaoScreen_Color
+                  //                                 .Colors_Text2_,
+                  //                             // fontWeight: FontWeight.bold,
+                  //                             fontFamily: Font_.Fonts_T
+                  //                             //fontSize: 10.0
+                  //                             ),
+                  //                       ),
+                  //                     ),
+                  //                   ),
+                  //                   onTap: () async {
+                  //                     // uploadFile_Agreement();
 
-                                      (cxname_lease == null)
-                                          ? uploadFile_Agreement(
-                                              '${cxname_lease}',
-                                              ' $cxname_lease_ser',
-                                            )
-                                          : showDialog<void>(
-                                              context: context,
-                                              barrierDismissible:
-                                                  false, // user must tap button!
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      10.0))),
-                                                  title: const Center(
-                                                      child: Text(
-                                                    'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
-                                                  )),
-                                                  content:
-                                                      SingleChildScrollView(
-                                                    child: ListBody(
-                                                      children: const <Widget>[
-                                                        Text(
-                                                          'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .red[600],
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ลบเอกสาร',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () async {
-                                                              deletedFile_SQL(
-                                                                  '$cxname_lease_ser');
-                                                              deletedFile_(
-                                                                  '${cxname_lease}',
-                                                                  ' $cxname_lease_ser',
-                                                                  'lease');
+                  //                     (cxname_lease == null)
+                  //                         ? uploadFile_Agreement(
+                  //                             '${cxname_lease}',
+                  //                             ' $cxname_lease_ser',
+                  //                           )
+                  //                         : showDialog<void>(
+                  //                             context: context,
+                  //                             barrierDismissible:
+                  //                                 false, // user must tap button!
+                  //                             builder: (BuildContext context) {
+                  //                               return AlertDialog(
+                  //                                 shape:
+                  //                                     const RoundedRectangleBorder(
+                  //                                         borderRadius:
+                  //                                             BorderRadius.all(
+                  //                                                 Radius.circular(
+                  //                                                     10.0))),
+                  //                                 title: const Center(
+                  //                                     child: Text(
+                  //                                   'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
+                  //                                   style: TextStyle(
+                  //                                       color:
+                  //                                           PeopleChaoScreen_Color
+                  //                                               .Colors_Text1_,
+                  //                                       fontWeight:
+                  //                                           FontWeight.bold,
+                  //                                       fontFamily: FontWeight_
+                  //                                           .Fonts_T),
+                  //                                 )),
+                  //                                 content:
+                  //                                     SingleChildScrollView(
+                  //                                   child: ListBody(
+                  //                                     children: const <Widget>[
+                  //                                       Text(
+                  //                                         'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
+                  //                                         style: TextStyle(
+                  //                                             color: PeopleChaoScreen_Color
+                  //                                                 .Colors_Text2_,
+                  //                                             fontFamily: Font_
+                  //                                                 .Fonts_T),
+                  //                                       ),
+                  //                                     ],
+                  //                                   ),
+                  //                                 ),
+                  //                                 actions: <Widget>[
+                  //                                   Row(
+                  //                                     mainAxisAlignment:
+                  //                                         MainAxisAlignment
+                  //                                             .center,
+                  //                                     children: [
+                  //                                       Padding(
+                  //                                         padding:
+                  //                                             const EdgeInsets
+                  //                                                 .all(8.0),
+                  //                                         child: InkWell(
+                  //                                           child: Container(
+                  //                                               width: 100,
+                  //                                               decoration:
+                  //                                                   BoxDecoration(
+                  //                                                 color: Colors
+                  //                                                     .red[600],
+                  //                                                 borderRadius: const BorderRadius
+                  //                                                         .only(
+                  //                                                     topLeft:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     topRight:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     bottomLeft:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     bottomRight:
+                  //                                                         Radius.circular(
+                  //                                                             10)),
+                  //                                                 // border: Border.all(color: Colors.white, width: 1),
+                  //                                               ),
+                  //                                               padding:
+                  //                                                   const EdgeInsets
+                  //                                                           .all(
+                  //                                                       8.0),
+                  //                                               child:
+                  //                                                   const Center(
+                  //                                                       child:
+                  //                                                           Text(
+                  //                                                 'ลบเอกสาร',
+                  //                                                 style: TextStyle(
+                  //                                                     color: PeopleChaoScreen_Color
+                  //                                                         .Colors_Text3_,
+                  //                                                     fontWeight:
+                  //                                                         FontWeight
+                  //                                                             .bold,
+                  //                                                     fontFamily:
+                  //                                                         Font_
+                  //                                                             .Fonts_T),
+                  //                                               ))),
+                  //                                           onTap: () async {
+                  //                                             deletedFile_SQL(
+                  //                                                 '$cxname_lease_ser');
+                  //                                             deletedFile_(
+                  //                                                 '${cxname_lease}',
+                  //                                                 ' $cxname_lease_ser',
+                  //                                                 'lease');
 
-                                                              GC_contractf();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ปิด',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () {
-                                                              GC_contractf();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              // Expanded(
-                              //   flex: 1,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.all(8.0),
-                              //     child: InkWell(
-                              //       child: Container(
-                              //         height: 40,
-                              //         decoration: BoxDecoration(
-                              //           color: Colors.red[400],
-                              //           borderRadius: const BorderRadius.only(
-                              //               topLeft: Radius.circular(10),
-                              //               topRight: Radius.circular(10),
-                              //               bottomLeft: Radius.circular(10),
-                              //               bottomRight: Radius.circular(10)),
-                              //         ),
-                              //         child: const Center(
-                              //           child: Text(
-                              //             'ลบ(PDF)',
-                              //             textAlign: TextAlign.start,
-                              //             style: TextStyle(
-                              //                 color: PeopleChaoScreen_Color
-                              //                     .Colors_Text2_,
-                              //                 // fontWeight: FontWeight.bold,
-                              //                 fontFamily: Font_.Fonts_T
-                              //                 //fontSize: 10.0
-                              //                 ),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       onTap: () async {
-                              //         deletedFile_('${cxname_lease}',
-                              //             ' $cxname_lease_ser');
-                              //         // final file = await pickFile_agreement();
-                              //         // if (file != null) {
-                              //         //   // Upload the file to the server
-                              //         //   uploadFile_Agreement(file);
-                              //         // }
-                              //       },
-                              //     ),
-                              //   ),
-                              // ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange[400],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: Icon(
-                                              Icons.print,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            'พิมพ์',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      // String Url =
-                                      //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                      String Url =
-                                          await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
-                                      print(Url);
-                                      if (Url == '') {
-                                        showDialog<void>(
-                                          context: context,
-                                          barrierDismissible:
-                                              false, // user must tap button!
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10.0))),
-                                              title: const Center(
-                                                  child: Text(
-                                                'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T),
-                                              )),
-                                              content: SingleChildScrollView(
-                                                child: ListBody(
-                                                  children: const <Widget>[
-                                                    Text(
-                                                      'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                InkWell(
-                                                  child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Center(
-                                                          child: Text(
-                                                        'ปิด',
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text3_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ))),
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                // TextButton(
-                                                //   child: const Text('ตกลง'),
-                                                //   onPressed: () {
-                                                //     Navigator.of(context).pop();
-                                                //   },
-                                                // ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PreviewScreenRental_(
-                                                      title:
-                                                          'เอกสารสัญญาเช่า(เซ็นแล้ว)',
-                                                      Url: Url),
-                                            ));
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                  //                                             GC_contractf();
+                  //                                             Navigator.of(
+                  //                                                     context)
+                  //                                                 .pop();
+                  //                                           },
+                  //                                         ),
+                  //                                       ),
+                  //                                       Padding(
+                  //                                         padding:
+                  //                                             const EdgeInsets
+                  //                                                 .all(8.0),
+                  //                                         child: InkWell(
+                  //                                           child: Container(
+                  //                                               width: 100,
+                  //                                               decoration:
+                  //                                                   const BoxDecoration(
+                  //                                                 color: Colors
+                  //                                                     .black,
+                  //                                                 borderRadius: BorderRadius.only(
+                  //                                                     topLeft:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     topRight:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     bottomLeft:
+                  //                                                         Radius.circular(
+                  //                                                             10),
+                  //                                                     bottomRight:
+                  //                                                         Radius.circular(
+                  //                                                             10)),
+                  //                                                 // border: Border.all(color: Colors.white, width: 1),
+                  //                                               ),
+                  //                                               padding:
+                  //                                                   const EdgeInsets
+                  //                                                           .all(
+                  //                                                       8.0),
+                  //                                               child:
+                  //                                                   const Center(
+                  //                                                       child:
+                  //                                                           Text(
+                  //                                                 'ปิด',
+                  //                                                 style: TextStyle(
+                  //                                                     color: PeopleChaoScreen_Color
+                  //                                                         .Colors_Text3_,
+                  //                                                     fontWeight:
+                  //                                                         FontWeight
+                  //                                                             .bold,
+                  //                                                     fontFamily:
+                  //                                                         Font_
+                  //                                                             .Fonts_T),
+                  //                                               ))),
+                  //                                           onTap: () {
+                  //                                             GC_contractf();
+                  //                                             Navigator.of(
+                  //                                                     context)
+                  //                                                 .pop();
+                  //                                           },
+                  //                                         ),
+                  //                                       ),
+                  //                                     ],
+                  //                                   ),
+                  //                                 ],
+                  //                               );
+                  //                             },
+                  //                           );
+                  //                   },
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         Row(
+                  //           children: [
+                  //             // Expanded(
+                  //             //   flex: 1,
+                  //             //   child: Padding(
+                  //             //     padding: const EdgeInsets.all(8.0),
+                  //             //     child: InkWell(
+                  //             //       child: Container(
+                  //             //         height: 40,
+                  //             //         decoration: BoxDecoration(
+                  //             //           color: Colors.red[400],
+                  //             //           borderRadius: const BorderRadius.only(
+                  //             //               topLeft: Radius.circular(10),
+                  //             //               topRight: Radius.circular(10),
+                  //             //               bottomLeft: Radius.circular(10),
+                  //             //               bottomRight: Radius.circular(10)),
+                  //             //         ),
+                  //             //         child: const Center(
+                  //             //           child: Text(
+                  //             //             'ลบ(PDF)',
+                  //             //             textAlign: TextAlign.start,
+                  //             //             style: TextStyle(
+                  //             //                 color: PeopleChaoScreen_Color
+                  //             //                     .Colors_Text2_,
+                  //             //                 // fontWeight: FontWeight.bold,
+                  //             //                 fontFamily: Font_.Fonts_T
+                  //             //                 //fontSize: 10.0
+                  //             //                 ),
+                  //             //           ),
+                  //             //         ),
+                  //             //       ),
+                  //             //       onTap: () async {
+                  //             //         deletedFile_('${cxname_lease}',
+                  //             //             ' $cxname_lease_ser');
+                  //             //         // final file = await pickFile_agreement();
+                  //             //         // if (file != null) {
+                  //             //         //   // Upload the file to the server
+                  //             //         //   uploadFile_Agreement(file);
+                  //             //         // }
+                  //             //       },
+                  //             //     ),
+                  //             //   ),
+                  //             // ),
+                  //             Expanded(
+                  //               flex: 1,
+                  //               child: Padding(
+                  //                 padding: const EdgeInsets.all(8.0),
+                  //                 child: InkWell(
+                  //                   child: Container(
+                  //                     height: 40,
+                  //                     decoration: BoxDecoration(
+                  //                       color: Colors.orange[400],
+                  //                       borderRadius: const BorderRadius.only(
+                  //                           topLeft: Radius.circular(10),
+                  //                           topRight: Radius.circular(10),
+                  //                           bottomLeft: Radius.circular(10),
+                  //                           bottomRight: Radius.circular(10)),
+                  //                     ),
+                  //                     child: Row(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.center,
+                  //                       children: const [
+                  //                         Padding(
+                  //                           padding: EdgeInsets.all(4.0),
+                  //                           child: Icon(
+                  //                             Icons.print,
+                  //                             color: Colors.white,
+                  //                           ),
+                  //                         ),
+                  //                         Text(
+                  //                           'พิมพ์',
+                  //                           textAlign: TextAlign.start,
+                  //                           style: TextStyle(
+                  //                               color: PeopleChaoScreen_Color
+                  //                                   .Colors_Text2_,
+                  //                               // fontWeight: FontWeight.bold,
+                  //                               fontFamily: Font_.Fonts_T
+                  //                               //fontSize: 10.0
+                  //                               ),
+                  //                         ),
+                  //                       ],
+                  //                     ),
+                  //                   ),
+                  //                   onTap: () async {
+                  //                     // String Url =
+                  //                     //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                  //                     String Url =
+                  //                         await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
+                  //                     print(Url);
+                  //                     if (Url == '') {
+                  //                       showDialog<void>(
+                  //                         context: context,
+                  //                         barrierDismissible:
+                  //                             false, // user must tap button!
+                  //                         builder: (BuildContext context) {
+                  //                           return AlertDialog(
+                  //                             shape:
+                  //                                 const RoundedRectangleBorder(
+                  //                                     borderRadius:
+                  //                                         BorderRadius.all(
+                  //                                             Radius.circular(
+                  //                                                 10.0))),
+                  //                             title: const Center(
+                  //                                 child: Text(
+                  //                               'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
+                  //                               style: TextStyle(
+                  //                                   color:
+                  //                                       PeopleChaoScreen_Color
+                  //                                           .Colors_Text1_,
+                  //                                   fontWeight: FontWeight.bold,
+                  //                                   fontFamily:
+                  //                                       FontWeight_.Fonts_T),
+                  //                             )),
+                  //                             content: SingleChildScrollView(
+                  //                               child: ListBody(
+                  //                                 children: const <Widget>[
+                  //                                   Text(
+                  //                                     'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                  //                                     style: TextStyle(
+                  //                                         color:
+                  //                                             PeopleChaoScreen_Color
+                  //                                                 .Colors_Text2_,
+                  //                                         fontFamily:
+                  //                                             Font_.Fonts_T),
+                  //                                   ),
+                  //                                 ],
+                  //                               ),
+                  //                             ),
+                  //                             actions: <Widget>[
+                  //                               InkWell(
+                  //                                 child: Container(
+                  //                                     width: 100,
+                  //                                     decoration:
+                  //                                         const BoxDecoration(
+                  //                                       color: Colors.black,
+                  //                                       borderRadius:
+                  //                                           BorderRadius.only(
+                  //                                               topLeft: Radius
+                  //                                                   .circular(
+                  //                                                       10),
+                  //                                               topRight: Radius
+                  //                                                   .circular(
+                  //                                                       10),
+                  //                                               bottomLeft: Radius
+                  //                                                   .circular(
+                  //                                                       10),
+                  //                                               bottomRight: Radius
+                  //                                                   .circular(
+                  //                                                       10)),
+                  //                                       // border: Border.all(color: Colors.white, width: 1),
+                  //                                     ),
+                  //                                     padding:
+                  //                                         const EdgeInsets.all(
+                  //                                             8.0),
+                  //                                     child: const Center(
+                  //                                         child: Text(
+                  //                                       'ปิด',
+                  //                                       style: TextStyle(
+                  //                                           color: PeopleChaoScreen_Color
+                  //                                               .Colors_Text3_,
+                  //                                           fontWeight:
+                  //                                               FontWeight.bold,
+                  //                                           fontFamily:
+                  //                                               Font_.Fonts_T),
+                  //                                     ))),
+                  //                                 onTap: () {
+                  //                                   Navigator.of(context).pop();
+                  //                                 },
+                  //                               ),
+                  //                               // TextButton(
+                  //                               //   child: const Text('ตกลง'),
+                  //                               //   onPressed: () {
+                  //                               //     Navigator.of(context).pop();
+                  //                               //   },
+                  //                               // ),
+                  //                             ],
+                  //                           );
+                  //                         },
+                  //                       );
+                  //                     } else {
+                  //                       Navigator.push(
+                  //                           context,
+                  //                           MaterialPageRoute(
+                  //                             builder: (context) =>
+                  //                                 PreviewScreenRental_(
+                  //                                     title:
+                  //                                         'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+                  //                                     Url: Url),
+                  //                           ));
+                  //                     }
+                  //                   },
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                   Expanded(
                     flex: 2,
                     child: Container(
@@ -3657,7 +3671,7 @@ class _RentalInformationState extends State<RentalInformation> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    height: 60,
+                                    height: 110,
                                     decoration: const BoxDecoration(
                                       // color: Colors.orange[600],
                                       borderRadius: BorderRadius.only(
@@ -3914,201 +3928,201 @@ class _RentalInformationState extends State<RentalInformation> {
                               ),
                             ],
                           ),
-                          Row(
-                            children: [
-                              // Expanded(
-                              //   flex: 1,
-                              //   child: Padding(
-                              //     padding: const EdgeInsets.all(8.0),
-                              //     child: InkWell(
-                              //       child: Container(
-                              //         height: 40,
-                              //         decoration: BoxDecoration(
-                              //           color: Colors.red[400],
-                              //           borderRadius: const BorderRadius.only(
-                              //               topLeft: Radius.circular(10),
-                              //               topRight: Radius.circular(10),
-                              //               bottomLeft: Radius.circular(10),
-                              //               bottomRight: Radius.circular(10)),
-                              //         ),
-                              //         child: const Center(
-                              //           child: Text(
-                              //             'ลบ(PDF)',
-                              //             textAlign: TextAlign.start,
-                              //             style: TextStyle(
-                              //                 color: PeopleChaoScreen_Color
-                              //                     .Colors_Text2_,
-                              //                 // fontWeight: FontWeight.bold,
-                              //                 fontFamily: Font_.Fonts_T
-                              //                 //fontSize: 10.0
-                              //                 ),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       onTap: () async {
-                              //         deletedFile_('${cxname_other}',
-                              //             ' $cxname_other_ser');
-                              //         // final file = await pickFile_agreement();
-                              //         // if (file != null) {
-                              //         //   // Upload the file to the server
-                              //         //   uploadFile_Agreement(file);
-                              //         // }
-                              //       },
-                              //     ),
-                              //   ),
-                              // ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    child: Container(
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: Colors.orange[400],
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: const [
-                                          Padding(
-                                            padding: EdgeInsets.all(4.0),
-                                            child: Icon(
-                                              Icons.print,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Text(
-                                            'พิมพ์',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: PeopleChaoScreen_Color
-                                                    .Colors_Text2_,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    onTap: () async {
-                                      // String Url =
-                                      //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                      String Url =
-                                          await '${MyConstant().domain}/files/kad_taii/contract/other/$cxname_other';
-                                      print(Url);
-                                      if (Url == '') {
-                                        showDialog<void>(
-                                          context: context,
-                                          barrierDismissible:
-                                              false, // user must tap button!
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              shape:
-                                                  const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  10.0))),
-                                              title: const Center(
-                                                  child: Text(
-                                                'ไม่พบเอกสารอื่นๆ',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text1_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T),
-                                              )),
-                                              content: SingleChildScrollView(
-                                                child: ListBody(
-                                                  children: const <Widget>[
-                                                    Text(
-                                                      'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              actions: <Widget>[
-                                                InkWell(
-                                                  child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Center(
-                                                          child: Text(
-                                                        'ปิด',
-                                                        style: TextStyle(
-                                                            color: PeopleChaoScreen_Color
-                                                                .Colors_Text3_,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            fontFamily:
-                                                                Font_.Fonts_T),
-                                                      ))),
-                                                  onTap: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                                // TextButton(
-                                                //   child: const Text('ตกลง'),
-                                                //   onPressed: () {
-                                                //     Navigator.of(context).pop();
-                                                //   },
-                                                // ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      } else {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PreviewScreenRental_(
-                                                      title: 'เอกสารอื่นๆ',
-                                                      Url: Url),
-                                            ));
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: [
+                          //     // Expanded(
+                          //     //   flex: 1,
+                          //     //   child: Padding(
+                          //     //     padding: const EdgeInsets.all(8.0),
+                          //     //     child: InkWell(
+                          //     //       child: Container(
+                          //     //         height: 40,
+                          //     //         decoration: BoxDecoration(
+                          //     //           color: Colors.red[400],
+                          //     //           borderRadius: const BorderRadius.only(
+                          //     //               topLeft: Radius.circular(10),
+                          //     //               topRight: Radius.circular(10),
+                          //     //               bottomLeft: Radius.circular(10),
+                          //     //               bottomRight: Radius.circular(10)),
+                          //     //         ),
+                          //     //         child: const Center(
+                          //     //           child: Text(
+                          //     //             'ลบ(PDF)',
+                          //     //             textAlign: TextAlign.start,
+                          //     //             style: TextStyle(
+                          //     //                 color: PeopleChaoScreen_Color
+                          //     //                     .Colors_Text2_,
+                          //     //                 // fontWeight: FontWeight.bold,
+                          //     //                 fontFamily: Font_.Fonts_T
+                          //     //                 //fontSize: 10.0
+                          //     //                 ),
+                          //     //           ),
+                          //     //         ),
+                          //     //       ),
+                          //     //       onTap: () async {
+                          //     //         deletedFile_('${cxname_other}',
+                          //     //             ' $cxname_other_ser');
+                          //     //         // final file = await pickFile_agreement();
+                          //     //         // if (file != null) {
+                          //     //         //   // Upload the file to the server
+                          //     //         //   uploadFile_Agreement(file);
+                          //     //         // }
+                          //     //       },
+                          //     //     ),
+                          //     //   ),
+                          //     // ),
+                          //     Expanded(
+                          //       flex: 1,
+                          //       child: Padding(
+                          //         padding: const EdgeInsets.all(8.0),
+                          //         child: InkWell(
+                          //           child: Container(
+                          //             height: 40,
+                          //             decoration: BoxDecoration(
+                          //               color: Colors.orange[400],
+                          //               borderRadius: const BorderRadius.only(
+                          //                   topLeft: Radius.circular(10),
+                          //                   topRight: Radius.circular(10),
+                          //                   bottomLeft: Radius.circular(10),
+                          //                   bottomRight: Radius.circular(10)),
+                          //             ),
+                          //             child: Row(
+                          //               mainAxisAlignment:
+                          //                   MainAxisAlignment.center,
+                          //               children: const [
+                          //                 Padding(
+                          //                   padding: EdgeInsets.all(4.0),
+                          //                   child: Icon(
+                          //                     Icons.print,
+                          //                     color: Colors.white,
+                          //                   ),
+                          //                 ),
+                          //                 Text(
+                          //                   'พิมพ์',
+                          //                   textAlign: TextAlign.start,
+                          //                   style: TextStyle(
+                          //                       color: PeopleChaoScreen_Color
+                          //                           .Colors_Text2_,
+                          //                       // fontWeight: FontWeight.bold,
+                          //                       fontFamily: Font_.Fonts_T
+                          //                       //fontSize: 10.0
+                          //                       ),
+                          //                 ),
+                          //               ],
+                          //             ),
+                          //           ),
+                          //           onTap: () async {
+                          //             // String Url =
+                          //             //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                          //             String Url =
+                          //                 await '${MyConstant().domain}/files/kad_taii/contract/other/$cxname_other';
+                          //             print(Url);
+                          //             if (Url == '') {
+                          //               showDialog<void>(
+                          //                 context: context,
+                          //                 barrierDismissible:
+                          //                     false, // user must tap button!
+                          //                 builder: (BuildContext context) {
+                          //                   return AlertDialog(
+                          //                     shape:
+                          //                         const RoundedRectangleBorder(
+                          //                             borderRadius:
+                          //                                 BorderRadius.all(
+                          //                                     Radius.circular(
+                          //                                         10.0))),
+                          //                     title: const Center(
+                          //                         child: Text(
+                          //                       'ไม่พบเอกสารอื่นๆ',
+                          //                       style: TextStyle(
+                          //                           color:
+                          //                               PeopleChaoScreen_Color
+                          //                                   .Colors_Text1_,
+                          //                           fontWeight: FontWeight.bold,
+                          //                           fontFamily:
+                          //                               FontWeight_.Fonts_T),
+                          //                     )),
+                          //                     content: SingleChildScrollView(
+                          //                       child: ListBody(
+                          //                         children: const <Widget>[
+                          //                           Text(
+                          //                             'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                          //                             style: TextStyle(
+                          //                                 color:
+                          //                                     PeopleChaoScreen_Color
+                          //                                         .Colors_Text2_,
+                          //                                 fontFamily:
+                          //                                     Font_.Fonts_T),
+                          //                           ),
+                          //                         ],
+                          //                       ),
+                          //                     ),
+                          //                     actions: <Widget>[
+                          //                       InkWell(
+                          //                         child: Container(
+                          //                             width: 100,
+                          //                             decoration:
+                          //                                 const BoxDecoration(
+                          //                               color: Colors.black,
+                          //                               borderRadius:
+                          //                                   BorderRadius.only(
+                          //                                       topLeft: Radius
+                          //                                           .circular(
+                          //                                               10),
+                          //                                       topRight: Radius
+                          //                                           .circular(
+                          //                                               10),
+                          //                                       bottomLeft: Radius
+                          //                                           .circular(
+                          //                                               10),
+                          //                                       bottomRight: Radius
+                          //                                           .circular(
+                          //                                               10)),
+                          //                               // border: Border.all(color: Colors.white, width: 1),
+                          //                             ),
+                          //                             padding:
+                          //                                 const EdgeInsets.all(
+                          //                                     8.0),
+                          //                             child: const Center(
+                          //                                 child: Text(
+                          //                               'ปิด',
+                          //                               style: TextStyle(
+                          //                                   color: PeopleChaoScreen_Color
+                          //                                       .Colors_Text3_,
+                          //                                   fontWeight:
+                          //                                       FontWeight.bold,
+                          //                                   fontFamily:
+                          //                                       Font_.Fonts_T),
+                          //                             ))),
+                          //                         onTap: () {
+                          //                           Navigator.of(context).pop();
+                          //                         },
+                          //                       ),
+                          //                       // TextButton(
+                          //                       //   child: const Text('ตกลง'),
+                          //                       //   onPressed: () {
+                          //                       //     Navigator.of(context).pop();
+                          //                       //   },
+                          //                       // ),
+                          //                     ],
+                          //                   );
+                          //                 },
+                          //               );
+                          //             } else {
+                          //               Navigator.push(
+                          //                   context,
+                          //                   MaterialPageRoute(
+                          //                     builder: (context) =>
+                          //                         PreviewScreenRental_(
+                          //                             title: 'เอกสารอื่นๆ',
+                          //                             Url: Url),
+                          //                   ));
+                          //             }
+                          //           },
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),

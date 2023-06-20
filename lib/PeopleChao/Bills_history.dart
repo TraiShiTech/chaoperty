@@ -74,6 +74,7 @@ class _BillsHistoryState extends State<BillsHistory> {
   String? Form_aser;
   String? Form_qty;
   String? ADDR;
+  String? base64_Imgmap, foder;
   @override
   void initState() {
     super.initState();
@@ -97,7 +98,18 @@ class _BillsHistoryState extends State<BillsHistory> {
       print('read_GC_rental///// $result');
       for (var map in result) {
         RenTalModel renTalModel = RenTalModel.fromJson(map);
+        var rtnamex = renTalModel.rtname;
+        var typexs = renTalModel.type;
+        var typexx = renTalModel.typex;
+        var name = renTalModel.pn!.trim();
+        var pkqtyx = int.parse(renTalModel.pkqty!);
+        var pkuserx = int.parse(renTalModel.pkuser!);
+        var pkx = renTalModel.pk!.trim();
+        var foderx = renTalModel.dbn;
+        var img = renTalModel.img;
+        var imglogo = renTalModel.imglogo;
         setState(() {
+          foder = foderx;
           renTalModels.add(renTalModel);
         });
       }
@@ -1385,12 +1397,12 @@ class _BillsHistoryState extends State<BillsHistory> {
                         onTap: () async {
                           List newValuePDFimg = [];
                           for (int index = 0; index < 1; index++) {
-                            if (renTalModels[0].img!.trim() == '') {
+                            if (renTalModels[0].imglogo!.trim() == '') {
                               // newValuePDFimg.add(
                               //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
                             } else {
                               newValuePDFimg.add(
-                                  '${MyConstant().domain}/${renTalModels[0].img!.trim()}');
+                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                             }
                           }
                           SharedPreferences preferences =

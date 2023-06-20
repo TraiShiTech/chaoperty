@@ -208,7 +208,7 @@ class Pdfgen_historybill {
             ),
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
             pw.Container(
-              decoration: const pw.BoxDecoration(
+              decoration: pw.BoxDecoration(
                 color: PdfColors.green100,
                 border: pw.Border(
                   bottom: pw.BorderSide(color: PdfColors.green900),
@@ -406,9 +406,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -430,9 +430,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -454,9 +454,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -478,9 +478,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -504,9 +504,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -528,9 +528,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -554,9 +554,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -580,9 +580,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -606,9 +606,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.white,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),
@@ -630,9 +630,9 @@ class Pdfgen_historybill {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: const pw.BoxDecoration(
+                      decoration: pw.BoxDecoration(
                         color: PdfColors.grey100,
-                        border: pw.Border(
+                        border: const pw.Border(
                           bottom: pw.BorderSide(color: PdfColors.grey300),
                         ),
                       ),

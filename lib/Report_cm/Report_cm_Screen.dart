@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:file_saver/file_saver.dart';
-import 'package:fine_bar_chart/fine_bar_chart.dart';
+// import 'package:fine_bar_chart/fine_bar_chart.dart';
 import 'package:fl_pin_code/pin_code.dart';
 import 'package:fl_pin_code/styles.dart';
 import 'package:flutter/cupertino.dart';
@@ -1848,7 +1848,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               Value_Report,
               _TransReBillModels_Income,
               TransReBillModels_Income,
-              renTal_name,
+              bill_name,
               Value_selectDate1,
               Value_selectDate2);
         } else if (Value_Report == 'รายงานรายจ่าย') {
@@ -1862,7 +1862,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               Value_Report,
               _TransReBillModels_Bankmovemen,
               TransReBillModels_Bankmovemen,
-              renTal_name,
+              bill_name,
               Value_selectDate1,
               Value_selectDate2);
         } else if (Value_Report == 'รายงานประจำวัน') {
@@ -1873,7 +1873,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               Value_Report,
               _TransReBillModels,
               TransReBillModels,
-              renTal_name,
+              bill_name,
               Value_selectDate,
               rent_CM,
               tank_CM,
@@ -1889,7 +1889,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               Value_Report,
               _TransReBillModels_cus,
               TransReBillModels_cus,
-              renTal_name,
+              bill_name,
               Value_selectDate_daly_cus,
               rent_CM_cus,
               tank_CM_cus,
@@ -1904,7 +1904,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
               _verticalGroupValue_NameFile,
               Value_Report,
               teNantModels,
-              renTal_name,
+              bill_name,
               Value_selectDate,
               coutumer_MOMO_CM,
               coutumer_tank_CM,
@@ -2806,18 +2806,18 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           SizedBox(
                                                                                                             width: 20,
                                                                                                           ),
-                                                                                                          // Expanded(
-                                                                                                          //   flex: 1,
-                                                                                                          //   child: Text(
-                                                                                                          //     'รหัสพื้นที่',
-                                                                                                          //     textAlign: TextAlign.center,
-                                                                                                          //     style: TextStyle(
-                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                          //       fontWeight: FontWeight.bold,
-                                                                                                          //       fontFamily: FontWeight_.Fonts_T,
-                                                                                                          //     ),
-                                                                                                          //   ),
-                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              'รหัสพื้นที่',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: FontWeight_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
                                                                                                           // Expanded(
                                                                                                           //   flex: 1,
                                                                                                           //   child: Text(
@@ -2953,19 +2953,19 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           const SizedBox(
                                                                                                             width: 20,
                                                                                                           ),
-                                                                                                          // Expanded(
-                                                                                                          //   flex: 1,
-                                                                                                          //   child: Text(
-                                                                                                          //     (_TransReBillModels[index1].ln == null) ? '' : '${_TransReBillModels[index1].ln}',
-                                                                                                          //     // '${TransReBillModels[index1].length}',
-                                                                                                          //     textAlign: TextAlign.center,
-                                                                                                          //     style: const TextStyle(
-                                                                                                          //       color: ReportScreen_Color.Colors_Text1_,
-                                                                                                          //       // fontWeight: FontWeight.bold,
-                                                                                                          //       fontFamily: Font_.Fonts_T,
-                                                                                                          //     ),
-                                                                                                          //   ),
-                                                                                                          // ),
+                                                                                                          Expanded(
+                                                                                                            flex: 1,
+                                                                                                            child: Text(
+                                                                                                              (_TransReBillModels_Income[index1].ln == null) ? '${_TransReBillModels_Income[index1].room_number}' : '${_TransReBillModels_Income[index1].ln}',
+                                                                                                              // '${TransReBillModels[index1].length}',
+                                                                                                              textAlign: TextAlign.center,
+                                                                                                              style: const TextStyle(
+                                                                                                                color: ReportScreen_Color.Colors_Text1_,
+                                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                                              ),
+                                                                                                            ),
+                                                                                                          ),
                                                                                                           // Expanded(
                                                                                                           //   flex: 1,
                                                                                                           //   child: Text(
@@ -2995,7 +2995,7 @@ class _Report_cm_ScreenState extends State<Report_cm_Screen> {
                                                                                                           Expanded(
                                                                                                             flex: 1,
                                                                                                             child: Text(
-                                                                                                              (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname.toString() == '') ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
+                                                                                                              (_TransReBillModels_Income[index1].sname == null || _TransReBillModels_Income[index1].sname.toString() == '' || _TransReBillModels_Income[index1].sname.toString() == 'null') ? '${_TransReBillModels_Income[index1].remark1}' : '${_TransReBillModels_Income[index1].sname}',
                                                                                                               // '${TransReBillModels[index1].length}',
                                                                                                               textAlign: TextAlign.center,
                                                                                                               style: const TextStyle(

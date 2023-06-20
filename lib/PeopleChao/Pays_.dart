@@ -83,6 +83,8 @@ class _PaysState extends State<Pays> {
   final Form_time = TextEditingController();
   final Formbecause_ = TextEditingController();
   final Form_note = TextEditingController();
+  final text_add = TextEditingController();
+  final price_add = TextEditingController();
   double sum_pvat = 0.00,
       sum_vat = 0.00,
       sum_wht = 0.00,
@@ -580,6 +582,64 @@ class _PaysState extends State<Pays> {
       } else {
         setState(() {
           red_Trans_select2();
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //       content: Text(
+        //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+        //           style: TextStyle(
+        //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+        // );
+      }
+    } catch (e) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+      //           style:
+      //               TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      // );
+      print('rrrrrrrrrrrrrr $e');
+    }
+  }
+
+  Future<Null> in_Trans_add() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = widget.Get_Value_NameShop_index;
+
+    var textadd = text_add.text;
+    var priceadd = price_add.text;
+
+    String url =
+        '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('rr>>>>>> $result');
+      if (result.toString() == 'true') {
+        setState(() {
+          red_Trans_select2();
+
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          red_Trans_select2();
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        setState(() {
+          red_Trans_select2();
+          text_add.clear();
+          price_add.clear();
         });
         // ScaffoldMessenger.of(context).showSnackBar(
         //   SnackBar(
@@ -2057,7 +2117,9 @@ class _PaysState extends State<Pays> {
                                                 MainAxisAlignment.start,
                                             children: [
                                               InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  addPlay();
+                                                },
                                                 child: Container(
                                                   width: 100,
                                                   decoration:
@@ -8864,6 +8926,224 @@ class _PaysState extends State<Pays> {
         )
       ],
     );
+  }
+
+  Future<void> addPlay() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListBody(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'เพิ่มรายการชำระ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            // keyboardType: TextInputType.name,
+                            controller: text_add,
+
+                            maxLines: 1,
+                            // maxLength: 13,
+                            cursorColor: Colors.green,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white.withOpacity(0.3),
+                              filled: true,
+                              // prefixIcon:
+                              //     const Icon(Icons.person, color: Colors.black),
+                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              labelText: 'รายการชำระ',
+                              labelStyle: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            // keyboardType: TextInputType.name,
+                            controller: price_add,
+
+                            maxLines: 1,
+                            // maxLength: 13,
+                            cursorColor: Colors.green,
+                            decoration: InputDecoration(
+                              fillColor: Colors.white.withOpacity(0.3),
+                              filled: true,
+                              // prefixIcon:
+                              //     const Icon(Icons.person, color: Colors.black),
+                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              labelText: 'ยอดชำระ',
+                              labelStyle: const TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                // fontWeight: FontWeight.bold,
+                                fontFamily: Font_.Fonts_T,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade900,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          if (text_add.text != '' && price_add.text != '') {
+                            in_Trans_add();
+                            Navigator.of(context).pop();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
   }
 
   Future<Null> confirmOrderdelete(index) async {

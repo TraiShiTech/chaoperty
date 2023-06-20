@@ -359,11 +359,23 @@ class _SettingScreenState extends State<SettingScreen> {
   ScrollController _scrollController1 = ScrollController();
   ScrollController _scrollController2 = ScrollController();
   final zone_text = TextEditingController();
+
   final area_ser_text = TextEditingController();
+
   final area_name_text = TextEditingController();
   final area_qty_text = TextEditingController();
+
   final area_pri_text = TextEditingController();
+
   final Add_totalnew_area_text = TextEditingController();
+  final Add_Number_area_text = TextEditingController();
+  final Add_Number_area_ = TextEditingController();
+  final Add_name_area_text = TextEditingController();
+  final Add_name_area_ = TextEditingController();
+  final Add_qty_area_text = TextEditingController();
+  final Add_pri_area_text = TextEditingController();
+
+  List<dynamic> Start_number = [for (int i = 1; i <= 1000; i++) i++];
 
   ///----------------->
   _moveUp1() {
@@ -1845,163 +1857,161 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     ),
                                                   ),
                                                   actions: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                    Column(
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 50,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .red[600],
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ลบรูป',
-                                                                  style: TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () async {
-                                                              String url =
-                                                                  await '${MyConstant().domain}/files/$foder/logo/$img_logo';
-                                                              deletedFile_(
-                                                                  'logo',
-                                                                  '$img_logo',
-                                                                  '');
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
+                                                        const SizedBox(
+                                                          height: 5.0,
                                                         ),
-                                                        SizedBox(
-                                                          child: Row(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .green[600],
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ดูรูป',
-                                                                        style: TextStyle(
+                                                        const Divider(
+                                                          color: Colors.grey,
+                                                          height: 4.0,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: InkWell(
+                                                                child: Container(
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors
+                                                                              .red[
+                                                                          600],
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                    ),
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: const Center(
+                                                                        child: Text(
+                                                                      'ลบรูป',
+                                                                      style: TextStyle(
+                                                                          color: SettingScreen_Color
+                                                                              .Colors_Text3_,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ))),
+                                                                onTap:
+                                                                    () async {
+                                                                  String url =
+                                                                      await '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                                                  deletedFile_(
+                                                                      'logo',
+                                                                      '$img_logo',
+                                                                      '');
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              child: Row(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap:
-                                                                      () async {
-                                                                    String url =
-                                                                        await '${MyConstant().domain}/files/$foder/logo/$img_logo';
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
+                                                                                Colors.green[600],
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ดูรูป',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () async {
+                                                                        String
+                                                                            url =
+                                                                            await '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
 
-                                                                    _showMyDialogImg(
-                                                                        url,
-                                                                        'รูปโลโก้');
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: const BoxDecoration(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ปิด',
-                                                                        style: TextStyle(
+                                                                        _showMyDialogImg(
+                                                                            url,
+                                                                            'รูปโลโก้');
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: const BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap: () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                ),
+                                                                                Colors.black,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ปิด',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
@@ -2031,15 +2041,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         Icons.check,
                                                         color: Colors.green,
                                                       ),
-                                                const Text(
-                                                  ' รูปโลโก้',
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                                const Expanded(
+                                                  child: Text(
+                                                    ' รูปโลโก้',
+                                                    style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
                                                 ),
                                               ],
                                             ))),
@@ -2092,163 +2106,161 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     ),
                                                   ),
                                                   actions: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                    Column(
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 50,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .red[600],
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ลบรูป',
-                                                                  style: TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () async {
-                                                              String url =
-                                                                  await '${MyConstant().domain}/files/$foder/contract/$img_';
-                                                              deletedFile_(
-                                                                  'contract',
-                                                                  '',
-                                                                  '');
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
+                                                        const SizedBox(
+                                                          height: 5.0,
                                                         ),
-                                                        SizedBox(
-                                                          child: Row(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .green[600],
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ดูรูป',
-                                                                        style: TextStyle(
+                                                        const Divider(
+                                                          color: Colors.grey,
+                                                          height: 4.0,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: InkWell(
+                                                                child: Container(
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors
+                                                                              .red[
+                                                                          600],
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                    ),
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: const Center(
+                                                                        child: Text(
+                                                                      'ลบรูป',
+                                                                      style: TextStyle(
+                                                                          color: SettingScreen_Color
+                                                                              .Colors_Text3_,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ))),
+                                                                onTap:
+                                                                    () async {
+                                                                  String url =
+                                                                      await '${MyConstant().domain}/files/$foder/contract/$img_';
+                                                                  deletedFile_(
+                                                                      'contract',
+                                                                      '',
+                                                                      '');
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              child: Row(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap:
-                                                                      () async {
-                                                                    String url =
-                                                                        await '${MyConstant().domain}/files/$foder/contract/$img_';
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
+                                                                                Colors.green[600],
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ดูรูป',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () async {
+                                                                        String
+                                                                            url =
+                                                                            await '${MyConstant().domain}/files/$foder/contract/$img_';
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
 
-                                                                    _showMyDialogImg(
-                                                                        url,
-                                                                        'รูปแผนผัง');
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: const BoxDecoration(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ปิด',
-                                                                        style: TextStyle(
+                                                                        _showMyDialogImg(
+                                                                            url,
+                                                                            'รูปแผนผัง');
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: const BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap: () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                ),
+                                                                                Colors.black,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ปิด',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
@@ -2277,15 +2289,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         Icons.check,
                                                         color: Colors.green,
                                                       ),
-                                                const Text(
-                                                  ' รูปแผนผัง',
-                                                  style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                                Expanded(
+                                                  child: const Text(
+                                                    ' รูปแผนผัง',
+                                                    style: TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
                                                 ),
                                               ],
                                             ))),
@@ -2316,15 +2332,19 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         Icons.check,
                                                         color: Colors.green,
                                                       ),
-                                                Text(
-                                                  ' รูปโซนพื้นที่(${zoneModels[index].zn})',
-                                                  style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                                Expanded(
+                                                  child: Text(
+                                                    ' รูปโซนพื้นที่(${zoneModels[index].zn})',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            SettingScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
                                                 ),
                                               ],
                                             )),
@@ -2380,161 +2400,159 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     ),
                                                   ),
                                                   actions: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
+                                                    Column(
                                                       children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 50,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .red[600],
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ลบรูป',
-                                                                  style: TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () async {
-                                                              deletedFile_(
-                                                                  'zone',
-                                                                  '${zoneModels[index].img}',
-                                                                  '${zoneModels[index].ser}');
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
+                                                        const SizedBox(
+                                                          height: 5.0,
                                                         ),
-                                                        SizedBox(
-                                                          child: Row(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: BoxDecoration(
-                                                                        color: Colors
-                                                                            .green[600],
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ดูรูป',
-                                                                        style: TextStyle(
+                                                        const Divider(
+                                                          color: Colors.grey,
+                                                          height: 4.0,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: InkWell(
+                                                                child: Container(
+                                                                    width: 50,
+                                                                    decoration: BoxDecoration(
+                                                                      color: Colors
+                                                                              .red[
+                                                                          600],
+                                                                      borderRadius: const BorderRadius
+                                                                              .only(
+                                                                          topLeft: Radius.circular(
+                                                                              10),
+                                                                          topRight: Radius.circular(
+                                                                              10),
+                                                                          bottomLeft: Radius.circular(
+                                                                              10),
+                                                                          bottomRight:
+                                                                              Radius.circular(10)),
+                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                    ),
+                                                                    padding: const EdgeInsets.all(8.0),
+                                                                    child: const Center(
+                                                                        child: Text(
+                                                                      'ลบรูป',
+                                                                      style: TextStyle(
+                                                                          color: SettingScreen_Color
+                                                                              .Colors_Text3_,
+                                                                          fontWeight: FontWeight
+                                                                              .bold,
+                                                                          fontFamily:
+                                                                              Font_.Fonts_T),
+                                                                    ))),
+                                                                onTap:
+                                                                    () async {
+                                                                  deletedFile_(
+                                                                      'zone',
+                                                                      '${zoneModels[index].img}',
+                                                                      '${zoneModels[index].ser}');
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              child: Row(
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap:
-                                                                      () async {
-                                                                    String url =
-                                                                        await '${MyConstant().domain}/files/$foder/zone/${zoneModels[index].img}';
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
+                                                                                Colors.green[600],
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ดูรูป',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () async {
+                                                                        String
+                                                                            url =
+                                                                            await '${MyConstant().domain}/files/$foder/zone/${zoneModels[index].img}';
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
 
-                                                                    _showMyDialogImg(
-                                                                        url,
-                                                                        'รูปโซน(${zoneModels[index].zn})');
-                                                                  },
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: InkWell(
-                                                                  child: Container(
-                                                                      width: 50,
-                                                                      decoration: const BoxDecoration(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        borderRadius: BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight: Radius.circular(10),
-                                                                            bottomLeft: Radius.circular(10),
-                                                                            bottomRight: Radius.circular(10)),
-                                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(8.0),
-                                                                      child: const Center(
-                                                                          child: Text(
-                                                                        'ปิด',
-                                                                        style: TextStyle(
+                                                                        _showMyDialogImg(
+                                                                            url,
+                                                                            'รูปโซน(${zoneModels[index].zn})');
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        InkWell(
+                                                                      child: Container(
+                                                                          width: 50,
+                                                                          decoration: const BoxDecoration(
                                                                             color:
-                                                                                SettingScreen_Color.Colors_Text3_,
-                                                                            fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ))),
-                                                                  onTap: () {
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                    Navigator.of(
-                                                                            context)
-                                                                        .pop();
-                                                                  },
-                                                                ),
+                                                                                Colors.black,
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topLeft: Radius.circular(10),
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10)),
+                                                                            // border: Border.all(color: Colors.white, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets.all(8.0),
+                                                                          child: const Center(
+                                                                              child: Text(
+                                                                            'ปิด',
+                                                                            style: TextStyle(
+                                                                                color: SettingScreen_Color.Colors_Text3_,
+                                                                                fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ))),
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
                                                       ],
                                                     ),
@@ -3681,8 +3699,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                   )),
                                   content: Container(
                                     // height: MediaQuery.of(context).size.height / 1.5,
-                                    width:
-                                        MediaQuery.of(context).size.width / 1.5,
+                                    width: (!Responsive.isDesktop(context))
+                                        ? MediaQuery.of(context).size.width
+                                        : MediaQuery.of(context).size.width *
+                                            0.5,
                                     decoration: const BoxDecoration(
                                       // color: Colors.grey[300],
                                       borderRadius: BorderRadius.only(
@@ -3801,124 +3821,161 @@ class _SettingScreenState extends State<SettingScreen> {
                                     ),
                                   ),
                                   actions: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              width: 100,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10)),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextButton(
-                                                onPressed: () async {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    SharedPreferences
-                                                        preferences =
-                                                        await SharedPreferences
-                                                            .getInstance();
-                                                    String? ren = preferences
-                                                        .getString('renTalSer');
-                                                    String? ser_user =
-                                                        preferences
-                                                            .getString('ser');
+                                    Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        const Divider(
+                                          color: Colors.grey,
+                                          height: 4.0,
+                                        ),
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: 100,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    onPressed: () async {
+                                                      if (_formKey.currentState!
+                                                          .validate()) {
+                                                        SharedPreferences
+                                                            preferences =
+                                                            await SharedPreferences
+                                                                .getInstance();
+                                                        String? ren = preferences
+                                                            .getString(
+                                                                'renTalSer');
+                                                        String? ser_user =
+                                                            preferences
+                                                                .getString(
+                                                                    'ser');
 
-                                                    var zonename =
-                                                        zone_text.text;
+                                                        var zonename =
+                                                            zone_text.text;
 
-                                                    String url =
-                                                        '${MyConstant().domain}/InC_zone_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename';
+                                                        String url =
+                                                            '${MyConstant().domain}/InC_zone_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename';
 
-                                                    try {
-                                                      var response = await http
-                                                          .get(Uri.parse(url));
+                                                        try {
+                                                          var response =
+                                                              await http.get(
+                                                                  Uri.parse(
+                                                                      url));
 
-                                                      var result = json.decode(
-                                                          response.body);
-                                                      print(result);
-                                                      Insert_log.Insert_logs(
-                                                          'ตั้งค่า',
-                                                          'พื้นที่>>เพิ่มโซนพื้นที่(${zone_text.text.toString()})');
-                                                      if (result.toString() ==
-                                                          'true') {
-                                                        setState(() {
-                                                          zone_text.clear();
-                                                          read_GC_zone();
-                                                          read_GC_area();
-                                                          read_GC_area_count();
-                                                        });
+                                                          var result = json
+                                                              .decode(response
+                                                                  .body);
+                                                          print(result);
+                                                          Insert_log.Insert_logs(
+                                                              'ตั้งค่า',
+                                                              'พื้นที่>>เพิ่มโซนพื้นที่(${zone_text.text.toString()})');
+                                                          if (result
+                                                                  .toString() ==
+                                                              'true') {
+                                                            setState(() {
+                                                              zone_text.clear();
+                                                              read_GC_zone();
+                                                              read_GC_area();
+                                                              read_GC_area_count();
+                                                            });
 
-                                                        Navigator.pop(
-                                                            context, 'OK');
+                                                            Navigator.pop(
+                                                                context, 'OK');
+                                                          }
+                                                        } catch (e) {
+                                                          print(e);
+                                                        }
                                                       }
-                                                    } catch (e) {
-                                                      print(e);
-                                                    }
-                                                  }
-                                                },
-                                                child: const Text(
-                                                  'บันทึก',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
+                                                    },
+                                                    child: const Text(
+                                                      'บันทึก',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              width: 100,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.black,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(10),
-                                                    topRight:
-                                                        Radius.circular(10),
-                                                    bottomLeft:
-                                                        Radius.circular(10),
-                                                    bottomRight:
-                                                        Radius.circular(10)),
-                                              ),
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: TextButton(
-                                                onPressed: () => Navigator.pop(
-                                                    context, 'OK'),
-                                                child: const Text(
-                                                  'ยกเลิก',
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T,
-                                                    fontWeight: FontWeight.bold,
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                  width: 100,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.black,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            context, 'OK'),
+                                                    child: const Text(
+                                                      'ยกเลิก',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -4127,7 +4184,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     padding: (Form_Zone_text.text == 'null' ||
                             Form_Zone_text == null ||
                             name_Zone.toString() == 'ทั้งหมด')
-                        ? EdgeInsets.all(8.0)
+                        ? const EdgeInsets.all(8.0)
                         : null,
                     child: (Form_Zone_text.text == 'null' ||
                             Form_Zone_text == null ||
@@ -4335,10 +4392,15 @@ class _SettingScreenState extends State<SettingScreen> {
                                         )),
                                         content: Container(
                                           // height: MediaQuery.of(context).size.height / 1.5,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              1.5,
+                                          width:
+                                              (!Responsive.isDesktop(context))
+                                                  ? MediaQuery.of(context)
+                                                      .size
+                                                      .width
+                                                  : MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.5,
                                           decoration: const BoxDecoration(
                                             // color: Colors.grey[300],
                                             borderRadius: BorderRadius.only(
@@ -4349,6 +4411,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     Radius.circular(10)),
                                             // border: Border.all(color: Colors.white, width: 1),
                                           ),
+                                          padding: const EdgeInsets.all(8.0),
                                           child: SingleChildScrollView(
                                             child: Column(
                                               // mainAxisAlignment: MainAxisAlignment.center,
@@ -4460,6 +4523,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                       labelText: 'รหัสพื้นที่',
                                                                       labelStyle: const TextStyle(
+                                                                        fontSize:
+                                                                            14,
                                                                         color: Colors
                                                                             .black54,
                                                                         fontFamily:
@@ -4587,6 +4652,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                       labelText: 'ชื่อพื้นที่',
                                                                       labelStyle: const TextStyle(
+                                                                        fontSize:
+                                                                            14,
                                                                         color: Colors
                                                                             .black54,
                                                                         fontFamily:
@@ -4611,38 +4678,38 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         )),
                                                   ],
                                                 ),
+                                                Align(
+                                                  alignment: Alignment.topLeft,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Row(
+                                                      children: const [
+                                                        Text(
+                                                          'ขนาดพื้นที่-ค่าบริการหลัก',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: TextStyle(
+                                                            color: SettingScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
                                                 Row(
                                                   children: [
                                                     Expanded(
                                                         flex: 6,
                                                         child: Column(
                                                           children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Text(
-                                                                    'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -4718,6 +4785,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                       labelText: 'ขนาดพื้นที่(ต.ร.ม.)',
                                                                       labelStyle: const TextStyle(
+                                                                        fontSize:
+                                                                            14,
                                                                         color: Colors
                                                                             .black54,
                                                                         fontFamily:
@@ -4745,32 +4814,6 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         flex: 6,
                                                         child: Column(
                                                           children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Text(
-                                                                    'ค่าบริการหลัก(ต่องวด)',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
                                                             Padding(
                                                               padding:
                                                                   const EdgeInsets
@@ -4846,6 +4889,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                       ),
                                                                       labelText: 'ค่าบริการหลัก(ต่องวด)',
                                                                       labelStyle: const TextStyle(
+                                                                        fontSize:
+                                                                            14,
                                                                         color: Colors
                                                                             .black54,
                                                                         fontFamily:
@@ -4876,22 +4921,35 @@ class _SettingScreenState extends State<SettingScreen> {
                                           ),
                                         ),
                                         actions: <Widget>[
-                                          Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                    width: 100,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.green,
-                                                      borderRadius:
-                                                          BorderRadius.only(
+                                          Column(
+                                            children: [
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              const Divider(
+                                                color: Colors.grey,
+                                                height: 4.0,
+                                              ),
+                                              const SizedBox(
+                                                height: 5.0,
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius: BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -4902,104 +4960,108 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: TextButton(
-                                                      onPressed: () async {
-                                                        if (_formKey
-                                                            .currentState!
-                                                            .validate()) {
-                                                          SharedPreferences
-                                                              preferences =
-                                                              await SharedPreferences
-                                                                  .getInstance();
-                                                          String? ren = preferences
-                                                              .getString(
-                                                                  'renTalSer');
-                                                          String? ser_user =
-                                                              preferences
-                                                                  .getString(
-                                                                      'ser');
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: TextButton(
+                                                          onPressed: () async {
+                                                            if (_formKey
+                                                                .currentState!
+                                                                .validate()) {
+                                                              SharedPreferences
+                                                                  preferences =
+                                                                  await SharedPreferences
+                                                                      .getInstance();
+                                                              String? ren =
+                                                                  preferences
+                                                                      .getString(
+                                                                          'renTalSer');
+                                                              String? ser_user =
+                                                                  preferences
+                                                                      .getString(
+                                                                          'ser');
 
-                                                          var zonename =
-                                                              ser_Zonex;
-                                                          var area_ser =
-                                                              area_ser_text
-                                                                  .text;
-                                                          var area_name =
-                                                              area_name_text
-                                                                  .text;
-                                                          var area_qty =
-                                                              area_qty_text
-                                                                  .text;
-                                                          var area_pri =
-                                                              area_pri_text
-                                                                  .text;
+                                                              var zonename =
+                                                                  ser_Zonex;
+                                                              var area_ser =
+                                                                  area_ser_text
+                                                                      .text;
+                                                              var area_name =
+                                                                  area_name_text
+                                                                      .text;
+                                                              var area_qty =
+                                                                  area_qty_text
+                                                                      .text;
+                                                              var area_pri =
+                                                                  area_pri_text
+                                                                      .text;
 
-                                                          String url =
-                                                              '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
+                                                              String url =
+                                                                  '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
 
-                                                          try {
-                                                            var response =
-                                                                await http.get(
-                                                                    Uri.parse(
-                                                                        url));
+                                                              try {
+                                                                var response =
+                                                                    await http.get(
+                                                                        Uri.parse(
+                                                                            url));
 
-                                                            var result = json
-                                                                .decode(response
-                                                                    .body);
-                                                            print(result);
-                                                            if (result
-                                                                    .toString() ==
-                                                                'true') {
-                                                              setState(() {
-                                                                read_GC_zone();
-                                                                read_GC_area();
-                                                                read_GC_area_count();
-                                                                area_ser_text
-                                                                    .clear();
-                                                                area_name_text
-                                                                    .clear();
-                                                                area_qty_text
-                                                                    .clear();
-                                                                area_pri_text
-                                                                    .clear();
-                                                              });
-                                                              Navigator.pop(
-                                                                  context,
-                                                                  'OK');
+                                                                var result =
+                                                                    json.decode(
+                                                                        response
+                                                                            .body);
+                                                                print(result);
+                                                                if (result
+                                                                        .toString() ==
+                                                                    'true') {
+                                                                  setState(() {
+                                                                    read_GC_zone();
+                                                                    read_GC_area();
+                                                                    read_GC_area_count();
+                                                                    area_ser_text
+                                                                        .clear();
+                                                                    area_name_text
+                                                                        .clear();
+                                                                    area_qty_text
+                                                                        .clear();
+                                                                    area_pri_text
+                                                                        .clear();
+                                                                  });
+                                                                  Navigator.pop(
+                                                                      context,
+                                                                      'OK');
+                                                                }
+                                                              } catch (e) {
+                                                                print(e);
+                                                              }
                                                             }
-                                                          } catch (e) {
-                                                            print(e);
-                                                          }
-                                                        }
-                                                      },
-                                                      child: const Text(
-                                                        'บันทึก',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                          },
+                                                          child: const Text(
+                                                            'บันทึก',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Container(
-                                                    width: 100,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.black,
-                                                      borderRadius:
-                                                          BorderRadius.only(
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius: BorderRadius.only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -5010,38 +5072,45 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
-                                                    ),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: TextButton(
-                                                      onPressed: () {
-                                                        setState(() {
-                                                          area_ser_text.clear();
-                                                          area_name_text
-                                                              .clear();
-                                                          area_qty_text.clear();
-                                                          area_pri_text.clear();
-                                                        });
-                                                        Navigator.pop(
-                                                            context, 'OK');
-                                                      },
-                                                      child: const Text(
-                                                        'ยกเลิก',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              FontWeight_
-                                                                  .Fonts_T,
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: TextButton(
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              area_ser_text
+                                                                  .clear();
+                                                              area_name_text
+                                                                  .clear();
+                                                              area_qty_text
+                                                                  .clear();
+                                                              area_pri_text
+                                                                  .clear();
+                                                            });
+                                                            Navigator.pop(
+                                                                context, 'OK');
+                                                          },
+                                                          child: const Text(
+                                                            'ยกเลิก',
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily:
+                                                                  FontWeight_
+                                                                      .Fonts_T,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
-                                                  ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -5097,6 +5166,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ),
                               ),
                               onTap: () {
+                                setState(() {
+                                  Add_Number_area_.text = '1';
+                                  Add_name_area_.text = '1';
+                                });
+
                                 showDialog<String>(
                                   barrierDismissible: false,
                                   context: context,
@@ -5118,8 +5192,11 @@ class _SettingScreenState extends State<SettingScreen> {
                                       )),
                                       content: Container(
                                         // height: MediaQuery.of(context).size.height / 1.5,
-                                        width:
-                                            MediaQuery.of(context).size.width *
+                                        width: (!Responsive.isDesktop(context))
+                                            ? MediaQuery.of(context).size.width
+                                            : MediaQuery.of(context)
+                                                    .size
+                                                    .width *
                                                 0.5,
                                         decoration: const BoxDecoration(
                                           // color: Colors.grey[300],
@@ -5140,7 +5217,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                     padding:
                                                         EdgeInsets.all(8.0),
                                                     child: Text(
-                                                      'จำนวนพื้นที่',
+                                                      'จำนวนที่ต้องการเพิ่ม',
                                                       textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         color:
@@ -5240,29 +5317,70 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                     ),
                                                                   ),
                                                                   labelText:
-                                                                      'จำนวนพื้นที่',
+                                                                      'จำนวน',
                                                                   labelStyle:
                                                                       const TextStyle(
+                                                                    fontSize:
+                                                                        12,
                                                                     color: Colors
                                                                         .black54,
                                                                     fontFamily:
                                                                         FontWeight_
                                                                             .Fonts_T,
                                                                   )),
-                                                          inputFormatters: <
-                                                              TextInputFormatter>[
-                                                            // for below version 2 use this
+                                                          inputFormatters: [
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'\s')),
+                                                            FilteringTextInputFormatter
+                                                                .deny(RegExp(
+                                                                    r'^0')),
                                                             FilteringTextInputFormatter
                                                                 .allow(RegExp(
-                                                                    r'[0-9]')),
-                                                            // for version 2 and greater youcan also use this
-                                                            // FilteringTextInputFormatter.digitsOnly
+                                                                    r'[0-9 .]')),
                                                           ],
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                 ],
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    (areaModels.length == 0)
+                                                        ? 'รหัสพื้นที่ '
+                                                        : 'รหัสพื้นที่ (รหัสล่าสุดคือ : ${areaModels[areaModels.length - 1].ln})',
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10, 4, 4, 4),
+                                                  child: Text(
+                                                    '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontSize: 12),
+                                                  ),
+                                                ),
                                               ),
                                               Row(
                                                 children: [
@@ -5274,28 +5392,106 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             padding:
                                                                 const EdgeInsets
                                                                     .all(8.0),
-                                                            child: Row(
-                                                              children: const [
-                                                                Text(
-                                                                  'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ],
+                                                            child: SizedBox(
+                                                              // width: 200,
+                                                              child:
+                                                                  TextFormField(
+                                                                controller:
+                                                                    Add_Number_area_text,
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
+                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                  }
+                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                  //   return '< 13';
+                                                                  // }
+                                                                  return null;
+                                                                },
+                                                                // maxLength: 13,
+                                                                cursorColor:
+                                                                    Colors
+                                                                        .green,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        fillColor:
+                                                                            Colors.white.withOpacity(
+                                                                                0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText:
+                                                                            'ตัวอักษร',
+                                                                        labelStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\s')),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ),
+                                                        ],
+                                                      )),
+                                                  Expanded(
+                                                      flex: 6,
+                                                      child: Column(
+                                                        children: [
                                                           Padding(
                                                             padding:
                                                                 const EdgeInsets
@@ -5305,7 +5501,395 @@ class _SettingScreenState extends State<SettingScreen> {
                                                               child:
                                                                   TextFormField(
                                                                 controller:
-                                                                    area_qty_text,
+                                                                    Add_Number_area_,
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
+                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                  }
+                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                  //   return '< 13';
+                                                                  // }
+                                                                  return null;
+                                                                },
+                                                                // maxLength: 4,
+                                                                cursorColor:
+                                                                    Colors
+                                                                        .green,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        fillColor:
+                                                                            Colors.white.withOpacity(
+                                                                                0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText:
+                                                                            'เลขเรื่มต้น 1-xxx',
+                                                                        labelStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\s')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'^0')),
+                                                                  FilteringTextInputFormatter
+                                                                      .allow(RegExp(
+                                                                          r'[0-9 .]')),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                ],
+                                              ),
+                                              Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    (areaModels.length == 0)
+                                                        ? 'ชื่อพื้นที่เช่า '
+                                                        : 'ชื่อพื้นที่เช่า(ชื่อล่าสุดคือ : ${areaModels[areaModels.length - 1].lncode})',
+                                                    textAlign: TextAlign.left,
+                                                    style: const TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10, 4, 4, 4),
+                                                  child: Text(
+                                                    '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T,
+                                                        fontSize: 12),
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                      flex: 6,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              // width: 200,
+                                                              child:
+                                                                  TextFormField(
+                                                                controller:
+                                                                    Add_name_area_text,
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
+                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                  }
+                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                  //   return '< 13';
+                                                                  // }
+                                                                  return null;
+                                                                },
+                                                                // maxLength: 13,
+                                                                cursorColor:
+                                                                    Colors
+                                                                        .green,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        fillColor:
+                                                                            Colors.white.withOpacity(
+                                                                                0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText:
+                                                                            'ตัวอักษร',
+                                                                        labelStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\s')),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                  Expanded(
+                                                      flex: 6,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              // width: 200,
+                                                              child:
+                                                                  TextFormField(
+                                                                controller:
+                                                                    Add_name_area_,
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
+                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                  }
+                                                                  // if (int.parse(value.toString()) < 13) {
+                                                                  //   return '< 13';
+                                                                  // }
+                                                                  return null;
+                                                                },
+                                                                // maxLength: 13,
+                                                                cursorColor:
+                                                                    Colors
+                                                                        .green,
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                        fillColor:
+                                                                            Colors.white.withOpacity(
+                                                                                0.3),
+                                                                        filled:
+                                                                            true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder:
+                                                                            const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText:
+                                                                            'เลขเรื่มต้น 1-xxx',
+                                                                        labelStyle:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'\s')),
+                                                                  FilteringTextInputFormatter
+                                                                      .deny(RegExp(
+                                                                          r'^0')),
+                                                                  FilteringTextInputFormatter
+                                                                      .allow(RegExp(
+                                                                          r'[0-9 .]')),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      )),
+                                                ],
+                                              ),
+                                              const Align(
+                                                alignment: Alignment.topLeft,
+                                                child: Padding(
+                                                  padding: EdgeInsets.fromLTRB(
+                                                      10, 4, 4, 4),
+                                                  child: Text(
+                                                    'ขนาดพื้นที่ - ค่าบริการหลัก',
+                                                    textAlign: TextAlign.left,
+                                                    style: TextStyle(
+                                                      color: SettingScreen_Color
+                                                          .Colors_Text1_,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                      flex: 6,
+                                                      child: Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: SizedBox(
+                                                              // width: 200,
+                                                              child:
+                                                                  TextFormField(
+                                                                controller:
+                                                                    Add_qty_area_text,
                                                                 validator:
                                                                     (value) {
                                                                   if (value ==
@@ -5379,6 +5963,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             'ขนาดพื้นที่(ต.ร.ม.)',
                                                                         labelStyle:
                                                                             const TextStyle(
+                                                                          fontSize:
+                                                                              12,
                                                                           color:
                                                                               Colors.black54,
                                                                           fontFamily:
@@ -5410,38 +5996,12 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             padding:
                                                                 const EdgeInsets
                                                                     .all(8.0),
-                                                            child: Row(
-                                                              children: const [
-                                                                Text(
-                                                                  'ค่าบริการหลัก(ต่องวด)',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .start,
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: SettingScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
                                                             child: SizedBox(
                                                               // width: 200,
                                                               child:
                                                                   TextFormField(
                                                                 controller:
-                                                                    area_pri_text,
+                                                                    Add_pri_area_text,
                                                                 validator:
                                                                     (value) {
                                                                   if (value ==
@@ -5515,6 +6075,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             'ค่าบริการหลัก(ต่องวด)',
                                                                         labelStyle:
                                                                             const TextStyle(
+                                                                          fontSize:
+                                                                              12,
                                                                           color:
                                                                               Colors.black54,
                                                                           fontFamily:
@@ -5545,197 +6107,299 @@ class _SettingScreenState extends State<SettingScreen> {
                                         ),
                                       ),
                                       actions: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.green,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      if (_formKey2
-                                                          .currentState!
-                                                          .validate()) {
-                                                        Insert_log.Insert_logs(
-                                                            'ตั้งค่า',
-                                                            'พื้นที่>>เพิ่มพื้นที่แบบAuto>>จำนวน:${Add_totalnew_area_text.text}');
-                                                        SharedPreferences
-                                                            preferences =
-                                                            await SharedPreferences
-                                                                .getInstance();
-                                                        String? ren = preferences
-                                                            .getString(
-                                                                'renTalSer');
-                                                        String? ser_user =
-                                                            preferences
-                                                                .getString(
-                                                                    'ser');
-                                                        print(
-                                                            '*******  ${Add_totalnew_area_text.text}');
+                                        Column(
+                                          children: [
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            const Divider(
+                                              color: Colors.grey,
+                                              height: 4.0,
+                                            ),
+                                            const SizedBox(
+                                              height: 5.0,
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      width: 100,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextButton(
+                                                       onPressed: () async {
+                                                          if (_formKey2
+                                                              .currentState!
+                                                              .validate()) {
+                                                            Insert_log.Insert_logs(
+                                                                'ตั้งค่า',
+                                                                'พื้นที่>>เพิ่มพื้นที่แบบAuto>>จำนวน:${Add_totalnew_area_text.text}');
+                                                            SharedPreferences
+                                                                preferences =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+                                                            String? ren =
+                                                                preferences
+                                                                    .getString(
+                                                                        'renTalSer');
+                                                            String? ser_user =
+                                                                preferences
+                                                                    .getString(
+                                                                        'ser');
+                                                            print(
+                                                                '*******  ${Add_totalnew_area_text.text}');
 
-                                                        var zonename =
-                                                            ser_Zonex;
+                                                            var zonename =
+                                                                ser_Zonex;
 
-                                                        var area_qty =
-                                                            '${area_qty_text.text}';
-                                                        var area_pri =
-                                                            '${area_pri_text.text}';
-                                                        for (int index = 0;
-                                                            index <
-                                                                int.parse(
-                                                                    '${Add_totalnew_area_text.text}');
-                                                            index++) {
-                                                          var area_ser =
-                                                              'ADD_Auto${index + 1}';
-
-                                                          var area_name =
-                                                              'ADD_AutoName${index + 1}';
-
-                                                          print(
-                                                              '*******  $area_ser}');
-                                                          print(
-                                                              '*******  ${area_name}');
-
-                                                          String url =
-                                                              '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
-
-                                                          try {
-                                                            var response =
-                                                                await http.get(
-                                                                    Uri.parse(
-                                                                        url));
-
-                                                            var result = json
-                                                                .decode(response
-                                                                    .body);
-                                                            print(result);
-                                                            if (result
-                                                                    .toString() ==
-                                                                'true') {
-                                                              if (index + 1 ==
-                                                                  int.parse(
-                                                                      Add_totalnew_area_text
-                                                                          .text)) {
-                                                                setState(() {
-                                                                  read_GC_zone();
-                                                                  read_GC_area();
-                                                                  read_GC_area_count();
-                                                                  area_ser_text
-                                                                      .clear();
-                                                                  area_name_text
-                                                                      .clear();
-                                                                  area_qty_text
-                                                                      .clear();
-                                                                  area_pri_text
-                                                                      .clear();
-                                                                  Add_totalnew_area_text
-                                                                      .clear();
-                                                                });
-                                                                Navigator.pop(
+                                                            var area_qty =
+                                                                '${Add_qty_area_text.text}';
+                                                            var area_pri =
+                                                                '${Add_pri_area_text.text}';
+                                                            showDialog(
+                                                                barrierDismissible:
+                                                                    false,
+                                                                context:
                                                                     context,
-                                                                    'OK');
-                                                              } else {
-                                                                print(
-                                                                    'ADD_Auto${index + 1}');
+                                                                builder: (_) {
+                                                                  // Future.delayed(
+                                                                  //     const Duration(
+                                                                  //         seconds:
+                                                                  //             1),
+                                                                  //     () {
+                                                                  //   Navigator.of(
+                                                                  //           context)
+                                                                  //       .pop();
+                                                                  // });
+                                                                  return Dialog(
+                                                                    child:
+                                                                        SizedBox(
+                                                                      height:
+                                                                          20,
+                                                                      width: 80,
+                                                                      child:
+                                                                          FittedBox(
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                        child: Image
+                                                                            .asset(
+                                                                          "images/gif-LOGOchao.gif",
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                          height:
+                                                                              20,
+                                                                          width:
+                                                                              80,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                });
+                                                            for (int index = 0;
+                                                                index <
+                                                                    int.parse(
+                                                                        '${Add_totalnew_area_text.text}');
+                                                                index++) {
+                                                              // var area_ser =
+                                                              //     'ADD_Auto${index + 1}';
+
+                                                              // var area_name =
+                                                              //     'ADD_AutoName${index + 1}';
+
+                                                              var Add_Number_area_New = (index ==
+                                                                      0)
+                                                                  ? int.parse(
+                                                                      '${Add_Number_area_.text}')
+                                                                  : int.parse(
+                                                                          '${Add_Number_area_.text}') +
+                                                                      (index);
+
+                                                              var Add_name_area__New = (index ==
+                                                                      0)
+                                                                  ? int.parse(
+                                                                      '${Add_name_area_.text}')
+                                                                  : int.parse(
+                                                                          '${Add_name_area_.text}') +
+                                                                      (index);
+
+                                                              String url =
+                                                                  '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=${Add_Number_area_text.text}${Add_Number_area_New}&area_name=${Add_name_area_text.text}${Add_name_area__New}&area_qty=$area_qty&area_pri=$area_pri';
+
+                                                              try {
+                                                                var response =
+                                                                    await http.get(
+                                                                        Uri.parse(
+                                                                            url));
+
+                                                                var result =
+                                                                    json.decode(
+                                                                        response
+                                                                            .body);
+                                                                // print(result);
+                                                                if (result
+                                                                        .toString() ==
+                                                                    'true') {
+                                                                  print(
+                                                                      '${Add_Number_area_New} // ${Add_name_area__New}');
+                                                                  if (index +
+                                                                          1 ==
+                                                                      int.parse(
+                                                                          Add_totalnew_area_text
+                                                                              .text)) {
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_zone();
+                                                                      read_GC_area();
+                                                                      read_GC_area_count();
+
+                                                                      Add_totalnew_area_text
+                                                                          .clear();
+
+                                                                      Add_Number_area_text
+                                                                          .clear();
+                                                                      Add_Number_area_
+                                                                          .clear();
+
+                                                                      Add_name_area_text
+                                                                          .clear();
+                                                                      Add_name_area_
+                                                                          .clear();
+
+                                                                      Add_qty_area_text
+                                                                          .clear();
+
+                                                                      Add_pri_area_text
+                                                                          .clear();
+                                                                    });
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        'OK');
+                                                                        
+                                                                    Navigator.pop(
+                                                                        context,
+                                                                        'OK');
+                                                                  } else {
+                                                                    print(
+                                                                        'ADD_Auto${index + 1}');
+                                                                  }
+                                                                }
+                                                              } catch (e) {
+                                                                print(e);
                                                               }
                                                             }
-                                                          } catch (e) {
-                                                            print(e);
                                                           }
-                                                        }
-                                                      }
-                                                    },
-                                                    child: const Text(
-                                                      'บันทึก',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                        },
+                                                        child: const Text(
+                                                          'บันทึก',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: TextButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        area_ser_text.clear();
-                                                        area_name_text.clear();
-                                                        area_qty_text.clear();
-                                                        area_pri_text.clear();
-                                                        Add_totalnew_area_text
-                                                            .clear();
-                                                      });
-                                                      Navigator.pop(
-                                                          context, 'OK');
-                                                    },
-                                                    child: const Text(
-                                                      'ยกเลิก',
-                                                      style: TextStyle(
-                                                        color: Colors.white,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      width: 100,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.black,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextButton(
+                                                        onPressed: () async {
+                                                          setState(() {
+                                                            Add_totalnew_area_text
+                                                                .clear();
+
+                                                            Add_Number_area_text
+                                                                .clear();
+                                                            Add_Number_area_
+                                                                .clear();
+
+                                                            Add_name_area_text
+                                                                .clear();
+                                                            Add_name_area_
+                                                                .clear();
+
+                                                            Add_qty_area_text
+                                                                .clear();
+
+                                                            Add_pri_area_text
+                                                                .clear();
+                                                          });
+                                                          Navigator.pop(
+                                                              context, 'OK');
+                                                        },
+                                                        child: const Text(
+                                                          'ยกเลิก',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),

@@ -284,7 +284,9 @@ class _AccessrightsState extends State<Accessrights> {
           )),
           content: Container(
             height: MediaQuery.of(context).size.height / 1.5,
-            width: MediaQuery.of(context).size.width / 1.2,
+            width: (!Responsive.isDesktop(context))
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.width * 0.5,
             decoration: const BoxDecoration(
               // color: Colors.grey[300],
               borderRadius: BorderRadius.only(
@@ -324,7 +326,7 @@ class _AccessrightsState extends State<Accessrights> {
                             child: SizedBox(
                               // width: 200,
                               child: TextFormField(
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 controller: FormName_text,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -409,7 +411,7 @@ class _AccessrightsState extends State<Accessrights> {
                             child: SizedBox(
                               // width: 200,
                               child: TextFormField(
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 controller: FormLame_text,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -498,7 +500,7 @@ class _AccessrightsState extends State<Accessrights> {
                             child: SizedBox(
                               // width: 200,
                               child: TextFormField(
-                                keyboardType: TextInputType.number,
+                                keyboardType: TextInputType.text,
                                 controller: FormRank_text,
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -594,7 +596,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   // }
                                   return null;
                                 },
-                                // maxLength: 13,
+                                maxLength: 10,
                                 cursorColor: Colors.green,
                                 decoration: InputDecoration(
                                     fillColor: Colors.white.withOpacity(0.3),
@@ -632,10 +634,9 @@ class _AccessrightsState extends State<Accessrights> {
                                             SettingScreen_Color.Colors_Text2_,
                                         fontFamily: Font_.Fonts_T)),
                                 inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.deny(
-                                      RegExp("[' ']")),
                                   // for below version 2 use this
-                                  // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
                                   // for version 2 and greater youcan also use this
                                   // FilteringTextInputFormatter.digitsOnly
                                 ],
@@ -671,7 +672,7 @@ class _AccessrightsState extends State<Accessrights> {
                           child: SizedBox(
                             // width: 200,
                             child: TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               controller: FormEmail_text,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -755,7 +756,7 @@ class _AccessrightsState extends State<Accessrights> {
                           child: SizedBox(
                             // width: 200,
                             child: TextFormField(
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               controller: FormPassword_text,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -938,134 +939,151 @@ class _AccessrightsState extends State<Accessrights> {
             ),
           ),
           actions: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              if (checked_value == '') {
-                              } else {
-                                print(
-                                    'ชื่อผู้ใช้ : ${FormName_text.text.toString()}');
-                                print(
-                                    'ตำแหน่ง : ${FormRank_text.text.toString()}');
-                                print(
-                                    'อีเมล : ${FormEmail_text.text.toString()}');
-                                // print(
-                                //     'สิทธิ์ 8: ${checked_Add} $checked_value');
-
-                                var cl = checked_value!.length;
-                                var cle = checked_value!.substring(0, cl - 1);
-                                print('สิทธิ์ 9: $cle');
-
-                                var name = FormName_text.text.toString();
-                                var lame = FormLame_text.text.toString();
-                                var tel = FormTel_text.text.toString();
-                                var email = FormEmail_text.text.toString();
-                                var password = md5
-                                    .convert(utf8.encode(
-                                        FormPassword_text.text.toString()))
-                                    .toString();
-                                var renk = FormRank_text.text.toString();
-
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                String? ren =
-                                    preferences.getString('renTalSer');
-                                String? ser_user = preferences.getString('ser');
-
-                                String url =
-                                    '${MyConstant().domain}/InC_Useradd.php?isAdd=true&ren=$ren&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle';
-
-                                try {
-                                  var response = await http.get(Uri.parse(url));
-
-                                  var result = json.decode(response.body);
-                                  print(result);
-                                  if (result.toString() == 'true') {
-                                    Insert_log.Insert_logs('ตั้งค่า',
-                                        'สิทธิการเข้าถึง>>เพิ่ม(*${FormName_text.text.toString()})');
-                                    setState(() {
-                                      FormName_text.clear();
-                                      FormLame_text.clear();
-                                      FormTel_text.clear();
-                                      FormEmail_text.clear();
-                                      FormPassword_text.clear();
-                                      FormRank_text.clear();
-                                      read_GC_User();
-                                    });
-                                  } else {}
-                                } catch (e) {}
-                                setState(() {
-                                  read_GC_User();
-                                  list.clear();
-                                  _isChecks.clear();
-                                  read_GC_user_count();
-                                });
-                                Navigator.pop(context);
-                              }
-                            }
-                          },
-                          child: const Text(
-                            'ตกลง',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                const SizedBox(
+                  height: 5.0,
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        width: 100,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextButton(
-                          onPressed: () => Navigator.pop(context, 'OK'),
-                          child: const Text(
-                            'ปิด',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: FontWeight_.Fonts_T,
-                              fontWeight: FontWeight.bold,
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  if (checked_value == '') {
+                                  } else {
+                                    print(
+                                        'ชื่อผู้ใช้ : ${FormName_text.text.toString()}');
+                                    print(
+                                        'ตำแหน่ง : ${FormRank_text.text.toString()}');
+                                    print(
+                                        'อีเมล : ${FormEmail_text.text.toString()}');
+                                    // print(
+                                    //     'สิทธิ์ 8: ${checked_Add} $checked_value');
+
+                                    var cl = checked_value!.length;
+                                    var cle =
+                                        checked_value!.substring(0, cl - 1);
+                                    print('สิทธิ์ 9: $cle');
+
+                                    var name = FormName_text.text.toString();
+                                    var lame = FormLame_text.text.toString();
+                                    var tel = FormTel_text.text.toString();
+                                    var email = FormEmail_text.text.toString();
+                                    var password = md5
+                                        .convert(utf8.encode(
+                                            FormPassword_text.text.toString()))
+                                        .toString();
+                                    var renk = FormRank_text.text.toString();
+
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+                                    String? ser_user =
+                                        preferences.getString('ser');
+
+                                    String url =
+                                        '${MyConstant().domain}/InC_Useradd.php?isAdd=true&ren=$ren&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle';
+
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        Insert_log.Insert_logs('ตั้งค่า',
+                                            'สิทธิการเข้าถึง>>เพิ่ม(*${FormName_text.text.toString()})');
+                                        setState(() {
+                                          FormName_text.clear();
+                                          FormLame_text.clear();
+                                          FormTel_text.clear();
+                                          FormEmail_text.clear();
+                                          FormPassword_text.clear();
+                                          FormRank_text.clear();
+                                          read_GC_User();
+                                        });
+                                      } else {}
+                                    } catch (e) {}
+                                    setState(() {
+                                      read_GC_User();
+                                      list.clear();
+                                      _isChecks.clear();
+                                      read_GC_user_count();
+                                    });
+                                    Navigator.pop(context);
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'ตกลง',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () => Navigator.pop(context, 'OK'),
+                              child: const Text(
+                                'ปิด',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontWeight_.Fonts_T,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -1156,7 +1174,9 @@ class _AccessrightsState extends State<Accessrights> {
           )),
           content: Container(
             height: MediaQuery.of(context).size.height / 1.5,
-            width: MediaQuery.of(context).size.width / 1.2,
+            width: (!Responsive.isDesktop(context))
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.width * 0.5,
             decoration: const BoxDecoration(
               // color: Colors.grey[300],
               borderRadius: BorderRadius.only(
@@ -1466,7 +1486,7 @@ class _AccessrightsState extends State<Accessrights> {
                                   // }
                                   return null;
                                 },
-                                // maxLength: 13,
+                                maxLength: 10,
                                 cursorColor: Colors.green,
                                 decoration: InputDecoration(
                                     fillColor: Colors.white.withOpacity(0.3),
@@ -1504,10 +1524,9 @@ class _AccessrightsState extends State<Accessrights> {
                                             SettingScreen_Color.Colors_Text2_,
                                         fontFamily: Font_.Fonts_T)),
                                 inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.deny(
-                                      RegExp("[' ']")),
                                   // for below version 2 use this
-                                  // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'[0-9]')),
                                   // for version 2 and greater youcan also use this
                                   // FilteringTextInputFormatter.digitsOnly
                                 ],
@@ -1810,240 +1829,259 @@ class _AccessrightsState extends State<Accessrights> {
             ),
           ),
           actions: <Widget>[
-            ScrollConfiguration(
-              behavior: ScrollConfiguration.of(context).copyWith(dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              }),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Container(
-                      width: (!Responsive.isDesktop(context))
-                          ? MediaQuery.of(context).size.width
-                          : MediaQuery.of(context).size.width * 0.85,
-                      child: Row(
-                        // mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextButton(
-                                onPressed: () async {
-                                  SharedPreferences preferences =
-                                      await SharedPreferences.getInstance();
-                                  String? ren =
-                                      preferences.getString('renTalSer');
-                                  String? ser_user =
-                                      preferences.getString('ser');
-                                  String? ser_id = userModels[index].ser;
-
-                                  String url =
-                                      '${MyConstant().domain}/DeC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user';
-
-                                  try {
-                                    var response =
-                                        await http.get(Uri.parse(url));
-
-                                    var result = json.decode(response.body);
-                                    Insert_log.Insert_logs('ตั้งค่า',
-                                        'สิทธิการเข้าถึง>>ลบ(*${FormEmail_text.text.toString()})');
-                                    print(result);
-                                    if (result.toString() == 'true') {
-                                      setState(() {
-                                        FormName_text.clear();
-                                        FormLame_text.clear();
-                                        FormTel_text.clear();
-                                        FormEmail_text.clear();
-                                        FormPassword_text.clear();
-                                        FormRank_text.clear();
-                                        read_GC_User();
-                                      });
-                                    } else {}
-                                  } catch (e) {}
-                                  setState(() {
-                                    read_GC_User();
-                                    read_GC_user_count();
-                                    list.clear();
-                                    _isChecks.clear();
-                                  });
-                                  Navigator.pop(context);
-                                },
-                                child: const Text(
-                                  'ลบ',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(child: Container()),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: StreamBuilder(
-                                  stream: Stream.periodic(
-                                      const Duration(seconds: 0)),
-                                  builder: (context, snapshot) {
-                                    return TextButton(
-                                      onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          if (checked_value == '') {
-                                          } else {
-                                            print(
-                                                'ชื่อผู้ใช้ : ${FormName_text.text.toString()}');
-                                            print(
-                                                'ตำแหน่ง : ${FormRank_text.text.toString()}');
-                                            print(
-                                                'อีเมล : ${FormEmail_text.text.toString()}');
-                                            // print(
-                                            //     'สิทธิ์ 8: ${checked_Add} $checked_value');
-
-                                            var cl = checked_value!.length;
-                                            var cle = checked_value!
-                                                .substring(0, cl - 1);
-                                            print(
-                                                'สิทธิ์ 9: $cle ${FormPassword_text.text.toString()}');
-
-                                            var name =
-                                                FormName_text.text.toString();
-                                            var lame =
-                                                FormLame_text.text.toString();
-                                            var tel =
-                                                FormTel_text.text.toString();
-                                            var email =
-                                                FormEmail_text.text.toString();
-                                            var password = FormPassword_text
-                                                        .text
-                                                        .toString() ==
-                                                    ''
-                                                ? userModels[index].passwd
-                                                : md5
-                                                    .convert(utf8.encode(
-                                                        FormPassword_text.text
-                                                            .toString()))
-                                                    .toString();
-                                            var renk =
-                                                FormRank_text.text.toString();
-
-                                            print('สิทธิ์ 10: $password');
-
-                                            SharedPreferences preferences =
-                                                await SharedPreferences
-                                                    .getInstance();
-                                            String? ren = preferences
-                                                .getString('renTalSer');
-                                            String? ser_user =
-                                                preferences.getString('ser');
-                                            String? ser_id =
-                                                userModels[index].ser;
-
-                                            String url =
-                                                '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle';
-                                            Insert_log.Insert_logs('ตั้งค่า',
-                                                'สิทธิการเข้าถึง>>แก้ไขผู้ใช้งาน(${FormEmail_text.text.toString()})');
-                                            try {
-                                              var response = await http
-                                                  .get(Uri.parse(url));
-
-                                              var result =
-                                                  json.decode(response.body);
-                                              print(result);
-
-                                              if (result.toString() == 'true') {
-                                                setState(() {
-                                                  FormName_text.clear();
-                                                  FormLame_text.clear();
-                                                  FormTel_text.clear();
-                                                  FormEmail_text.clear();
-                                                  FormPassword_text.clear();
-                                                  FormRank_text.clear();
-                                                  read_GC_User();
-                                                });
-                                              } else {}
-                                            } catch (e) {}
-                                            setState(() {
-                                              read_GC_User();
-                                              list.clear();
-                                              _isChecks.clear();
-                                            });
-                                            Navigator.pop(context);
-                                          }
-                                        }
-                                      },
-                                      child: const Text(
-                                        'ตกลง',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    );
-                                  }),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 100,
-                              decoration: const BoxDecoration(
-                                color: Colors.black,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    checked_edit.clear();
-                                  });
-                                  Navigator.pop(context, 'OK');
-                                },
-                                child: const Text(
-                                  'ปิด',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+            Column(
+              children: [
+                const SizedBox(
+                  height: 5.0,
                 ),
-              ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                ScrollConfiguration(
+                  behavior:
+                      ScrollConfiguration.of(context).copyWith(dragDevices: {
+                    PointerDeviceKind.touch,
+                    PointerDeviceKind.mouse,
+                  }),
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: (!Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width
+                              : MediaQuery.of(context).size.width * 0.85,
+                          child: Row(
+                            // mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextButton(
+                                    onPressed: () async {
+                                      SharedPreferences preferences =
+                                          await SharedPreferences.getInstance();
+                                      String? ren =
+                                          preferences.getString('renTalSer');
+                                      String? ser_user =
+                                          preferences.getString('ser');
+                                      String? ser_id = userModels[index].ser;
+
+                                      String url =
+                                          '${MyConstant().domain}/DeC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user';
+
+                                      try {
+                                        var response =
+                                            await http.get(Uri.parse(url));
+
+                                        var result = json.decode(response.body);
+                                        Insert_log.Insert_logs('ตั้งค่า',
+                                            'สิทธิการเข้าถึง>>ลบ(*${FormEmail_text.text.toString()})');
+                                        print(result);
+                                        if (result.toString() == 'true') {
+                                          setState(() {
+                                            FormName_text.clear();
+                                            FormLame_text.clear();
+                                            FormTel_text.clear();
+                                            FormEmail_text.clear();
+                                            FormPassword_text.clear();
+                                            FormRank_text.clear();
+                                            read_GC_User();
+                                          });
+                                        } else {}
+                                      } catch (e) {}
+                                      setState(() {
+                                        read_GC_User();
+                                        read_GC_user_count();
+                                        list.clear();
+                                        _isChecks.clear();
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text(
+                                      'ลบ',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(child: Container()),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 0)),
+                                      builder: (context, snapshot) {
+                                        return TextButton(
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              if (checked_value == '') {
+                                              } else {
+                                                print(
+                                                    'ชื่อผู้ใช้ : ${FormName_text.text.toString()}');
+                                                print(
+                                                    'ตำแหน่ง : ${FormRank_text.text.toString()}');
+                                                print(
+                                                    'อีเมล : ${FormEmail_text.text.toString()}');
+                                                // print(
+                                                //     'สิทธิ์ 8: ${checked_Add} $checked_value');
+
+                                                var cl = checked_value!.length;
+                                                var cle = checked_value!
+                                                    .substring(0, cl - 1);
+                                                print(
+                                                    'สิทธิ์ 9: $cle ${FormPassword_text.text.toString()}');
+
+                                                var name = FormName_text.text
+                                                    .toString();
+                                                var lame = FormLame_text.text
+                                                    .toString();
+                                                var tel = FormTel_text.text
+                                                    .toString();
+                                                var email = FormEmail_text.text
+                                                    .toString();
+                                                var password = FormPassword_text
+                                                            .text
+                                                            .toString() ==
+                                                        ''
+                                                    ? userModels[index].passwd
+                                                    : md5
+                                                        .convert(utf8.encode(
+                                                            FormPassword_text
+                                                                .text
+                                                                .toString()))
+                                                        .toString();
+                                                var renk = FormRank_text.text
+                                                    .toString();
+
+                                                print('สิทธิ์ 10: $password');
+
+                                                SharedPreferences preferences =
+                                                    await SharedPreferences
+                                                        .getInstance();
+                                                String? ren = preferences
+                                                    .getString('renTalSer');
+                                                String? ser_user = preferences
+                                                    .getString('ser');
+                                                String? ser_id =
+                                                    userModels[index].ser;
+
+                                                String url =
+                                                    '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle';
+                                                Insert_log.Insert_logs(
+                                                    'ตั้งค่า',
+                                                    'สิทธิการเข้าถึง>>แก้ไขผู้ใช้งาน(${FormEmail_text.text.toString()})');
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+
+                                                  if (result.toString() ==
+                                                      'true') {
+                                                    setState(() {
+                                                      FormName_text.clear();
+                                                      FormLame_text.clear();
+                                                      FormTel_text.clear();
+                                                      FormEmail_text.clear();
+                                                      FormPassword_text.clear();
+                                                      FormRank_text.clear();
+                                                      read_GC_User();
+                                                    });
+                                                  } else {}
+                                                } catch (e) {}
+                                                setState(() {
+                                                  read_GC_User();
+                                                  list.clear();
+                                                  _isChecks.clear();
+                                                });
+                                                Navigator.pop(context);
+                                              }
+                                            }
+                                          },
+                                          child: const Text(
+                                            'ตกลง',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        checked_edit.clear();
+                                      });
+                                      Navigator.pop(context, 'OK');
+                                    },
+                                    child: const Text(
+                                      'ปิด',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -2487,10 +2525,12 @@ class _AccessrightsState extends State<Accessrights> {
                                                       child: Container(
                                                         width: 100,
                                                         decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.green,
+                                                            BoxDecoration(
+                                                          color: Colors.blueGrey
+                                                              .shade100,
                                                           borderRadius:
-                                                              BorderRadius.only(
+                                                              const BorderRadius
+                                                                  .only(
                                                             topLeft:
                                                                 Radius.circular(
                                                                     10),
@@ -2511,7 +2551,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                             const EdgeInsets
                                                                 .all(8.0),
                                                         child: const Text(
-                                                          '>',
+                                                          'แก้ไข',
                                                           textAlign:
                                                               TextAlign.center,
                                                           style: TextStyle(

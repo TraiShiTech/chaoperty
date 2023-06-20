@@ -219,7 +219,9 @@ class _BillDocumentState extends State<BillDocument> {
           )),
           content: Container(
             // height: MediaQuery.of(context).size.height / 1.5,
-            width: MediaQuery.of(context).size.width / 1.5,
+            width: (!Responsive.isDesktop(context))
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.width * 0.5,
             decoration: const BoxDecoration(
               // color: Colors.grey[300],
               borderRadius: BorderRadius.only(
@@ -482,102 +484,119 @@ class _BillDocumentState extends State<BillDocument> {
             ),
           ),
           actions: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 100,
-                      decoration: const BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            print('Ser เอกสาร : ${serDocu.toString()}');
-                            print(
-                                'แก้ไขหัวบิล : ${FormtitleDocu_text.text.toString()}');
-                            print(
-                                'แก้ไขเลขเอกสาร : ${FormnumDocu_text.text.toString()}');
-                            var name_bull = Formtitledoc_text.text.toString();
-                            var name_abc = FormtitleDocu_text.text.toString();
-                            var name_num = FormnumDocu_text.text.toString();
-                            SharedPreferences preferences =
-                                await SharedPreferences.getInstance();
-                            String? ren = preferences.getString('renTalSer');
-                            String? ser_user = preferences.getString('ser');
-                            var vser = serDocu;
-                            String url =
-                                '${MyConstant().domain}/UpC_Bill.php?isAdd=true&ren=$ren&ser_user=$ser_user&vser=$vser&name_bull=$name_bull&name_abc=$name_abc&name_num=$name_num';
+            Column(
+              children: [
+                const SizedBox(
+                  height: 5.0,
+                ),
+                const Divider(
+                  color: Colors.grey,
+                  height: 4.0,
+                ),
+                const SizedBox(
+                  height: 5.0,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                print('Ser เอกสาร : ${serDocu.toString()}');
+                                print(
+                                    'แก้ไขหัวบิล : ${FormtitleDocu_text.text.toString()}');
+                                print(
+                                    'แก้ไขเลขเอกสาร : ${FormnumDocu_text.text.toString()}');
+                                var name_bull =
+                                    Formtitledoc_text.text.toString();
+                                var name_abc =
+                                    FormtitleDocu_text.text.toString();
+                                var name_num = FormnumDocu_text.text.toString();
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                String? ren =
+                                    preferences.getString('renTalSer');
+                                String? ser_user = preferences.getString('ser');
+                                var vser = serDocu;
+                                String url =
+                                    '${MyConstant().domain}/UpC_Bill.php?isAdd=true&ren=$ren&ser_user=$ser_user&vser=$vser&name_bull=$name_bull&name_abc=$name_abc&name_num=$name_num';
 
-                            try {
-                              var response = await http.get(Uri.parse(url));
+                                try {
+                                  var response = await http.get(Uri.parse(url));
 
-                              var result = json.decode(response.body);
-                              print(result);
-                              if (result.toString() == 'true') {
-                                Insert_log.Insert_logs(
-                                    'ตั้งค่า', 'เอกสาร>>$typeDocu');
-                                setState(() {
-                                  FormtitleDocu_text.clear();
-                                  FormnumDocu_text.clear();
-                                  Formtitledoc_text.clear();
-                                  read_GC_doctype();
-                                  read_GC_doctype2();
-                                });
-                                Navigator.pop(context);
-                              } else {}
-                            } catch (e) {}
-                          }
-                        },
-                        child: const Text(
-                          'บันทึก',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
+                                  var result = json.decode(response.body);
+                                  print(result);
+                                  if (result.toString() == 'true') {
+                                    Insert_log.Insert_logs(
+                                        'ตั้งค่า', 'เอกสาร>>$typeDocu');
+                                    setState(() {
+                                      FormtitleDocu_text.clear();
+                                      FormnumDocu_text.clear();
+                                      Formtitledoc_text.clear();
+                                      read_GC_doctype();
+                                      read_GC_doctype2();
+                                    });
+                                    Navigator.pop(context);
+                                  } else {}
+                                } catch (e) {}
+                              }
+                            },
+                            child: const Text(
+                              'บันทึก',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 100,
-                      decoration: const BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                      ),
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextButton(
-                        onPressed: () => Navigator.pop(context, 'OK'),
-                        child: const Text(
-                          'ยกเลิก',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: FontWeight_.Fonts_T,
-                            fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 100,
+                          decoration: const BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextButton(
+                            onPressed: () => Navigator.pop(context, 'OK'),
+                            child: const Text(
+                              'ยกเลิก',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: FontWeight_.Fonts_T,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         ),
@@ -1010,6 +1029,7 @@ class _BillDocumentState extends State<BillDocument> {
                             // ),
                             padding: const EdgeInsets.all(8.0),
                             child: TextFormField(
+                              keyboardType: TextInputType.number,
                               initialValue: bill_tel!.trim(),
                               onFieldSubmitted: (value) async {
                                 SharedPreferences preferences =
@@ -1035,12 +1055,12 @@ class _BillDocumentState extends State<BillDocument> {
                                   } else {}
                                 } catch (e) {}
                               },
-                              // maxLength: 13,
+                              maxLength: 10,
                               cursorColor: Colors.green,
                               decoration: InputDecoration(
                                 fillColor: Colors.white.withOpacity(0.05),
                                 filled: true,
-                                // prefixIcon:
+                                // prefixIcon:;
                                 //     const Icon(Icons.key, color: Colors.black),
                                 // suffixIcon: Icon(Icons.clear, color: Colors.black),
                                 focusedBorder: const OutlineInputBorder(
@@ -1072,6 +1092,13 @@ class _BillDocumentState extends State<BillDocument> {
                                     // fontWeight: FontWeight.bold,
                                     fontFamily: Font_.Fonts_T),
                               ),
+                              inputFormatters: <TextInputFormatter>[
+                                // for below version 2 use this
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'[0-9]')),
+                                // for version 2 and greater youcan also use this
+                                // FilteringTextInputFormatter.digitsOnly
+                              ],
                             )),
                       ),
                       const Expanded(

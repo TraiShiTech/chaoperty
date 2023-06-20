@@ -2121,10 +2121,11 @@ class _BillsState extends State<Bills> {
                                     [
                                       '${index + 1}',
                                       '${_TransModels[index].name}',
-                                      '${DateFormat('dd/MM/yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
+                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
                                       "${nFormat.format(double.parse('${_TransModels[index].tqty}'))}",
                                       // '${_TransModels[index].tqty}',
                                       '${_TransModels[index].unit_con}',
+                                      "${nFormat.format(double.parse('${_TransModels[index].vat}'))}",
                                       _TransModels[index].qty_con == '0.00'
                                           ? "${nFormat.format(double.parse('${_TransModels[index].amt_con}'))}"
                                           // '${_TransModels[index].amt_con}'
@@ -2134,7 +2135,21 @@ class _BillsState extends State<Bills> {
                                       // '${_TransModels[index].pvat}',
                                     ],
                                 ];
-
+                                // final tableData003 = [
+                                //   for (int index = 0;
+                                //       index < _TransModels.length;
+                                //       index++)
+                                //     [
+                                //       '${index + 1}',
+                                //       '${_TransModels[index].name}',
+                                //       '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
+                                //       "${nFormat.format(double.parse('${_TransModels[index].qty}'))}",
+                                //       "${nFormat.format(double.parse('${_TransModels[index].nvat}'))}",
+                                //       "${nFormat.format(double.parse('${_TransModels[index].vat}'))}",
+                                //       "${nFormat.format(double.parse('${_TransModels[index].pvat}'))}",
+                                //       "${nFormat.format(double.parse('${_TransModels[index].amt}'))}"
+                                //     ],
+                                // ];
                                 in_Trans_invoice2(tableData003, newValuePDFimg);
                               },
                               child: Container(
@@ -2387,7 +2402,7 @@ class PreviewPdfgen_Bills extends StatelessWidget {
           ),
           centerTitle: true,
           title: Text(
-            "$nameBills(ณ วันที่${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}) ",
+            "$nameBills",
             style: const TextStyle(
               color: Colors.white,
               fontFamily: Font_.Fonts_T,
@@ -2403,7 +2418,7 @@ class PreviewPdfgen_Bills extends StatelessWidget {
           // scrollViewDecoration:,
           initialPageFormat: PdfPageFormat.a4,
           pdfFileName:
-              "$nameBills(ณ วันที่${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}).pdf",
+              "$nameBills.pdf",
         ),
       ),
     );

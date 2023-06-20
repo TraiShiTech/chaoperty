@@ -88,17 +88,8 @@ class Pdfgen_RentalInforma {
     // ];
     pdf.addPage(
       pw.MultiPage(
-        // header: (context) {
-        //   return pw.Text(
-        //     'Flutter Approach',
-        //     style: pw.TextStyle(
-        //       fontWeight: pw.FontWeight.bold,
-        //       fontSize: 15.0,
-        //     ),
-        //   );
-        // },
-        build: (context) {
-          return [
+        header: (context) {
+          return pw.Column(children: [
             pw.Row(
               children: [
                 (netImage.isEmpty)
@@ -108,7 +99,7 @@ class Pdfgen_RentalInforma {
                         color: PdfColors.grey200,
                         child: pw.Center(
                           child: pw.Text(
-                            '$renTal_name ',
+                            '$bill_name ',
                             maxLines: 1,
                             style: pw.TextStyle(
                               fontSize: 8,
@@ -136,16 +127,16 @@ class Pdfgen_RentalInforma {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        '$renTal_name',
+                        '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 11.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -178,7 +169,11 @@ class Pdfgen_RentalInforma {
                       //       fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       // ),
                       pw.Text(
-                        'โทรศัพท์: $bill_tel',
+                        (bill_tel == null ||
+                                bill_tel.toString() == '' ||
+                                bill_tel.toString() == 'null')
+                            ? 'โทรศัพท์: '
+                            : 'โทรศัพท์: $bill_tel',
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
@@ -187,7 +182,11 @@ class Pdfgen_RentalInforma {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        'อีเมล: $bill_email',
+                        (bill_email == null ||
+                                bill_email.toString() == '' ||
+                                bill_email.toString() == 'null')
+                            ? 'อีเมล: '
+                            : 'อีเมล: $bill_email',
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
@@ -196,7 +195,11 @@ class Pdfgen_RentalInforma {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        'เลขประจำตัวผู้เสียภาษี: $bill_tax',
+                        (bill_tax == null ||
+                                bill_tax.toString() == '' ||
+                                bill_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         maxLines: 2,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -216,6 +219,10 @@ class Pdfgen_RentalInforma {
                 ),
               ],
             ),
+          ]);
+        },
+        build: (context) {
+          return [
             // pw.Row(
             //   children: [
             //     pw.Image(

@@ -1111,7 +1111,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                           10.0))),
                                                           title: Center(
                                                               child: Text(
-                                                            'มีรูปหน้าปกอยู่แล้ว $man_img_',
+                                                            'มีรูปหน้าปกอยู่แล้ว ',
                                                             style: TextStyle(
                                                                 color: SettingScreen_Color
                                                                     .Colors_Text1_,
@@ -1140,83 +1140,88 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                             ),
                                                           ),
                                                           actions: <Widget>[
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
+                                                            Column(
                                                               children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child:
-                                                                      InkWell(
-                                                                    child: Container(
-                                                                        width: 50,
-                                                                        decoration: BoxDecoration(
-                                                                          color:
-                                                                              Colors.red[600],
-                                                                          borderRadius: const BorderRadius.only(
-                                                                              topLeft: Radius.circular(10),
-                                                                              topRight: Radius.circular(10),
-                                                                              bottomLeft: Radius.circular(10),
-                                                                              bottomRight: Radius.circular(10)),
-                                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                                        ),
-                                                                        padding: const EdgeInsets.all(8.0),
-                                                                        child: const Center(
-                                                                            child: Text(
-                                                                          'ลบรูป',
-                                                                          style: TextStyle(
-                                                                              color: SettingScreen_Color.Colors_Text3_,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ))),
-                                                                    onTap:
-                                                                        () async {
-                                                                      // String url =
-                                                                      //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
-                                                                      deletedFile_(
-                                                                        'manimg',
-                                                                        '$man_img_',
-                                                                      );
-
-                                                                      Navigator.of(
-                                                                              context)
-                                                                          .pop();
-                                                                    },
-                                                                  ),
+                                                                const SizedBox(
+                                                                  height: 5.0,
                                                                 ),
-                                                                SizedBox(
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            InkWell(
-                                                                          child: Container(
-                                                                              width: 50,
-                                                                              decoration: const BoxDecoration(
-                                                                                color: Colors.black,
-                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                // border: Border.all(color: Colors.white, width: 1),
-                                                                              ),
-                                                                              padding: const EdgeInsets.all(8.0),
-                                                                              child: const Center(
-                                                                                  child: Text(
-                                                                                'ปิด',
-                                                                                style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                              ))),
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.of(context).pop();
-                                                                          },
-                                                                        ),
+                                                                const Divider(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  height: 4.0,
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 5.0,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .spaceBetween,
+                                                                  children: [
+                                                                    Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          InkWell(
+                                                                        child: Container(
+                                                                            width: 50,
+                                                                            decoration: BoxDecoration(
+                                                                              color: Colors.red[600],
+                                                                              borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                              // border: Border.all(color: Colors.white, width: 1),
+                                                                            ),
+                                                                            padding: const EdgeInsets.all(8.0),
+                                                                            child: const Center(
+                                                                                child: Text(
+                                                                              'ลบรูป',
+                                                                              style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                            ))),
+                                                                        onTap:
+                                                                            () async {
+                                                                          // String url =
+                                                                          //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                                                          deletedFile_(
+                                                                            'manimg',
+                                                                            '$man_img_',
+                                                                          );
+
+                                                                          Navigator.of(context)
+                                                                              .pop();
+                                                                        },
                                                                       ),
-                                                                    ],
-                                                                  ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(8.0),
+                                                                            child:
+                                                                                InkWell(
+                                                                              child: Container(
+                                                                                  width: 50,
+                                                                                  decoration: const BoxDecoration(
+                                                                                    color: Colors.black,
+                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                                  ),
+                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                  child: const Center(
+                                                                                      child: Text(
+                                                                                    'ปิด',
+                                                                                    style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                  ))),
+                                                                              onTap: () {
+                                                                                Navigator.of(context).pop();
+                                                                              },
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ],
                                                             ),
@@ -1757,7 +1762,7 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                                             10.0))),
                                                             title: Center(
                                                                 child: Text(
-                                                              'มีรูป QR Code อยู่แล้ว $qr_img_',
+                                                              'มีรูป QR Code อยู่แล้ว',
                                                               style: TextStyle(
                                                                   color: SettingScreen_Color
                                                                       .Colors_Text1_,
@@ -1785,81 +1790,84 @@ class _EditwebScreenState extends State<EditwebScreen> {
                                                               ),
                                                             ),
                                                             actions: <Widget>[
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
+                                                              Column(
                                                                 children: [
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        InkWell(
-                                                                      child: Container(
-                                                                          width: 50,
-                                                                          decoration: BoxDecoration(
-                                                                            color:
-                                                                                Colors.red[600],
-                                                                            borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(10),
-                                                                                topRight: Radius.circular(10),
-                                                                                bottomLeft: Radius.circular(10),
-                                                                                bottomRight: Radius.circular(10)),
-                                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                                          ),
-                                                                          padding: const EdgeInsets.all(8.0),
-                                                                          child: const Center(
-                                                                              child: Text(
-                                                                            'ลบรูป',
-                                                                            style: TextStyle(
-                                                                                color: SettingScreen_Color.Colors_Text3_,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                fontFamily: Font_.Fonts_T),
-                                                                          ))),
-                                                                      onTap:
-                                                                          () async {
-                                                                        // String url =
-                                                                        //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
-                                                                        deletedFile_(
-                                                                          'qrimg',
-                                                                          '$qr_img_',
-                                                                        );
-
-                                                                        Navigator.of(context)
-                                                                            .pop();
-                                                                      },
-                                                                    ),
+                                                                  const SizedBox(
+                                                                    height: 5.0,
                                                                   ),
-                                                                  SizedBox(
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
-                                                                          child:
-                                                                              InkWell(
-                                                                            child: Container(
-                                                                                width: 50,
-                                                                                decoration: const BoxDecoration(
-                                                                                  color: Colors.black,
-                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                                ),
-                                                                                padding: const EdgeInsets.all(8.0),
-                                                                                child: const Center(
-                                                                                    child: Text(
-                                                                                  'ปิด',
-                                                                                  style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
-                                                                                ))),
-                                                                            onTap:
-                                                                                () {
-                                                                              Navigator.of(context).pop();
-                                                                            },
-                                                                          ),
+                                                                  const Divider(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    height: 4.0,
+                                                                  ),
+                                                                  const SizedBox(
+                                                                    height: 5.0,
+                                                                  ),
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 50,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.red[600],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ลบรูป',
+                                                                                style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () async {
+                                                                            // String url =
+                                                                            //     await '${MyConstant().domain}/files/$foder/logo/$img_logo';
+                                                                            deletedFile_(
+                                                                              'qrimg',
+                                                                              '$qr_img_',
+                                                                            );
+
+                                                                            Navigator.of(context).pop();
+                                                                          },
                                                                         ),
-                                                                      ],
-                                                                    ),
+                                                                      ),
+                                                                      SizedBox(
+                                                                        child:
+                                                                            Row(
+                                                                          children: [
+                                                                            Padding(
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: InkWell(
+                                                                                child: Container(
+                                                                                    width: 50,
+                                                                                    decoration: const BoxDecoration(
+                                                                                      color: Colors.black,
+                                                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                      // border: Border.all(color: Colors.white, width: 1),
+                                                                                    ),
+                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                    child: const Center(
+                                                                                        child: Text(
+                                                                                      'ปิด',
+                                                                                      style: TextStyle(color: SettingScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                                    ))),
+                                                                                onTap: () {
+                                                                                  Navigator.of(context).pop();
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
                                                                   ),
                                                                 ],
                                                               ),

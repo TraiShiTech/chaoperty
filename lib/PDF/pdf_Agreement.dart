@@ -12,41 +12,42 @@ import 'package:printing/printing.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../PeopleChao/Rental_Information.dart';
+import '../Style/colors.dart';
 
 class Pdfgen_Agreement {
 //////////---------------------------------------------------->(DOCX)
 
   static void exportPDF_Agreement(
-    context,
-    Get_Value_NameShop_index,
-    Get_Value_cid,
-    _verticalGroupValue,
-    Form_nameshop,
-    Form_typeshop,
-    Form_bussshop,
-    Form_bussscontact,
-    Form_address,
-    Form_tel,
-    Form_email,
-    Form_tax,
-    Form_ln,
-    Form_zn,
-    Form_area,
-    Form_qty,
-    Form_sdate,
-    Form_ldate,
-    Form_period,
-    Form_rtname,
-    quotxSelectModels,
-    _TransModels,
-    renTal_name,
-    bill_addr,
-    bill_email,
-    bill_tel,
-    bill_tax,
-    bill_name,
-    newValuePDFimg,
-  ) async {
+      context,
+      Get_Value_NameShop_index,
+      Get_Value_cid,
+      _verticalGroupValue,
+      Form_nameshop,
+      Form_typeshop,
+      Form_bussshop,
+      Form_bussscontact,
+      Form_address,
+      Form_tel,
+      Form_email,
+      Form_tax,
+      Form_ln,
+      Form_zn,
+      Form_area,
+      Form_qty,
+      Form_sdate,
+      Form_ldate,
+      Form_period,
+      Form_rtname,
+      quotxSelectModels,
+      _TransModels,
+      renTal_name,
+      bill_addr,
+      bill_email,
+      bill_tel,
+      bill_tax,
+      bill_name,
+      newValuePDFimg,
+      tableData00) async {
     ////
     //// ------------>(ใบเสนอราคา)
     ///////
@@ -69,17 +70,17 @@ class Pdfgen_Agreement {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     String? base64Image_1 = preferences.getString('base64Image1');
-    String? base64Image_2 = preferences.getString('base64Image2');
-    String? base64Image_3 = preferences.getString('base64Image3');
-    String? base64Image_4 = preferences.getString('base64Image4');
+    // String? base64Image_2 = preferences.getString('base64Image2');
+    // String? base64Image_3 = preferences.getString('base64Image3');
+    // String? base64Image_4 = preferences.getString('base64Image4');
     String base64Image_new1 = (base64Image_1 == null) ? '' : base64Image_1;
-    String base64Image_new2 = (base64Image_2 == null) ? '' : base64Image_2;
-    String base64Image_new3 = (base64Image_3 == null) ? '' : base64Image_3;
-    String base64Image_new4 = (base64Image_4 == null) ? '' : base64Image_4;
-    Uint8List data1 = base64Decode(base64Image_new1);
-    Uint8List data2 = base64Decode(base64Image_new2);
-    Uint8List data3 = base64Decode(base64Image_new3);
-    Uint8List data4 = base64Decode(base64Image_new4);
+    // String base64Image_new2 = (base64Image_2 == null) ? '' : base64Image_2;
+    // String base64Image_new3 = (base64Image_3 == null) ? '' : base64Image_3;
+    // String base64Image_new4 = (base64Image_4 == null) ? '' : base64Image_4;
+    // Uint8List data1 = base64Decode(base64Image_new1);
+    // Uint8List data2 = base64Decode(base64Image_new2);
+    // Uint8List data3 = base64Decode(base64Image_new3);
+    // Uint8List data4 = base64Decode(base64Image_new4);
 
     for (int i = 0; i < newValuePDFimg.length; i++) {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
@@ -271,7 +272,7 @@ class Pdfgen_Agreement {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        '$renTal_name',
+                        '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
                           fontSize: 14.0,
@@ -358,7 +359,7 @@ class Pdfgen_Agreement {
               mainAxisAlignment: pw.MainAxisAlignment.center,
               children: [
                 pw.Text(
-                  'สัญญาเช่าพื้นที่ $renTal_name',
+                  'สัญญาเช่าพื้นที่',
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
                     fontSize: 11.0,
@@ -401,20 +402,32 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
             pw.Text(
-              'สัญญานี้ทำขึ้นระหว่าง $renTal_name  โดย  นายณรงค์  ตนานุวัฒน์   และ    นางรัตนา  ตนานุวัฒน์ \nกรรมการผู้จัดการผู้มีอำนาจกระทำการแทน $renTal_name สำนักงานตั้งอยู่ที่ $bill_addr   ซึ่งต่อไปนี้ในสัญญาฉบับนี้เรียกว่า  ผู้ให้เช่า  ฝ่ายหนึ่งกับ     ',
+              'สัญญาฉบับนี้ ทำขึ้นระหว่าง........$bill_name........',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+            pw.Text(
+              'ที่อยู่........$bill_addr........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              '$Form_bussshop........โดย.....$Form_bussscontact............................................',
+              'ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้ให้เช่า” ฝ่ายหนึ่งกับ........$Form_bussshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
             ),
             pw.Text(
               'ที่อยู่..............$Form_address.................. ',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+            pw.Text(
+              'เลขประจำตัวผู้เสียภาษี..............$Form_tax.................. ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
@@ -427,14 +440,41 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ซึ่งต่อไปนี้ในสัญญาฉบับนี้เรียกว่า ผู้เช่า อีกฝ่ายหนึ่งได้ตกลงให้ผู้เช่าและผู้ให้เช่าใช้ที่อยู่ของแต่ละฝ่ายตามสัญญานี้ \nสำหรับการติดต่อส่งหนังสือถึงกันและตกลงทำสัญญาเช่าต่อกันมีข้อความดังต่อไปนี้ ',
+              '        ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้เช่า” อีกฝ่ายหนึ่ง',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+            pw.Text(
+              '        ทั้งสองฝ่ายตกลงทำสัญญาดังมีข้อความต่อไปนี้',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 1. ทรัพย์สินที่เช่า และอายุสัญญาเช่า ',
+              'ข้อ 1. ผู้ให้เช่า ตกลงให้เช่า และ ผู้เช่าตกลงเช่า พื้นที่บางส่วน บริเวณชั้นที่........ห้องเลขที่........',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+
+            pw.Text(
+              'ของอาคาร........มีเนื้อที่ประมาณ....$Form_area....ตารางเมตร',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+            pw.Text(
+              'ตั้งอยู่........$bill_addr........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -445,26 +485,55 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ผู้เช่าตกลงเช่าและผู้ให้เช่าตกลงให้เช่าพื้นที่บางส่วนใน....$renTal_name............ ',
+              '        ซึ่งต่อไปนี้ในสัญญานี้เรียกว่า “พื้นที่เช่า”',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
             ),
-            pw.Text(
-              'ซึ่งเป็นพื้นที่ล๊อค........$Form_ln($Form_zn)..............พื้นที่ประมาณ...$Form_area.....ตารางเมตร  ตั้งอยู่ที่....$bill_addr..........',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'เริ่มเช่าตั้งแต่วันที่.......$Form_sdate......สิ้นสุดสัญญาเช่าวันที่....$Form_ldate.....ประเภทการเช่า...$Form_rtname....ระยะเวลา.....$Form_period.. ดังรายละเอียดแบบแปลนแนบท้ายสัญญาซึ่งถือเป็นส่วนหนึ่งของสัญญาฉบับนี้ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
+
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 2.  ค่าเช่า  ',
+              (Form_rtname.toString() == 'รายวัน')
+                  ? 'ข้อ 2. ผู้ให้เช่าตกลงให้ผู้เช่า เช่าพื้นที่เช่า มีกำหนดอายุ........$Form_period........วัน'
+                  : (Form_rtname.toString() == 'รายเดือน')
+                      ? 'ข้อ 2. ผู้ให้เช่าตกลงให้ผู้เช่า เช่าพื้นที่เช่า มีกำหนดอายุ........$Form_period........เดือน'
+                      : (Form_rtname.toString() == 'รายปี')
+                          ? 'ข้อ 2. ผู้ให้เช่าตกลงให้ผู้เช่า เช่าพื้นที่เช่า มีกำหนดอายุ........$Form_period........ปี'
+                          : 'ข้อ 2. ผู้ให้เช่าตกลงให้ผู้เช่า เช่าพื้นที่เช่า มีกำหนดอายุ........$Form_period........$Form_rtname',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+                fontWeight: pw.FontWeight.bold,
+              ),
+            ),
+
+            pw.Text(
+              'เริ่มอายุการเช่าตั้งแต่วันที่........$Form_sdate........และสิ้นสุดในวันที่........$Form_ldate........',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+
+            pw.Text(
+              ' โดยมีวัตถุประสงค์ของการเช่าเพื่อทำธุรกิจ........$Form_typeshop........',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+            pw.Text(
+              (Form_nameshop == null || Form_nameshop.toString() == 'null')
+                  ? 'โดยใช้ชื่อธุรกิจว่า........$Form_bussshop........'
+                  : 'โดยใช้ชื่อธุรกิจว่า........$Form_nameshop........',
+              textAlign: pw.TextAlign.justify,
+              style: pw.TextStyle(
+                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            ),
+
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              'ข้อ 3.  ผู้เช่าจะชำระค่าบริการแก่ผู้ให้เช่า ดังนี้ ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -474,236 +543,228 @@ class Pdfgen_Agreement {
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '2.1  อัตราค่าเช่าเดือนละ.....${nFormat.format(Sumtotal).toString()}....บาท..(....~${text_Number2}~....)..โดยผู้เช่าต้องชำระค่าเช่าเป็นรายเดือน ไม่เกิน วันที่ 5 ของทุกเดือน โดยผู้เช่าจะต้องนำเงินค่าเช่าเข้าบัญชีเงินฝากของ    ผู้ให้เช่า ธนาคารกรุงเทพ สาขาตลาดมีโชค ชื่อบัญชี บจ.ขันแก้ว บัญชีเลขที่ 675-0-22186-0 หรือบัญชีอื่นใดที่ทางผู้ให้เช่าแจ้งเปลี่ยนแปลงภายหลังจากวันทำสัญญา',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+            // pw.Text(
+            //   '(ดึงข้อมูลในตาราง “รายละเอียดค่าบริการ” จากหน้า ข้อมูลการเช่ามา ทุกอันยกเว้นเงินประกัน)',
+            //   textAlign: pw.TextAlign.left,
+            //   style: pw.TextStyle(
+            //       fontSize: 10.0, font: ttf, color: PdfColors.black),
+            // ),
+            pw.Container(
+              decoration: const pw.BoxDecoration(
+                color: PdfColors.green100,
+                border: pw.Border(
+                  bottom: pw.BorderSide(color: PdfColors.green900),
+                ),
+              ),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'งวด',
+                          maxLines: 1,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: 10.0,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'วันที่',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: 10.0,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'รายการ',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: 10.0,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ยอด/งวด',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: 10.0,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Center(
+                        child: pw.Text(
+                          'ยอด',
+                          textAlign: pw.TextAlign.center,
+                          maxLines: 1,
+                          style: pw.TextStyle(
+                              fontSize: 10.0,
+                              fontWeight: pw.FontWeight.bold,
+                              font: ttf,
+                              color: PdfColors.green900),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'กรณีผู้ให้เช่าไม่สามารถเรียกเก็บเงินค่าเช่าตามเช็คได้ภายในกำหนดเวลาผู้เช่ายินยอมชำระดอกเบี้ยอัตรา ร้อยละ 15 ต่อปี ผู้เช่าตกลงให้ผู้ให้เช่าปรับขึ้นอัตราค่าเช่าเพิ่มขึ้นเมื่อครบสัญญาเช่าฉบับนี้โดยผู้ให้เช่าจะมีหนังสือแจ้งเป็น ลายลักษณ์อักษรให้ผู้เช่าได้รับทราบทุกครั้งที่มีการปรับขึ้นราคาค่าเช่า ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '2.2  ผู้เช่าตกลงยินยอมจ่ายค่าตอบแทนในการได้สิทธิการเช่าให้แก่ผู้ให้เช่าในวันทำสัญญาเช่าเป็นจำนวน',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'เงิน.........280,800.00.........บาท(...สองแสนแปดหมื่นแปดร้อยบาทถ้วน...)ซึ่งเงินจำนวนดังกล่าวผู้ให้เช่าจะ ไม่คืนให้ผู้เช่าไม่ว่ากรณีใด ๆทั้งสิ้น  ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '2.3  เงินประกันค่าเสียหาย ผู้เช่าได้วางเงินประกันค่าเสียหายไว้กับผู้ให้เช่า ตลอดอายุสัญญาเช่ารวมถึงที่ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ได้ต่อสัญญาเช่าไปด้วยแล้ว เป็นจำนวนเงิน...39,000.00..บาท..............(...สามหมื่นเก้าพันบาทถ้วน..........) ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'เงินประกันค่าเสียหายดังกล่าวผู้ให้เช่าจะคืนให้เท่ากับจำนวนเดิม เมื่อครบกำหนดอายุสัญญาเช่าโดยผู้ให้เช่าไม่คิด',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ดอกเบี้ยจากเงินประกันดังกล่าวข้างต้นหรือคืนให้ตามส่วนหรือให้ถือเป็นการชดใช้ค่าเสียหาย  บางส่วนเมื่อผู้เช่าผิด  ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'สัญญาหรือกรณีที่ผู้เช่าจะต้องรับผิดในความเสียหายที่เกิดขึ้นแก่ทรัพย์สินที่เช่า และหากเงินประกันไม่เพียงพอ ผู้ให้ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'เช่ามีสิทธิที่จะเรียกร้องค่าเสียหายจากผู้เช่าให้จนครบจำนวนและเงินประกันนี้ไม่สามารถชำระเป็นค่าเช่าล่วงหน้า หรือไม่ถือเป็นค่าเช่ารายเดือนได้  ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '2.4  ในกรณีสุดวิสัยไม่ว่าด้วยเหตุใดภายหลังจากวันทำสัญญาเช่าภายในศูนย์การค้าฉบับนี้ ทำให้ผู้เช่าไม่ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'สามารถเปิดธุรกิจได้ทั้งหมด หรือส่วนหนึ่งส่วนใด หรือมีการแก้ไขปรับปรุงแบบ ซึ่งทำให้ทรัพย์สินที่เช่าเปลี่ยนแปลง ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ไปไม่ว่าจะเป็นสาระสำคัญหรือไม่ก็ตาม และทำให้วัตถุประสงค์ในการนำศูนย์การค้าออกให้เช่าเปลี่ยนแปลงไปและ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ผู้ให้เช่าได้แจ้งยกเลิกการเช่าให้ผู้เช่าทราบแล้วในกรณีนี้ให้ถือว่าสัญญาเช่าฉบับนี้สิ้นสุดลง  โดยผู้เช่ายินยอมสละ ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'สิทธิที่จะเรียกร้องค่าเสียหายใด ๆ จากผู้ให้เช่า ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 15 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 3. เงื่อนไขและรายละเอียดการเช่า ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-                fontWeight: pw.FontWeight.bold,
+            for (int index = 0; index < tableData00.length; index++)
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData00[index][0]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: 8.0,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 2,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.center,
+                        child: pw.Text(
+                          '${tableData00[index][1]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.center,
+                          style: pw.TextStyle(
+                              fontSize: 8.0,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerLeft,
+                        child: pw.Text(
+                          '${tableData00[index][2]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.left,
+                          style: pw.TextStyle(
+                              fontSize: 8.0,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][3]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: 8.0,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                  pw.Expanded(
+                    flex: 1,
+                    child: pw.Container(
+                      height: 25,
+                      child: pw.Align(
+                        alignment: pw.Alignment.centerRight,
+                        child: pw.Text(
+                          '${tableData00[index][4]}',
+                          maxLines: 2,
+                          textAlign: pw.TextAlign.right,
+                          style: pw.TextStyle(
+                              fontSize: 8.0,
+                              font: ttf,
+                              color: PdfColors.grey800),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            pw.Container(
+              height: 5,
+              decoration: const pw.BoxDecoration(
+                // color: PdfColors.green100,
+                border: pw.Border(
+                  bottom: pw.BorderSide(color: PdfColors.green900),
+                ),
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              '3.1  ผู้เช่าต้องทำสัญญาอย่างน้อย.....36......ถ้าผู้เช่าอยู่ไม่ครบกำหนดสัญญาเช่า......36.....เดือน หรือ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ถ้าผู้เช่าผิดสัญญาเช่านี้ ผู้เช่ายอมให้ผู้ให้เช่าบอกเลิกสัญญาได้ทันที ',
+              '        โดยผู้ให้เช่าต้องให้การบริการในส่วนที่เก็บค่าบริการอย่างสุจริตและโปร่งใสตามหน้าที่ของผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                   fontSize: 10.0, font: ttf, color: PdfColors.black),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              '3.2  ภาษีโรงเรือน ผู้ให้เช่าจะเรียกเก็บค่าภาษีโรงเรือน และที่ดินหรือภาษี หรือค่าธรรมเนียม หรือเงินได ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'อื่นใดที่รัฐบาลเรียกเก็บที่เกี่ยวข้องกับทรัพย์สินที่เช่า จากผู้เช่าในอัตราร้อยละ 12.50 ของค่าเช่าทั้งปี.................',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'หมายเหตุ  รอเอกสารจากทางเทศบาล ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ผู้ให้เช่ายินยอมให้ผู้เช่าติดตั้งแผ่นป้ายโฆษณาของผู้เช่าได้ โดยหากมีภาษีป้ายในส่วนนี้ผู้เช่าต้องรับผิดชอบเป็นผู้ชำระเอง ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '3.3  ผู้เช่าจะใช้พื้นที่นี้ประกอบกิจการค้าประเภท...............$Form_typeshop .............เท่านั้นห้ามผู้เช่าใช้สถาน   ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ที่นี้ในการเก็บสารหรือวัตถุไวไฟทุกชนิด และยอมให้ความสะดวกแก่ผู้ให้เช่าตรวจพื้นที่ ที่เช่านี้ได้เสมอผู้เช่าจะใช้พื้นที่นี้',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'เพื่อเป็นที่พักอย่างเดียวโดยไม่ประกอบกิจการค้าไม่ได้และจะดูแลสภาพตัวอาคารให้ดีหากเกิดความเสียหายในระหว่างการเช่าผู้เช่าต้องเข้าซ่อมแซมแก้ไขทันทีและเมื่อเลิกเช่าต้องส่งมอบพื้นที่คืนในสภาพที่ดีเหมือนตอนที่ได้รับมอบไปจากผู้ให้เช่าหากผู้เช่าประสงค์จะเปลี่ยนแปลงกิจการค้าในภายหลังต้องขออนุญาตเป็นหนังสือจากผู้ให้เช่าหากผู้ให้เช่าอนุญาตจะมี หนังสือแจ้งให้ทราบผู้เช่าต้องไม่กระทำการใดอันเป็นการรบกวนผู้เช่ารายอื่น',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '3.4  ผู้เช่าต้องประกอบกิจการค้าอย่างจริงจัง โดยเริ่มเปิดหน้าร้านไม่เกิน 9.00 น.  และปิดหน้าร้านหลังเวลา 20.00 น.    ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.Text(
-              'ทุกวันและต้องมีการตกแต่งหน้าร้านและจัดทำป้ายชื่อร้านจัดวางสินค้าหรืออุปกรณ์ให้เป็นระเบียบไม่วางสินค้าหรืออุปกรณ์วัตถุใดลงบนทางเท้าหรือลงบนถนนหน้าอาคารหรือบนทางเดินด้านหลังอาคารและจัดให้มีพนักงานประจำร้านตามปกติวิสัยของการประกอบการค้า ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ห้ามผู้เช่าปิดร้านเกินสัปดาห์ละ..1..วันแต่ยกเว้นวันหยุดตามประกาศของทางโครงการ...แคนนาส...หากเช่าปิดร้านเกินกว่าที่กำหนดไว้ผู้เช่ายินยอมเสียค่าปรับเป็นวันละ...1,000.-...บาท..(..หนึ่งพันบาทถ้วน..)ยกเว้นมีเหตุจำเป็นผู้เช่าต้องบอกกล่าวให้ผู้ให้เช่าทราบถึงความจำเป็นนั้นก่อนล่วงหน้า   ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              '3.5  หากผู้เช่าทอดทิ้งสถานที่เช่าทั้งหมดหรือส่วนใหญ่ ให้อยู่ในสภาพปราศจากการครอบครองหรือปราศจากการ ทำประโยชน์เป็นระยะเวลาเกิน 7 วันติดต่อกันโดยไม่ได้รับความยินยอมจากผู้ให้เช่าผู้ให้เช่ามีสิทธิบอกเลิกสัญญาได้ โดยส่งคำบอกกล่าวเป็นหนังสือไปยังผู้เช่า ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 4. ถ้าผู้เช่าต้องการโอนสิทธิตามสัญญาเช่านี้แก่บุคคลอื่นหรือต้องการเปลี่ยนตัวผู้เช่าเป็นบุคคลอื่นผู้เช่าต้องแจ้ง ให้ผู้ให้เช่าพิจารณาหากผู้ให้เช่าให้ความยินยอมเปลี่ยนสัญญาเช่าให้ผู้เช่าต้องเสียค่าใช้จ่ายในการเปลี่ยนสัญญาจำนวน  ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.Text(
-              '.............................บาท  (...  ...............................-...........................)ผู้เช่าจะติดป้ายให้เช่า หรือให้เซ้ง หรือป้ายอื่นใดที่มี  ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.Text(
-              'ข้อความทำนองดังกล่าวไม่ได้ ยกเว้นจะได้รับอนุญาตจากผู้ให้เช่าก่อน ผู้เช่าจะนำพื้นที่นี้ไปให้เช่าช่วงต่อหรือมีภาระผูกพัน ใดๆกับบุคคลอื่นไม่ว่าบางส่วนหรือทั้งหมดโดยไม่มีหนังสือยินยอมจากผู้ให้เช่าไม่ได้  ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 5. . การตกแต่งปรับปรุงเปลี่ยนแปลง นับตั้งแต่วันที่ผู้เช่าได้รับหนังสือมอบการครอบครองทรัพย์สินที่เช่าผู้เช่ามีสิทธิเข้า ปรับปรุงตกแต่งเพื่อใช้ประโยชน์ในทรัพย์สินที่เช่าซึ่งรวมถึงการติดป้ายหรือข้อความอย่างอื่นภายในทรัพย์สินที่เช่าได้ โดยผู้เช่าจะต้องเสนอรายละเอียดในการปรับปรุงตกแต่งเป็นหนังสือและต้องให้ผู้ให้เช่าเห็นชอบด้วยก่อนการปรับปรุงตกแต่งจะต้องไม่ทำให้เกิดความเสียหายใดๆแก่ตัวอาคารถ้าเกิดความเสียหายผู้เช่าต้องรับผิดชอบความเสียหายที่เกิดขึ้นทั้งสิ้น   ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'อนึ่ง สิ่งที่ตกแต่งและ / หรือปรับปรุงที่ติดตรึงตรากับทรัพย์สินที่เช่าซึ่งสามารถจะเคลื่อนย้ายโดยไม่ก่อให้เกิดความ ความเสียหายแก่ทรัพย์สินที่เช่านั้นไม่ว่าจะเป็นส่วนควบหรืออุปกรณ์ให้คงเป็นกรรมสิทธิ์ของผู้เช่าในระหว่างที่สัญญาเช่านี้มีผลบังคับ และเมื่อสิ้นสุดสัญญาไม่ว่ากรณีใด ๆ ทั้งสิ้น   ',
+              'ข้อ 4.  ผู้เช่าตกลงวางเงินประกันการเช่า ดังนี้',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -711,9 +772,8 @@ class Pdfgen_Agreement {
                 color: PdfColors.black,
               ),
             ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 6.  หากผู้เช่าประสงค์ต่อสัญญาเช่าคราวต่อไป ให้แจ้งแก่ผู้ให้เช่าทราบไม่น้อยกว่า 90 วัน ก่อนวันครบสัญญา เช่า หากผู้ให้เช่าตกลงให้เช่าต่อผู้เช่าต้องเข้าทำสัญญาเช่าใหม่ก่อนสัญญาเช่านี้ครบกำหนดไม่น้อยกว่า 90 วันแต่ทั้งนี้ให้  ปฏิบัติตามเงื่อนไขและอัตราค่าเช่าในสัญญาเช่าฉบับใหม่ด้วยหากพ้นกำหนดนี้ถือว่าผู้เช่าไม่ประสงค์จะเช่าต่อผู้เช่าต้อง ทำการส่งมอบพื้นที่คืนแก่ผู้ให้เช่าโดยการที่ผู้เช่าต้องขนย้ายทรัพย์สินและบริวารออกจากสถานที่เช่าและทำการซ่อมแซมอาคารให้มีสภาพดังเดิมเหมือนสภาพที่ได้รับมอบไปจากผู้ให้เช่าให้เสร็จเรียบร้อยในวันที่สิ้นสุดสัญญาเช่าพร้อมทั้งนำกุญแจไปคืนแก่ผู้ให้เช่าหากเกินกำหนดนี้ผู้เช่าต้องรับผิดชอบค่าเสียหายและปฏิบัติตามข้อความในสัญญาข้อ 11. อีก     ',
+              '(ดึงข้อมูลส่วนเงินประกันมา)',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -721,9 +781,8 @@ class Pdfgen_Agreement {
                 color: PdfColors.black,
               ),
             ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 7.  เมื่อผู้ให้เช่าต้องการสถานที่คืน ผู้ให้เช่าจะแจ้งให้ผู้เช่าทราบล่วงหน้า 3 เดือน โดยผู้เช่าจะไม่เรียกร้องค่าขนย้ายใด ๆ ทั้งสิ้น ',
+              '        ให้แก่ผู้ให้เช่าเพื่อเป็นการประกันการปฏิบัติตามสัญญาเช่าและเป็นประกันความเสียหายใดๆที่อาจเกิดขึ้นแก่ พื้นที่เช่าและ/หรือ แก่ผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -731,9 +790,8 @@ class Pdfgen_Agreement {
                 color: PdfColors.black,
               ),
             ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 8.  เมื่อครบกำหนดสัญญาเช่าแล้ว  ผู้เช่ายังไม่ออกจากสถานที่ให้เช่า  ผู้เช่ายินยอมให้ผู้ให้เช่าปรับวันละ \n5,000.- บาท ( ห้าพันบาทถ้วน )  ',
+              '        เงินประกันการเช่านี้ผู้ให้เช่าจะคืนให้แก่ผู้เช่าในทันทีที่สัญญาเช่าสิ้นสุดลงโดยผู้ให้เช่ามีสิทธิที่จะหักค่าเช่าที่ ค้างชำระอยู่และหากเงินประกันการเช่านี้มีจำนวนไม่เพียงพอ ผู้เช่า สัญญาว่าจะชำระเงินส่วนที่ขาดให้แก่ ผู้ให้เช่า ในทันทีที่ได้รับการทวงถาม',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -743,7 +801,27 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 9. เมื่อผู้เช่ายกเลิกสัญญาเช่าแล้ว ผู้เช่าจะรับผิดชอบรื้อถอนตู้เซฟ หรือประตูห้องนิรภัยออกไปให้เรียบร้อย (สำหรับผู้ประกอบธุรกิจธนาคารหรือธุรกิจที่เกี่ยวข้อง)และทำการซ่อมแซมอาคารให้มีสภาพดังเดิมเหมือนสภาพที่ได้\nรับมอบไปจากผู้ให้เช่าให้เสร็จเรียบร้อยในวันที่สิ้นสุดสัญญาเช่า ',
+              'ข้อ 5.  เมื่อสัญญาเช่าฉบับนี้สิ้นสุดลงตามระยะเวลาดังกล่าวใน ข้อ 2. โดย ผู้เช่ามิได้เคยมีการผิดนัดผิดสัญญาในข้อหนึ่ง ข้อใดมาก่อนหากผู้เช่าประสงค์จะขอเช่าพื้นที่เช่านี้ต่อไปอีกต้องดำเนินการแจ้งความประสงค์ดังกล่าวล่วงหน้าเป็นหนังสือก่อนสิ้นสุดระยะเวลาที่ได้ระบุไว้ในสัญญานี้ไม่น้อยกว่า 3 เดือน',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+            pw.Text(
+              '        เมื่อผู้ให้เช่าได้รับหนังสือตามที่ได้กล่าวไว้ในวรรคแรกแล้วจะทำการตกลงรายละเอียดอีกครั้งเพื่อจัดทำสัญญาเช่า ฉบับใหม่โดยผู้ให้เช่าจะต้องเสนอราคาของการเช่าครั้งใหม่ให้ผู้เช่าก่อนทุกครั้ง',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              'ข้อ 6.  ค่าภาษีโรงเรือนและที่ดิน ผู้ให้เช่าจะเป็นผู้ชำระเองทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -753,7 +831,7 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 10. หากผู้เช่าประสงค์จะเลิกเช่าก่อนที่จะครบกำหนดตามสัญญาเช่าผู้เช่าต้องมีหนังสือแจ้งให้ผู้ให้เช่าทราบล่วง หน้าไม่น้อยกว่า 90 วัน และผู้เช่าต้องส่งมอบห้องคืนตามข้อ 11. ด้วย    ',
+              'ข้อ 7.  ผู้ให้เช่ามีหน้าที่ในการจัดหรือแนะนำสถานที่จอดรถและแนวทางการอำนวยการจราจรซึ่งสามารถรวมไปยัง ระบบรักษาความปลอดภัยภายในและภายนอกอาคาร ตลอด 24 ชั่วโมง ',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -763,7 +841,16 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 11. ผู้เช่าต้องส่งมอบพื้นที่นี้คืนแก่ผู้ให้เช่าเมื่อสิ้นสุดสัญญาเช่าหรือเมื่อผู้ให้เช่าบอกเลิกสัญญาเช่าหรือผู้เช่าบอกเลิก สัญญาเช่าหากผู้เช่าไม่ยอมหรือไม่ยินยอมขนย้ายทรัพย์สินและบริวารออกไปหรือไม่ส่งมอบพื้นที่นี้ผู้เช่ายอมให้ ผู้ให้เช่ากระทำการต่อไปนี้ได้โดยผู้เช่าจะไม่เอาผิดกับผู้ให้เช่าไม่ว่าในทางแพ่งหรือทางอาญาคือ       ',
+              'ข้อ 8.  ผู้เช่า มีหน้าที่ในการดูแลรักษาและซ่อมแซม พื้นที่เช่า เสมอวิญญูชนจะพึงสงวนรักษาทรัพย์สินของตนเองโดยทุน ทรัพย์ของผู้เช่าเองเว้นแต่การชำรุดทรุดโทรมที่เกิดขึ้นตามสภาพของพื้นที่เช่าจนถึงขนาดต้องซ่อมแซมใหญ่ ผู้ให้เช่า จึงจะเป็นผู้รับผิดชอบในค่าใช้จ่ายสำหรับการซ่อมแซมนั้น',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+            pw.Text(
+              '        หากผู้เช่า ไม่ปฏิบัติหน้าที่ในการดูแลรักษาและซ่อมแซม พื้นที่เช่า ตามวรรคแรก และผู้ให้เช่าได้บอกกล่าวแล้ว ผู้ให้เช่า มีสิทธิจัดการซ่อมแซมเองโดย ผู้เช่า ต้องเป็นผู้ออกค่าใช้จ่ายในการนั้นทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -773,7 +860,16 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 11.1  ผู้เช่ายอมให้ผู้ให้เช่าริบเงินประกันในข้อ 2.3 ได้ทันทีและผู้เช่าต้องรับผิดชอบชดใช้ค่าปรับแก่ผู้ให้เช่าเดือน \nละ 2เท่าของอัตราค่าเช่าที่ใช้อยู่ในสัญญาฉบับนี้นับจากวันที่สิ้นสุดสัญญาเช่าหรือเมื่อผู้ให้เช่าบอกเลิกสัญญาเช่าหรือ ไปจนถึงวันที่ผู้เช่ากระทำการส่งมอบพื้นที่คืนแก่ผู้ให้เช่าเป็นที่เรียบร้อยเพื่อให้ผู้ให้เช่าจะได้ครอบครองและเข้าไปใช้ ประโยชน์ในพื้นที่นี้ได้อย่างสมบูรณ์           ',
+              'ข้อ 9.  ผู้เช่า จะไม่ทำการดัดแปลง ต่อเติม รื้อถอน หรือเปลี่ยนแปลง พื้นที่เช่า ไม่ว่าจะทั้งหมดหรือเพียงบางส่วนเว้นแต่ จะได้รับความยินยอมเป็นหนังสือจาก ผู้ให้เช่าก่อน หากผู้เช่า ได้กระทำการไปโดยไม่ได้รับความยินยอม ผู้ให้เช่าจะเรียก ให้ผู้เช่าทำพื้นที่เช่าให้กลับสู่สภาพเดิมรวมถึงเรียกให้ชดใช้ในค่าเสียหายอันเกิดจากการดัดแปลง ต่อเติม รื้อถอน หรือเปลี่ยนแปลงนั้นก็ได้',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+            pw.Text(
+              '        บรรดาทรัพย์สิน อุปกรณ์ หรือเครื่องตกแต่งที่มีลักษณะติดตรึงตรากับพื้นที่เช่า ที่ผู้เช่า หรือบริวารนำมาติดตั้ง ไม่ว่าจะโดยได้รับความยินยอมจาก ผู้ให้เช่า หรือไม่ก็ตาม ให้ตกเป็นกรรมสิทธิ์ของผู้ให้เช่าในทันที โดยผู้ให้เช่า ไม่ต้องชดใช้ราคาหรือค่าตอบแทนใด ๆ ทั้งสิ้น',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -783,7 +879,7 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 11.2 ผู้เช่ายอมให้ผู้ให้เช่านำกุญแจเข้าปิด เปิด หรือทำลายกุญแจหรือสิ่งกีดขวางใดที่เป็นของผู้เช่าหรือบริวาร อันเป็นอุปสรรคในการเข้าครอบครองพื้นที่นี้ของผู้ให้เช่าและขนย้ายทรัพย์สินเหล่านั้นกลับไปภายใน7 วัน นับจากวันที่ ผู้ให้เช่าได้มีหนังสือส่งไปและหากเกิดความเสียหายหรือสูญหายของทรัพย์สินอันใดไม่ว่าในระหว่างการขนย้ายหรือระหว่างการรอให้ผู้เช่าเข้ามาขนย้ายก็ตามผู้ให้เช่าไม่ต้องรับผิดชอบทุกกรณีค่าใช้จ่ายในการขนย้ายและค่าใช้จ่ายในการเก็บทรัพย์สินของผู้เช่าที่ผู้ให้เช่าได้ใช้จ่ายไปผู้เช่าต้องเป็นผู้รับผิดชอบชำระให้แก่ผู้ให้เช่าทั้งหมดหากพ้นกำหนดนี้ไปให้ถือว่าผู้เช่า สละสิทธิ์ในทรัพย์เหล่านั้นโดยยินยอมให้ตกเป็นของผู้ให้เช่าโดยผู้เช่าจะไม่ติดใจเอาความหรือเรียกร้องสิ่งใดจากผู้ให้เช่าอีกทั้งนั้น           ',
+              'ข้อ 10.  ผู้เช่า ยินยอมให้ ผู้ให้เช่าหรือตัวแทนของผู้ให้เช่า เข้าตรวจตรา พื้นที่เช่า ได้เป็นครั้งคราวและในระยะเวลาที่เหมาะสมตามสมควร',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -793,7 +889,29 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 12. ผู้เช่ายอมปฏิบัติตามกฎระเบียบของผู้ให้เช่าในการรักษาความเป็นระเบียบเรียบร้อยความสะอาดต้องจัดการภายใน บริเวณสถานที่เช่าโดยกำจัดสิ่งโสโครกและกลิ่นเหม็นและนำไปทิ้งยังสถานที่ที่ผู้ให้เช่าจัดไว้และไม่กระทำการอึกทึกเป็น ประจำจนคนอื่นได้รับความรำคาญจากความปกติสุขและความสะดวกสบายของลูกค้าหรือผู้มาติดต่อการค้าทั้ง ของผู้เช่าเองและของผู้เช่ารายอื่นด้วยเช่นกัน       ',
+              'ข้อ 11.  ผู้เช่า จะไม่นำพื้นที่เช่า ไปให้ผู้อื่นเช่าช่วง หรือยินยอมไม่ว่าจะโดยชัดแจ้ง หรือโดยปริยายให้ผู้อื่นใช้ พื้นที่เช่า เว้นแต่จะได้รับความยินยอมเป็นหนังสือจาก ผู้ให้เช่าก่อน',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              'ข้อ 12.  ผู้เช่า สัญญาว่าจะไม่กระทำการใด ๆ ที่เป็นการขัดต่อกฎหมาย หรือศีลธรรมอันดีของประชาชน หรือเป็นการก่อให้เกิดความเดือนร้อนรำคาญแก่บุคคลอื่น',
+              textAlign: pw.TextAlign.left,
+              style: pw.TextStyle(
+                fontSize: 10.0,
+                font: ttf,
+                color: PdfColors.black,
+              ),
+            ),
+
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
+            pw.Text(
+              'ข้อ 13.  ถ้าผู้เช่า เลิกสัญญาเช่าก่อนครบกำหนดระยะเวลาตามสัญญานี้ หรือผู้เช่า ผิดนัดผิดสัญญาข้อใดข้อหนึ่งก็ตาม ผู้ให้เช่า มีสิทธิบอกเลิกสัญญาเช่า และทำการริบเงินประกันการเช่าไว้ทั้งหมดได้ทันที',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -803,7 +921,7 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 12.1 พื้นที่ทางเดินบริเวณทางเท้าด้านหน้า และด้านหลังของพื้นที่ที่เช่าเป็นกรรมสิทธิ์ของผู้ให้เช่าเท่านั้นห้ามมิให้ มีการนำสินค้าหรืออุปกรณ์ทุกชนิดมาวางหรือติดตั้งเป็นการชั่วคราวหรือถาวรไม่ว่ากรณีใด ๆ ทั้งสิ้น     ',
+              'ข้อ 14.  เมื่อสัญญาเช่าได้สิ้นสุดลงไม่ว่าจะโดยเหตุใดก็ตาม ผู้เช่า ต้องขนย้ายทรัพย์สินและบริวารออกไปจากพื้นที่เช่า และส่งมอบพื้นที่เช่าคืนให้แก่ ผู้ให้เช่า ในสภาพที่เรียบร้อย ภายในกำหนดเวลา 15 วันนับแต่วันที่สัญญาสิ้นสุดลง โดย ผู้เช่าจะเรียกร้องค่าขนย้ายหรือค่าใช้จ่ายประการใด ๆ จากผู้ให้เช่า อีกไม่ได้ หากผู้เช่า ไม่ดำเนินการภายในกำหนด ผู้เช่ายินยอมให้ผู้ให้เช่าปรับตามเรตอัตราค่าเช่ารายวันคูณ 2 เท่า ไปจนกว่าจะดำเนินการได้ถูกต้องตามสัญญา',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -813,7 +931,7 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 12.2 รถยนต์หรือพาหนะอื่น ๆ ของผู้เช่า ผู้เช่ายอมให้ความร่วมมือในการนำไปจอดบริเวณลานจอดรถที่ผู้ให้เช่าจัด ให้เพื่อความสะดวกในการจอดรถของลูกค้าของศูนย์การค้า ในวันเสาร์ หรือวันอาทิตย์หรือวันอื่นที่ผู้ให้เช่าได้จัดตลาดนัด หรือจัดงานต่าง ๆ ผู้เช่ายอมนำรถไปจอดบริเวณที่จะจัดให้แต่ละคราวไป       ',
+              'ข้อ 15.  ในกรณีที่พื้นที่เช่าถูกเวนคืนตามกฎหมายของทางราชการก่อนครบกำหนดตามสัญญาเช่าหรือเกิดอัคคีภัยหรือ วินาศภัยใดๆขึ้นกับพื้นที่เช่าจนเป็นเหตุให้ไม่สามารถใช้งานพื้นที่เช่าได้โดยมิใช่สาเหตุที่เกิดจากผู้เช่าแล้วคู่สัญญาทั้งสอง ฝ่ายตกลงกันให้ถือว่าสัญญาเช่าฉบับนี้เป็นอันระงับสิ้นสุดลงและต่างฝ่ายต่าง ไม่ติดใจเรียกร้องค่าเสียหายประการใด ๆ ต่อกันอีก',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -823,7 +941,7 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 13. ถ้าผู้ให้เช่าบอกเลิกสัญญาเช่านี้ก่อนวันสิ้นสุดสัญญาเช่าโดยผู้เช่ามิได้เป็นฝ่ายผิดสัญญาก่อนผู้ให้เช่าต้องคืนเงินประกันแก่ ผู้เช่าภายใน 30 วัน นับจากวันที่ผู้เช่าได้ส่งมอบพื้นที่เช่าคืนตามข้อ 11. เรียบร้อย         ',
+              'ข้อ 16.  หากคู่สัญญาฝ่ายใดฝ่ายหนึ่ง ผิดนัดผิดสัญญาข้อใดข้อหนึ่ง คู่สัญญาอีกฝ่ายหนึ่ง มีสิทธิบอกเลิกสัญญาได้ทันที และคู่สัญญาฝ่ายที่ผิดยินยอมชดใช้ค่าเสียหายตามที่เกิดขึ้นจริง นับแต่วันบอกเลิกสัญญาเป็นต้นไป',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -831,60 +949,11 @@ class Pdfgen_Agreement {
                 color: PdfColors.black,
               ),
             ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 14. ในกรณีเกิดอัคคีภัยหรือภัยพิบัติอย่างอื่นใดทั้งหมดหรือแต่บางส่วนจนไม่เหมาะสมที่จะเช่าต่อไปอีกตามความ เป็นจริงให้ถือว่าเป็นการสิ้นสุดสัญญาเช่าลง           ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 15. ในกรณีที่เกิดอุบัติเหตุขัดข้องสำหรับการให้บริการส่วนกลางเฉพาะส่วนพื้นที่เช่าของผู้เช่าบกพร่องในบางครั้งผู้เช่า จะไม่ถือเป็นเหตุที่จะลดอัตราค่าบริการตามที่กำหนดไว้             ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 16. พื้นที่ถนนในส่วนต่าง ๆ และทางเท้าเป็นกรรมสิทธิ์ของผู้ให้เช่าเท่านั้น ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 17. ผู้เช่าสัญญาว่าจะไม่ใช้สถานที่เช่า ทำการค้าอย่างใดอันมิชอบด้วยกฎหมายหรือเป็นที่น่ารังเกียจหรืออาจจะเป็น เชื้อเพลิงหรือทำให้สถานที่เช่าชำรุดเป็นอันตรายไปโดยเร็วพลันทั้งจะไม่ยอมให้ผู้อื่นกระทำการใด ๆ ดังกล่าวด้วย   ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Text(
-              'ข้อ 18. หากผู้เช่าผิดสัญญาข้อหนึ่งข้อใด ผู้ให้เช่าสามารถทำการเอาผิดกับผู้เช่าได้ทั้งทางแพ่งและทางอาญา    ',
-              textAlign: pw.TextAlign.left,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                color: PdfColors.black,
-              ),
-            ),
+
             pw.SizedBox(height: 40 * PdfPageFormat.mm),
             pw.SizedBox(height: 10 * PdfPageFormat.mm),
             pw.Text(
-              'สัญญาฉบับนี้ทำเป็นสองฉบับมีข้อความถูกต้องตรงกันคู่สัญญาได้อ่านและเข้าใจข้อความนี้โดยตลอดแล้วเห็นว่า ถูกต้องตามเจตนาของคู่สัญญาทุกประการ จึงได้ลงลายมือชื่อไว้เป็นหลักฐานต่อหน้าพยาน  ',
+              'สัญญานี้ทำขึ้น 2 ฉบับ มีข้อความตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่าน และเข้าข้อความในสัญญาฉบับนี้โดยตลอดแล้ว เห็นว่าถูกต้องและตรงตามความประสงค์แล้ว จึงได้ลงลายมือชื่อไว้เป็นหลักฐานต่อหน้าพยาน และเก็บสัญญาไว้ฝ่ายละฉบับ',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
@@ -894,20 +963,21 @@ class Pdfgen_Agreement {
             ),
             pw.SizedBox(height: 65 * PdfPageFormat.mm),
             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              (base64Image_new1 == '')
-                  ? pw.Text(
-                      'ลงชื่อ.............................................ผู้ให้เช่า   ',
-                      textAlign: pw.TextAlign.justify,
-                      style: pw.TextStyle(
-                        fontSize: 10.0,
-                        font: ttf,
-                        fontWeight: pw.FontWeight.bold,
-                      ),
-                    )
-                  : pw.Center(
-                      child: pw.Image(pw.MemoryImage(data1),
-                          width: 100, height: 100),
-                    ),
+              // (base64Image_new1 == '')
+              //     ?
+              pw.Text(
+                'ลงชื่อ.............................................ผู้ให้เช่า   ',
+                textAlign: pw.TextAlign.justify,
+                style: pw.TextStyle(
+                  fontSize: 10.0,
+                  font: ttf,
+                  fontWeight: pw.FontWeight.bold,
+                ),
+              )
+              // : pw.Center(
+              //     child: pw.Image(pw.MemoryImage(data1),
+              //         width: 100, height: 100),
+              //   ),
             ]),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
@@ -1000,7 +1070,7 @@ class Pdfgen_Agreement {
                   child: pw.Column(
                     children: [
                       pw.Text(
-                        'ลงชื่อ.............................................พยาน 1   ',
+                        'ลงชื่อ.............................................พยาน    ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -1036,7 +1106,7 @@ class Pdfgen_Agreement {
                   child: pw.Column(
                     children: [
                       pw.Text(
-                        'ลงชื่อ.............................................พยาน 2   ',
+                        'ลงชื่อ.............................................พยาน    ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -1069,6 +1139,26 @@ class Pdfgen_Agreement {
             ]),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
           ];
+        },
+        footer: (context) {
+          return pw.Column(
+            mainAxisSize: pw.MainAxisSize.min,
+            children: [
+              pw.Align(
+                alignment: pw.Alignment.bottomRight,
+                child: pw.Text(
+                  'หน้า ${context.pageNumber} / ${context.pagesCount} ',
+                  textAlign: pw.TextAlign.left,
+                  style: pw.TextStyle(
+                    fontSize: 10,
+                    font: ttf,
+                    color: PdfColors.grey800,
+                    // fontWeight: pw.FontWeight.bold
+                  ),
+                ),
+              )
+            ],
+          );
         },
       ),
     ); // final bytes = await pdf.save();

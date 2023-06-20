@@ -12,25 +12,27 @@ import 'package:printing/printing.dart';
 import '../Account/Account_Screen.dart';
 import '../PeopleChao/Pays_.dart';
 
-class Pdfgen_his_statusbill {
+class Pdfgen_his_statusbill2 {
 //////////---------------------------------------------------->(บัญชี--->ประวัติบิล )
 
-  static void exportPDF_statusbill(
+  static void exportPDF_statusbill2(
       tableData00,
       context,
-      _TransReBillHistoryModels,
-      Num_cid,
-      Namenew,
+      // _TransReBillHistoryModels,
+      numinvoice_,
+      //  Namenew,
       sum_pvat,
       sum_vat,
       sum_wht,
-      Sum_SubTotal,
+      sum_amt,
+      //  Sum_SubTotal,
       sum_disp,
       sum_disamt,
-      Total,
+
+      //  Total,
       renTal_name,
       sname,
-      cname,
+      // cname,
       addr,
       tax,
       bill_addr,
@@ -40,9 +42,9 @@ class Pdfgen_his_statusbill {
       bill_name,
       newValuePDFimg,
       numinvoice,
-      cFinn,
-      finnancetransModels,
-      dayfinpay) async {
+      //  cFinn,
+      // finnancetransModels,
+      finnancetransModels) async {
     ////
     //// ------------>(ใบเสร็จรับเงินชั่วคราว paySrsscreen_)
     ///////
@@ -55,38 +57,38 @@ class Pdfgen_his_statusbill {
     String thaiDate = formatter.format(date);
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
-    final iconImage =
-        (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
+    // final iconImage =
+    //     (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
 
     for (int i = 0; i < newValuePDFimg.length; i++) {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
     }
 
-    final tableHeaders = [
-      'ลำดับ',
-      'กำหนดชำระ',
-      'รายการ',
-      'VAT%',
-      'หน่วย',
-      'VAT',
-      'ราคารวมก่อนVAT',
-      'ราคารวมvat',
-    ];
+    // final tableHeaders = [
+    //   'ลำดับ',
+    //   'กำหนดชำระ',
+    //   'รายการ',
+    //   'VAT%',
+    //   'หน่วย',
+    //   'VAT',
+    //   'ราคารวมก่อนVAT',
+    //   'ราคารวมvat',
+    // ];
 
-    final tableData = [
-      for (int index = 0; index < _TransReBillHistoryModels.length; index++)
-        [
-          '${index + 1}',
-          '${_TransReBillHistoryModels[index].date}',
-          '${_TransReBillHistoryModels[index].expname}',
-          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
-          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
-          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
-          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
-          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-        ],
-    ];
+    // final tableData = [
+    //   for (int index = 0; index < _TransReBillHistoryModels.length; index++)
+    //     [
+    //       '${index + 1}',
+    //       '${_TransReBillHistoryModels[index].date}',
+    //       '${_TransReBillHistoryModels[index].expname}',
+    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].tqty!))}',
+    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].pvat!))}',
+    //       '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+    //     ],
+    // ];
 ///////////////////////------------------------------------------------->
     final List<String> _digitThai = [
       'ศูนย์',
@@ -175,7 +177,9 @@ class Pdfgen_his_statusbill {
     }
 
 ////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
-    var number_ = "${nFormat2.format(double.parse(Total.toString()))}";
+
+    var number_ =
+        "${nFormat2.format(double.parse(sum_amt.toString()) - double.parse(sum_disamt.toString()))}";
     var parts = number_.split('.');
     var front = parts[0];
     var back = parts[1];
@@ -432,64 +436,6 @@ class Pdfgen_his_statusbill {
             // ),
 
             pw.SizedBox(height: 3 * PdfPageFormat.mm),
-
-            pw.Text(
-              'รูปแบบชำระ',
-              textAlign: pw.TextAlign.justify,
-              style: pw.TextStyle(
-                fontSize: 10.0,
-                font: ttf,
-                fontWeight: pw.FontWeight.bold,
-              ),
-            ),
-
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            // pw.Row(children: [
-            //   for (var i = 0; i < finnancetransModels.length; i++)
-            //     pw.Row(
-            //       children: [
-            //         if (finnancetransModels[i].type.toString() == 'CASH')
-            //           pw.Text(
-            //             '${i + 1}.เงินสด : ',
-            //             textAlign: pw.TextAlign.justify,
-            //             style: pw.TextStyle(
-            //               fontSize: 10.0,
-            //               font: ttf,
-            //               fontWeight: pw.FontWeight.bold,
-            //             ),
-            //           ),
-            //         if (finnancetransModels[i].type.toString() != 'CASH')
-            //           pw.Text(
-            //             '${i + 1}.เงินโอน : ',
-            //             textAlign: pw.TextAlign.justify,
-            //             style: pw.TextStyle(
-            //               fontSize: 10.0,
-            //               font: ttf,
-            //               fontWeight: pw.FontWeight.bold,
-            //             ),
-            //           ),
-            //         pw.Text(
-            //           '${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท',
-            //           // '${Form_payment1.toString()} บาท',
-            //           // textAlign: pw.TextAlign.justify,
-            //           style: pw.TextStyle(
-            //               fontSize: 10.0, font: ttf, color: PdfColors.grey),
-            //         ),
-            //         // pw.Expanded(
-            //         //   flex: 4,
-            //         //   child:
-            //         // pw.Text(
-            //         //     '${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท',
-            //         //     // '${Form_payment1.toString()} บาท',
-            //         //     // textAlign: pw.TextAlign.justify,
-            //         //     style: pw.TextStyle(
-            //         //         fontSize: 10.0, font: ttf, color: PdfColors.grey),
-            //         //   ),
-            //         // ),
-            //       ],
-            //     )
-            // ]),
-
             pw.Row(
               children: [
                 pw.Expanded(
@@ -498,6 +444,14 @@ class Pdfgen_his_statusbill {
                     mainAxisSize: pw.MainAxisSize.min,
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
+                      pw.Text(
+                        'รูปแบบชำระ',
+                        style: pw.TextStyle(
+                          fontSize: 10.0,
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                        ),
+                      ),
                       for (var i = 0; i < finnancetransModels.length; i++)
                         pw.Row(
                           children: [
@@ -507,10 +461,10 @@ class Pdfgen_his_statusbill {
                                 '${i + 1}.เงินสด : ',
                                 textAlign: pw.TextAlign.justify,
                                 style: pw.TextStyle(
-                                  fontSize: 10.0,
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                ),
+                                    fontSize: 10.0,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.grey),
                               ),
                             if (finnancetransModels[i].type.toString() !=
                                 'CASH')
@@ -518,10 +472,10 @@ class Pdfgen_his_statusbill {
                                 '${i + 1}.เงินโอน : ',
                                 textAlign: pw.TextAlign.justify,
                                 style: pw.TextStyle(
-                                  fontSize: 10.0,
-                                  font: ttf,
-                                  fontWeight: pw.FontWeight.bold,
-                                ),
+                                    fontSize: 10.0,
+                                    font: ttf,
+                                    fontWeight: pw.FontWeight.bold,
+                                    color: PdfColors.grey),
                               ),
                             pw.Text(
                               '${nFormat.format(double.parse(finnancetransModels[i].amt!.toString()))} บาท',
@@ -564,10 +518,9 @@ class Pdfgen_his_statusbill {
                         ),
                       ),
                       pw.Text(
-                        (dayfinpay.toString() == '' ||
-                                dayfinpay.toString() == 'null')
-                            ? '-'
-                            : '$dayfinpay',
+                        (finnancetransModels.length == 0)
+                            ? ''
+                            : '${finnancetransModels[0].date.toString()}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -577,6 +530,7 @@ class Pdfgen_his_statusbill {
                 ),
               ],
             ),
+
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
 
             pw.Container(
@@ -1041,7 +995,7 @@ class Pdfgen_his_statusbill {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Sum_SubTotal.toString()))}',
+                              '${nFormat.format(double.parse(sum_amt.toString()))}',
                               // '$Sum_SubTotal',
                               style: pw.TextStyle(
                                   fontSize: 10,
@@ -1089,7 +1043,7 @@ class Pdfgen_his_statusbill {
                               ),
                             ),
                             pw.Text(
-                              '${nFormat.format(double.parse(Total.toString()))}',
+                              '${nFormat.format(double.parse(sum_amt.toString()) - double.parse(sum_disamt.toString()))}',
                               style: pw.TextStyle(
                                   fontSize: 10,
                                   fontWeight: pw.FontWeight.bold,
@@ -1164,7 +1118,7 @@ class Pdfgen_his_statusbill {
                                   ),
                                 ),
                                 pw.Text(
-                                  '${nFormat.format(double.parse(Total.toString()))}',
+                                  '${nFormat.format(double.parse(sum_amt.toString()) - double.parse(sum_disamt.toString()))}',
                                   // '${Total}',
                                   style: pw.TextStyle(
                                       fontWeight: pw.FontWeight.bold,
@@ -1181,418 +1135,6 @@ class Pdfgen_his_statusbill {
                   ),
                 )),
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
-
-            // pw.Stack(
-            //   children: [
-            //     // pw.Positioned(
-            //     //     left: 0,
-            //     //     bottom: 120,
-            //     //     child: pw.Transform.rotate(
-            //     //       angle: 15 * math.pi / 190,
-            //     //       child: pw.Text(
-            //     //         '$renTal_name $renTal_name $renTal_name ',
-            //     //         style: pw.TextStyle(
-            //     //           fontSize: 40,
-            //     //           color: PdfColors.grey200,
-            //     //           font: ttf,
-            //     //         ),
-            //     //       ),
-            //     //       //         pw.Image(
-            //     //       //     pw.MemoryImage(iconImage),
-            //     //       //     height: 300,
-            //     //       //     width: 400,
-            //     //       //   ),
-            //     //       // )
-            //     //     )),
-            //     pw.Container(
-            //       child: pw.Column(
-            //         children: [
-            //           pw.Table.fromTextArray(
-            //             headers: tableHeaders,
-            //             data: tableData00,
-            //             border: null,
-            //             headerStyle:
-            // pw.TextStyle(
-            //                 fontSize: 10.0,
-            //                 fontWeight: pw.FontWeight.bold,
-            //                 font: ttf,
-            //                 color: PdfColors.green900),
-            //             headerDecoration: const pw.BoxDecoration(
-            //               color: PdfColors.green100,
-            //               border: pw.Border(
-            //                 bottom: pw.BorderSide(color: PdfColors.green900),
-            //               ),
-            //             ),
-            //             cellStyle: pw.TextStyle(
-            //                 fontSize: 10.0,
-            //                 font: ttf,
-            //                 color: PdfColors.grey800),
-            //             cellHeight: 25.0,
-            //             cellAlignments: {
-            //               0: pw.Alignment.centerLeft,
-            //               1: pw.Alignment.centerRight,
-            //               2: pw.Alignment.centerRight,
-            //               3: pw.Alignment.centerRight,
-            //               4: pw.Alignment.centerRight,
-            //               5: pw.Alignment.centerRight,
-            //               6: pw.Alignment.centerRight,
-            //             },
-            //           ),
-            //           pw.Divider(color: PdfColors.grey),
-            //           pw.Container(
-            //             alignment: pw.Alignment.centerRight,
-            //             child: pw.Row(
-            //               children: [
-            //                 pw.Spacer(flex: 6),
-            //                 pw.Expanded(
-            //                   flex: 4,
-            //                   child: pw.Column(
-            //                     crossAxisAlignment: pw.CrossAxisAlignment.start,
-            //                     children: [
-            //                       // SubTotal, Vat, Deduct, Sum_SubTotal, DisC, Total
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'รวมราคาสินค้า/Sub Total',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_pvat.toString()))}',
-            //                             // '${sum_pvat}',
-            //                             // '$SubTotal',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ภาษีมูลค่าเพิ่ม/Vat',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_vat.toString()))}',
-            //                             // '${sum_vat}',
-            //                             // '$Vat',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'หัก ณ ที่จ่าย',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_wht.toString()))}',
-            //                             // '${sum_wht}',
-            //                             // '$Deduct',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ยอดรวม',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(Sum_SubTotal.toString()))}',
-            //                             // '$Sum_SubTotal',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ส่วนลด/Discount',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_disamt.toString()))}',
-            //                             // '${sum_disamt}',
-            //                             // '$DisC',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Divider(color: PdfColors.grey),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ยอดชำระ',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(Total.toString()))}',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //           pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            //           pw.Container(
-            //               height: 25,
-            //               decoration: const pw.BoxDecoration(
-            //                 color: PdfColors.green100,
-            //                 border: pw.Border(
-            //                   top: pw.BorderSide(color: PdfColors.green900),
-            //                 ),
-            //               ),
-            //               alignment: pw.Alignment.centerRight,
-            //               child: pw.Center(
-            //                 child: pw.Row(
-            //                   children: [
-            //                     pw.SizedBox(width: 2 * PdfPageFormat.mm),
-            //                     pw.Text(
-            //                       'ตัวอักษร ',
-            //                       style: pw.TextStyle(
-            //                           fontSize: 10,
-            //                           fontWeight: pw.FontWeight.bold,
-            //                           font: ttf,
-            //                           fontStyle: pw.FontStyle.italic,
-            //                           color: PdfColors.green900),
-            //                     ),
-            //                     pw.Expanded(
-            //                       flex: 4,
-            //                       child: pw.Text(
-            //                         '(~${text_Number2}~)',
-            //                         style: pw.TextStyle(
-            //                           fontSize: 10,
-            //                           fontWeight: pw.FontWeight.bold,
-            //                           font: ttf,
-            //                           fontStyle: pw.FontStyle.italic,
-            //                           // decoration:
-            //                           //     pw.TextDecoration.lineThrough,
-            //                           color: PdfColors.green900,
-            //                         ),
-            //                       ),
-            //                     ),
-            //                     // pw.Spacer(flex: 6),
-            //                     pw.Expanded(
-            //                       flex: 2,
-            //                       child: pw.Column(
-            //                         mainAxisAlignment:
-            //                             pw.MainAxisAlignment.center,
-            //                         crossAxisAlignment:
-            //                             pw.CrossAxisAlignment.start,
-            //                         children: [
-            //                           pw.Row(
-            //                             children: [
-            //                               pw.Expanded(
-            //                                 flex: 2,
-            //                                 child: pw.Text(
-            //                                   'ยอดรวมสุทธิ',
-            //                                   textAlign: pw.TextAlign.left,
-            //                                   style: pw.TextStyle(
-            //                                       fontWeight:
-            //                                           pw.FontWeight.bold,
-            //                                       font: ttf,
-            //                                       fontSize: 10,
-            //                                       color: PdfColors.green900),
-            //                                 ),
-            //                               ),
-            //                               pw.Text(
-            //                                 '${nFormat.format(double.parse(Total.toString()))}',
-            //                                 // '${Total}',
-            //                                 style: pw.TextStyle(
-            //                                     fontWeight: pw.FontWeight.bold,
-            //                                     font: ttf,
-            //                                     fontSize: 10,
-            //                                     color: PdfColors.green900),
-            //                               ),
-            //                             ],
-            //                           ),
-            //                         ],
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               )),
-            //           pw.SizedBox(height: 5 * PdfPageFormat.mm),
-            //           // pw.Row(
-            //           //   children: [
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         'ผู้ขาย',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             fontWeight: pw.FontWeight.bold,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         'ลูกค้า',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             fontWeight: pw.FontWeight.bold,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //   ],
-            //           // ),
-            //           // pw.SizedBox(height: 7 * PdfPageFormat.mm),
-            //           // pw.Row(
-            //           //   children: [
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         '..........................................',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         '..........................................',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontWeight: pw.FontWeight.bold,
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //   ],
-            //           // ),
-            //           // pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            //           // pw.Row(
-            //           //   children: [
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         '(................................)',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         '(................................)',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //   ],
-            //           // ),
-            //           // pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            //           // pw.Row(
-            //           //   children: [
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         'วันที่........../........../..........)',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //     pw.Expanded(
-            //           //       flex: 1,
-            //           //       child: pw.Text(
-            //           //         'วันที่........../........../..........)',
-            //           //         textAlign: pw.TextAlign.center,
-            //           //         style: pw.TextStyle(
-            //           //             fontSize: 10,
-            //           //             font: ttf,
-            //           //             color: PdfColors.black),
-            //           //       ),
-            //           //     ),
-            //           //   ],
-            //           // ),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // )
           ];
         },
         footer: (context) {
@@ -1720,7 +1262,7 @@ class Pdfgen_his_statusbill {
         context,
         MaterialPageRoute(
           builder: (context) => PreviewPdfgen_Billsplay(
-              doc: pdf, title: 'ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ'),
+              doc: pdf, title: 'ประวัติบิล $numinvoice'),
         ));
   }
 }

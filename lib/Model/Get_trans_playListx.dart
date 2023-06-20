@@ -1,4 +1,4 @@
-class TransPlayxModel {
+class TransPlayListxModel {
   String? ser_trans;
   String? date_trans;
   String? docno_trans;
@@ -15,7 +15,7 @@ class TransPlayxModel {
   String? invoice_row;
   String? trans_date;
 
-  TransPlayxModel({
+  TransPlayListxModel({
     this.ser_trans,
     this.date_trans,
     this.docno_trans,
@@ -33,7 +33,7 @@ class TransPlayxModel {
     this.trans_date,
   });
 
-  TransPlayxModel.fromJson(Map<String, dynamic> json) {
+  TransPlayListxModel.fromJson(Map<String, dynamic> json) {
     ser_trans = json['ser_trans'];
     date_trans = json['date_trans'];
     docno_trans = json['docno_trans'];

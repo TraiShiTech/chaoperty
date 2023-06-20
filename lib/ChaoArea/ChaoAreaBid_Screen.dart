@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -1475,18 +1475,18 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
 
                               ///-------------------->
                               Pdfgen_DataChaoArea.exportPDF_DataChaoArea(
-                                context,
-                                '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                '${nFormat.format(_area_sum)}',
-                                fname_user,
-                                renTal_name,
-                                newValuePDFimg,
-                                newValuePDFimg2,
-                                '${renTalModels[0].bill_addr}',
-                                '${renTalModels[0].bill_email}',
-                                '${renTalModels[0].bill_tel}',
-                                '${renTalModels[0].bill_tax}',
-                              );
+                                  context,
+                                  '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                  '${nFormat.format(_area_sum)}',
+                                  fname_user,
+                                  renTal_name,
+                                  newValuePDFimg,
+                                  newValuePDFimg2,
+                                  '${renTalModels[0].bill_addr}',
+                                  '${renTalModels[0].bill_email}',
+                                  '${renTalModels[0].bill_tel}',
+                                  '${renTalModels[0].bill_tax}',
+                                  '${bill_name}');
                             },
                             child: Container(
                               width: 150,

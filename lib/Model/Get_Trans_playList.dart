@@ -1,4 +1,4 @@
-class TransPlayModel {
+class TransPlayListModel {
   String? ser;
   String? datex;
   String? timex;
@@ -55,7 +55,7 @@ class TransPlayModel {
   List<dynamic> play_amt = [];
   String? trans_date;
 
-  TransPlayModel({
+  TransPlayListModel({
     this.ser,
     this.datex,
     this.timex,
@@ -112,7 +112,7 @@ class TransPlayModel {
     this.trans_date,
   });
 
-  TransPlayModel.fromJson(Map<String, dynamic> json) {
+  TransPlayListModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
     datex = json['datex'];
     timex = json['timex'];

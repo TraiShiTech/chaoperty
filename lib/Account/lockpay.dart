@@ -229,6 +229,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
       var result = json.decode(response.body);
       print(result);
+
       if (result != null) {
         for (var map in result) {
           AreaModel areakModel = AreaModel.fromJson(map);
@@ -1724,206 +1725,476 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                   const EdgeInsets
                                                                       .all(8.0),
                                                               child:
-                                                                  AutoSizeText(
-                                                                minFontSize: 10,
-                                                                maxFontSize: 15,
-                                                                maxLines: 3,
-                                                                _selecteSer.length ==
-                                                                        0
-                                                                    ? 'เลือก'
-                                                                    : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                                                style: const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text1_,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T),
-                                                              ),
-                                                            ),
-                                                            onTap: () async {
-                                                              // read_GC_areaSelect();
-                                                              read_GC_areak();
-                                                              showDialog<
-                                                                  String>(
-                                                                barrierDismissible:
-                                                                    false,
-                                                                context:
-                                                                    context,
-                                                                builder: (BuildContext
-                                                                        context) =>
-                                                                    AlertDialog(
-                                                                  shape: const RoundedRectangleBorder(
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(20.0))),
-                                                                  title:
-                                                                      const Center(
-                                                                          child:
-                                                                              Text(
-                                                                    'เลือกพื้นที่',
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T),
-                                                                  )),
-                                                                  content:
-                                                                      SingleChildScrollView(
-                                                                    child:
-                                                                        ListBody(
-                                                                      children: <
-                                                                          Widget>[
-                                                                        StreamBuilder(
-                                                                            stream:
-                                                                                Stream.periodic(const Duration(seconds: 0)),
-                                                                            builder: (context, snapshot) {
-                                                                              return CheckboxGroup(
-                                                                                  checked: _selecteSerbool,
-                                                                                  activeColor: Colors.red,
-                                                                                  checkColor: Colors.white,
-                                                                                  labels: <String>[
-                                                                                    for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
-                                                                                  ],
-                                                                                  labelStyle: const TextStyle(
-                                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                    // fontWeight: FontWeight.bold,
-                                                                                    fontFamily: Font_.Fonts_T,
+                                                                  PopupMenuButton(
+                                                                child: (No_Area_
+                                                                            .toString() !=
+                                                                        '')
+                                                                    ? AutoSizeText(
+                                                                        '$No_Area_',
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            15,
+                                                                        maxLines:
+                                                                            3,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T),
+                                                                      )
+                                                                    : AutoSizeText(
+                                                                        (_selecteSer.length ==
+                                                                                0)
+                                                                            ? 'เลือก'
+                                                                            : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                                        minFontSize:
+                                                                            10,
+                                                                        maxFontSize:
+                                                                            15,
+                                                                        maxLines:
+                                                                            3,
+                                                                        style: const TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text1_,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: FontWeight_.Fonts_T),
+                                                                      ),
+                                                                itemBuilder:
+                                                                    (BuildContext
+                                                                            context) =>
+                                                                        [
+                                                                  PopupMenuItem(
+                                                                    child: InkWell(
+                                                                        onTap: () async {
+                                                                          setState(
+                                                                              () {
+                                                                            No_Area_ =
+                                                                                'ไม่ระบุพื้นที่';
+                                                                            _selecteSer.clear();
+                                                                            _selecteSer.clear();
+                                                                            _selecteZnSer.clear();
+                                                                            _selecteSerbool.clear();
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child: Container(
+                                                                            padding: const EdgeInsets.all(10),
+                                                                            width: MediaQuery.of(context).size.width,
+                                                                            child: Row(
+                                                                              children: const [
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    'ไม่ระบุพื้นที่',
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
                                                                                   ),
-                                                                                  onChange: (isChecked, label, index) {
-                                                                                    if (isChecked == false) {
-                                                                                      _selecteSer.remove(areaModels[index].ser);
-                                                                                      _selecteZnSer.remove(areaModels[index].zser);
-
-                                                                                      double areax = double.parse(areaModels[index].area!);
-                                                                                      double rentx = double.parse(areaModels[index].rent!);
-                                                                                      _area_sum = _area_sum - areax;
-                                                                                      _area_rent_sum = _area_rent_sum - rentx;
-
-                                                                                      if (isChecked == true) {
-                                                                                        setState(() {
-                                                                                          _area_sum = _area_sum + areax;
-                                                                                          _area_rent_sum = _area_rent_sum + rentx;
-                                                                                          _selecteSer.add(areaModels[index].ser);
-                                                                                          _selecteZnSer.add(areaModels[index].zser);
-                                                                                        });
-                                                                                      }
-                                                                                    } else {
-                                                                                      double areax = double.parse(areaModels[index].area!);
-                                                                                      double rentx = double.parse(areaModels[index].rent!);
-                                                                                      if (isChecked == true) {
-                                                                                        setState(() {
-                                                                                          _area_sum = _area_sum + areax;
-                                                                                          _area_rent_sum = _area_rent_sum + rentx;
-                                                                                          _selecteSer.add(areaModels[index].ser);
-                                                                                          _selecteZnSer.add(areaModels[index].zser);
-                                                                                        });
-                                                                                      }
-                                                                                    }
-                                                                                    print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
-                                                                                  },
-                                                                                  onSelected: (List<String> selected) {
-                                                                                    setState(() {
-                                                                                      _selecteSerbool = selected;
-                                                                                    });
-                                                                                    print('SerGetBankModels_ : ${_selecteSerbool}');
-                                                                                  });
-                                                                            })
-                                                                      ],
-                                                                    ),
+                                                                                )
+                                                                              ],
+                                                                            ))),
                                                                   ),
-                                                                  actions: <
-                                                                      Widget>[
-                                                                    Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
-                                                                      child:
-                                                                          Row(
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.end,
-                                                                        children: [
-                                                                          Padding(
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                Container(
-                                                                                  width: 100,
-                                                                                  decoration: const BoxDecoration(
-                                                                                    color: Colors.green,
-                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                  ),
+                                                                  PopupMenuItem(
+                                                                    child: InkWell(
+                                                                        onTap: () async {
+                                                                          // read_GC_areaSelect();
+                                                                          read_GC_areak();
+                                                                          showDialog<
+                                                                              String>(
+                                                                            barrierDismissible:
+                                                                                false,
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Text(
+                                                                                'เลือกพื้นที่',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                              )),
+                                                                              content: SingleChildScrollView(
+                                                                                child: ListBody(
+                                                                                  children: <Widget>[
+                                                                                    StreamBuilder(
+                                                                                        stream: Stream.periodic(const Duration(seconds: 0)),
+                                                                                        builder: (context, snapshot) {
+                                                                                          return CheckboxGroup(
+                                                                                              checked: _selecteSerbool,
+                                                                                              activeColor: Colors.red,
+                                                                                              checkColor: Colors.white,
+                                                                                              labels: <String>[
+                                                                                                for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
+                                                                                              ],
+                                                                                              labelStyle: const TextStyle(
+                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                // fontWeight: FontWeight.bold,
+                                                                                                fontFamily: Font_.Fonts_T,
+                                                                                              ),
+                                                                                              onChange: (isChecked, label, index) {
+                                                                                                if (isChecked == false) {
+                                                                                                  _selecteSer.remove(areaModels[index].ser);
+                                                                                                  _selecteZnSer.remove(areaModels[index].zser);
+
+                                                                                                  double areax = double.parse(areaModels[index].area!);
+                                                                                                  double rentx = double.parse(areaModels[index].rent!);
+                                                                                                  _area_sum = _area_sum - areax;
+                                                                                                  _area_rent_sum = _area_rent_sum - rentx;
+
+                                                                                                  if (isChecked == true) {
+                                                                                                    setState(() {
+                                                                                                      _area_sum = _area_sum + areax;
+                                                                                                      _area_rent_sum = _area_rent_sum + rentx;
+                                                                                                      _selecteSer.add(areaModels[index].ser);
+                                                                                                      _selecteZnSer.add(areaModels[index].zser);
+                                                                                                    });
+                                                                                                  }
+                                                                                                } else {
+                                                                                                  double areax = double.parse(areaModels[index].area!);
+                                                                                                  double rentx = double.parse(areaModels[index].rent!);
+                                                                                                  if (isChecked == true) {
+                                                                                                    setState(() {
+                                                                                                      _area_sum = _area_sum + areax;
+                                                                                                      _area_rent_sum = _area_rent_sum + rentx;
+                                                                                                      _selecteSer.add(areaModels[index].ser);
+                                                                                                      _selecteZnSer.add(areaModels[index].zser);
+                                                                                                    });
+                                                                                                  }
+                                                                                                }
+                                                                                                print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                                                              },
+                                                                                              onSelected: (List<String> selected) {
+                                                                                                setState(() {
+                                                                                                  _selecteSerbool = selected;
+                                                                                                });
+                                                                                                print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                                                              });
+                                                                                        })
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                              actions: <Widget>[
+                                                                                Padding(
                                                                                   padding: const EdgeInsets.all(8.0),
-                                                                                  child: TextButton(
-                                                                                    onPressed: () {
-                                                                                      setState(() {
-                                                                                        No_Area_ = '';
-                                                                                        Status5Form_NoArea_.clear();
-                                                                                      });
-                                                                                      // setState(
-                                                                                      //     () {
-                                                                                      //   read_GC_areaSelectSer();
-                                                                                      // });
-                                                                                      Navigator.pop(context, 'OK');
-                                                                                    },
-                                                                                    child: const Text(
-                                                                                      'บันทึก',
-                                                                                      style: TextStyle(
-                                                                                        color: Colors.white,
-                                                                                        fontWeight: FontWeight.bold,
-                                                                                        fontFamily: FontWeight_.Fonts_T,
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                                                    children: [
+                                                                                      Padding(
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: Row(
+                                                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                                                          children: [
+                                                                                            Container(
+                                                                                              width: 100,
+                                                                                              decoration: const BoxDecoration(
+                                                                                                color: Colors.green,
+                                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                              ),
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: TextButton(
+                                                                                                onPressed: () {
+                                                                                                  setState(() {
+                                                                                                    No_Area_ = '';
+                                                                                                    Status5Form_NoArea_.clear();
+                                                                                                  });
+                                                                                                  // setState(
+                                                                                                  //     () {
+                                                                                                  //   read_GC_areaSelectSer();
+                                                                                                  // });
+                                                                                                  Navigator.pop(context, 'OK');
+                                                                                                  Navigator.pop(context);
+                                                                                                },
+                                                                                                child: const Text(
+                                                                                                  'บันทึก',
+                                                                                                  style: TextStyle(
+                                                                                                    color: Colors.white,
+                                                                                                    fontWeight: FontWeight.bold,
+                                                                                                    fontFamily: FontWeight_.Fonts_T,
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
                                                                                       ),
-                                                                                    ),
+                                                                                      Container(
+                                                                                        width: 100,
+                                                                                        decoration: const BoxDecoration(
+                                                                                          color: Colors.black,
+                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: TextButton(
+                                                                                          onPressed: () {
+                                                                                            setState(() {
+                                                                                              _selecteSer.clear();
+                                                                                              _selecteSerbool.clear();
+                                                                                            });
+                                                                                            Navigator.pop(context);
+                                                                                            Navigator.pop(context);
+                                                                                          },
+                                                                                          child: const Text(
+                                                                                            'ยกเลิก',
+                                                                                            style: TextStyle(
+                                                                                              color: Colors.white,
+                                                                                              fontWeight: FontWeight.bold,
+                                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                                            ),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ],
                                                                                   ),
                                                                                 ),
                                                                               ],
                                                                             ),
-                                                                          ),
-                                                                          Container(
-                                                                            width:
-                                                                                100,
-                                                                            decoration:
-                                                                                const BoxDecoration(
-                                                                              color: Colors.black,
-                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                            ),
-                                                                            padding:
-                                                                                const EdgeInsets.all(8.0),
-                                                                            child:
-                                                                                TextButton(
-                                                                              onPressed: () {
-                                                                                Navigator.pop(context);
-                                                                                setState(() {
-                                                                                  _selecteSer.clear();
-                                                                                  _selecteSerbool.clear();
-                                                                                });
-                                                                              },
-                                                                              child: const Text(
-                                                                                'ยกเลิก',
-                                                                                style: TextStyle(
-                                                                                  color: Colors.white,
-                                                                                  fontWeight: FontWeight.bold,
-                                                                                  fontFamily: FontWeight_.Fonts_T,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              );
-                                                            },
+                                                                          );
+                                                                        },
+                                                                        child: Container(
+                                                                            padding: const EdgeInsets.all(10),
+                                                                            width: MediaQuery.of(context).size.width,
+                                                                            child: Row(
+                                                                              children: const [
+                                                                                Expanded(
+                                                                                  child: Text(
+                                                                                    'ระบุพื้นที่',
+                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  ),
+                                                                                )
+                                                                              ],
+                                                                            ))),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
                                                           ),
+                                                          // InkWell(
+                                                          //   child: Container(
+                                                          //     width: 100,
+                                                          //     decoration:
+                                                          //         BoxDecoration(
+                                                          //       color: AppbackgroundColor
+                                                          //           .TiTile_Colors,
+                                                          //       borderRadius: const BorderRadius
+                                                          //               .only(
+                                                          //           topLeft:
+                                                          //               Radius.circular(
+                                                          //                   10),
+                                                          //           topRight: Radius
+                                                          //               .circular(
+                                                          //                   10),
+                                                          //           bottomLeft:
+                                                          //               Radius.circular(
+                                                          //                   10),
+                                                          //           bottomRight:
+                                                          //               Radius.circular(
+                                                          //                   10)),
+                                                          //       border: Border.all(
+                                                          //           color: Colors
+                                                          //               .black,
+                                                          //           width: 1),
+                                                          //     ),
+                                                          //     padding:
+                                                          //         const EdgeInsets
+                                                          //             .all(8.0),
+                                                          //     child:
+                                                          //         AutoSizeText(
+                                                          //       minFontSize: 10,
+                                                          //       maxFontSize: 15,
+                                                          //       maxLines: 3,
+                                                          //       _selecteSer.length ==
+                                                          //               0
+                                                          //           ? 'เลือก'
+                                                          //           : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                                          //       style: const TextStyle(
+                                                          //           color: PeopleChaoScreen_Color
+                                                          //               .Colors_Text1_,
+                                                          //           fontWeight:
+                                                          //               FontWeight
+                                                          //                   .bold,
+                                                          //           fontFamily:
+                                                          //               FontWeight_
+                                                          //                   .Fonts_T),
+                                                          //     ),
+                                                          //   ),
+                                                          //   onTap: () async {
+                                                          //     // read_GC_areaSelect();
+                                                          //     read_GC_areak();
+                                                          //     showDialog<
+                                                          //         String>(
+                                                          //       barrierDismissible:
+                                                          //           false,
+                                                          //       context:
+                                                          //           context,
+                                                          //       builder: (BuildContext
+                                                          //               context) =>
+                                                          //           AlertDialog(
+                                                          //         shape: const RoundedRectangleBorder(
+                                                          //             borderRadius:
+                                                          //                 BorderRadius.all(
+                                                          //                     Radius.circular(20.0))),
+                                                          //         title:
+                                                          //             const Center(
+                                                          //                 child:
+                                                          //                     Text(
+                                                          //           'เลือกพื้นที่',
+                                                          //           style: TextStyle(
+                                                          //               color: PeopleChaoScreen_Color
+                                                          //                   .Colors_Text1_,
+                                                          //               fontWeight:
+                                                          //                   FontWeight
+                                                          //                       .bold,
+                                                          //               fontFamily:
+                                                          //                   FontWeight_.Fonts_T),
+                                                          //         )),
+                                                          //         content:
+                                                          //             SingleChildScrollView(
+                                                          //           child:
+                                                          //               ListBody(
+                                                          //             children: <Widget>[
+                                                          //               StreamBuilder(
+                                                          //                   stream:
+                                                          //                       Stream.periodic(const Duration(seconds: 0)),
+                                                          //                   builder: (context, snapshot) {
+                                                          //                     return CheckboxGroup(
+                                                          //                         checked: _selecteSerbool,
+                                                          //                         activeColor: Colors.red,
+                                                          //                         checkColor: Colors.white,
+                                                          //                         labels: <String>[
+                                                          //                           for (var i = 0; i < areaModels.length; i++) '${areaModels[i].lncode}',
+                                                          //                         ],
+                                                          //                         labelStyle: const TextStyle(
+                                                          //                           color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                          //                           // fontWeight: FontWeight.bold,
+                                                          //                           fontFamily: Font_.Fonts_T,
+                                                          //                         ),
+                                                          //                         onChange: (isChecked, label, index) {
+                                                          //                           if (isChecked == false) {
+                                                          //                             _selecteSer.remove(areaModels[index].ser);
+                                                          //                             _selecteZnSer.remove(areaModels[index].zser);
+
+                                                          //                             double areax = double.parse(areaModels[index].area!);
+                                                          //                             double rentx = double.parse(areaModels[index].rent!);
+                                                          //                             _area_sum = _area_sum - areax;
+                                                          //                             _area_rent_sum = _area_rent_sum - rentx;
+
+                                                          //                             if (isChecked == true) {
+                                                          //                               setState(() {
+                                                          //                                 _area_sum = _area_sum + areax;
+                                                          //                                 _area_rent_sum = _area_rent_sum + rentx;
+                                                          //                                 _selecteSer.add(areaModels[index].ser);
+                                                          //                                 _selecteZnSer.add(areaModels[index].zser);
+                                                          //                               });
+                                                          //                             }
+                                                          //                           } else {
+                                                          //                             double areax = double.parse(areaModels[index].area!);
+                                                          //                             double rentx = double.parse(areaModels[index].rent!);
+                                                          //                             if (isChecked == true) {
+                                                          //                               setState(() {
+                                                          //                                 _area_sum = _area_sum + areax;
+                                                          //                                 _area_rent_sum = _area_rent_sum + rentx;
+                                                          //                                 _selecteSer.add(areaModels[index].ser);
+                                                          //                                 _selecteZnSer.add(areaModels[index].zser);
+                                                          //                               });
+                                                          //                             }
+                                                          //                           }
+                                                          //                           print('เลือกพื้นที่ :  ${_selecteSer.map((e) => e)}  : _area_sum = $_area_sum _area_rent_sum = $_area_rent_sum ');
+                                                          //                         },
+                                                          //                         onSelected: (List<String> selected) {
+                                                          //                           setState(() {
+                                                          //                             _selecteSerbool = selected;
+                                                          //                           });
+                                                          //                           print('SerGetBankModels_ : ${_selecteSerbool}');
+                                                          //                         });
+                                                          //                   })
+                                                          //             ],
+                                                          //           ),
+                                                          //         ),
+                                                          //         actions: <Widget>[
+                                                          //           Padding(
+                                                          //             padding:
+                                                          //                 const EdgeInsets.all(
+                                                          //                     8.0),
+                                                          //             child:
+                                                          //                 Row(
+                                                          //               mainAxisAlignment:
+                                                          //                   MainAxisAlignment.end,
+                                                          //               children: [
+                                                          //                 Padding(
+                                                          //                   padding:
+                                                          //                       const EdgeInsets.all(8.0),
+                                                          //                   child:
+                                                          //                       Row(
+                                                          //                     mainAxisAlignment: MainAxisAlignment.center,
+                                                          //                     children: [
+                                                          //                       Container(
+                                                          //                         width: 100,
+                                                          //                         decoration: const BoxDecoration(
+                                                          //                           color: Colors.green,
+                                                          //                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                          //                         ),
+                                                          //                         padding: const EdgeInsets.all(8.0),
+                                                          //                         child: TextButton(
+                                                          //                           onPressed: () {
+                                                          //                             setState(() {
+                                                          //                               No_Area_ = '';
+                                                          //                               Status5Form_NoArea_.clear();
+                                                          //                             });
+                                                          //                             // setState(
+                                                          //                             //     () {
+                                                          //                             //   read_GC_areaSelectSer();
+                                                          //                             // });
+                                                          //                             Navigator.pop(context, 'OK');
+                                                          //                           },
+                                                          //                           child: const Text(
+                                                          //                             'บันทึก',
+                                                          //                             style: TextStyle(
+                                                          //                               color: Colors.white,
+                                                          //                               fontWeight: FontWeight.bold,
+                                                          //                               fontFamily: FontWeight_.Fonts_T,
+                                                          //                             ),
+                                                          //                           ),
+                                                          //                         ),
+                                                          //                       ),
+                                                          //                     ],
+                                                          //                   ),
+                                                          //                 ),
+                                                          //                 Container(
+                                                          //                   width:
+                                                          //                       100,
+                                                          //                   decoration:
+                                                          //                       const BoxDecoration(
+                                                          //                     color: Colors.black,
+                                                          //                     borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                          //                   ),
+                                                          //                   padding:
+                                                          //                       const EdgeInsets.all(8.0),
+                                                          //                   child:
+                                                          //                       TextButton(
+                                                          //                     onPressed: () {
+                                                          //                       Navigator.pop(context);
+                                                          //                       setState(() {
+                                                          //                         _selecteSer.clear();
+                                                          //                         _selecteSerbool.clear();
+                                                          //                       });
+                                                          //                     },
+                                                          //                     child: const Text(
+                                                          //                       'ยกเลิก',
+                                                          //                       style: TextStyle(
+                                                          //                         color: Colors.white,
+                                                          //                         fontWeight: FontWeight.bold,
+                                                          //                         fontFamily: FontWeight_.Fonts_T,
+                                                          //                       ),
+                                                          //                     ),
+                                                          //                   ),
+                                                          //                 ),
+                                                          //               ],
+                                                          //             ),
+                                                          //           ),
+                                                          //         ],
+                                                          //       ),
+                                                          //     );
+                                                          //   },
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),
@@ -2149,8 +2420,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                               ],
                                                                             ),
                                                                           ),
-                                                                          actions: <
-                                                                              Widget>[
+                                                                          actions: <Widget>[
                                                                             Padding(
                                                                               padding: const EdgeInsets.all(8.0),
                                                                               child: Row(
@@ -3969,8 +4239,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
                                                     //fontWeight: FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T)),
-                                            inputFormatters: <
-                                                TextInputFormatter>[
+                                            inputFormatters: <TextInputFormatter>[
                                               FilteringTextInputFormatter.allow(
                                                   RegExp(r'[0-9 .]')),
                                               // FilteringTextInputFormatter.digitsOnly
@@ -4272,8 +4541,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 //fontWeight: FontWeight.bold,
                                                                 fontFamily: Font_
                                                                     .Fonts_T)),
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       FilteringTextInputFormatter
                                                           .allow(RegExp(
                                                               r'[0-9 .]')),
@@ -4385,8 +4653,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                         //fontWeight: FontWeight.bold,
                                                         fontFamily:
                                                             Font_.Fonts_T)),
-                                                inputFormatters: <
-                                                    TextInputFormatter>[
+                                                inputFormatters: <TextInputFormatter>[
                                                   FilteringTextInputFormatter
                                                       .allow(
                                                           RegExp(r'[0-9 .]')),
@@ -5076,8 +5343,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                       // fontWeight: FontWeight.bold,
                                                       fontFamily:
                                                           Font_.Fonts_T)),
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 // for below version 2 use this
                                                 FilteringTextInputFormatter
                                                     .allow(RegExp(r'[0-9 .]')),
@@ -5233,8 +5499,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 // fontWeight: FontWeight.bold,
                                                                 fontFamily: Font_
                                                                     .Fonts_T)),
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       // for below version 2 use this
                                                       FilteringTextInputFormatter
                                                           .allow(RegExp(
@@ -5738,8 +6003,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                     SingleChildScrollView(
                                                                   child:
                                                                       ListBody(
-                                                                    children: const <
-                                                                        Widget>[
+                                                                    children: const <Widget>[
                                                                       Text(
                                                                         'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
                                                                         style: TextStyle(
@@ -5750,8 +6014,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                actions: <
-                                                                    Widget>[
+                                                                actions: <Widget>[
                                                                   Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -6487,8 +6750,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                             content:
                                                                 SingleChildScrollView(
                                                               child: ListBody(
-                                                                children: <
-                                                                    Widget>[
+                                                                children: <Widget>[
                                                                   //  '${Form_bussshop}',
                                                                   //   '${Form_address}',
                                                                   //   '${Form_tel}',
@@ -7833,8 +8095,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                       // fontWeight: FontWeight.bold,
                                                       fontFamily:
                                                           Font_.Fonts_T)),
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 // for below version 2 use this
                                                 FilteringTextInputFormatter
                                                     .allow(RegExp(r'[0-9 .]')),
@@ -7990,8 +8251,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 // fontWeight: FontWeight.bold,
                                                                 fontFamily: Font_
                                                                     .Fonts_T)),
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       // for below version 2 use this
                                                       FilteringTextInputFormatter
                                                           .allow(RegExp(
@@ -8495,8 +8755,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                     SingleChildScrollView(
                                                                   child:
                                                                       ListBody(
-                                                                    children: const <
-                                                                        Widget>[
+                                                                    children: const <Widget>[
                                                                       Text(
                                                                         'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
                                                                         style: TextStyle(
@@ -8507,8 +8766,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                     ],
                                                                   ),
                                                                 ),
-                                                                actions: <
-                                                                    Widget>[
+                                                                actions: <Widget>[
                                                                   Row(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -9244,8 +9502,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                             content:
                                                                 SingleChildScrollView(
                                                               child: ListBody(
-                                                                children: <
-                                                                    Widget>[
+                                                                children: <Widget>[
                                                                   //  '${Form_bussshop}',
                                                                   //   '${Form_address}',
                                                                   //   '${Form_tel}',
@@ -10255,7 +10512,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
             Form_payment2.text,
             numinvoice,
             cFinn,
-            '${Area_}');
+            '${Area_}',
+            '${Value_newDateD}');
 
         setState(() async {
           await red_Trans_bill();

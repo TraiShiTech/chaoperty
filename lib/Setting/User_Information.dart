@@ -13,6 +13,7 @@ import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetPerMission_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
+import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'package:http/http.dart' as http;
 
@@ -228,7 +229,9 @@ class _USerInformationState extends State<USerInformation> {
                         )),
                         content: Container(
                           // height: MediaQuery.of(context).size.height / 1.5,
-                          width: MediaQuery.of(context).size.width / 1.5,
+                          width: (!Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width
+                              : MediaQuery.of(context).size.width * 0.5,
                           decoration: const BoxDecoration(
                             // color: Colors.grey[300],
                             borderRadius: BorderRadius.only(
@@ -748,75 +751,89 @@ class _USerInformationState extends State<USerInformation> {
                           ),
                         ),
                         actions: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        if (_formKey2.currentState!
-                                            .validate()) {
-                                          print(fname_text.text);
-                                          print(lname_text.text);
-                                          print(email_text.text);
-                                          print(tel_text.text);
-                                          Resetdata2(context);
-                                        }
-                                      },
-                                      child: const Text(
-                                        'บันทึก',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              const Divider(
+                                color: Colors.grey,
+                                height: 4.0,
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            if (_formKey2.currentState!
+                                                .validate()) {
+                                              print(fname_text.text);
+                                              print(lname_text.text);
+                                              print(email_text.text);
+                                              print(tel_text.text);
+                                              Resetdata2(context);
+                                            }
+                                          },
+                                          child: const Text(
+                                            'บันทึก',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'OK'),
-                                      child: const Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text(
+                                            'ยกเลิก',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -1066,7 +1083,9 @@ class _USerInformationState extends State<USerInformation> {
                         )),
                         content: Container(
                           // height: MediaQuery.of(context).size.height / 1.5,
-                          width: MediaQuery.of(context).size.width / 1.5,
+                          width: (!Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width
+                              : MediaQuery.of(context).size.width * 0.5,
                           decoration: const BoxDecoration(
                             // color: Colors.grey[300],
                             borderRadius: BorderRadius.only(
@@ -1245,100 +1264,117 @@ class _USerInformationState extends State<USerInformation> {
                           ),
                         ),
                         actions: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.green,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextButton(
-                                      onPressed: () async {
-                                        if (_formKey.currentState!.validate()) {
-                                          if (Pasw1_text.text !=
-                                              Pasw2_text.text) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                  content: Text(
-                                                      'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่ !',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontFamily:
-                                                              Font_.Fonts_T))),
-                                            );
-                                          } else {
-                                            setState(() {
-                                              password_U = md5
-                                                  .convert(utf8
-                                                      .encode(Pasw1_text.text))
-                                                  .toString();
-                                            });
-                                            /////---------------------------
-                                            print('password Md5 $password_U');
-                                            /////---------------------------
-                                            setState(() {
-                                              Pasw1_text.clear();
-                                              Pasw2_text.clear();
-                                            });
-                                            /////---------------------------
-                                            ResetPass(context);
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              const Divider(
+                                color: Colors.grey,
+                                height: 4.0,
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.green,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextButton(
+                                          onPressed: () async {
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              if (Pasw1_text.text !=
+                                                  Pasw2_text.text) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(
+                                                  const SnackBar(
+                                                      content: Text(
+                                                          'รหัสผ่านไม่ตรงกัน กรุณาลองใหม่ !',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontFamily: Font_
+                                                                  .Fonts_T))),
+                                                );
+                                              } else {
+                                                setState(() {
+                                                  password_U = md5
+                                                      .convert(utf8.encode(
+                                                          Pasw1_text.text))
+                                                      .toString();
+                                                });
+                                                /////---------------------------
+                                                print(
+                                                    'password Md5 $password_U');
+                                                /////---------------------------
+                                                setState(() {
+                                                  Pasw1_text.clear();
+                                                  Pasw2_text.clear();
+                                                });
+                                                /////---------------------------
+                                                ResetPass(context);
 
-                                            /////---------------------------
-                                          }
-                                        }
-                                      },
-                                      child: const Text(
-                                        'บันทึก',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
+                                                /////---------------------------
+                                              }
+                                            }
+                                          },
+                                          child: const Text(
+                                            'บันทึก',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    width: 100,
-                                    decoration: const BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                    ),
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextButton(
-                                      onPressed: () =>
-                                          Navigator.pop(context, 'OK'),
-                                      child: const Text(
-                                        'ยกเลิก',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: 100,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.black,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'OK'),
+                                          child: const Text(
+                                            'ยกเลิก',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),

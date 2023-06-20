@@ -79,6 +79,7 @@ class _AccountScreenState extends State<AccountScreen> {
   List<TeNantModel> teNantModels = [];
   List<TeNantModel> _teNantModels = <TeNantModel>[];
   List<TransReBillModel> _TransReBillModels = [];
+  List<TransReBillModel> TransReBillModels_ = [];
   List<InvoiceHistoryModel> _InvoiceHistoryModels = [];
   Set<int> _selectedIndexes = Set();
   String? renTal_user,
@@ -110,7 +111,7 @@ class _AccountScreenState extends State<AccountScreen> {
     'ประวัติบิล',
   ];
   List Status = [
-    'ภาพรวม(ตาราง)',
+    // 'ภาพรวม(ตาราง)',
     'ภาพรวม',
     'ค้างชำระ',
     'ประวัติบิล',
@@ -128,7 +129,7 @@ class _AccountScreenState extends State<AccountScreen> {
       Value_newDateD = '',
       Value_newDateY1 = '',
       Value_newDateD1 = '';
-  int select_page = 0, pamentpage = 0, ser_zn = 0;
+  int select_page = 0, pamentpage = 0, ser_zn = 0, viewTab = 1;
   String? cid_Name, name_Name;
   String? rtname,
       type,
@@ -509,7 +510,9 @@ class _AccountScreenState extends State<AccountScreen> {
             // _TransBillModels.add(_TransBillModel);
           });
         }
-
+        setState(() {
+          TransReBillModels_ = _TransReBillModels;
+        });
         print('result ${_TransReBillModels.length}');
       }
     } catch (e) {}
@@ -521,6 +524,9 @@ class _AccountScreenState extends State<AccountScreen> {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
+      if (preferences.getString('renTalSer') == '65') {
+        viewTab = 0;
+      }
     });
   }
 
@@ -842,20 +848,91 @@ class _AccountScreenState extends State<AccountScreen> {
       onChanged: (text) {
         print(text);
         text = text.toLowerCase();
-        setState(() {
-          teNantModels = _teNantModels.where((teNantModels) {
-            var notTitle = teNantModels.lncode.toString().toLowerCase();
-            var notTitle2 = teNantModels.cid.toString().toLowerCase();
-            var notTitle3 = teNantModels.docno.toString().toLowerCase();
-            var notTitle4 = teNantModels.sname.toString().toLowerCase();
-            var notTitle5 = teNantModels.cname.toString().toLowerCase();
-            return notTitle.contains(text) ||
-                notTitle2.contains(text) ||
-                notTitle3.contains(text) ||
-                notTitle4.contains(text) ||
-                notTitle5.contains(text);
-          }).toList();
-        });
+        //         Widget BodyHome_Web() {
+        //   return (Status_ == 1)
+        //       ? viewTab == 0
+        //           ? PlayColumn()
+        //           : BodyStatus2_Web()
+        //       : (Status_ == 2)
+        //           ? BodyStatus1_Web()
+        //           : (Status_ == 3)
+        //               ? BodyStatus3_Web()
+        //               : BodyStatus4_Web();
+        // }
+        if (Status_ == 1) {
+          if (viewTab == 0) {
+          } else {
+            setState(() {
+              teNantModels = _teNantModels.where((teNantModels) {
+                var notTitle = teNantModels.lncode.toString().toLowerCase();
+                var notTitle2 = teNantModels.cid.toString().toLowerCase();
+                var notTitle3 = teNantModels.docno.toString().toLowerCase();
+                var notTitle4 = teNantModels.sname.toString().toLowerCase();
+                var notTitle5 = teNantModels.cname.toString().toLowerCase();
+                return notTitle.contains(text) ||
+                    notTitle2.contains(text) ||
+                    notTitle3.contains(text) ||
+                    notTitle4.contains(text) ||
+                    notTitle5.contains(text);
+              }).toList();
+            });
+          }
+        } else if (Status_ == 2) {
+          setState(() {
+            teNantModels = _teNantModels.where((teNantModels) {
+              var notTitle = teNantModels.cid.toString().toLowerCase();
+              var notTitle2 = teNantModels.docno.toString().toLowerCase();
+              var notTitle3 = teNantModels.invoice.toString().toLowerCase();
+              var notTitle4 = teNantModels.ln_c.toString().toLowerCase();
+              var notTitle5 = teNantModels.sname.toString().toLowerCase();
+              var notTitle6 = teNantModels.cname.toString().toLowerCase();
+              var notTitle7 = teNantModels.expname.toString().toLowerCase();
+              var notTitle8 = teNantModels.date.toString().toLowerCase();
+              return notTitle.contains(text) ||
+                  notTitle2.contains(text) ||
+                  notTitle3.contains(text) ||
+                  notTitle4.contains(text) ||
+                  notTitle5.contains(text) ||
+                  notTitle6.contains(text) ||
+                  notTitle7.contains(text) ||
+                  notTitle8.contains(text);
+            }).toList();
+          });
+        } else if (Status_ == 3) {
+          setState(() {
+            _TransReBillModels = TransReBillModels_.where((TransReBillModels) {
+              var notTitle = TransReBillModels.cid.toString().toLowerCase();
+              var notTitle2 =
+                  TransReBillModels.daterec.toString().toLowerCase();
+              var notTitle3 = TransReBillModels.pdate.toString().toLowerCase();
+              var notTitle4 = TransReBillModels.docno.toString().toLowerCase();
+              var notTitle5 = TransReBillModels.doctax.toString().toLowerCase();
+              var notTitle6 = TransReBillModels.inv.toString().toLowerCase();
+              var notTitle7 =
+                  TransReBillModels.room_number.toString().toLowerCase();
+              var notTitle8 = TransReBillModels.ln.toString().toLowerCase();
+              var notTitle9 = TransReBillModels.remark.toString().toLowerCase();
+              var notTitle10 = TransReBillModels.sname.toString().toLowerCase();
+              var notTitle11 =
+                  TransReBillModels.total_bill.toString().toLowerCase();
+              var notTitle12 =
+                  TransReBillModels.doctax.toString().toLowerCase();
+
+              return notTitle.contains(text) ||
+                  notTitle2.contains(text) ||
+                  notTitle3.contains(text) ||
+                  notTitle4.contains(text) ||
+                  notTitle5.contains(text) ||
+                  notTitle6.contains(text) ||
+                  notTitle7.contains(text) ||
+                  notTitle8.contains(text) ||
+                  notTitle9.contains(text) ||
+                  notTitle10.contains(text) ||
+                  notTitle11.contains(text) ||
+                  notTitle12.contains(text);
+            }).toList();
+          });
+        } else {}
       },
     );
   }
@@ -1209,7 +1286,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                 preferences.setString(
                                     'zonesName', zonesName.toString());
                                 setState(() {
-                                  read_GC_tenant();
+                                  if (Status_ == 1) {
+                                    read_GC_tenant1();
+                                  } else if (Status_ == 2) {
+                                    read_GC_tenant();
+                                  }
+                                  // read_GC_tenant();
                                   read_GC_areaSelect();
                                 });
                               },
@@ -1220,44 +1302,54 @@ class _AccountScreenState extends State<AccountScreen> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'ค้นหา:',
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text1_,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontWeight_.Fonts_T),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: MediaQuery.of(context).size.shortestSide <
-                                MediaQuery.of(context).size.width * 1
-                            ? 8
-                            : 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppbackgroundColor.Sub_Abg_Colors,
-                              borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10)),
-                              border: Border.all(color: Colors.grey, width: 1),
+                      if (Status_ != 4)
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'ค้นหา:',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text1_,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T),
                             ),
-                            // width: 120,
-                            // height: 35,
-                            child: _searchBar(),
                           ),
                         ),
-                      ),
-                      if (Status_ == 3)
+
+                      (Status_ == 4)
+                          ? Expanded(
+                              flex: MediaQuery.of(context).size.shortestSide <
+                                      MediaQuery.of(context).size.width * 1
+                                  ? 8
+                                  : 4,
+                              child: Text(''))
+                          : Expanded(
+                              flex: MediaQuery.of(context).size.shortestSide <
+                                      MediaQuery.of(context).size.width * 1
+                                  ? 8
+                                  : 4,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppbackgroundColor.Sub_Abg_Colors,
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    border: Border.all(
+                                        color: Colors.grey, width: 1),
+                                  ),
+                                  // width: 120,
+                                  // height: 35,
+                                  child: _searchBar(),
+                                ),
+                              ),
+                            ),
+                      if (Status_ != 4)
                         InkWell(
                           onTap: () {
                             _exportExcel_();
@@ -1808,7 +1900,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                             read_GC_zone();
                                             if (Status_ == 1) {
                                               read_GC_tenant1();
-                                            } else {
+                                            } else if (Status_ == 2) {
                                               read_GC_tenant();
                                             }
 
@@ -2290,6 +2382,46 @@ class _AccountScreenState extends State<AccountScreen> {
                     ),
                   ),
                 ),
+                (Status_ == 1)
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              color: viewTab == 0
+                                  ? Colors.orange.shade900
+                                  : Colors.white,
+                              child: IconButton(
+                                  color: viewTab == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                  onPressed: () {
+                                    setState(() {
+                                      viewTab = 0;
+                                    });
+                                  },
+                                  icon: Icon(Icons.view_module)),
+                            ),
+                            Container(
+                              color: viewTab == 1
+                                  ? Colors.orange.shade900
+                                  : Colors.white,
+                              child: IconButton(
+                                  color: viewTab == 1
+                                      ? Colors.white
+                                      : Colors.black,
+                                  onPressed: () {
+                                    setState(() {
+                                      viewTab = 1;
+                                    });
+                                  },
+                                  icon: Icon(Icons.horizontal_split)),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox(),
                 // (!Responsive.isDesktop(context)) ? BodyHome_mobile() :
                 BodyHome_Web()
               ],
@@ -2311,15 +2443,31 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Widget BodyHome_Web() {
     return (Status_ == 1)
-        ? PlayColumn()
+        ? viewTab == 0
+            ? PlayColumn()
+            : BodyStatus2_Web()
         : (Status_ == 2)
-            ? BodyStatus2_Web()
+            ? BodyStatus1_Web()
             : (Status_ == 3)
-                ? BodyStatus1_Web()
-                : (Status_ == 4)
-                    ? BodyStatus3_Web()
-                    : BodyStatus4_Web();
+                ? BodyStatus3_Web()
+                : BodyStatus4_Web();
   }
+
+  // Widget BodyStatusPlay_Web() {
+  //   return PlayColumn(
+  //     Get_Value_zone_ser: zone_ser,
+  //   );
+  // }
+
+  // Widget BodyStatusPlay_Web() {
+  //   return StreamBuilder(
+  //       stream: Stream.periodic(const Duration(seconds: 0)),
+  //       builder: (context, snapshot) {
+  //         return PlayColumn(
+
+  //         );
+  //       });
+  // }
 
   Widget BodyStatus1_Web() {
     return Padding(
@@ -8208,9 +8356,9 @@ class _AccountScreenState extends State<AccountScreen> {
           _InvoiceHistoryModels.clear();
           numinvoice = null;
 
-          if (Status_ == 1) {
+          if (Status_ == 2) {
             read_GC_tenant1();
-          } else {
+          } else if (Status_ == 3) {
             read_GC_tenant();
           }
 
@@ -15655,8 +15803,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                                                           FontWeight_
                                                                               .Fonts_T),
                                                                 )),
-                                                                actions: <
-                                                                    Widget>[
+                                                                actions: <Widget>[
                                                                   Padding(
                                                                     padding:
                                                                         const EdgeInsets.all(
@@ -16129,12 +16276,22 @@ class _AccountScreenState extends State<AccountScreen> {
                                                           .length;
                                                   index++)
                                                 [
-                                                  '${index + 1}',
+                                                  // '${index + 1}',
+                                                  // '${_TransReBillHistoryModels[index].date}',
+                                                  // '${_TransReBillHistoryModels[index].expname}',
+                                                  // '${_TransReBillHistoryModels[index].nvat}',
+                                                  // '${_TransReBillHistoryModels[index].vtype}',
+                                                  // '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+                                                  // '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
+                                                  // '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                                   '${index + 1}',
+
                                                   '${_TransReBillHistoryModels[index].date}',
+
                                                   '${_TransReBillHistoryModels[index].expname}',
-                                                  '${_TransReBillHistoryModels[index].nvat}',
-                                                  '${_TransReBillHistoryModels[index].vtype}',
-                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].vat!))}',
+
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+                                                  '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
                                                   '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
                                                   '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
                                                 ],

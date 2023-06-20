@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:date_time_picker/date_time_picker.dart';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13270,7 +13270,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                   '${renTalModels[0].bill_tel}',
                                   '${renTalModels[0].bill_tax}',
                                   '${renTalModels[0].bill_name}',
-                                  newValuePDFimg,
+                                  newValuePDFimg,''
                                   // (ser_user == null) ? '' : ser_user
                                 );
                               },

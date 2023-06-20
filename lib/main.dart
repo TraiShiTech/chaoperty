@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'Home/Home_Screen.dart';
 import 'Register/SignIn_Screen.dart';
-import 'Register/SignUp_Screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,7 +23,7 @@ void main() {
 //----(Git Lab)
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
-//3.-------->git commit -m "แก้CMหลังพบลูกค้า"
+//3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
 //----(Git Hub)

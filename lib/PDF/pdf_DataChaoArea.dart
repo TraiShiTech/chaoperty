@@ -12,18 +12,18 @@ import '../ChaoArea/ChaoAreaRenew_Screen.dart';
 
 class Pdfgen_DataChaoArea {
   static void exportPDF_DataChaoArea(
-    context,
-    NumberArea_,
-    QtyArea,
-    fname_user_,
-    renTal_name,
-    newValuePDFimg,
-    newValuePDFimg2,
-    bill_addr,
-    bill_email,
-    bill_tel,
-    bill_tax,
-  ) async {
+      context,
+      NumberArea_,
+      QtyArea,
+      fname_user_,
+      renTal_name,
+      newValuePDFimg,
+      newValuePDFimg2,
+      bill_addr,
+      bill_email,
+      bill_tel,
+      bill_tax,
+      bill_name) async {
     ////
     //// ------------>(ใบเสนอราคา),
     ///////
@@ -77,17 +77,8 @@ class Pdfgen_DataChaoArea {
     ];
     pdf.addPage(
       pw.MultiPage(
-        // header: (context) {
-        //   return pw.Text(
-        //     'Flutter Approach',
-        //     style: pw.TextStyle(
-        //       fontWeight: pw.FontWeight.bold,
-        //       fontSize: 15.0,
-        //     ),
-        //   );
-        // },
-        build: (context) {
-          return [
+        header: (context) {
+          return pw.Column(children: [
             pw.Row(
               children: [
                 // pw.Image(
@@ -130,16 +121,16 @@ class Pdfgen_DataChaoArea {
                     crossAxisAlignment: pw.CrossAxisAlignment.start,
                     children: [
                       pw.Text(
-                        '$renTal_name',
+                        '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 11.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -147,31 +138,40 @@ class Pdfgen_DataChaoArea {
                           font: ttf,
                         ),
                       ),
+                      pw.Text(
+                        'โทรศัพท์: $bill_tel',
+                        textAlign: pw.TextAlign.right,
+                        maxLines: 1,
+                        style: pw.TextStyle(
+                            fontSize: 10.0,
+                            font: ttf,
+                            color: PdfColors.grey800),
+                      ),
+                      pw.Text(
+                        'อีเมล: $bill_email',
+                        maxLines: 1,
+                        textAlign: pw.TextAlign.right,
+                        style: pw.TextStyle(
+                            fontSize: 10.0,
+                            font: ttf,
+                            color: PdfColors.grey800),
+                      ),
+                      pw.Text(
+                        (bill_tax.toString() == '' ||
+                                bill_tax == null ||
+                                bill_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
+                        textAlign: pw.TextAlign.right,
+                        style: pw.TextStyle(
+                            fontSize: 10.0,
+                            font: ttf,
+                            color: PdfColors.grey800),
+                      ),
                     ],
                   ),
                 ),
-                // pw.Column(
-                //   mainAxisSize: pw.MainAxisSize.min,
-                //   crossAxisAlignment: pw.CrossAxisAlignment.start,
-                //   children: [
-                //     pw.Text(
-                //       'บริษัทดีเซนทริค จำกัด(Dzentric co., ltd.)',
-                //       style: pw.TextStyle(
-                //         fontSize: 14.0,
-                //         fontWeight: pw.FontWeight.bold,
-                //         font: ttf,
-                //       ),
-                //     ),
-                //     pw.Text(
-                //       '1-8 ถ.รัตนโกสินทร์ ต.ศรีภูมิ อ.เมือง จ.เชียงใหม่ 50200',
-                //       style: pw.TextStyle(
-                //         fontSize: 10.0,
-                //         color: PdfColors.grey700,
-                //         font: ttf,
-                //       ),
-                //     ),
-                //   ],
-                // ),
+
                 pw.Spacer(),
                 pw.Container(
                   width: 180,
@@ -225,85 +225,89 @@ class Pdfgen_DataChaoArea {
                 ),
               ],
             ),
+          ]);
+        },
+        build: (context) {
+          return [
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
             pw.Divider(),
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
-            pw.Row(
-              children: [
-                pw.Expanded(
-                  flex: 4,
-                  child: pw.Column(
-                    mainAxisSize: pw.MainAxisSize.min,
-                    crossAxisAlignment: pw.CrossAxisAlignment.start,
-                    children: [
-                      pw.Text(
-                        '$renTal_name',
-                        style: pw.TextStyle(
-                            fontSize: 10.0,
-                            fontWeight: pw.FontWeight.bold,
-                            font: ttf,
-                            color: PdfColors.green),
-                      ),
-                      pw.Text(
-                        'ที่อยู่ : $bill_addr',
-                        textAlign: pw.TextAlign.justify,
-                        style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey900),
-                      ),
-                      pw.Text(
-                        'อีเมล: $bill_email',
-                        textAlign: pw.TextAlign.justify,
-                        style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey900),
-                      ),
-                      pw.Text(
-                        'เบอร์โทร: $bill_tel',
-                        textAlign: pw.TextAlign.justify,
-                        style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey900),
-                      ),
-                      pw.Text(
-                        'เลขประจำตัวผู้เสียภาษี : $bill_tax',
-                        textAlign: pw.TextAlign.justify,
-                        style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey900),
-                      ),
-                    ],
-                  ),
-                ),
-                // pw.SizedBox(width: 10 * PdfPageFormat.mm),
-                // pw.Expanded(
-                //   flex: 4,
-                //   child: pw.Column(
-                //     mainAxisSize: pw.MainAxisSize.min,
-                //     crossAxisAlignment: pw.CrossAxisAlignment.end,
-                //     children: [
-                //       pw.Text(
-                //         'ผู้เสนอราคา',
-                //         style: pw.TextStyle(
-                //             fontSize: 10.0, font: ttf, color: PdfColors.green),
-                //       ),
-                //       pw.Text(
-                //         'นรารัตน์',
-                //         style: pw.TextStyle(
-                //           fontSize: 12.00,
-                //           fontWeight: pw.FontWeight.bold,
-                //           font: ttf,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
-            ),
+            // pw.Row(
+            //   children: [
+            //     pw.Expanded(
+            //       flex: 4,
+            //       child: pw.Column(
+            //         mainAxisSize: pw.MainAxisSize.min,
+            //         crossAxisAlignment: pw.CrossAxisAlignment.start,
+            //         children: [
+            //           pw.Text(
+            //             '$renTal_name',
+            //             style: pw.TextStyle(
+            //                 fontSize: 10.0,
+            //                 fontWeight: pw.FontWeight.bold,
+            //                 font: ttf,
+            //                 color: PdfColors.green),
+            //           ),
+            //           pw.Text(
+            //             'ที่อยู่ : $bill_addr',
+            //             textAlign: pw.TextAlign.justify,
+            //             style: pw.TextStyle(
+            //                 fontSize: 10.0,
+            //                 font: ttf,
+            //                 color: PdfColors.grey900),
+            //           ),
+            //           pw.Text(
+            //             'อีเมล: $bill_email',
+            //             textAlign: pw.TextAlign.justify,
+            //             style: pw.TextStyle(
+            //                 fontSize: 10.0,
+            //                 font: ttf,
+            //                 color: PdfColors.grey900),
+            //           ),
+            //           pw.Text(
+            //             'เบอร์โทร: $bill_tel',
+            //             textAlign: pw.TextAlign.justify,
+            //             style: pw.TextStyle(
+            //                 fontSize: 10.0,
+            //                 font: ttf,
+            //                 color: PdfColors.grey900),
+            //           ),
+            //           pw.Text(
+            //             'เลขประจำตัวผู้เสียภาษี : $bill_tax',
+            //             textAlign: pw.TextAlign.justify,
+            //             style: pw.TextStyle(
+            //                 fontSize: 10.0,
+            //                 font: ttf,
+            //                 color: PdfColors.grey900),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     // pw.SizedBox(width: 10 * PdfPageFormat.mm),
+            //     // pw.Expanded(
+            //     //   flex: 4,
+            //     //   child: pw.Column(
+            //     //     mainAxisSize: pw.MainAxisSize.min,
+            //     //     crossAxisAlignment: pw.CrossAxisAlignment.end,
+            //     //     children: [
+            //     //       pw.Text(
+            //     //         'ผู้เสนอราคา',
+            //     //         style: pw.TextStyle(
+            //     //             fontSize: 10.0, font: ttf, color: PdfColors.green),
+            //     //       ),
+            //     //       pw.Text(
+            //     //         'นรารัตน์',
+            //     //         style: pw.TextStyle(
+            //     //           fontSize: 12.00,
+            //     //           fontWeight: pw.FontWeight.bold,
+            //     //           font: ttf,
+            //     //         ),
+            //     //       ),
+            //     //     ],
+            //     //   ),
+            //     // ),
+            //   ],
+            // ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Row(mainAxisAlignment: pw.MainAxisAlignment.start, children: [
               pw.Expanded(

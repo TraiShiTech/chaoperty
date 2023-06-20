@@ -18,10 +18,13 @@ import '../Model/GetFinnancetrans_Model.dart';
 import '../Model/GetInvoice_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetPayMent_Model.dart';
+import '../Model/GetRenTal_Model.dart';
+import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTranBill_model.dart';
 import '../Model/GetTrans_Model.dart';
 import '../Model/trans_re_bill_history_model.dart';
 import '../Model/trans_re_bill_model.dart';
+import '../PDF/pdf_historybill2.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 
@@ -48,7 +51,8 @@ class _HistoryBillsState extends State<HistoryBills> {
   List<TransReBillHistoryModel> _TransReBillHistoryModels = [];
   List<PayMentModel> _PayMentModels = [];
   List<FinnancetransModel> finnancetransModels = [];
-
+  List<RenTalModel> renTalModels = [];
+  List<TeNantModel> teNantModels = [];
   // final sum_disamtx = TextEditingController();
   // final sum_dispx = TextEditingController();
   final Form_payment1 = TextEditingController();
@@ -76,14 +80,134 @@ class _HistoryBillsState extends State<HistoryBills> {
       Value_newDateY1 = '',
       Value_newDateD1 = '';
   DateTime newDatetime = DateTime.now();
-
+  String? rtname,
+      type,
+      typex,
+      renname,
+      bill_name,
+      bill_addr,
+      bill_tax,
+      bill_tel,
+      bill_email,
+      expbill,
+      expbill_name,
+      bill_default,
+      bill_tser,
+      foder,
+      renTal_name;
+  String? Form_nameshop,
+      Form_typeshop,
+      Form_bussshop,
+      Form_bussscontact,
+      Form_address,
+      Form_tel,
+      Form_email,
+      Form_tax;
   @override
   void initState() {
     super.initState();
     red_Trans_bill();
+    read_GC_rental();
+    read_data();
     // sum_disamtx.text = '0.00';
     Value_newDateY1 = DateFormat('yyyy-MM-dd').format(newDatetime);
     Value_newDateD1 = DateFormat('dd-MM-yyyy').format(newDatetime);
+  }
+
+  Future<Null> read_GC_rental() async {
+    if (renTalModels.isNotEmpty) {
+      renTalModels.clear();
+    }
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_rental_setring.php?isAdd=true&ren=$ren';
+    renTal_name = preferences.getString('renTalName');
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          RenTalModel renTalModel = RenTalModel.fromJson(map);
+          var rtnamex = renTalModel.rtname!.trim();
+          var typexs = renTalModel.type!.trim();
+          var typexx = renTalModel.typex!.trim();
+          var bill_namex = renTalModel.bill_name!.trim();
+          var bill_addrx = renTalModel.bill_addr!.trim();
+          var bill_taxx = renTalModel.bill_tax!.trim();
+          var bill_telx = renTalModel.bill_tel!.trim();
+          var bill_emailx = renTalModel.bill_email!.trim();
+          var bill_defaultx = renTalModel.bill_default;
+          var bill_tserx = renTalModel.tser;
+          var name = renTalModel.pn!.trim();
+          var foderx = renTalModel.dbn;
+          setState(() {
+            foder = foderx;
+            rtname = rtnamex;
+            type = typexs;
+            typex = typexx;
+            renname = name;
+            bill_name = bill_namex;
+            bill_addr = bill_addrx;
+            bill_tax = bill_taxx;
+            bill_tel = bill_telx;
+            bill_email = bill_emailx;
+            bill_default = bill_defaultx;
+            bill_tser = bill_tserx;
+            renTalModels.add(renTalModel);
+            if (bill_defaultx == 'P') {
+              bills_name_ = 'บิลธรรมดา';
+            } else {
+              bills_name_ = 'ใบกำกับภาษี';
+            }
+          });
+        }
+      } else {}
+    } catch (e) {}
+    print('name>>>>>  $renname');
+  }
+
+  Future<Null> read_data() async {
+    if (teNantModels.length != 0) {
+      setState(() {
+        teNantModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var ciddoc = widget.Get_Value_cid;
+    var qutser = widget.Get_Value_NameShop_index;
+
+    String url =
+        '${MyConstant().domain}/GC_tenantlookAS.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          TeNantModel teNantModel = TeNantModel.fromJson(map);
+          setState(() {
+            teNantModels.add(teNantModel);
+
+            Form_nameshop = teNantModel.sname.toString();
+            Form_typeshop = teNantModel.stype.toString();
+            Form_bussshop = teNantModel.cname.toString();
+            Form_bussscontact = teNantModel.attn.toString();
+            Form_address = teNantModel.addr.toString();
+            Form_tel = teNantModel.tel.toString();
+            Form_email = teNantModel.email.toString();
+            Form_tax =
+                teNantModel.tax == null ? "-" : teNantModel.tax.toString();
+          });
+        }
+      }
+    } catch (e) {}
   }
 
   Future<Null> red_Trans_bill() async {
@@ -1441,6 +1565,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                 minFontSize: 10,
                                                 maxFontSize: 15,
                                                 maxLines: 1,
+
                                                 '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
                                                 // '${_TransReBillHistoryModels[index].nvat}',
                                                 textAlign: TextAlign.right,
@@ -1459,6 +1584,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                 minFontSize: 10,
                                                 maxFontSize: 15,
                                                 maxLines: 1,
+
                                                 '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
                                                 // '${_TransReBillHistoryModels[index].wht}',
                                                 textAlign: TextAlign.end,
@@ -2612,7 +2738,81 @@ class _HistoryBillsState extends State<HistoryBills> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: (_TransReBillHistoryModels.length ==
+                                                    0)
+                                                ? null
+                                                :  () {
+                                          final tableData00 = [
+                                            for (int index = 0;
+                                                index <
+                                                    _TransReBillHistoryModels
+                                                        .length;
+                                                index++)
+                                              [
+                                                '${index + 1}',
+                                                '${_TransReBillHistoryModels[index].date}',
+                                                '${_TransReBillHistoryModels[index].expname}',
+                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
+                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
+                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                              ],
+                                          ];
+
+                                          List newValuePDFimg = [];
+                                          for (int index = 0;
+                                              index < 1;
+                                              index++) {
+                                            if (renTalModels[0]
+                                                    .imglogo!
+                                                    .trim() ==
+                                                '') {
+                                              // newValuePDFimg.add(
+                                              //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                            } else {
+                                              newValuePDFimg.add(
+                                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                            }
+                                          }
+
+                                          // String? Form_nameshop,
+                                          //     Form_typeshop,
+                                          //     Form_bussshop,
+                                          //     Form_bussscontact,
+                                          //     Form_address,
+                                          //     Form_tel,
+                                          //     Form_email,
+                                          //     Form_tax;
+                                          Pdfgen_his_statusbill2
+                                              .exportPDF_statusbill2(
+                                                  tableData00,
+                                                  context,
+                                                  numdoctax == ''
+                                                      ? '$numinvoice'
+                                                      : '$numdoctax',
+                                                  sum_pvat,
+                                                  sum_vat,
+                                                  sum_wht,
+                                                  sum_amt,
+                                                  sum_disp,
+                                                  sum_disamt,
+                                                  renTal_name,
+                                                  Form_bussscontact,
+                                                  // cname,
+                                                  Form_address,
+                                                  Form_tax,
+                                                  bill_addr,
+                                                  bill_email,
+                                                  bill_tel,
+                                                  bill_tax,
+                                                  bill_name,
+                                                  newValuePDFimg,
+                                                  numinvoice,
+                                                  finnancetransModels
+
+                                                  // finnancetransModels
+                                                  );
+                                        },
                                         child: Container(
                                             height: 50,
                                             decoration: const BoxDecoration(
@@ -2629,7 +2829,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                             padding: EdgeInsets.all(8.0),
                                             child: Center(
                                                 child: Text(
-                                              'พิมพ์เอกสาร',
+                                              'พิมพ์',
                                               style: TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text1_,

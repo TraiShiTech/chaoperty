@@ -271,13 +271,13 @@ class PdfgenReceipt {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 13.0,
+                          fontSize: 11.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -304,9 +304,11 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        (bill_tax.toString() == '' || bill_tax == null)
-                            ? 'เลขประจำตัวผู้เสียภาษี:0'
-                            : 'เลขประจำตัวผู้เสียภาษี:$bill_tax',
+                        (bill_tax.toString() == '' ||
+                                bill_tax == null ||
+                                bill_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -359,8 +361,8 @@ class PdfgenReceipt {
                       // ),
                       pw.Text(
                         (Slip_status.toString() == '1')
-                            ? 'เลขที่ใบแจ้งหนี้:$cFinn '
-                            : 'เลขที่รับชำระ:$cFinn ',
+                            ? 'เลขที่ใบแจ้งหนี้: $cFinn '
+                            : 'เลขที่รับชำระ: $cFinn ',
                         maxLines: 2,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -368,7 +370,7 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        'วันที่ออกบิล:  $thaiDate ${DateTime.now().year + 543}',
+                        'วันที่ออกบิล: $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -452,7 +454,11 @@ class PdfgenReceipt {
                         ),
                       ),
                       pw.Text(
-                        '$Form_bussshop',
+                        (Form_bussshop.toString() == '' ||
+                                Form_bussshop == null ||
+                                Form_bussshop.toString() == 'null')
+                            ? '-'
+                            : '$Form_bussshop',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -470,17 +476,21 @@ class PdfgenReceipt {
                       //       fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       // ),
                       pw.Text(
-                        (Form_address.toString() == '' || Form_address == null)
-                            ? 'ที่อยู่:-'
-                            : 'ที่อยู่:$Form_address',
+                        (Form_address.toString() == '' ||
+                                Form_address == null ||
+                                Form_address.toString() == 'null')
+                            ? 'ที่อยู่: -'
+                            : 'ที่อยู่: $Form_address',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       ),
                       pw.Text(
-                        (Form_tax.toString() == '' || Form_tax == null)
-                            ? 'เลขประจำตัวผู้เสียภาษี:0'
-                            : 'เลขประจำตัวผู้เสียภาษี:$Form_tax',
+                        (Form_tax.toString() == '' ||
+                                Form_tax == null ||
+                                Form_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $Form_tax',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -527,7 +537,11 @@ class PdfgenReceipt {
                           pw.Expanded(
                             flex: 4,
                             child: pw.Text(
-                              '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
+                              (Form_payment1 == null ||
+                                      Form_payment1.toString() == 'null' ||
+                                      Form_payment1.toString() == '')
+                                  ? '-'
+                                  : '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
                               //'${Form_payment1.toString()} บาท',
                               // textAlign: pw.TextAlign.justify,
                               style: pw.TextStyle(
@@ -551,7 +565,11 @@ class PdfgenReceipt {
                             pw.Expanded(
                               flex: 4,
                               child: pw.Text(
-                                '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
+                                (Form_payment2 == null ||
+                                        Form_payment2.toString() == 'null' ||
+                                        Form_payment2.toString() == '')
+                                    ? '-'
+                                    : '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
                                 //  '${Form_payment2.toString()} บาท',
                                 // textAlign: pw.TextAlign.justify,
                                 style: pw.TextStyle(
@@ -1870,17 +1888,8 @@ class PdfgenReceipt {
 ///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
-        // header: (context) {
-        //   return pw.Text(
-        //     'Flutter Approach',
-        //     style: pw.TextStyle(
-        //       fontWeight: pw.FontWeight.bold,
-        //       fontSize: 15.0,
-        //     ),
-        //   );
-        // },
-        build: (context) {
-          return [
+        header: (context) {
+          return pw.Column(children: [
             pw.Row(
               children: [
                 (netImage.isEmpty)
@@ -1921,13 +1930,13 @@ class PdfgenReceipt {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 13.0,
+                          fontSize: 11.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -1954,9 +1963,11 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        (bill_tax.toString() == '' || bill_tax == null)
-                            ? 'เลขประจำตัวผู้เสียภาษี:0'
-                            : 'เลขประจำตัวผู้เสียภาษี:$bill_tax',
+                        (bill_tax.toString() == '' ||
+                                bill_tax == null ||
+                                bill_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -2008,7 +2019,7 @@ class PdfgenReceipt {
                       //       color: PdfColors.grey800),
                       // ),
                       pw.Text(
-                        'รหัสอ้างอิง:$numinvoice ',
+                        'รหัสอ้างอิง: $numinvoice ',
                         maxLines: 2,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -2016,7 +2027,7 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        'วันที่:  $thaiDate ${DateTime.now().year + 543}',
+                        'วันที่: $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
                             fontSize: 10.0,
@@ -2028,6 +2039,10 @@ class PdfgenReceipt {
                 ),
               ],
             ),
+          ]);
+        },
+        build: (context) {
+          return [
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
             pw.Divider(),
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
@@ -2088,7 +2103,11 @@ class PdfgenReceipt {
                         ),
                       ),
                       pw.Text(
-                        '$Form_bussshop',
+                        (Form_bussshop.toString() == '' ||
+                                Form_bussshop == null ||
+                                Form_bussshop.toString() == 'null')
+                            ? '-'
+                            : '$Form_bussshop',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -2106,17 +2125,21 @@ class PdfgenReceipt {
                       //       fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       // ),
                       pw.Text(
-                        (Form_address.toString() == '' || Form_address == null)
-                            ? 'ที่อยู่:-'
-                            : 'ที่อยู่:$Form_address',
+                        (Form_address.toString() == '' ||
+                                Form_address == null ||
+                                Form_address.toString() == 'null')
+                            ? 'ที่อยู่: -'
+                            : 'ที่อยู่: $Form_address',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       ),
                       pw.Text(
-                        (Form_tax.toString() == '' || Form_tax == null)
-                            ? 'เลขประจำตัวผู้เสียภาษี:0'
-                            : 'เลขประจำตัวผู้เสียภาษี:$Form_tax',
+                        (Form_tax.toString() == '' ||
+                                Form_tax == null ||
+                                Form_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $Form_tax',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -2159,7 +2182,11 @@ class PdfgenReceipt {
                 pw.Expanded(
                   flex: 4,
                   child: pw.Text(
-                    '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
+                    (Form_payment1 == null ||
+                            Form_payment1.toString() == 'null' ||
+                            Form_payment1.toString() == '')
+                        ? '-'
+                        : '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
                     // '${Form_payment1.toString()} บาท',
                     // textAlign: pw.TextAlign.justify,
                     style: pw.TextStyle(
@@ -2183,7 +2210,11 @@ class PdfgenReceipt {
                   pw.Expanded(
                     flex: 4,
                     child: pw.Text(
-                      '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
+                      (Form_payment2 == null ||
+                              Form_payment2.toString() == 'null' ||
+                              Form_payment2.toString() == '')
+                          ? '-'
+                          : '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
                       // '${Form_payment2.toString()} บาท',
                       // textAlign: pw.TextAlign.justify,
                       style: pw.TextStyle(
@@ -2195,7 +2226,7 @@ class PdfgenReceipt {
             pw.SizedBox(height: 5 * PdfPageFormat.mm),
 
             pw.Container(
-              decoration: pw.BoxDecoration(
+              decoration: const pw.BoxDecoration(
                 color: PdfColors.green100,
                 border: pw.Border(
                   bottom: pw.BorderSide(color: PdfColors.green900),
@@ -2357,7 +2388,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2380,7 +2411,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2403,7 +2434,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2426,7 +2457,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2449,7 +2480,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2472,7 +2503,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2495,7 +2526,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -2518,7 +2549,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3419,17 +3450,8 @@ class PdfgenReceipt {
 ///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
-        // header: (context) {
-        //   return pw.Text(
-        //     'Flutter Approach',
-        //     style: pw.TextStyle(
-        //       fontWeight: pw.FontWeight.bold,
-        //       fontSize: 15.0,
-        //     ),
-        //   );
-        // },
-        build: (context) {
-          return [
+        header: (context) {
+          return pw.Column(children: [
             pw.Row(
               children: [
                 (netImage.isEmpty)
@@ -3471,13 +3493,13 @@ class PdfgenReceipt {
                         //'$',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 13.0,
+                          fontSize: 11.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
                       ),
                       pw.Text(
-                        '$bill_addr',
+                        'ที่อยู่: $bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -3495,7 +3517,11 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        'อีเมล: $bill_email',
+                        (bill_email.toString() == '' ||
+                                bill_email == null ||
+                                bill_email.toString() == 'null')
+                            ? 'อีเมล: '
+                            : 'อีเมล: $bill_email',
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
@@ -3504,9 +3530,11 @@ class PdfgenReceipt {
                             color: PdfColors.grey800),
                       ),
                       pw.Text(
-                        (bill_tax.toString() == '' || bill_tax == null)
-                            ? 'เลขประจำตัวผู้เสียภาษี:0'
-                            : 'เลขประจำตัวผู้เสียภาษี:$bill_tax',
+                        (bill_tax.toString() == '' ||
+                                bill_tax == null ||
+                                bill_tax.toString() == 'null')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         // textAlign: pw.TextAlign.justify,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
@@ -3527,7 +3555,7 @@ class PdfgenReceipt {
                       pw.Text(
                         (Slip_status.toString() == '1')
                             ? 'ใบรับเงินชั่วคราว'
-                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษีอย่างย่อ',
+                            : 'ใบเสร็จรับเงิน/ใบกำกับภาษี',
                         style: pw.TextStyle(
                           fontSize: 10.00,
                           fontWeight: pw.FontWeight.bold,
@@ -3559,6 +3587,10 @@ class PdfgenReceipt {
                 ),
               ],
             ),
+          ]);
+        },
+        build: (context) {
+          return [
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
             pw.Divider(),
             pw.SizedBox(height: 1 * PdfPageFormat.mm),
@@ -3615,19 +3647,31 @@ class PdfgenReceipt {
                         ),
                       ),
                       pw.Text(
-                        '$Form_bussshop',
+                        (Form_bussshop == null ||
+                                Form_bussshop.toString() == 'null' ||
+                                Form_bussshop.toString() == '')
+                            ? '-'
+                            : '$Form_bussshop',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       ),
                       pw.Text(
-                        'ที่อยู่:$Form_address',
+                        (Form_address == null ||
+                                Form_address.toString() == 'null' ||
+                                Form_address.toString() == '')
+                            ? 'ที่อยู่: -'
+                            : 'ที่อยู่:$Form_address',
                         textAlign: pw.TextAlign.left,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
                       ),
                       pw.Text(
-                        'เลขประจำตัวผู้เสียภาษี:$Form_tax',
+                        (Form_tax == null ||
+                                Form_tax.toString() == 'null' ||
+                                Form_tax.toString() == '')
+                            ? 'เลขประจำตัวผู้เสียภาษี: 0'
+                            : 'เลขประจำตัวผู้เสียภาษี: $Form_tax',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
                             fontSize: 10.0, font: ttf, color: PdfColors.grey),
@@ -3670,7 +3714,11 @@ class PdfgenReceipt {
                 pw.Expanded(
                   flex: 4,
                   child: pw.Text(
-                    '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
+                    (Form_payment1 == null ||
+                            Form_payment1.toString() == 'null' ||
+                            Form_payment1.toString() == '')
+                        ? '-'
+                        : '${nFormat.format(double.parse(Form_payment1.toString()))} บาท',
                     // '${Form_payment1.toString()} บาท',
                     // textAlign: pw.TextAlign.justify,
                     style: pw.TextStyle(
@@ -3694,7 +3742,11 @@ class PdfgenReceipt {
                   pw.Expanded(
                     flex: 4,
                     child: pw.Text(
-                      '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
+                      (Form_payment2 == null ||
+                              Form_payment2.toString() == 'null' ||
+                              Form_payment2.toString() == '')
+                          ? '-'
+                          : '${nFormat.format(double.parse(Form_payment2.toString()))} บาท',
                       // '${Form_payment2.toString()} บาท',
                       // textAlign: pw.TextAlign.justify,
                       style: pw.TextStyle(
@@ -3713,7 +3765,7 @@ class PdfgenReceipt {
             // 'ราคารวมก่อนVAT',
             // 'ราคารวมvat',
             pw.Container(
-              decoration: pw.BoxDecoration(
+              decoration: const pw.BoxDecoration(
                 color: PdfColors.green100,
                 border: pw.Border(
                   bottom: pw.BorderSide(color: PdfColors.green900),
@@ -3875,7 +3927,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3898,7 +3950,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3921,7 +3973,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3944,7 +3996,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3967,7 +4019,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -3990,7 +4042,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -4013,7 +4065,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),
@@ -4036,7 +4088,7 @@ class PdfgenReceipt {
                     flex: 1,
                     child: pw.Container(
                       height: 25,
-                      decoration: pw.BoxDecoration(
+                      decoration: const pw.BoxDecoration(
                         color: PdfColors.white,
                         // border: const pw.Border(
                         //   bottom: pw.BorderSide(color: PdfColors.grey300),

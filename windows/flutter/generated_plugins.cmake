@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   file_saver
+  flutter_localization
   permission_handler_windows
   printing
   syncfusion_pdfviewer_windows

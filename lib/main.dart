@@ -23,7 +23,7 @@ void main() {
 //----(Git Lab)
 //1.----> git add .
 //2.------> git remote set-url origin https://gitlab.com/traishitech.com/chaoperty.git
-//3.-------->git commit -m "commit message"
+//3.-------->git commit -m "แก้หลังจากerror อัพเวอร์ชั่น"
 //4.-----------> git push origin main
 //----------------------------------------------------->
 //----(Git Hub)

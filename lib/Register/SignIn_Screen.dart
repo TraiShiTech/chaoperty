@@ -13,14 +13,13 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AdminScaffold/AdminScaffold.dart';
-import '../Home/Home_Screen.dart';
+
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'SignUp_Screen.dart';
 import 'SignUp_Screen2.dart';
-import 'package:crypto/crypto.dart' as crypto;
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -87,7 +86,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  bool _isObscure = true;
+  // bool _isObscure = true;
   // bool _validate = false;
   final Form1_text = TextEditingController();
   final Form2_text = TextEditingController();

@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable
 import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
@@ -166,7 +167,7 @@ class _SystemlogScreenState extends State<SystemlogScreen> {
 
   Future<Null> _select_Date(BuildContext context) async {
     final Future<DateTime?> picked = showDatePicker(
-      locale: const Locale('th', 'TH'),
+      // locale: const Locale('th', 'TH'),
       helpText: 'เลือกวันที่เริ่มต้น', confirmText: 'ตกลง',
       cancelText: 'ยกเลิก',
       context: context,

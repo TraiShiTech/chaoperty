@@ -75,6 +75,7 @@ class TransModel {
   String? disendbill;
   String? diffx;
   String? dtypex;
+  String? dtype;
   String? paid;
   String? refund;
   String? returnSt;
@@ -179,6 +180,7 @@ class TransModel {
       this.disendbill,
       this.diffx,
       this.dtypex,
+      this.dtype,
       this.paid,
       this.refund,
       this.returnSt,
@@ -280,6 +282,7 @@ class TransModel {
     disendbill = json['disendbill'];
     diffx = json['diffx'];
     dtypex = json['dtypex'];
+    dtype = json['dtype'];
     paid = json['paid'];
     refund = json['refund'];
     returnSt = json['return_st'];
@@ -384,6 +387,7 @@ class TransModel {
     data['disendbill'] = this.disendbill;
     data['diffx'] = this.diffx;
     data['dtypex'] = this.dtypex;
+    data['dtype'] = this.dtype;
     data['paid'] = this.paid;
     data['refund'] = this.refund;
     data['return_st'] = this.returnSt;

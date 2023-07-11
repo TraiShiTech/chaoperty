@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -369,7 +370,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       TextButton(
@@ -662,7 +663,7 @@ class _PeopleChaoScreen2State extends State<PeopleChaoScreen2> {
                                           decoration: BoxDecoration(
                                             color: Colors.white,
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),

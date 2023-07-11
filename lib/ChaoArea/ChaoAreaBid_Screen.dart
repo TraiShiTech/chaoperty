@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'dart:math';
 
@@ -4179,6 +4180,12 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                           });
                                         } else {
                                           setState(() {
+                                            Value_D_start = '';
+                                            Value_D_end = '';
+                                            Value_DateTime_end = '';
+                                            Value_DateTime_Step2 = '';
+                                          });
+                                          setState(() {
                                             Value_rental_type_ = rtnameName;
                                             if (rtnameName == 'รายวัน') {
                                               Value_rental_type_2 = 'วัน';
@@ -4314,8 +4321,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                               // fontWeight: FontWeight.bold,
                                                               fontFamily: Font_
                                                                   .Fonts_T)),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
+                                                  inputFormatters: <TextInputFormatter>[
                                                     // for below version 2 use this
                                                     FilteringTextInputFormatter
                                                         .allow(
@@ -4390,7 +4396,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                           onTap: () async {
                                             DateTime? newDate =
                                                 await showDatePicker(
-                                              locale: const Locale('th', 'TH'),
+                                              // locale: const Locale('th', 'TH'),
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime(1000, 1, 01),
@@ -4474,26 +4480,28 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                     ? DateTime(
                                                         newDate.year,
                                                         newDate.month,
-                                                        newDate.day + countday)
+                                                        newDate.day +
+                                                            (countday - 1))
                                                     : Value_rental_type_2 ==
                                                             'สัปดาห์'
                                                         ? DateTime(
                                                             newDate.year,
                                                             newDate.month,
                                                             newDate.day +
-                                                                (countday * 7))
+                                                                (countday * 6))
                                                         : Value_rental_type_2 ==
                                                                 'เดือน'
                                                             ? DateTime(
                                                                 newDate.year,
                                                                 newDate.month +
                                                                     countday,
-                                                                newDate.day)
+                                                                newDate.day - 1)
                                                             : DateTime(
                                                                 newDate.year +
                                                                     countday,
                                                                 newDate.month,
-                                                                newDate.day);
+                                                                newDate.day -
+                                                                    1);
                                                 // var birthday = DateTime(
                                                 //     newDate.year,
                                                 //     newDate.month - 1,
@@ -4870,7 +4878,12 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                     'auto>>>>>>>>>>>${expAutoModels[i].auto}');
                                 if (expAutoModels[i].auto == '1') {
                                   var serex = expAutoModels[i].ser;
-                                  var sdate = expAutoModels[i].sday;
+                                  var sdate = expAutoModels[i].unitser == '6'
+                                      ? expAutoModels[i].sday
+                                      : DateFormat('dd')
+                                          .format(DateTime.parse(
+                                              '$Value_D_start 00:00:00'))
+                                          .toString();
                                   add_quot_auto(serex, sdate, i);
                                 }
                               }
@@ -4881,7 +4894,12 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                             print('auto>>>>>>>>>>>${expAutoModels[i].auto}');
                             if (expAutoModels[i].auto == '1') {
                               var serex = expAutoModels[i].ser;
-                              var sdate = expAutoModels[i].sday;
+                              var sdate = expAutoModels[i].unitser == '6'
+                                  ? expAutoModels[i].sday
+                                  : DateFormat('dd')
+                                      .format(DateTime.parse(
+                                          '$Value_D_start 00:00:00'))
+                                      .toString();
                               add_quot_auto(serex, sdate, i);
                             }
                           }
@@ -5489,20 +5507,22 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
     var valut_email = _Form_email; //email
     var valut_tax = _Form_tax == 'null' ? '-' : _Form_tax; //เลข tax
     var valut_DateTime_Step2 = Value_DateTime_Step2; //เลือก ว-ด-ป
-    var valut_rental_type = expAutoModels[i].unitser == '0'
-        ? Value_rental_type_
-        : expAutoModels[i].unit; //รายวัน เดือน ปี
+    var valut_rental_type = Value_rental_type_; //รายวัน เดือน ปี
+    // var valut_rental_type = expAutoModels[i].unitser == '0'
+    //     ? Value_rental_type_
+    //     : expAutoModels[i].unit; //รายวัน เดือน ปี
     var valut_D_type = Value_rental_type_2; //วัน เดือน ปี
     var valut_D = Value_DateTime_end; //หมดสัญญา ว-ด-ป
     var valut_D_start = Value_D_start; //เริ่มสัญญา ป-ด-ว
     var valut_D_start_dmy = dmy; //เริ่มสัญญา ป-ด-ว set
     var valut_D_end = Value_D_end; //หมดสัญญา ป-ด-ว
     var valut_D_end_dmy = dmye; //หมดสัญญา ป-ด-ว set
-    var valut_D_count = expAutoModels[i].unitser == '0'
-        ? Value_rental_count_
-        : expAutoModels[i].unit == 'ครั้งเดียว'
-            ? '1'
-            : Value_rental_count_; //จำนวน วัน เดือน ปี
+    var valut_D_count = Value_rental_count_; //จำนวน วัน เดือน ปี
+    // var valut_D_count = expAutoModels[i].unitser == '0'
+    //     ? Value_rental_count_
+    //     : expAutoModels[i].unit == 'ครั้งเดียว'
+    //         ? '1'
+    //         : Value_rental_count_; //จำนวน วัน เดือน ปี
     var ser_area = _selecteSer.map((e) => e).toString().substring(
         1, _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
     var name_area = _selecteSerbool.map((e) => e).toString().substring(
@@ -5594,12 +5614,17 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
 
     String _Mount =
         DateFormat('yyyy-MM').format(DateTime.parse('$Value_D_start 00:00:00'));
+    String _day =
+        DateFormat('dd').format(DateTime.parse('$Value_D_start 00:00:00'));
 
     String _Mounte =
         DateFormat('yyyy-MM').format(DateTime.parse('$Value_D_end 00:00:00'));
 
-    var dmy = '$_Mount-$_Date';
-    var dmye = '$_Mounte-$_Date';
+    var dmy =
+        expModels[index].unit == 'มิเตอร์' ? '$_Mount-$_Date' : '$_Mount-$_day';
+    var dmye = expModels[index].unit == 'มิเตอร์'
+        ? '$_Mounte-$_Date'
+        : '$_Mount-$_day';
     print('>>>>>>>>>>>>>>>>>>>>>>>>>> $dmy ------ $dmye');
 
     var valut_type = Value_AreaSer_ + 1; // ser ประเภท
@@ -5613,20 +5638,34 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
     var valut_email = _Form_email; //email
     var valut_tax = _Form_tax == 'null' ? '-' : _Form_tax; //เลข tax
     var valut_DateTime_Step2 = Value_DateTime_Step2; //เลือก ว-ด-ป
-    var valut_rental_type = expModels[index].unitser == '0'
+    // var valut_rental_type = Value_rental_type_; //รายวัน เดือน ปี
+    // var valut_rental_type = expModels[index].unitser == '0'
+    //     ? Value_rental_type_
+    //     : expModels[index].unit; //รายวัน เดือน ปี
+    var valut_rental_type = expModels[index].etype == 'R'
         ? Value_rental_type_
-        : expModels[index].unit; //รายวัน เดือน ปี
+        : expModels[index].unitser == '0'
+            ? Value_rental_type_
+            : expModels[index].unit;
     var valut_D_type = Value_rental_type_2; //วัน เดือน ปี
     var valut_D = Value_DateTime_end; //หมดสัญญา ว-ด-ป
     var valut_D_start = Value_D_start; //เริ่มสัญญา ป-ด-ว
     var valut_D_start_dmy = dmy; //เริ่มสัญญา ป-ด-ว set
     var valut_D_end = Value_D_end; //หมดสัญญา ป-ด-ว
     var valut_D_end_dmy = dmye; //หมดสัญญา ป-ด-ว set
-    var valut_D_count = expModels[index].unitser == '0'
+    // var valut_D_count = Value_rental_count_; //จำนวน วัน เดือน ปี
+    // var valut_D_count = expModels[index].unitser == '0'
+    //     ? Value_rental_count_
+    //     : expModels[index].unit == 'ครั้งเดียว'
+    //         ? '1'
+    //         : Value_rental_count_; //จำนวน วัน เดือน ปี
+    var valut_D_count = expModels[index].etype == 'R'
         ? Value_rental_count_
-        : expModels[index].unit == 'ครั้งเดียว'
-            ? '1'
-            : Value_rental_count_; //จำนวน วัน เดือน ปี
+        : expModels[index].unitser == '0'
+            ? Value_rental_count_
+            : expModels[index].unit == 'ครั้งเดียว'
+                ? '1'
+                : Value_rental_count_;
     var ser_area = _selecteSer.map((e) => e).toString().substring(
         1, _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
     var name_area = _selecteSerbool.map((e) => e).toString().substring(
@@ -5815,7 +5854,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -5990,8 +6029,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -6184,7 +6224,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                     ),
                                                   ),
                                                   const Expanded(
-                                                    flex: 1,
+                                                    flex: 2,
                                                     child: Padding(
                                                       padding:
                                                           EdgeInsets.all(8.0),
@@ -6716,7 +6756,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                         ),
                                                                         Expanded(
                                                                           flex:
-                                                                              1,
+                                                                              2,
                                                                           child:
                                                                               Padding(
                                                                             padding:
@@ -6977,10 +7017,11 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                                   ),
                                                                                 ],
                                                                               ),
-                                                                              icon: const Icon(
-                                                                                Icons.arrow_drop_down,
-                                                                                color: Colors.black45,
-                                                                              ),
+                                                                              icon: Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+                                                                              // icon: const Icon(
+                                                                              //   Icons.arrow_drop_down,
+                                                                              //   color: Colors.black45,
+                                                                              // ),
                                                                               iconSize: 30,
                                                                               buttonHeight: 60,
                                                                               buttonPadding: const EdgeInsets.only(left: 10, right: 10),
@@ -7979,7 +8020,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                         // color: AppbackgroundColor
                                                         //     .TiTile_Colors,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -8035,7 +8076,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius
@@ -8809,8 +8850,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                                 bottomRight: Radius.circular(10)),
                                                                             // border: Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -8834,9 +8876,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -8858,9 +8900,9 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                                     flex: 1,
                                                                     child:
                                                                         Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         maxLines:
@@ -9245,7 +9287,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 8, 8, 8, 0),
                                                         child: Container(
                                                             width: (!Responsive
@@ -9309,7 +9351,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 8, 0, 8, 0),
                                                         child: Container(
                                                             width: (!Responsive
@@ -9583,7 +9625,7 @@ class _ChaoAreaBidScreenState extends State<ChaoAreaBidScreen> {
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 8, 0, 8, 8),
                                                         child: Column(
                                                           children: [

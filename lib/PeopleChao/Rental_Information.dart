@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
@@ -5,6 +6,7 @@ import 'dart:math';
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:crypto/crypto.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:file_saver/file_saver.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,12 +27,15 @@ import 'package:radio_grouped_buttons/custom_buttons/custom_radio_buttons_group.
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../Constant/Myconstant.dart';
+import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetC_Quot_Select_Model.dart';
 import '../Model/GetContractf_Model.dart';
+import '../Model/GetCustomer_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetTrans_Model.dart';
@@ -50,6 +55,9 @@ import 'dart:convert';
 import 'dart:js' as js;
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import 'QR_PDF2.dart';
+import 'package:convert/convert.dart';
 
 class RentalInformation extends StatefulWidget {
   final Get_Value_NameShop_index;
@@ -71,6 +79,7 @@ class _RentalInformationState extends State<RentalInformation> {
   List<TeNantModel> teNantModels = [];
   List<RenTalModel> renTalModels = [];
   List<ContractfModel> contractfModels = [];
+  final _formKey = GlobalKey<FormState>();
   final Form_nameshop = TextEditingController();
   final Form_typeshop = TextEditingController();
   final Form_bussshop = TextEditingController();
@@ -90,11 +99,21 @@ class _RentalInformationState extends State<RentalInformation> {
   final Form_zn = TextEditingController();
   final Form_aser = TextEditingController();
   final Form_qty = TextEditingController();
+
+  final Form_User = TextEditingController();
+  final Form_UserPass = TextEditingController();
   String tappedIndex_1 = ''; // รายละเอียดค่าบริการ
   String tappedIndex_2 = ''; // รายละเอียดค่าบริการ
   List<QuotxSelectModel> quotxSelectModels = [];
   List<TransModel> _TransModels = [];
-  String? _verticalGroupValue, foder;
+  List<CustomerModel> customerModels = [];
+  String? _verticalGroupValue,
+      foder,
+      renTal_bill,
+      renTal_name,
+      renTal_user,
+      fname_,
+      Cust_no_;
   String File_Names = '';
   String? cxname_card,
       cxname_lease,
@@ -102,15 +121,25 @@ class _RentalInformationState extends State<RentalInformation> {
       cxname_card_ser,
       cxname_lease_ser,
       cxname_other_ser;
-
+  List<ContractfModel> Other_file = [];
   @override
   void initState() {
     super.initState();
+    checkPreferance();
     read_data();
     red_report();
     red_reporttrans();
     read_GC_rental();
     GC_contractf();
+  }
+
+  Future<Null> checkPreferance() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      renTal_user = preferences.getString('renTalSer');
+      renTal_name = preferences.getString('renTalName');
+      fname_ = preferences.getString('fname');
+    });
   }
 
   Future<Null> read_GC_rental() async {
@@ -131,6 +160,7 @@ class _RentalInformationState extends State<RentalInformation> {
         var foderx = renTalModel.dbn;
         setState(() {
           foder = foderx;
+          renTal_bill = renTalModel.bill_name!;
           renTalModels.add(renTalModel);
         });
       }
@@ -233,6 +263,7 @@ class _RentalInformationState extends State<RentalInformation> {
           TeNantModel teNantModel = TeNantModel.fromJson(map);
           setState(() {
             teNantModels.add(teNantModel);
+            Cust_no_ = teNantModel.custno_1.toString();
             _verticalGroupValue = teNantModel.ctype;
             Form_nameshop.text = teNantModel.sname.toString();
             Form_typeshop.text = teNantModel.stype.toString();
@@ -258,6 +289,42 @@ class _RentalInformationState extends State<RentalInformation> {
             Form_zn.text = teNantModel.zn.toString();
             Form_aser.text = teNantModel.aser.toString();
             Form_qty.text = teNantModel.qty.toString();
+          });
+        }
+        red_coutumer();
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> red_coutumer() async {
+    if (customerModels.isNotEmpty) {
+      setState(() {
+        customerModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String? ren = preferences.getString('renTalSer');
+    String url =
+        '${MyConstant().domain}/GC_custo_informa.php?isAdd=true&ren=$ren&cusno=$Cust_no_';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      //print(result);
+      List<int> encodedBytes = [];
+      Uint8List decodedBytes;
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          CustomerModel customerModel = CustomerModel.fromJson(map);
+          setState(() {
+            customerModels.add(customerModel);
+
+            Form_User.text = customerModel.user_name.toString();
+            // encodedBytes = hex.decode(customerModel.passw!);
+            // decodedBytes = Uint8List.fromList(encodedBytes);
+            // const utf8Decoder = Utf8Decoder(allowMalformed: true);
+            // Form_UserPass.text = utf8Decoder.convert(encodedBytes);
           });
         }
       }
@@ -411,6 +478,7 @@ class _RentalInformationState extends State<RentalInformation> {
       contractfModels.clear();
     }
     setState(() {
+      Other_file = [];
       cxname_card = null;
       cxname_lease = null;
       cxname_other = null;
@@ -439,14 +507,26 @@ class _RentalInformationState extends State<RentalInformation> {
           });
 
           if (contractfModelss.cxname.toString() == 'contract/card') {
-            cxname_card = contractfModelss.filename.toString();
-            cxname_card_ser = contractfModelss.ser.toString();
+            setState(() {
+              cxname_card = contractfModelss.filename.toString();
+              cxname_card_ser = contractfModelss.ser.toString();
+            });
           } else if (contractfModelss.cxname.toString() == 'contract/lease') {
-            cxname_lease = contractfModelss.filename.toString();
-            cxname_lease_ser = contractfModelss.ser.toString();
+            setState(() {
+              cxname_lease = contractfModelss.filename.toString();
+              cxname_lease_ser = contractfModelss.ser.toString();
+            });
           } else if (contractfModelss.cxname.toString() == 'contract/other') {
-            cxname_other = contractfModelss.filename.toString();
-            cxname_other_ser = contractfModelss.ser.toString();
+            setState(() {
+              cxname_other = contractfModelss.filename.toString();
+              cxname_other_ser = contractfModelss.ser.toString();
+            });
+
+            //////////----------------------------------
+
+            setState(() {
+              Other_file.add(contractfModelss);
+            });
           } else {}
         }
 
@@ -629,7 +709,9 @@ class _RentalInformationState extends State<RentalInformation> {
     String date_ = DateFormat('ddMMyyyy')
         .format(DateTime.parse('${dateTimeNow}'))
         .toString();
-    String fileName = 'other_${widget.Get_Value_cid}_$date_.pdf';
+
+    String fileName =
+        'other_${widget.Get_Value_cid}_${date_}_${Other_file.length + 1}.pdf';
     String MixPath_ = '$Path_foder/$Path_foderSub';
 
     InsertFile_SQL(fileName, MixPath_);
@@ -866,7 +948,7 @@ class _RentalInformationState extends State<RentalInformation> {
                   const Expanded(
                     flex: 1,
                     child: Text(
-                      '',
+                      'บัตรผู้เช่า',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -878,18 +960,373 @@ class _RentalInformationState extends State<RentalInformation> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        // color: Colors.green,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
+                    child: ScrollConfiguration(
+                      behavior: ScrollConfiguration.of(context)
+                          .copyWith(dragDevices: {
+                        PointerDeviceKind.touch,
+                        PointerDeviceKind.mouse,
+                      }),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 300,
+                                    // height: 135,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(0),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(0)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 3,
+                                          blurRadius: 5,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                      image: const DecorationImage(
+                                        image: AssetImage("images/pngegg2.png"),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              4, 0, 0, 0),
+                                          child: Container(
+                                            color: Colors.white,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Center(
+                                                    child: Container(
+                                                  height: 110,
+                                                  width: 110,
+                                                  child: SfBarcodeGenerator(
+                                                    value:
+                                                        '${widget.Get_Value_cid}',
+                                                    symbology: QRCode(),
+                                                    showValue: false,
+                                                  ),
+                                                )),
+
+                                                // Center(
+                                                //   child: PrettyQr(
+                                                //     // typeNumber: 3,
+                                                //     image: const AssetImage(
+                                                //       "images/Icon-chao.png",
+                                                //     ),
+                                                //     size: 110,
+                                                //     data: '${teNantModels[index].cid}',
+                                                //     errorCorrectLevel: QrErrorCorrectLevel.M,
+                                                //     roundEdges: true,
+                                                //   ),
+                                                // ),
+                                                Text(
+                                                  '${Form_sdate.text} ถึง ${Form_ldate.text}',
+                                                  maxLines: 2,
+                                                  style: const TextStyle(
+                                                    fontSize: 8.0,
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    // fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      4, 8, 0, 8),
+                                              child: Container(
+                                                // decoration:
+                                                //     BoxDecoration(
+                                                //   image:
+                                                //       DecorationImage(
+                                                //     image: NetworkImage("https://www.kindpng.com/picc/m/266-2660257_dotted-background-png-image-free-download-searchpng-white.png"),
+                                                //     fit: BoxFit.cover,
+                                                //   ),
+                                                // ),
+                                                width: 170,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    const SizedBox(
+                                                      height: 5.0,
+                                                    ),
+                                                    // const Text(
+                                                    //   'เลขสัญญา',
+                                                    //   style: TextStyle(
+                                                    //     fontSize: 10.0,
+                                                    //     color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                    //     // fontWeight: FontWeight.bold,
+                                                    //     fontFamily: Font_.Fonts_T,
+                                                    //   ),
+                                                    // ),
+                                                    Text(
+                                                      '${widget.Get_Value_cid}',
+                                                      style: const TextStyle(
+                                                        fontSize: 12.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    const Text(
+                                                      'ชื่อผู้ติดต่อ',
+                                                      style: TextStyle(
+                                                        fontSize: 10.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        //fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${Form_bussscontact.text}',
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                        fontSize: 12.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    const Text(
+                                                      'ชื่อร้านค้า',
+                                                      style: TextStyle(
+                                                        fontSize: 10.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${Form_nameshop.text}',
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                        fontSize: 12.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'พื้นที่ : ${Form_ln.text} ( ${Form_zn.text} )',
+                                                      maxLines: 2,
+                                                      style: const TextStyle(
+                                                        fontSize: 10.0,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        // fontWeight: FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T,
+                                                      ),
+                                                    ),
+                                                    // Text(
+                                                    //   ' ${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
+                                                    //   maxLines: 2,
+                                                    //   style: const TextStyle(
+                                                    //     fontSize: 8.0,
+                                                    //     color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                    //     // fontWeight: FontWeight.bold,
+                                                    //     fontFamily: Font_.Fonts_T,
+                                                    //   ),
+                                                    // ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            // if (serPositioned == null)
+                                            //   // ?
+                                            Positioned(
+                                              bottom: 5,
+                                              right: 5,
+                                              child: InkWell(
+                                                child: Container(
+                                                  width: 30.0,
+                                                  height: 30.0,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.black
+                                                        .withOpacity(0.5),
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: const Center(
+                                                      child: Icon(
+                                                    Icons.print,
+                                                    color: Colors.white,
+                                                  )),
+                                                ),
+                                                onTap: () async {
+                                                  showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (_) {
+                                                        // Future.delayed(
+                                                        //     const Duration(
+                                                        //         seconds:
+                                                        //             1),
+                                                        //     () {
+                                                        //   Navigator.of(
+                                                        //           context)
+                                                        //       .pop();
+                                                        // });
+
+                                                        return Dialog(
+                                                          child: StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      seconds:
+                                                                          1)),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                return const SizedBox(
+                                                                    // height: 20,
+                                                                    width: 350,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          EdgeInsets.all(
+                                                                              20.0),
+                                                                      child:
+                                                                          Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.center,
+                                                                        children: [
+                                                                          Padding(
+                                                                            padding: EdgeInsets.fromLTRB(
+                                                                                0,
+                                                                                0,
+                                                                                8,
+                                                                                0),
+                                                                            child:
+                                                                                SizedBox(height: 30, child: CircularProgressIndicator()),
+                                                                          ),
+                                                                          Text(
+                                                                            'กำลัง Download และแปลงไฟล์ PDF...  ',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ));
+                                                              }),
+                                                        );
+                                                      });
+                                                  Pdfgen_QR_2.displayPdf_QR2(
+                                                      context,
+                                                      renTal_name,
+                                                      widget.Get_Value_cid,
+                                                      '${Form_bussscontact.text}',
+                                                      '${Form_sdate.text} ถึง ${Form_ldate.text}',
+                                                      '${Form_nameshop.text}',
+                                                      '${Form_ln.text} ( ${Form_zn.text} )');
+                                                },
+                                              ),
+                                            )
+                                            // :
+                                            // Positioned(bottom: 5, right: 5, child: Container(padding: const EdgeInsets.all(4.0), child: const CircularProgressIndicator())),
+                                          ],
+                                        ),
+
+                                        // ElevatedButton(
+                                        //     style: ElevatedButton.styleFrom(
+                                        //         primary: Colors
+                                        //             .blueGrey.shade900),
+                                        //     onPressed:
+                                        //         () {
+                                        //       //  saveData(index);
+                                        //     },
+                                        //     child: const Text(
+                                        //         'Add to Cart')),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 136,
+                                    width: 15,
+                                    decoration: BoxDecoration(
+                                      color: Colors.green[300],
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(0),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(0),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        RotatedBox(
+                                          quarterTurns: 1,
+                                          child: Text(
+                                            '$renTal_name',
+                                            maxLines: 1,
+                                            style: const TextStyle(
+                                              fontSize: 9.0,
+                                              color: Colors.white,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        // border: Border.all(color: Colors.grey, width: 1),
                       ),
-                      padding: const EdgeInsets.all(8.0),
                     ),
                   ),
                 ],
@@ -2214,13 +2651,664 @@ class _RentalInformationState extends State<RentalInformation> {
               ),
             ),
             Row(
-              children: const [
+              children: [
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: AutoSizeText(
                     minFontSize: 10,
                     maxFontSize: 15,
-                    '4.เอกสาร',
+                    '4.User & Password ',
+                    style: TextStyle(
+                        color: PeopleChaoScreen_Color.Colors_Text1_,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: FontWeight_.Fonts_T
+                        //fontSize: 10.0
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Text(
+                    'User & Password ของผู้เช่า ',
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: PeopleChaoScreen_Color.Colors_Text2_,
+                        // fontWeight: FontWeight.bold,
+                        fontFamily: Font_.Fonts_T
+                        //fontSize: 10.0
+                        ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: InkWell(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8),
+                              bottomLeft: Radius.circular(8),
+                              bottomRight: Radius.circular(8)),
+                        ),
+                        padding: EdgeInsets.all(4.0),
+                        child: Text(
+                          'แก้ไข / กำหนด',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: Colors.white,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: Font_.Fonts_T
+                              //fontSize: 10.0
+                              ),
+                        ),
+                      ),
+                      onTap: () {
+                        showDialog<String>(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (BuildContext context) => Form(
+                            key: _formKey,
+                            child: AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              title: const Center(
+                                  child: Text(
+                                'แก้ไข User & Password',
+                                style: TextStyle(
+                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                              actions: <Widget>[
+                                Column(
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'User',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.green,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(6),
+                                          topRight: Radius.circular(6),
+                                          bottomLeft: Radius.circular(6),
+                                          bottomRight: Radius.circular(6),
+                                        ),
+                                        // border: Border.all(color: Colors.grey, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        showCursor: true, //add this line
+                                        readOnly: false,
+                                        controller: Form_User,
+                                        cursorColor: Colors.green,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                          }
+                                          // if (int.parse(value.toString()) < 13) {
+                                          //   return '< 13';
+                                          // }
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            // fillColor: Colors.green[100]!.withOpacity(0.5),
+                                            filled: true,
+                                            // labelText: 'User',
+                                            // prefixIcon:
+                                            //     const Icon(Icons.person, color: Colors.black),
+                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            labelStyle: const TextStyle(
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp("[' ']")),
+                                          // for below version 2 use this
+                                          // FilteringTextInputFormatter.allow(
+                                          //     RegExp(r'[a-z A-Z 1-9]')),
+                                          // for version 2 and greater youcan also use this
+                                          // FilteringTextInputFormatter
+                                          //     .digitsOnly
+                                        ],
+                                        onChanged: (value) {
+                                          // print('User : ${value}');
+                                        },
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Password',
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.green,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(6),
+                                          topRight: Radius.circular(6),
+                                          bottomLeft: Radius.circular(6),
+                                          bottomRight: Radius.circular(6),
+                                        ),
+                                        // border: Border.all(color: Colors.grey, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.text,
+                                        showCursor: true, //add this line
+                                        readOnly: false,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                          }
+                                          // if (int.parse(value.toString()) < 13) {
+                                          //   return '< 13';
+                                          // }
+                                          return null;
+                                        },
+                                        controller: Form_UserPass,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            // fillColor: Colors.green[100]!.withOpacity(0.5),
+                                            filled: true,
+                                            // labelText: 'Password',
+                                            // prefixIcon:
+                                            //     const Icon(Icons.person, color: Colors.black),
+                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            labelStyle: const TextStyle(
+                                                color: Colors.black54,
+                                                fontFamily: Font_.Fonts_T)),
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.deny(
+                                              RegExp("[' ']")),
+                                          // for below version 2 use this
+                                          // FilteringTextInputFormatter.allow(
+                                          //     RegExp(r'[a-z A-Z 1-9]')),
+                                          // for version 2 and greater youcan also use this
+                                          // FilteringTextInputFormatter
+                                          //     .digitsOnly
+                                        ],
+                                        onChanged: (value) {
+                                          // print('Pass_User : ${value}');
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    const Divider(
+                                      color: Colors.grey,
+                                      height: 4.0,
+                                    ),
+                                    const SizedBox(
+                                      height: 5.0,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              width: 100,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  String? ren = preferences
+                                                      .getString('renTalSer');
+                                                  String? ser_user = preferences
+                                                      .getString('ser');
+
+                                                  String Cid_ =
+                                                      '${widget.Get_Value_cid}';
+                                                  print(
+                                                      'User : ${Form_User.text}');
+                                                  print(
+                                                      'Cust_no_ : ${Cust_no_}');
+
+                                                  String password = md5
+                                                      .convert(utf8.encode(
+                                                          Form_UserPass.text))
+                                                      .toString();
+                                                  print(
+                                                      'password Md5 $password');
+                                                  if (_formKey.currentState!
+                                                      .validate()) {
+                                                    String url =
+                                                        '${MyConstant().domain}/UpC_custno_cid_Informa.php?isAdd=true&cust_no=$Cust_no_&user_U=${Form_User.text}&pass_U=$password&ren=$ren';
+                                                    try {
+                                                      var response = await http
+                                                          .get(Uri.parse(url));
+
+                                                      var result = json.decode(
+                                                          response.body);
+                                                      Insert_log.Insert_logs(
+                                                          'ผู้เช่า',
+                                                          'ข้อมูลผู้เช่า>>แก้ไขUser&password(${widget.Get_Value_cid})');
+                                                      setState(() {
+                                                        checkPreferance();
+                                                        read_data();
+                                                        red_report();
+                                                        red_reporttrans();
+                                                        read_GC_rental();
+                                                        GC_contractf();
+                                                        Form_UserPass.clear();
+                                                        Form_User.clear();
+                                                      });
+                                                      Navigator.pop(
+                                                          context, 'OK');
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(const SnackBar(
+                                                              content: Text(
+                                                                  'แก้ไขข้อมูลเสร็จสิ้น !!',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T))));
+                                                    } catch (e) {
+                                                      Navigator.pop(
+                                                          context, 'OK');
+                                                      ScaffoldMessenger.of(
+                                                              context)
+                                                          .showSnackBar(
+                                                        const SnackBar(
+                                                            content: Text(
+                                                                'เกิดข้อผิดพลาด',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontFamily:
+                                                                        Font_
+                                                                            .Fonts_T))),
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                child: const Text(
+                                                  'ยืนยัน',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Container(
+                                                  width: 100,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    color: Colors.redAccent,
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        checkPreferance();
+                                                        read_data();
+                                                        red_report();
+                                                        red_reporttrans();
+                                                        read_GC_rental();
+                                                        GC_contractf();
+                                                        Form_UserPass.clear();
+                                                        Form_User.clear();
+                                                      });
+                                                      Navigator.pop(
+                                                          context, 'OK');
+                                                    },
+                                                    child: const Text(
+                                                      'ยกเลิก',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  // color: AppbackgroundColor.Sub_Abg_Colors,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                  border: Border.all(color: Colors.grey, width: 1),
+                ),
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    const Expanded(
+                      flex: 1,
+                      child: Text(
+                        'User',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                            //fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          // color: Colors.green,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(6),
+                            topRight: Radius.circular(6),
+                            bottomLeft: Radius.circular(6),
+                            bottomRight: Radius.circular(6),
+                          ),
+                          // border: Border.all(color: Colors.grey, width: 1),
+                        ),
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          showCursor: false, //add this line
+                          readOnly: true,
+                          controller: Form_User,
+                          // cursorColor: Colors.grey,
+                          decoration: InputDecoration(
+                              fillColor: Colors.white.withOpacity(0.3),
+                              // fillColor: Colors.green[100]!.withOpacity(0.5),
+                              filled: true,
+                              // labelText: 'User',
+                              // prefixIcon:
+                              //     const Icon(Icons.person, color: Colors.black),
+                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                              focusedBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              enabledBorder: const OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(15),
+                                  topLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              labelStyle: const TextStyle(
+                                  color: Colors.black54,
+                                  fontFamily: Font_.Fonts_T)),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                            // for below version 2 use this
+                            // FilteringTextInputFormatter.allow(
+                            //     RegExp(r'[a-z A-Z 1-9]')),
+                            // for version 2 and greater youcan also use this
+                            // FilteringTextInputFormatter
+                            //     .digitsOnly
+                          ],
+                          onChanged: (value) {
+                            print('User : ${value}');
+                          },
+                        ),
+                      ),
+                    ),
+                    const Expanded(
+                      flex: 3,
+                      child: Text(
+                        '',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: PeopleChaoScreen_Color.Colors_Text2_,
+                            //fontWeight: FontWeight.bold,
+                            fontFamily: Font_.Fonts_T),
+                      ),
+                    ),
+                    // Expanded(
+                    //   flex: 2,
+                    //   child: Container(
+                    //     decoration: const BoxDecoration(
+                    //       // color: Colors.green,
+                    //       borderRadius: BorderRadius.only(
+                    //         topLeft: Radius.circular(6),
+                    //         topRight: Radius.circular(6),
+                    //         bottomLeft: Radius.circular(6),
+                    //         bottomRight: Radius.circular(6),
+                    //       ),
+                    //       // border: Border.all(color: Colors.grey, width: 1),
+                    //     ),
+                    //     padding: const EdgeInsets.all(8.0),
+                    //     child: TextFormField(
+                    //       keyboardType: TextInputType.text,
+                    //       showCursor: false, //add this line
+                    //       readOnly: true,
+
+                    //       controller: Form_UserPass,
+                    //       // cursorColor: Colors.grey,
+                    //       decoration: InputDecoration(
+                    //           fillColor: Colors.white.withOpacity(0.3),
+                    //           // fillColor: Colors.green[100]!.withOpacity(0.5),
+                    //           filled: true,
+                    //           // labelText: 'Password',
+                    //           // prefixIcon:
+                    //           //     const Icon(Icons.person, color: Colors.black),
+                    //           // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                    //           focusedBorder: const OutlineInputBorder(
+                    //             borderRadius: BorderRadius.only(
+                    //               topRight: Radius.circular(15),
+                    //               topLeft: Radius.circular(15),
+                    //               bottomRight: Radius.circular(15),
+                    //               bottomLeft: Radius.circular(15),
+                    //             ),
+                    //             borderSide: BorderSide(
+                    //               width: 1,
+                    //               color: Colors.black,
+                    //             ),
+                    //           ),
+                    //           enabledBorder: const OutlineInputBorder(
+                    //             borderRadius: BorderRadius.only(
+                    //               topRight: Radius.circular(15),
+                    //               topLeft: Radius.circular(15),
+                    //               bottomRight: Radius.circular(15),
+                    //               bottomLeft: Radius.circular(15),
+                    //             ),
+                    //             borderSide: BorderSide(
+                    //               width: 1,
+                    //               color: Colors.grey,
+                    //             ),
+                    //           ),
+                    //           labelStyle: const TextStyle(
+                    //               color: Colors.black54,
+                    //               fontFamily: Font_.Fonts_T)),
+                    //       inputFormatters: <TextInputFormatter>[
+                    //         FilteringTextInputFormatter.deny(RegExp("[' ']")),
+                    //         // for below version 2 use this
+                    //         // FilteringTextInputFormatter.allow(
+                    //         //     RegExp(r'[a-z A-Z 1-9]')),
+                    //         // for version 2 and greater youcan also use this
+                    //         // FilteringTextInputFormatter
+                    //         //     .digitsOnly
+                    //       ],
+                    //       onChanged: (value) {
+                    //         print('Pass_User : ${value}');
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+            ),
+            const Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: AutoSizeText(
+                    minFontSize: 10,
+                    maxFontSize: 15,
+                    '5.เอกสาร',
                     style: TextStyle(
                         color: PeopleChaoScreen_Color.Colors_Text1_,
                         fontWeight: FontWeight.bold,
@@ -3651,10 +4739,10 @@ class _RentalInformationState extends State<RentalInformation> {
                     child: Container(
                       child: Column(
                         children: [
-                          const Padding(
+                          Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              'เอกสารอื่นๆ',
+                              'เอกสารอื่นๆ ${Other_file.length} รายการ',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -3672,45 +4760,288 @@ class _RentalInformationState extends State<RentalInformation> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     height: 110,
-                                    decoration: const BoxDecoration(
-                                      // color: Colors.orange[600],
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
+                                    padding: const EdgeInsets.all(4.0),
+                                    decoration: BoxDecoration(
+                                      // color: Colors.green,
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(8),
+                                          topRight: Radius.circular(8),
+                                          bottomLeft: Radius.circular(8),
+                                          bottomRight: Radius.circular(8)),
+                                      border: Border.all(
+                                          color: Colors.grey, width: 2),
                                     ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            (cxname_other != null)
-                                                ? 'พบเอกสาร'
-                                                : 'ไม่พบเอกสาร',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: (cxname_other != null)
-                                                    ? Colors.black
-                                                    : Colors.red,
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T
-                                                //fontSize: 10.0
-                                                ),
-                                          ),
-                                          Text(
-                                            (cxname_other != null)
-                                                ? '$cxname_other'
-                                                : '',
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: Colors.blue[800],
-                                                // fontWeight: FontWeight.bold,
-                                                fontFamily: Font_.Fonts_T,
-                                                fontSize: 8.0),
-                                          ),
-                                        ],
+                                    child: ScrollConfiguration(
+                                      behavior: ScrollConfiguration.of(context)
+                                          .copyWith(dragDevices: {
+                                        PointerDeviceKind.touch,
+                                        PointerDeviceKind.mouse,
+                                      }),
+                                      child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          children: [
+                                            for (int index = 0;
+                                                index < Other_file.length;
+                                                index++)
+                                              Stack(
+                                                children: [
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        // String Url =
+                                                        //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                                                        String Url =
+                                                            await '${MyConstant().domain}/files/$foder/contract/other/${Other_file[index].filename}';
+                                                        print(Url);
+                                                        if (Url == '') {
+                                                          showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10.0))),
+                                                                title:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  'ไม่พบเอกสารอื่นๆ',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                )),
+                                                                content:
+                                                                    const SingleChildScrollView(
+                                                                  child:
+                                                                      ListBody(
+                                                                    children: <Widget>[
+                                                                      Text(
+                                                                        'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                PeopleChaoScreen_Color.Colors_Text2_,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                actions: <Widget>[
+                                                                  InkWell(
+                                                                    child: Container(
+                                                                        width: 100,
+                                                                        decoration: const BoxDecoration(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(8.0),
+                                                                        child: const Center(
+                                                                            child: Text(
+                                                                          'ปิด',
+                                                                          style: TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ))),
+                                                                    onTap: () {
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                  // TextButton(
+                                                                  //   child: const Text('ตกลง'),
+                                                                  //   onPressed: () {
+                                                                  //     Navigator.of(context).pop();
+                                                                  //   },
+                                                                  // ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        } else {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    PreviewScreenRental_(
+                                                                        title:
+                                                                            'เอกสารอื่นๆ',
+                                                                        Url:
+                                                                            Url),
+                                                              ));
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                          width: 150,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: const BorderRadius
+                                                                    .only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        8),
+                                                                bottomRight:
+                                                                    Radius
+                                                                        .circular(
+                                                                            8)),
+                                                            border: Border.all(
+                                                                color:
+                                                                    Colors.grey,
+                                                                width: 2),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Text(
+                                                            '${Other_file[index].filename}',
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .blue[800],
+                                                                // fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T,
+                                                                fontSize: 12.0),
+                                                          )),
+                                                    ),
+                                                  ),
+                                                  Positioned(
+                                                      top: 0,
+                                                      right: 2,
+                                                      child: InkWell(
+                                                        child: Icon(
+                                                          Icons.close_sharp,
+                                                          color: Colors.red,
+                                                        ),
+                                                        onTap: () {
+                                                          showDialog<void>(
+                                                            context: context,
+                                                            barrierDismissible:
+                                                                false, // user must tap button!
+                                                            builder:
+                                                                (BuildContext
+                                                                    context) {
+                                                              return AlertDialog(
+                                                                shape: const RoundedRectangleBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.all(
+                                                                            Radius.circular(10.0))),
+                                                                title:
+                                                                    const Center(
+                                                                        child:
+                                                                            Text(
+                                                                  'ลบเอกสาร',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text1_,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontFamily:
+                                                                          FontWeight_
+                                                                              .Fonts_T),
+                                                                )),
+                                                                actions: <Widget>[
+                                                                  Row(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .center,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.red[600],
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ลบเอกสาร',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () async {
+                                                                            deletedFile_(
+                                                                                '${Other_file[index].filename}',
+                                                                                ' ${Other_file[index].ser}',
+                                                                                'other');
+
+                                                                            deletedFile_SQL('${Other_file[index].ser}');
+                                                                            GC_contractf();
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsets.all(8.0),
+                                                                        child:
+                                                                            InkWell(
+                                                                          child: Container(
+                                                                              width: 100,
+                                                                              decoration: const BoxDecoration(
+                                                                                color: Colors.black,
+                                                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                // border: Border.all(color: Colors.white, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Center(
+                                                                                  child: Text(
+                                                                                'ปิด',
+                                                                                style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text3_, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                              ))),
+                                                                          onTap:
+                                                                              () {
+                                                                            GC_contractf();
+                                                                            Navigator.of(context).pop();
+                                                                          },
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                      ))
+                                                ],
+                                              ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -3750,379 +5081,16 @@ class _RentalInformationState extends State<RentalInformation> {
                                       ),
                                     ),
                                     onTap: () async {
-                                      // uploadFile_Documentmore();
-
-                                      (cxname_other == null)
-                                          ? uploadFile_Documentmore(
-                                              '${cxname_other}',
-                                              ' $cxname_other_ser',
-                                            )
-                                          : showDialog<void>(
-                                              context: context,
-                                              barrierDismissible:
-                                                  false, // user must tap button!
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.all(
-                                                                  Radius.circular(
-                                                                      10.0))),
-                                                  title: const Center(
-                                                      child: Text(
-                                                    'มีเอกสารอื่นๆอยู่แล้ว',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontFamily: FontWeight_
-                                                            .Fonts_T),
-                                                  )),
-                                                  content:
-                                                      SingleChildScrollView(
-                                                    child: ListBody(
-                                                      children: const <Widget>[
-                                                        Text(
-                                                          'มีเอกสารอื่นๆอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  actions: <Widget>[
-                                                    Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .red[600],
-                                                                  borderRadius: const BorderRadius
-                                                                          .only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ลบเอกสาร',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () async {
-                                                              deletedFile_(
-                                                                  '${cxname_other}',
-                                                                  ' $cxname_other_ser',
-                                                                  'other');
-
-                                                              deletedFile_SQL(
-                                                                  '$cxname_other_ser');
-                                                              GC_contractf();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: InkWell(
-                                                            child: Container(
-                                                                width: 100,
-                                                                decoration:
-                                                                    const BoxDecoration(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child:
-                                                                    const Center(
-                                                                        child:
-                                                                            Text(
-                                                                  'ปิด',
-                                                                  style: TextStyle(
-                                                                      color: PeopleChaoScreen_Color
-                                                                          .Colors_Text3_,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontFamily:
-                                                                          Font_
-                                                                              .Fonts_T),
-                                                                ))),
-                                                            onTap: () {
-                                                              GC_contractf();
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop();
-                                                            },
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
+                                      uploadFile_Documentmore(
+                                        '${cxname_other}',
+                                        ' $cxname_other_ser',
+                                      );
                                     },
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          // Row(
-                          //   children: [
-                          //     // Expanded(
-                          //     //   flex: 1,
-                          //     //   child: Padding(
-                          //     //     padding: const EdgeInsets.all(8.0),
-                          //     //     child: InkWell(
-                          //     //       child: Container(
-                          //     //         height: 40,
-                          //     //         decoration: BoxDecoration(
-                          //     //           color: Colors.red[400],
-                          //     //           borderRadius: const BorderRadius.only(
-                          //     //               topLeft: Radius.circular(10),
-                          //     //               topRight: Radius.circular(10),
-                          //     //               bottomLeft: Radius.circular(10),
-                          //     //               bottomRight: Radius.circular(10)),
-                          //     //         ),
-                          //     //         child: const Center(
-                          //     //           child: Text(
-                          //     //             'ลบ(PDF)',
-                          //     //             textAlign: TextAlign.start,
-                          //     //             style: TextStyle(
-                          //     //                 color: PeopleChaoScreen_Color
-                          //     //                     .Colors_Text2_,
-                          //     //                 // fontWeight: FontWeight.bold,
-                          //     //                 fontFamily: Font_.Fonts_T
-                          //     //                 //fontSize: 10.0
-                          //     //                 ),
-                          //     //           ),
-                          //     //         ),
-                          //     //       ),
-                          //     //       onTap: () async {
-                          //     //         deletedFile_('${cxname_other}',
-                          //     //             ' $cxname_other_ser');
-                          //     //         // final file = await pickFile_agreement();
-                          //     //         // if (file != null) {
-                          //     //         //   // Upload the file to the server
-                          //     //         //   uploadFile_Agreement(file);
-                          //     //         // }
-                          //     //       },
-                          //     //     ),
-                          //     //   ),
-                          //     // ),
-                          //     Expanded(
-                          //       flex: 1,
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.all(8.0),
-                          //         child: InkWell(
-                          //           child: Container(
-                          //             height: 40,
-                          //             decoration: BoxDecoration(
-                          //               color: Colors.orange[400],
-                          //               borderRadius: const BorderRadius.only(
-                          //                   topLeft: Radius.circular(10),
-                          //                   topRight: Radius.circular(10),
-                          //                   bottomLeft: Radius.circular(10),
-                          //                   bottomRight: Radius.circular(10)),
-                          //             ),
-                          //             child: Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.center,
-                          //               children: const [
-                          //                 Padding(
-                          //                   padding: EdgeInsets.all(4.0),
-                          //                   child: Icon(
-                          //                     Icons.print,
-                          //                     color: Colors.white,
-                          //                   ),
-                          //                 ),
-                          //                 Text(
-                          //                   'พิมพ์',
-                          //                   textAlign: TextAlign.start,
-                          //                   style: TextStyle(
-                          //                       color: PeopleChaoScreen_Color
-                          //                           .Colors_Text2_,
-                          //                       // fontWeight: FontWeight.bold,
-                          //                       fontFamily: Font_.Fonts_T
-                          //                       //fontSize: 10.0
-                          //                       ),
-                          //                 ),
-                          //               ],
-                          //             ),
-                          //           ),
-                          //           onTap: () async {
-                          //             // String Url =
-                          //             //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                          //             String Url =
-                          //                 await '${MyConstant().domain}/files/kad_taii/contract/other/$cxname_other';
-                          //             print(Url);
-                          //             if (Url == '') {
-                          //               showDialog<void>(
-                          //                 context: context,
-                          //                 barrierDismissible:
-                          //                     false, // user must tap button!
-                          //                 builder: (BuildContext context) {
-                          //                   return AlertDialog(
-                          //                     shape:
-                          //                         const RoundedRectangleBorder(
-                          //                             borderRadius:
-                          //                                 BorderRadius.all(
-                          //                                     Radius.circular(
-                          //                                         10.0))),
-                          //                     title: const Center(
-                          //                         child: Text(
-                          //                       'ไม่พบเอกสารอื่นๆ',
-                          //                       style: TextStyle(
-                          //                           color:
-                          //                               PeopleChaoScreen_Color
-                          //                                   .Colors_Text1_,
-                          //                           fontWeight: FontWeight.bold,
-                          //                           fontFamily:
-                          //                               FontWeight_.Fonts_T),
-                          //                     )),
-                          //                     content: SingleChildScrollView(
-                          //                       child: ListBody(
-                          //                         children: const <Widget>[
-                          //                           Text(
-                          //                             'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                          //                             style: TextStyle(
-                          //                                 color:
-                          //                                     PeopleChaoScreen_Color
-                          //                                         .Colors_Text2_,
-                          //                                 fontFamily:
-                          //                                     Font_.Fonts_T),
-                          //                           ),
-                          //                         ],
-                          //                       ),
-                          //                     ),
-                          //                     actions: <Widget>[
-                          //                       InkWell(
-                          //                         child: Container(
-                          //                             width: 100,
-                          //                             decoration:
-                          //                                 const BoxDecoration(
-                          //                               color: Colors.black,
-                          //                               borderRadius:
-                          //                                   BorderRadius.only(
-                          //                                       topLeft: Radius
-                          //                                           .circular(
-                          //                                               10),
-                          //                                       topRight: Radius
-                          //                                           .circular(
-                          //                                               10),
-                          //                                       bottomLeft: Radius
-                          //                                           .circular(
-                          //                                               10),
-                          //                                       bottomRight: Radius
-                          //                                           .circular(
-                          //                                               10)),
-                          //                               // border: Border.all(color: Colors.white, width: 1),
-                          //                             ),
-                          //                             padding:
-                          //                                 const EdgeInsets.all(
-                          //                                     8.0),
-                          //                             child: const Center(
-                          //                                 child: Text(
-                          //                               'ปิด',
-                          //                               style: TextStyle(
-                          //                                   color: PeopleChaoScreen_Color
-                          //                                       .Colors_Text3_,
-                          //                                   fontWeight:
-                          //                                       FontWeight.bold,
-                          //                                   fontFamily:
-                          //                                       Font_.Fonts_T),
-                          //                             ))),
-                          //                         onTap: () {
-                          //                           Navigator.of(context).pop();
-                          //                         },
-                          //                       ),
-                          //                       // TextButton(
-                          //                       //   child: const Text('ตกลง'),
-                          //                       //   onPressed: () {
-                          //                       //     Navigator.of(context).pop();
-                          //                       //   },
-                          //                       // ),
-                          //                     ],
-                          //                   );
-                          //                 },
-                          //               );
-                          //             } else {
-                          //               Navigator.push(
-                          //                   context,
-                          //                   MaterialPageRoute(
-                          //                     builder: (context) =>
-                          //                         PreviewScreenRental_(
-                          //                             title: 'เอกสารอื่นๆ',
-                          //                             Url: Url),
-                          //                   ));
-                          //             }
-                          //           },
-                          //         ),
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
                         ],
                       ),
                     ),
@@ -8155,7 +9123,7 @@ class RentalInforman_Agreement extends StatelessWidget {
                                               ),
                                             ),
                                             pw.Text(
-                                              'ลงชื่อ.............................................พยานที่1   ',
+                                              'ลงชื่อ.............................................พยานที่   ',
                                               textAlign: pw.TextAlign.justify,
                                               style: pw.TextStyle(
                                                 fontSize: 10.0,
@@ -8194,7 +9162,7 @@ class RentalInforman_Agreement extends StatelessWidget {
                                 children: [
                                   (imageData4 == null)
                                       ? pw.Text(
-                                          'ลงชื่อ.............................................พยาน 2   ',
+                                          'ลงชื่อ.............................................พยาน   ',
                                           textAlign: pw.TextAlign.justify,
                                           style: pw.TextStyle(
                                             fontSize: 10.0,

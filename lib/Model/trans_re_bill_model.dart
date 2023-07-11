@@ -123,6 +123,7 @@ class TransReBillModel {
   String? znn;
   String? descr;
   String? descr1;
+  String? slip;
 
   TransReBillModel({
     this.ser,
@@ -245,6 +246,7 @@ class TransReBillModel {
     this.znn,
     this.descr,
     this.descr1,
+    this.slip,
   });
 
   TransReBillModel.fromJson(Map<String, dynamic> json) {
@@ -369,6 +371,7 @@ class TransReBillModel {
     znn = json['znn'];
     descr = json['descr'];
     descr1 = json['descr1'];
+    slip = json['slip'];
   }
 
   Map<String, dynamic> toJson() {
@@ -494,6 +497,7 @@ class TransReBillModel {
     data['znn'] = this.znn;
     data['descr'] = this.descr;
     data['descr1'] = this.descr1;
+    data['slip'] = this.slip;
 
     return data;
   }

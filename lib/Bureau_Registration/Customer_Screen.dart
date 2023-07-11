@@ -1,9 +1,11 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:convert';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:group_radio_button/group_radio_button.dart';
@@ -684,10 +686,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
     String? email = Form_email_.text.toString();
     String? tax = Form_tax_.text.toString();
     String? typerser = '${int.parse(Value_AreaSer_.toString()) + 1}';
-
+    print('--------------------------------------');
     print(typerser);
     print(_verticalGroupValue);
-
+    print('--------------------------------------');
     print(Ser);
     print(nameshop);
     print(typeshop);
@@ -697,22 +699,45 @@ class _CustomerScreenState extends State<CustomerScreen> {
     print(tel);
     print(email);
     print(tax);
+    print(ren);
+    print('--------------------------------------');
 
     String url =
-        '${MyConstant().domain}/Inc_customer_Bureau.php?isAdd=true&ren=$ren&Ser=$Ser&nameshop=$nameshop&typeshop=$typeshop&bussshop=$bussshop&bussscontact=$bussscontact&address=$address&tel=$tel&email=$email&tax=$tax&type=$_verticalGroupValue&typeser=$typerser';
+        '${MyConstant().domain}/Inc_customer_Bureau.php?isAdd=true&ren=$ren&user=$Ser&nameshop=$nameshop&typeshop=$typeshop&bussshop=$bussshop&bussscontact=$bussscontact&address=$address&tel=$tel&email=$email&tax=$tax&type=$_verticalGroupValue&typeser=$typerser';
 
     try {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+
       if (result.toString() == 'true') {
+        print('true');
         Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>แก้ไข($nameshop)');
         setState(() {
           select_coutumer();
         });
       } else {}
     } catch (e) {}
+
+    // String url =
+    //     '${MyConstant().domain}/Inc_customer_Bureau.php?isAdd=true&ren=$ren';
+
+    // var response = await http.post(Uri.parse(url), body: {
+    //   'user': '',
+    //   'nameshop': '',
+    //   'typeshop': '',
+    //   'bussshop': '',
+    //   'bussscontact': '',
+    //   'address': '',
+    //   'tel': '',
+    //   'email': '',
+    //   'tax': '',
+    //   'type': '',
+    //   'typeser': '',
+    // }).then((value) async {
+    //   Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>แก้ไข($nameshop)');
+    //   select_coutumer();
+    // });
   }
 
   ///---------------------------------------------------------------------->
@@ -1943,7 +1968,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                             child: AutoSizeText(
                                                               minFontSize: 10,
                                                               maxFontSize: 18,
-                                                              'ชื่อผู่เช่า/บริษัท',
+                                                              'ชื่อผู้เช่า/บริษัท',
                                                               textAlign:
                                                                   TextAlign
                                                                       .center,
@@ -2194,8 +2219,187 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                               ),
                                               Row(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.end,
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
+                                                  InkWell(
+                                                    onTap:
+                                                        (_TransReBillModels
+                                                                    .length >
+                                                                0)
+                                                            ? null
+                                                            : (tappedIndex_ ==
+                                                                    '')
+                                                                ? null
+                                                                : () async {
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: const Center(
+                                                                            child: Text(
+                                                                          'ต้องการลบข้อมูลลูกค้าใช่หรือไม่',
+                                                                          style: TextStyle(
+                                                                              color: AdminScafScreen_Color.Colors_Text1_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        )),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 5.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 5.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Container(
+                                                                                        width: 100,
+                                                                                        decoration: const BoxDecoration(
+                                                                                          color: Colors.green,
+                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(8.0),
+                                                                                        child: TextButton(
+                                                                                          onPressed: () async {
+                                                                                            SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                            String? ren = preferences.getString('renTalSer');
+                                                                                            String? ser_user = preferences.getString('ser');
+                                                                                            String? Ser = _Form_Ser.toString();
+                                                                                            String? nameshop = Form_nameshop_.text.toString();
+
+                                                                                            String url = '${MyConstant().domain}/De_customer_Bureau.php?isAdd=true&ren=$ren&user=$Ser';
+
+                                                                                            try {
+                                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                                              var result = json.decode(response.body);
+
+                                                                                              if (result.toString() == 'true') {
+                                                                                                Insert_log.Insert_logs('ทะเบียน', 'ทะเบียนลูกค้า>>ลบ($nameshop)');
+                                                                                                setState(() {
+                                                                                                  _TransReBillModels = [];
+                                                                                                  tappedIndex_ = '';
+                                                                                                  select_coutumer();
+                                                                                                });
+                                                                                                Navigator.pop(context, 'OK');
+                                                                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('ลบข้อมูลลูกค้าเรียบร้อย...')));
+                                                                                              } else {
+                                                                                                Navigator.pop(context, 'OK');
+                                                                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                                                                  SnackBar(content: Text('(ผิดพลาด !! )')),
+                                                                                                );
+                                                                                              }
+                                                                                            } catch (e) {}
+                                                                                          },
+                                                                                          child: const Text(
+                                                                                            'ยืนยัน',
+                                                                                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                          ),
+                                                                                        ),
+                                                                                      ),
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            ),
+                                                                                            padding: const EdgeInsets.all(8.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ยกเลิก',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                    child: Container(
+                                                      width: 100,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8),
+                                                      decoration: BoxDecoration(
+                                                        color: (_TransReBillModels
+                                                                        .length >
+                                                                    0 ||
+                                                                tappedIndex_ ==
+                                                                    '')
+                                                            ? Colors.grey[300]
+                                                            : (tappedIndex_ ==
+                                                                    '')
+                                                                ? Colors
+                                                                    .grey[300]
+                                                                : Colors
+                                                                    .red[300],
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                      ),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 18,
+                                                        'ลบ',
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            color: CustomerScreen_Color
+                                                                .Colors_Text1_,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T
+                                                            //fontSize: 10.0
+                                                            //fontSize: 10.0
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                   InkWell(
                                                     onTap: () {
                                                       setState(() {
@@ -3388,7 +3592,10 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                           (value) async {
                                                                         Save_FormText();
                                                                       },
-                                                                      // maxLines: 2,
+                                                                      maxLength:
+                                                                          10,
+                                                                      // maxLines:
+                                                                      //     10,
                                                                       decoration:
                                                                           InputDecoration(
                                                                         fillColor: Colors
@@ -3448,6 +3655,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                             //fontSize: 10.0
                                                                             ),
                                                                       ),
+                                                                      inputFormatters: <TextInputFormatter>[
+                                                                        // for below version 2 use this
+                                                                        FilteringTextInputFormatter.allow(
+                                                                            RegExp(r'[0-9]')),
+                                                                        // for version 2 and greater youcan also use this
+                                                                        FilteringTextInputFormatter
+                                                                            .digitsOnly
+                                                                      ],
                                                                     ),
                                                                   ),
 
@@ -3994,7 +4209,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                             children: [
                               Container(
                                 width: (Responsive.isDesktop(context))
-                                    ? MediaQuery.of(context).size.width * 0.86
+                                    ? MediaQuery.of(context).size.width * 0.85
                                     : 500,
                                 padding: const EdgeInsets.all(8),
                                 // decoration: const BoxDecoration(
@@ -4158,8 +4373,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                                                                     ),
                                                                   )
                                                                 : ListBody(
-                                                                    children: <
-                                                                        Widget>[
+                                                                    children: <Widget>[
                                                                       Row(
                                                                         children: [
                                                                           Expanded(

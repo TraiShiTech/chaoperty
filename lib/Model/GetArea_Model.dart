@@ -34,6 +34,10 @@ class AreaModel {
   String? type;
   String? sdate;
   String? dataUpdate;
+  String? id;
+  String? path;
+  String? color;
+  String? name;
 
   AreaModel(
       {this.ser,
@@ -70,7 +74,11 @@ class AreaModel {
       this.aserQout,
       this.type,
       this.sdate,
-      this.dataUpdate});
+      this.dataUpdate,
+      this.id,
+      this.path,
+      this.color,
+      this.name});
 
   AreaModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -109,6 +117,10 @@ class AreaModel {
     type = json['type'];
     sdate = json['sdate'];
     dataUpdate = json['data_update'];
+    id = json['id'];
+    path = json['path'];
+    color = json['color'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -148,6 +160,10 @@ class AreaModel {
     data['type'] = this.type;
     data['sdate'] = this.sdate;
     data['data_update'] = this.dataUpdate;
+    data['id'] = this.id;
+    data['path'] = this.path;
+    data['color'] = this.color;
+    data['name'] = this.name;
     return data;
   }
 }

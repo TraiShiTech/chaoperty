@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import '../Style/colors.dart';
@@ -667,7 +668,7 @@ class _PeopleChaoScreen4State extends State<PeopleChaoScreen4> {
                                                   child: Container(
                                                       decoration: BoxDecoration(
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -749,7 +750,7 @@ class _PeopleChaoScreen4State extends State<PeopleChaoScreen4> {
                                                   child: Container(
                                                       decoration: BoxDecoration(
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:

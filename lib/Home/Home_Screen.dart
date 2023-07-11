@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -346,8 +347,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var seruser = preferences.getString('ser');
     var utype = preferences.getString('utype');
+   var renTal = preferences.getString('renTalSer');
     String url =
-        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype';
+        '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype&ren=$renTal';
 
     try {
       var response = await http.get(Uri.parse(url));

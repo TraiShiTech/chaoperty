@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -13,13 +14,15 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../AdminScaffold/AdminScaffold.dart';
-
+import '../Home/Home_Screen.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
+import 'SignIn_admin.dart';
 import 'SignUp_Screen.dart';
 import 'SignUp_Screen2.dart';
+import 'package:crypto/crypto.dart' as crypto;
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -30,6 +33,7 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   DateTime datex = DateTime.now();
+  final Formbecause_ = TextEditingController();
   // EmailOTP myauth = EmailOTP();
   @override
   void initState() {
@@ -86,7 +90,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  // bool _isObscure = true;
+  bool _isObscure = true;
   // bool _validate = false;
   final Form1_text = TextEditingController();
   final Form2_text = TextEditingController();
@@ -376,7 +380,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.lime[800],
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(20),
                                                 topRight: Radius.circular(20),
                                                 bottomLeft: Radius.circular(20),
@@ -460,18 +464,276 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
 
                   child: Center(
-                    child: AutoSizeText(
-                        minFontSize: (Responsive.isDesktop(context)) ? 20 : 15,
-                        maxFontSize: 40,
-                        maxLines: 1,
-                        '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(
-                            // fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T)),
+                    child: TextButton(
+                        style: TextButton.styleFrom(
+                          textStyle: const TextStyle(fontSize: 16),
+                        ),
+                        onPressed: () {
+                          showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20.0))),
+                              title: const Center(
+                                  child: Text(
+                                'Admin Only',
+                                style: TextStyle(
+                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              )),
+                              actions: <Widget>[
+                                Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: Formbecause_,
+                                        obscureText: true,
+                                        validator: (value) {
+                                          if (value == null || value.isEmpty) {
+                                            return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                          }
+                                          // if (int.parse(value.toString()) < 13) {
+                                          //   return '< 13';
+                                          // }
+                                          return null;
+                                        },
+                                        onFieldSubmitted: (value) async {
+                                          print('value>>>>$value');
+                                          String url =
+                                              '${MyConstant().domain}/Gc_user_Admin.php?isAdd=true&puser=$value';
+
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              MaterialPageRoute route =
+                                                  MaterialPageRoute(
+                                                builder: (context) =>
+                                                    SignUnAdmin(),
+                                              );
+                                              Navigator.pushAndRemoveUntil(
+                                                      context,
+                                                      route,
+                                                      (route) => true)
+                                                  .then((value) {
+                                                setState(() {
+                                                  Formbecause_.clear();
+                                                });
+                                                Navigator.pop(context, 'OK');
+                                              });
+                                            } else {
+                                              setState(() {
+                                                Formbecause_.clear();
+                                              });
+                                              Navigator.pop(context, 'OK');
+                                            }
+                                          } catch (e) {}
+
+                                          // if (Formbecause_.text == 'DzenCha0') {
+                                          //   print('DzenCha0');
+                                          //   MaterialPageRoute route =
+                                          //       MaterialPageRoute(
+                                          //     builder: (context) =>
+                                          //         SignUnAdmin(),
+                                          //   );
+                                          //   Navigator.pushAndRemoveUntil(
+                                          //       context,
+                                          //       route,
+                                          //       (route) => true).then((value) {
+                                          //     setState(() {
+                                          //       Formbecause_.clear();
+                                          //     });
+                                          //     Navigator.pop(context, 'OK');
+                                          //   });
+                                          // } else {
+                                          //   setState(() {
+                                          //     Formbecause_.clear();
+                                          //   });
+                                          //   Navigator.pop(context, 'OK');
+                                          // }
+                                        },
+
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                            fillColor:
+                                                Colors.white.withOpacity(0.3),
+                                            filled: true,
+                                            // prefixIcon: const Icon(Icons.water,
+                                            //     color: Colors.blue),
+                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                            focusedBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            enabledBorder:
+                                                const OutlineInputBorder(
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(15),
+                                                topLeft: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                              ),
+                                              borderSide: BorderSide(
+                                                width: 1,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                            labelText: 'Password',
+                                            labelStyle: const TextStyle(
+                                              color: ManageScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight:
+                                              //     FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T,
+                                            )),
+                                        // inputFormatters: <TextInputFormatter>[
+                                        //   // for below version 2 use this
+                                        //   FilteringTextInputFormatter.allow(
+                                        //       RegExp(r'[0-9]')),
+                                        //   // for version 2 and greater youcan also use this
+                                        //   FilteringTextInputFormatter.digitsOnly
+                                        // ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 150,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                            ),
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                var vel =
+                                                    Formbecause_.text.trim();
+                                                print('vel>>>>$vel');
+                                                String url =
+                                                    '${MyConstant().domain}/Gc_user_Admin.php?isAdd=true&puser=$vel';
+
+                                                try {
+                                                  var response = await http
+                                                      .get(Uri.parse(url));
+
+                                                  var result = json
+                                                      .decode(response.body);
+                                                  print(result);
+                                                  if (result.toString() ==
+                                                      'true') {
+                                                    MaterialPageRoute route =
+                                                        MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SignUnAdmin(),
+                                                    );
+                                                    Navigator
+                                                            .pushAndRemoveUntil(
+                                                                context,
+                                                                route,
+                                                                (route) => true)
+                                                        .then((value) {
+                                                      setState(() {
+                                                        Formbecause_.clear();
+                                                      });
+                                                      Navigator.pop(
+                                                          context, 'OK');
+                                                    });
+                                                  } else {
+                                                    setState(() {
+                                                      Formbecause_.clear();
+                                                    });
+                                                    Navigator.pop(
+                                                        context, 'OK');
+                                                  }
+                                                } catch (e) {}
+                                                // if (Formbecause_.text ==
+                                                //     'DzenCha0') {
+                                                //   print('DzenCha0');
+                                                //   MaterialPageRoute route =
+                                                //       MaterialPageRoute(
+                                                //     builder: (context) =>
+                                                //         SignUnAdmin(),
+                                                //   );
+                                                //   Navigator.pushAndRemoveUntil(
+                                                //           context,
+                                                //           route,
+                                                //           (route) => true)
+                                                //       .then((value) {
+                                                //     setState(() {
+                                                //       Formbecause_.clear();
+                                                //     });
+                                                //     Navigator.pop(
+                                                //         context, 'OK');
+                                                //   });
+                                                // } else {
+                                                //   setState(() {
+                                                //     Formbecause_.clear();
+                                                //   });
+                                                //   Navigator.pop(context, 'OK');
+                                                // }
+                                              },
+                                              child: const Text(
+                                                'Submit',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: AutoSizeText(
+                            minFontSize:
+                                (Responsive.isDesktop(context)) ? 20 : 15,
+                            maxFontSize: 40,
+                            maxLines: 1,
+                            '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                            style: TextStyle(
+                                // fontSize: 20,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T))),
                   ),
                 ),
               ],

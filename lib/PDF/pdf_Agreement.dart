@@ -56,12 +56,13 @@ class Pdfgen_Agreement {
     // var dataint = fontData.buffer
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
+    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    var Colors_pd = PdfColors.black;
 
     final ttf = pw.Font.ttf(font);
     DateTime date = DateTime.now();
-    var formatter = new DateFormat.MMMMd('th_TH');
-    String thaiDate = formatter.format(date);
+    // var formatter = DateFormat('MMMMd', 'th');
+    String thaiDate = DateFormat('d เดือน MMM', 'th').format(date);
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
     final iconImage =
@@ -91,136 +92,12 @@ class Pdfgen_Agreement {
     //       '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
     //     ],
     // ];
-    double Sumtotal = 0;
-    for (int index = 0; index < quotxSelectModels.length; index++)
-      Sumtotal = Sumtotal +
-          (int.parse(quotxSelectModels[index].term!) *
-              double.parse(quotxSelectModels[index].total!));
-    ///////////////////////------------------------------------------------->
-    final List<String> _digitThai = [
-      'ศูนย์',
-      'หนึ่ง',
-      'สอง',
-      'สาม',
-      'สี่',
-      'ห้า',
-      'หก',
-      'เจ็ด',
-      'แปด',
-      'เก้า'
-    ];
+    // double Sumtotal = 0;
+    // for (int index = 0; index < quotxSelectModels.length; index++)
+    //   Sumtotal = Sumtotal +
+    //       (int.parse(quotxSelectModels[index].term!) *
+    //           double.parse(quotxSelectModels[index].total!));
 
-    final List<String> _positionThai = [
-      '',
-      'สิบ',
-      'ร้อย',
-      'พัน',
-      'หมื่น',
-      'แสน',
-      'ล้าน'
-    ];
-/////////////////////////////------------------------>(จำนวนเต็ม)
-    String convertNumberToText(int number) {
-      String result = '';
-      int numberIntPart = number.toInt();
-      int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-/////////////////////////////------------------------>(จำนวนทศนิยม สตางค์)
-    String convertNumberToText2(int number2) {
-      String result = '';
-      int numberIntPart = number2.toInt();
-      int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
-    var number_ = "${nFormat2.format(Sumtotal)}";
-    var parts = number_.split('.');
-    var front = parts[0];
-    var back = parts[1];
-
-////////////////--------------------------------->(บาท)
-    double number = double.parse(front);
-    final int numberIntPart = number.toInt();
-    final double numberDecimalPart = (number - numberIntPart) * 100;
-    final String numberText = convertNumberToText(numberIntPart);
-    final String decimalText = convertNumberToText(numberDecimalPart.toInt());
-////////////////---------------------------------->(สตางค์)
-    double number2 = double.parse(number_);
-    final int numberIntPart2 = number.toInt();
-    final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
-    final String numberText2 = convertNumberToText2(numberIntPart2);
-    final String decimalText2 =
-        convertNumberToText2(numberDecimalPart2.toInt());
-////////////////------------------------------->(เช็คและเพิ่มตัวอักษร)
-    final String formattedNumber = (decimalText2.replaceAll(
-                _digitThai[0], "") ==
-            '')
-        ? '$numberTextบาทถ้วน'
-        : (back[0].toString() == '0')
-            ? '$numberTextบาทศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
-            : '$numberTextบาท${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
-
-    String text_Number1 = formattedNumber;
-    RegExp exp1 = RegExp(r"สองสิบ");
-    if (exp1.hasMatch(text_Number1)) {
-      text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
-    }
-    String text_Number2 = text_Number1;
-    RegExp exp2 = RegExp(r"สิบหนึ่ง");
-    if (exp2.hasMatch(text_Number2)) {
-      text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
-    }
 ///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
@@ -249,7 +126,7 @@ class Pdfgen_Agreement {
                             style: pw.TextStyle(
                               fontSize: 8,
                               font: ttf,
-                              color: PdfColors.grey300,
+                              color: Colors_pd,
                             ),
                           ),
                         ))
@@ -275,7 +152,8 @@ class Pdfgen_Agreement {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 14.0,
+                          fontSize: 10.0,
+                          color: PdfColors.black,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
@@ -285,7 +163,7 @@ class Pdfgen_Agreement {
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
-                          color: PdfColors.grey800,
+                          color: Colors_pd,
                           font: ttf,
                         ),
                       ),
@@ -318,34 +196,38 @@ class Pdfgen_Agreement {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         'อีเมล: $bill_email',
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         maxLines: 2,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
-                        'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
+                        '${DateFormat('ณ วันที่: d เดือน MMM ปี ', 'th').format(DateTime.now())}${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -362,6 +244,7 @@ class Pdfgen_Agreement {
                   'สัญญาเช่าพื้นที่',
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
+                    color: Colors_pd,
                     fontSize: 11.0,
                     fontWeight: pw.FontWeight.bold,
                     font: ttf,
@@ -382,18 +265,27 @@ class Pdfgen_Agreement {
                         'เลขที่สัญญา.........$Get_Value_cid................ ',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0, font: ttf, color: PdfColors.black),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         'ทำที่ $renTal_name ',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0, font: ttf, color: PdfColors.black),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         'วันที่ทำสัญญา ............. ',
                         style: pw.TextStyle(
-                            fontSize: 10.0, font: ttf, color: PdfColors.black),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -405,26 +297,38 @@ class Pdfgen_Agreement {
               'สัญญาฉบับนี้ ทำขึ้นระหว่าง........$bill_name........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.Text(
               'ที่อยู่........$bill_addr........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               'ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้ให้เช่า” ฝ่ายหนึ่งกับ........$Form_bussshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.Text(
               'ที่อยู่..............$Form_address.................. ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.Text(
               'เลขประจำตัวผู้เสียภาษี..............$Form_tax.................. ',
@@ -436,40 +340,49 @@ class Pdfgen_Agreement {
               'เบอร์โทรศัพท์.....$Form_tel...........Email........$Form_email................................... ',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               '        ซึ่งต่อไปในสัญญานี้เรียกว่า “ผู้เช่า” อีกฝ่ายหนึ่ง',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.Text(
               '        ทั้งสองฝ่ายตกลงทำสัญญาดังมีข้อความต่อไปนี้',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              'ข้อ 1. ผู้ให้เช่า ตกลงให้เช่า และ ผู้เช่าตกลงเช่า พื้นที่บางส่วน บริเวณชั้นที่........ห้องเลขที่........',
+              'ข้อ 1. ผู้ให้เช่า ตกลงให้เช่า และ ผู้เช่าตกลงเช่า พื้นที่บางส่วน บริเวณพื้นที่โซน....$Form_zn....รหัสพื้นที่....$Form_ln....',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
 
             pw.Text(
-              'ของอาคาร........มีเนื้อที่ประมาณ....$Form_area....ตารางเมตร',
+              'มีเนื้อที่ประมาณ....$Form_area....ตารางเมตร จำนวนพื้นที่....$Form_qty....ล็อค/ห้อง',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
@@ -479,7 +392,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
@@ -488,7 +401,10 @@ class Pdfgen_Agreement {
               '        ซึ่งต่อไปนี้ในสัญญานี้เรียกว่า “พื้นที่เช่า”',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
 
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -504,7 +420,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
@@ -513,14 +429,20 @@ class Pdfgen_Agreement {
               'เริ่มอายุการเช่าตั้งแต่วันที่........$Form_sdate........และสิ้นสุดในวันที่........$Form_ldate........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
 
             pw.Text(
               ' โดยมีวัตถุประสงค์ของการเช่าเพื่อทำธุรกิจ........$Form_typeshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.Text(
               (Form_nameshop == null || Form_nameshop.toString() == 'null')
@@ -528,7 +450,10 @@ class Pdfgen_Agreement {
                   : 'โดยใช้ชื่อธุรกิจว่า........$Form_nameshop........',
               textAlign: pw.TextAlign.justify,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
 
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -538,7 +463,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
                 fontWeight: pw.FontWeight.bold,
               ),
             ),
@@ -760,7 +685,10 @@ class Pdfgen_Agreement {
               '        โดยผู้ให้เช่าต้องให้การบริการในส่วนที่เก็บค่าบริการอย่างสุจริตและโปร่งใสตามหน้าที่ของผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
-                  fontSize: 10.0, font: ttf, color: PdfColors.black),
+                fontSize: 10.0,
+                font: ttf,
+                color: Colors_pd,
+              ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
@@ -769,25 +697,27 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
-              '(ดึงข้อมูลส่วนเงินประกันมา)',
+              ' ( หากมีระบุไว้ในข้อ 3 )',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
+            pw.SizedBox(height: 2 * PdfPageFormat.mm),
             pw.Text(
               '        ให้แก่ผู้ให้เช่าเพื่อเป็นการประกันการปฏิบัติตามสัญญาเช่าและเป็นประกันความเสียหายใดๆที่อาจเกิดขึ้นแก่ พื้นที่เช่าและ/หรือ แก่ผู้ให้เช่า',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.Text(
@@ -796,7 +726,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -815,7 +745,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
 
@@ -826,7 +756,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -836,7 +766,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -846,7 +776,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.Text(
@@ -855,7 +785,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -874,7 +804,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -884,7 +814,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -894,7 +824,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
 
@@ -905,7 +835,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
 
@@ -916,7 +846,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -926,7 +856,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -936,7 +866,7 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 2 * PdfPageFormat.mm),
@@ -946,133 +876,33 @@ class Pdfgen_Agreement {
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
 
             pw.SizedBox(height: 40 * PdfPageFormat.mm),
             pw.SizedBox(height: 10 * PdfPageFormat.mm),
             pw.Text(
-              'สัญญานี้ทำขึ้น 2 ฉบับ มีข้อความตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่าน และเข้าข้อความในสัญญาฉบับนี้โดยตลอดแล้ว เห็นว่าถูกต้องและตรงตามความประสงค์แล้ว จึงได้ลงลายมือชื่อไว้เป็นหลักฐานต่อหน้าพยาน และเก็บสัญญาไว้ฝ่ายละฉบับ',
+              '        สัญญานี้ทำขึ้น 2 ฉบับ มีข้อความตรงกัน คู่สัญญาทั้งสองฝ่ายได้อ่าน และเข้าข้อความในสัญญาฉบับนี้โดยตลอดแล้ว เห็นว่าถูกต้องและตรงตามความประสงค์แล้ว จึงได้ลงลายมือชื่อไว้เป็นหลักฐานต่อหน้าพยาน และเก็บสัญญาไว้ฝ่ายละฉบับ',
               textAlign: pw.TextAlign.left,
               style: pw.TextStyle(
                 fontSize: 10.0,
                 font: ttf,
-                color: PdfColors.black,
+                color: Colors_pd,
               ),
             ),
             pw.SizedBox(height: 65 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              // (base64Image_new1 == '')
-              //     ?
-              pw.Text(
-                'ลงชื่อ.............................................ผู้ให้เช่า   ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              )
-              // : pw.Center(
-              //     child: pw.Image(pw.MemoryImage(data1),
-              //         width: 100, height: 100),
-              //   ),
-            ]),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              pw.Text(
-                '(.......................................................) ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            ]),
-            // pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            // pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-            //   pw.Text(
-            //     'บริษัท ขันแก้ว จำกัด ',
-            //     textAlign: pw.TextAlign.justify,
-            //     style: pw.TextStyle(
-            //       fontSize: 10.0,
-            //       font: ttf,
-            //       fontWeight: pw.FontWeight.bold,
-            //     ),
-            //   ),
-            // ]),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              pw.Text(
-                'วันที่............/.................../............. ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            ]),
-            pw.SizedBox(height: 30 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              pw.Text(
-                'ลงชื่อ.............................................ผู้เช่า   ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              )
-            ]),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              pw.Text(
-                '(.......................................................) ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            ]),
-            // pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            // pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-            //   pw.Text(
-            //     'ห้างหุ้นส่วนจำกัด ลาแปงคาเฟ่ ',
-            //     textAlign: pw.TextAlign.justify,
-            //     style: pw.TextStyle(
-            //       fontSize: 10.0,
-            //       font: ttf,
-            //       fontWeight: pw.FontWeight.bold,
-            //     ),
-            //   ),
-            // ]),
-            pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            pw.Row(mainAxisAlignment: pw.MainAxisAlignment.center, children: [
-              pw.Text(
-                'วันที่............/.................../............. ',
-                textAlign: pw.TextAlign.justify,
-                style: pw.TextStyle(
-                  fontSize: 10.0,
-                  font: ttf,
-                  fontWeight: pw.FontWeight.bold,
-                ),
-              ),
-            ]),
-            pw.SizedBox(height: 50 * PdfPageFormat.mm),
+
             pw.Row(children: [
               pw.Expanded(
                   flex: 1,
                   child: pw.Column(
                     children: [
                       pw.Text(
-                        'ลงชื่อ.............................................พยาน    ',
+                        'ลงชื่อ.............................................ผู้ให้เช่า    ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
@@ -1083,6 +913,7 @@ class Pdfgen_Agreement {
                         '(.......................................................) ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
@@ -1093,6 +924,88 @@ class Pdfgen_Agreement {
                         'วันที่............/.................../............. ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
+              pw.SizedBox(width: 5 * PdfPageFormat.mm),
+              pw.Expanded(
+                  flex: 1,
+                  child: pw.Column(
+                    children: [
+                      pw.Text(
+                        'ลงชื่อ.............................................ผู้เช่า    ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      pw.Text(
+                        '(.......................................................) ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      pw.Text(
+                        'วันที่............/.................../............. ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  )),
+            ]),
+
+            pw.SizedBox(height: 20 * PdfPageFormat.mm),
+            pw.Row(children: [
+              pw.Expanded(
+                  flex: 1,
+                  child: pw.Column(
+                    children: [
+                      pw.Text(
+                        'ลงชื่อ.............................................พยาน    ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      pw.Text(
+                        '(.......................................................) ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
+                          fontSize: 10.0,
+                          font: ttf,
+                          fontWeight: pw.FontWeight.bold,
+                        ),
+                      ),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
+                      pw.Text(
+                        'วันที่............/.................../............. ',
+                        textAlign: pw.TextAlign.justify,
+                        style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
@@ -1109,6 +1022,7 @@ class Pdfgen_Agreement {
                         'ลงชื่อ.............................................พยาน    ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
@@ -1129,6 +1043,7 @@ class Pdfgen_Agreement {
                         'วันที่............/.................../............. ',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
                           font: ttf,
                           fontWeight: pw.FontWeight.bold,
@@ -1152,7 +1067,7 @@ class Pdfgen_Agreement {
                   style: pw.TextStyle(
                     fontSize: 10,
                     font: ttf,
-                    color: PdfColors.grey800,
+                    color: Colors_pd,
                     // fontWeight: pw.FontWeight.bold
                   ),
                 ),

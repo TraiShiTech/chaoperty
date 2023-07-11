@@ -1,4 +1,6 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +56,19 @@ class _BillDocumentState extends State<BillDocument> {
       expbill_name,
       bill_default,
       bill_tser;
+
+  String? rtname_Check,
+      type_Check,
+      typex_Check,
+      renname_Check,
+      bill_name_Check,
+      bill_addr_Check,
+      bill_tax_Check,
+      bill_tel_Check,
+      bill_email_Check,
+      expbill_Check,
+      expbill_name_Check;
+
   ///////---------------------------------------------------->
   @override
   void initState() {
@@ -105,6 +120,15 @@ class _BillDocumentState extends State<BillDocument> {
             bill_default = bill_defaultx;
             bill_tser = bill_tserx;
             renTalModels.add(renTalModel);
+            rtname_Check = rtnamex;
+            type_Check = typexs;
+            typex_Check = typexx;
+            renname_Check = name;
+            bill_name_Check = bill_namex;
+            bill_addr_Check = bill_addrx;
+            bill_tax_Check = bill_taxx;
+            bill_tel_Check = bill_telx;
+            bill_email_Check = bill_emailx;
           });
         }
       } else {}
@@ -696,6 +720,11 @@ class _BillDocumentState extends State<BillDocument> {
                                   } else {}
                                 } catch (e) {}
                               },
+                              onChanged: (value) {
+                                setState(() {
+                                  bill_name_Check = value;
+                                });
+                              },
                               // maxLength: 13,
                               cursorColor: Colors.green,
                               decoration: InputDecoration(
@@ -746,6 +775,65 @@ class _BillDocumentState extends State<BillDocument> {
                             // ),
                             ),
                       ),
+                      if (bill_name.toString().trim() !=
+                          bill_name_Check.toString().trim())
+                        Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () async {
+                              print(bill_name);
+                              print(bill_name_Check);
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              String? ren = preferences.getString('renTalSer');
+                              String? ser_user = preferences.getString('ser');
+                              String value = bill_name_Check!;
+                              String url =
+                                  '${MyConstant().domain}/UpC_rentel_bill_name.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                              try {
+                                var response = await http.get(Uri.parse(url));
+
+                                var result = json.decode(response.body);
+                                print(result);
+                                setState(() {
+                                  bill_name = null;
+                                  bill_name_Check = null;
+                                });
+                                read_GC_rental();
+                                if (result.toString() == 'true') {
+                                  Insert_log.Insert_logs('ตั้งค่า',
+                                      'เอกสาร>>แก้ไข(ชื่อผู้เช่า/บริบัท)');
+                                } else {}
+                              } catch (e) {}
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Text(
+                                  'บันทึก',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontWeight: FontWeight.bold,
+                                      //fontSize: 10.0
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       Expanded(
                         flex: 1,
                         child: InkWell(
@@ -863,6 +951,11 @@ class _BillDocumentState extends State<BillDocument> {
                                   } else {}
                                 } catch (e) {}
                               },
+                              onChanged: (value) {
+                                setState(() {
+                                  bill_addr_Check = value;
+                                });
+                              },
                               // maxLength: 13,
                               cursorColor: Colors.green,
                               decoration: InputDecoration(
@@ -902,305 +995,609 @@ class _BillDocumentState extends State<BillDocument> {
                               ),
                             )),
                       ),
+                      if (bill_addr.toString().trim() !=
+                          bill_addr_Check.toString().trim())
+                        Expanded(
+                          flex: 1,
+                          child: InkWell(
+                            onTap: () async {
+                              SharedPreferences preferences =
+                                  await SharedPreferences.getInstance();
+                              String? ren = preferences.getString('renTalSer');
+                              String? ser_user = preferences.getString('ser');
+                              String value = bill_addr_Check!;
+                              String url =
+                                  '${MyConstant().domain}/UpC_rentel_bill_addr.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                              try {
+                                var response = await http.get(Uri.parse(url));
+
+                                var result = json.decode(response.body);
+                                print(result);
+                                if (result.toString() == 'true') {
+                                  Insert_log.Insert_logs(
+                                      'ตั้งค่า', 'เอกสาร>>แก้ไข(ที่อยู่)');
+                                  setState(() {
+                                    read_GC_rental();
+                                  });
+                                } else {}
+                              } catch (e) {}
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(6),
+                                    topRight: Radius.circular(6),
+                                    bottomLeft: Radius.circular(6),
+                                    bottomRight: Radius.circular(6),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Text(
+                                  'บันทึก',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: Font_.Fonts_T
+                                      //fontWeight: FontWeight.bold,
+                                      //fontSize: 10.0
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        flex: 1,
-                        child: Text(
-                          'TAX ID',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text2_,
-                              fontFamily: Font_.Fonts_T
-                              //fontWeight: FontWeight.bold,
-                              //fontSize: 10.0
-                              ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                            // decoration: BoxDecoration(
-                            //   // color: Colors.green,
-                            //   borderRadius: const BorderRadius.only(
-                            //     topLeft: Radius.circular(6),
-                            //     topRight: Radius.circular(6),
-                            //     bottomLeft: Radius.circular(6),
-                            //     bottomRight: Radius.circular(6),
-                            //   ),
-                            //   border: Border.all(color: Colors.grey, width: 1),
-                            // ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              initialValue: bill_tax!.trim(),
-                              onFieldSubmitted: (value) async {
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                String? ren =
-                                    preferences.getString('renTalSer');
-                                String? ser_user = preferences.getString('ser');
-
-                                String url =
-                                    '${MyConstant().domain}/UpC_rentel_bill_tax.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
-
-                                try {
-                                  var response = await http.get(Uri.parse(url));
-
-                                  var result = json.decode(response.body);
-                                  print(result);
-                                  if (result.toString() == 'true') {
-                                    Insert_log.Insert_logs(
-                                        'ตั้งค่า', 'เอกสาร>>แก้ไข(TAX ID)');
-                                    setState(() {
-                                      read_GC_rental();
-                                    });
-                                  } else {}
-                                } catch (e) {}
-                              },
-                              // maxLength: 13,
-                              cursorColor: Colors.green,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white.withOpacity(0.05),
-                                filled: true,
-                                // prefixIcon:
-                                //     const Icon(Icons.key, color: Colors.black),
-                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
+                  child: ScrollConfiguration(
+                    behavior:
+                        ScrollConfiguration.of(context).copyWith(dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    }),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: (!Responsive.isDesktop(context))
+                                ? MediaQuery.of(context).size.width + 200
+                                : MediaQuery.of(context).size.width * 0.84,
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'TAX ID',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color:
+                                            SettingScreen_Color.Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontWeight: FontWeight.bold,
+                                        //fontSize: 10.0
+                                        ),
                                   ),
                                 ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                      // decoration: BoxDecoration(
+                                      //   // color: Colors.green,
+                                      //   borderRadius: const BorderRadius.only(
+                                      //     topLeft: Radius.circular(6),
+                                      //     topRight: Radius.circular(6),
+                                      //     bottomLeft: Radius.circular(6),
+                                      //     bottomRight: Radius.circular(6),
+                                      //   ),
+                                      //   border: Border.all(color: Colors.grey, width: 1),
+                                      // ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        initialValue: bill_tax!.trim(),
+                                        onFieldSubmitted: (value) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+                                          String? ser_user =
+                                              preferences.getString('ser');
+
+                                          String url =
+                                              '${MyConstant().domain}/UpC_rentel_bill_tax.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              Insert_log.Insert_logs('ตั้งค่า',
+                                                  'เอกสาร>>แก้ไข(TAX ID)');
+                                              setState(() {
+                                                read_GC_rental();
+                                              });
+                                            } else {}
+                                          } catch (e) {}
+                                        },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            bill_tax_Check = value;
+                                          });
+                                        },
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.key, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelStyle: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      )),
+                                ),
+                                if (bill_tax.toString().trim() !=
+                                    bill_tax_Check.toString().trim())
+                                  Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
+                                        String? ser_user =
+                                            preferences.getString('ser');
+                                        String value = bill_tax_Check!;
+                                        String url =
+                                            '${MyConstant().domain}/UpC_rentel_bill_tax.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
+
+                                          var result =
+                                              json.decode(response.body);
+                                          print(result);
+                                          if (result.toString() == 'true') {
+                                            Insert_log.Insert_logs('ตั้งค่า',
+                                                'เอกสาร>>แก้ไข(TAX ID)');
+                                            setState(() {
+                                              read_GC_rental();
+                                            });
+                                          } else {}
+                                        } catch (e) {}
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Text(
+                                            'บันทึก',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
+                                const Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'เบอร์โทร',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color:
+                                            SettingScreen_Color.Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontWeight: FontWeight.bold,
+                                        //fontSize: 10.0
+                                        ),
                                   ),
                                 ),
-                                labelStyle: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
-                            )),
-                      ),
-                      const Expanded(
-                        flex: 1,
-                        child: Text(
-                          'เบอร์โทร',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text2_,
-                              fontFamily: Font_.Fonts_T
-                              //fontWeight: FontWeight.bold,
-                              //fontSize: 10.0
-                              ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                            // decoration: BoxDecoration(
-                            //   // color: Colors.green,
-                            //   borderRadius: const BorderRadius.only(
-                            //     topLeft: Radius.circular(6),
-                            //     topRight: Radius.circular(6),
-                            //     bottomLeft: Radius.circular(6),
-                            //     bottomRight: Radius.circular(6),
-                            //   ),
-                            //   border: Border.all(color: Colors.grey, width: 1),
-                            // ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              initialValue: bill_tel!.trim(),
-                              onFieldSubmitted: (value) async {
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                String? ren =
-                                    preferences.getString('renTalSer');
-                                String? ser_user = preferences.getString('ser');
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                      // decoration: BoxDecoration(
+                                      //   // color: Colors.green,
+                                      //   borderRadius: const BorderRadius.only(
+                                      //     topLeft: Radius.circular(6),
+                                      //     topRight: Radius.circular(6),
+                                      //     bottomLeft: Radius.circular(6),
+                                      //     bottomRight: Radius.circular(6),
+                                      //   ),
+                                      //   border: Border.all(color: Colors.grey, width: 1),
+                                      // ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        initialValue: bill_tel!.trim(),
+                                        onFieldSubmitted: (value) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+                                          String? ser_user =
+                                              preferences.getString('ser');
 
-                                String url =
-                                    '${MyConstant().domain}/UpC_rentel_bill_tel.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+                                          String url =
+                                              '${MyConstant().domain}/UpC_rentel_bill_tel.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
 
-                                try {
-                                  var response = await http.get(Uri.parse(url));
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
 
-                                  var result = json.decode(response.body);
-                                  print(result);
-                                  if (result.toString() == 'true') {
-                                    Insert_log.Insert_logs(
-                                        'ตั้งค่า', 'เอกสาร>>แก้ไข(เบอร์โทร)');
-                                    setState(() {
-                                      read_GC_rental();
-                                    });
-                                  } else {}
-                                } catch (e) {}
-                              },
-                              maxLength: 10,
-                              cursorColor: Colors.green,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white.withOpacity(0.05),
-                                filled: true,
-                                // prefixIcon:;
-                                //     const Icon(Icons.key, color: Colors.black),
-                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              Insert_log.Insert_logs('ตั้งค่า',
+                                                  'เอกสาร>>แก้ไข(เบอร์โทร)');
+                                              setState(() {
+                                                read_GC_rental();
+                                              });
+                                            } else {}
+                                          } catch (e) {}
+                                        },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            bill_tel_Check = value;
+                                          });
+                                        },
+                                        maxLength: 10,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: true,
+                                          // prefixIcon:;
+                                          //     const Icon(Icons.key, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelStyle: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                        inputFormatters: <TextInputFormatter>[
+                                          // for below version 2 use this
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'[0-9]')),
+                                          // for version 2 and greater youcan also use this
+                                          // FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                      )),
+                                ),
+                                if (bill_tel.toString().trim() !=
+                                    bill_tel_Check.toString().trim())
+                                  Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
+                                        String? ser_user =
+                                            preferences.getString('ser');
+                                        String value = bill_tel!;
+
+                                        String url =
+                                            '${MyConstant().domain}/UpC_rentel_bill_tel.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
+
+                                          var result =
+                                              json.decode(response.body);
+                                          print(result);
+                                          if (result.toString() == 'true') {
+                                            Insert_log.Insert_logs('ตั้งค่า',
+                                                'เอกสาร>>แก้ไข(เบอร์โทร)');
+                                            setState(() {
+                                              read_GC_rental();
+                                            });
+                                          } else {}
+                                        } catch (e) {}
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Text(
+                                            'บันทึก',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
+                                const Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    'อีเมล',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color:
+                                            SettingScreen_Color.Colors_Text2_,
+                                        fontFamily: Font_.Fonts_T
+                                        //fontWeight: FontWeight.bold,
+                                        //fontSize: 10.0
+                                        ),
                                   ),
                                 ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
-                                  ),
+                                Expanded(
+                                  flex: 2,
+                                  child: Container(
+                                      // decoration: BoxDecoration(
+                                      //   // color: Colors.green,
+                                      //   borderRadius: const BorderRadius.only(
+                                      //     topLeft: Radius.circular(6),
+                                      //     topRight: Radius.circular(6),
+                                      //     bottomLeft: Radius.circular(6),
+                                      //     bottomRight: Radius.circular(6),
+                                      //   ),
+                                      //   border: Border.all(color: Colors.grey, width: 1),
+                                      // ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        initialValue: bill_email!.trim(),
+                                        onFieldSubmitted: (value) async {
+                                          SharedPreferences preferences =
+                                              await SharedPreferences
+                                                  .getInstance();
+                                          String? ren = preferences
+                                              .getString('renTalSer');
+                                          String? ser_user =
+                                              preferences.getString('ser');
+
+                                          String url =
+                                              '${MyConstant().domain}/UpC_rentel_bill_email.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                          try {
+                                            var response =
+                                                await http.get(Uri.parse(url));
+
+                                            var result =
+                                                json.decode(response.body);
+                                            print(result);
+                                            if (result.toString() == 'true') {
+                                              Insert_log.Insert_logs('ตั้งค่า',
+                                                  'เอกสาร>>แก้ไข(อีเมล)');
+                                              setState(() {
+                                                read_GC_rental();
+                                              });
+                                            } else {}
+                                            // ScaffoldMessenger.of(context).showSnackBar(
+                                            //   SnackBar(
+                                            //       content: Text('บันทึกสำเร็จ',
+                                            //           style: TextStyle(
+                                            //               color: Colors.white,
+                                            //               fontFamily: Font_.Fonts_T))),
+                                            // );
+                                          } catch (e) {}
+                                        },
+                                        onChanged: (value) {
+                                          setState(() {
+                                            bill_email_Check = value;
+                                          });
+                                        },
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.05),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.key, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelStyle: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      )),
                                 ),
-                                labelStyle: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
-                              inputFormatters: <TextInputFormatter>[
-                                // for below version 2 use this
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'[0-9]')),
-                                // for version 2 and greater youcan also use this
-                                // FilteringTextInputFormatter.digitsOnly
+                                if (bill_email.toString().trim() !=
+                                    bill_email_Check.toString().trim())
+                                  Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () async {
+                                        SharedPreferences preferences =
+                                            await SharedPreferences
+                                                .getInstance();
+                                        String? ren =
+                                            preferences.getString('renTalSer');
+                                        String? ser_user =
+                                            preferences.getString('ser');
+                                        String value = bill_email_Check!;
+                                        String url =
+                                            '${MyConstant().domain}/UpC_rentel_bill_email.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
+
+                                        try {
+                                          var response =
+                                              await http.get(Uri.parse(url));
+
+                                          var result =
+                                              json.decode(response.body);
+                                          print(result);
+                                          if (result.toString() == 'true') {
+                                            Insert_log.Insert_logs('ตั้งค่า',
+                                                'เอกสาร>>แก้ไข(อีเมล)');
+                                            setState(() {
+                                              read_GC_rental();
+                                            });
+                                          } else {}
+                                          // ScaffoldMessenger.of(context).showSnackBar(
+                                          //   SnackBar(
+                                          //       content: Text('บันทึกสำเร็จ',
+                                          //           style: TextStyle(
+                                          //               color: Colors.white,
+                                          //               fontFamily: Font_.Fonts_T))),
+                                          // );
+                                        } catch (e) {}
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6),
+                                            ),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Text(
+                                            'บันทึก',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontWeight: FontWeight.bold,
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                               ],
-                            )),
+                            ),
+                          ),
+                        ],
                       ),
-                      const Expanded(
-                        flex: 1,
-                        child: Text(
-                          'อีเมล',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: SettingScreen_Color.Colors_Text2_,
-                              fontFamily: Font_.Fonts_T
-                              //fontWeight: FontWeight.bold,
-                              //fontSize: 10.0
-                              ),
-                        ),
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                            // decoration: BoxDecoration(
-                            //   // color: Colors.green,
-                            //   borderRadius: const BorderRadius.only(
-                            //     topLeft: Radius.circular(6),
-                            //     topRight: Radius.circular(6),
-                            //     bottomLeft: Radius.circular(6),
-                            //     bottomRight: Radius.circular(6),
-                            //   ),
-                            //   border: Border.all(color: Colors.grey, width: 1),
-                            // ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: TextFormField(
-                              initialValue: bill_email!.trim(),
-                              onFieldSubmitted: (value) async {
-                                SharedPreferences preferences =
-                                    await SharedPreferences.getInstance();
-                                String? ren =
-                                    preferences.getString('renTalSer');
-                                String? ser_user = preferences.getString('ser');
-
-                                String url =
-                                    '${MyConstant().domain}/UpC_rentel_bill_email.php?isAdd=true&ren=$ren&value=$value&ser_user=$ser_user';
-
-                                try {
-                                  var response = await http.get(Uri.parse(url));
-
-                                  var result = json.decode(response.body);
-                                  print(result);
-                                  if (result.toString() == 'true') {
-                                    Insert_log.Insert_logs(
-                                        'ตั้งค่า', 'เอกสาร>>แก้ไข(อีเมล)');
-                                    setState(() {
-                                      read_GC_rental();
-                                    });
-                                  } else {}
-                                  // ScaffoldMessenger.of(context).showSnackBar(
-                                  //   SnackBar(
-                                  //       content: Text('บันทึกสำเร็จ',
-                                  //           style: TextStyle(
-                                  //               color: Colors.white,
-                                  //               fontFamily: Font_.Fonts_T))),
-                                  // );
-                                } catch (e) {}
-                              },
-                              // maxLength: 13,
-                              cursorColor: Colors.green,
-                              decoration: InputDecoration(
-                                fillColor: Colors.white.withOpacity(0.05),
-                                filled: true,
-                                // prefixIcon:
-                                //     const Icon(Icons.key, color: Colors.black),
-                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                labelStyle: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text2_,
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T),
-                              ),
-                            )),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],

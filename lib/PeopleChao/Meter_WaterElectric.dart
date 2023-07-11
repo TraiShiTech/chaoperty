@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -1014,7 +1015,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                       flex: 1,
                                                       child: Text(
                                                         // ignore: unnecessary_string_interpolations
-                                                        '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].duedate} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].duedate} 00:00:00').year + 543}',
+                                                        '${DateFormat.MMMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))}\n${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}',
                                                         textAlign:
                                                             TextAlign.center,
                                                         style: const TextStyle(
@@ -1087,14 +1088,15 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                             border:
                                                                                 Border.all(color: Colors.grey, width: 1),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Text(
                                                                             indextran == 0
-                                                                                ? '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                                ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' // '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
                                                                                 //'${_TransModels[indextran].ovalue}'
-                                                                                : '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                                : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', //'${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
                                                                             // '${_TransModels[indextran - 1].nvalue}',
                                                                             textAlign:
                                                                                 TextAlign.right,
@@ -1183,8 +1185,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                               ),
                                                                               // labelText: 'ระบุชื่อร้านค้า',
                                                                               labelStyle: const TextStyle(color: Colors.black54, fontFamily: Font_.Fonts_T)),
-                                                                          inputFormatters: <
-                                                                              TextInputFormatter>[
+                                                                          inputFormatters: <TextInputFormatter>[
                                                                             // for below version 2 use this
                                                                             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                                                                             // for version 2 and greater youcan also use this
@@ -1213,18 +1214,18 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                 Colors.grey,
                                                                             width: 1),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           Text(
                                                                         indextran ==
                                                                                 0
-                                                                            ? '${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
+                                                                            ? '${_TransModels[indextran].ovalue!.padLeft(4, '0')}' //'${nFormat.format(double.parse(_TransModels[indextran].ovalue!))}'
                                                                             // '${_TransModels[indextran].ovalue}'
                                                                             : _TransModels[indextran - 1].nvalue == null
                                                                                 ? ''
-                                                                                : '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
+                                                                                : '${_TransModels[indextran - 1].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran - 1].nvalue!))}',
                                                                         //'${_TransModels[indextran - 1].nvalue}',
                                                                         textAlign:
                                                                             TextAlign.right,
@@ -1284,7 +1285,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       TextFormField(
@@ -1393,7 +1394,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                                 _TransModels[indextran].nvalue; // หลัง
                                                                             _celvat; //vat
                                                                             _cqty_vat; // หน่วย
-
+                                                                            print('1ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
                                                                             var oval =
                                                                                 '$_cnamex ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransModels[indextran].date} 00:00:00')))} ${DateTime.parse('${_TransModels[indextran].date} 00:00:00').year + 543}';
                                                                             String
@@ -1441,26 +1442,163 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                           _cqty_vat; // หน่วย
 
                                                                           print(
-                                                                              'ovalue>>>. $ovalue  ---- nvalue>>>>>> $nvalue');
+                                                                              '2ovalue>>>. $ovalue  --$value-- nvalue>>>>>> $nvalue ');
 
-                                                                          String
-                                                                              url =
-                                                                              '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+                                                                          if (double.parse(value) <
+                                                                              double.parse(ovalue!)) {
+                                                                            print('23ovalue>>>--$value-- น้อยกว่า  $ovalue');
+                                                                            showDialog<void>(
+                                                                                context: context,
+                                                                                barrierDismissible: false, // user must tap button!
+                                                                                builder: (BuildContext context) {
+                                                                                  return AlertDialog(
+                                                                                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                    // title: const Text('AlertDialog Title'),
+                                                                                    content: SingleChildScrollView(
+                                                                                      child: ListBody(
+                                                                                        children: <Widget>[
+                                                                                          Center(
+                                                                                            child: Column(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: Icon(
+                                                                                                    Icons.report_problem,
+                                                                                                    size: 50,
+                                                                                                    color: Colors.yellow.shade800,
+                                                                                                  ),
+                                                                                                ),
+                                                                                                Padding(
+                                                                                                  padding: const EdgeInsets.all(8.0),
+                                                                                                  child: Text(
+                                                                                                    'เลขมิเตอร์น้อยกว่าเลขมิเตอร์ก่อนหน้า ต้องการเริ่มเลขมิเตอร์ใหม่',
+                                                                                                    textAlign: TextAlign.center,
+                                                                                                    style: TextStyle(color: PeopleChaoScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                        //fontSize: 10.0
+                                                                                                        ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                    actions: <Widget>[
+                                                                                      Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Expanded(
+                                                                                            child: Container(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: InkWell(
+                                                                                                  child: Container(
+                                                                                                      width: 100,
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.green.shade900,
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: const Center(
+                                                                                                          child: Text(
+                                                                                                        'ตกลง',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ))),
+                                                                                                  onTap: () async {
+                                                                                                    String url = '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
 
-                                                                          try {
-                                                                            var response =
-                                                                                await http.get(Uri.parse(url));
+                                                                                                    try {
+                                                                                                      var response = await http.get(Uri.parse(url));
 
-                                                                            var result =
-                                                                                json.decode(response.body);
-                                                                            print(result);
-                                                                            if (result.toString() !=
-                                                                                'null') {
-                                                                              setState(() {
-                                                                                red_Trans(_cser);
-                                                                              });
-                                                                            }
-                                                                          } catch (e) {}
+                                                                                                      var result = json.decode(response.body);
+                                                                                                      print(result);
+                                                                                                      if (result.toString() != 'null') {
+                                                                                                        setState(() {
+                                                                                                          Navigator.of(context).pop();
+                                                                                                          red_Trans(_cser);
+                                                                                                        });
+                                                                                                      }
+                                                                                                    } catch (e) {}
+                                                                                                  },
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                          Expanded(
+                                                                                            child: Container(
+                                                                                              child: Padding(
+                                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                                child: InkWell(
+                                                                                                  child: Container(
+                                                                                                      width: 100,
+                                                                                                      decoration: const BoxDecoration(
+                                                                                                        color: Colors.black,
+                                                                                                        borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                        // border: Border.all(color: Colors.white, width: 1),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                                      child: const Center(
+                                                                                                          child: Text(
+                                                                                                        'ปิด',
+                                                                                                        textAlign: TextAlign.center,
+                                                                                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T
+                                                                                                            //fontSize: 10.0
+                                                                                                            ),
+                                                                                                      ))),
+                                                                                                  onTap: () {
+                                                                                                    Navigator.of(context).pop();
+                                                                                                  },
+                                                                                                ),
+                                                                                              ),
+                                                                                            ),
+                                                                                          )
+                                                                                        ],
+                                                                                      ),
+                                                                                    ],
+                                                                                  );
+                                                                                });
+                                                                          } else {
+                                                                            String
+                                                                                url =
+                                                                                '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                            try {
+                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                              var result = json.decode(response.body);
+                                                                              print(result);
+                                                                              if (result.toString() != 'null') {
+                                                                                setState(() {
+                                                                                  red_Trans(_cser);
+                                                                                });
+                                                                              }
+                                                                            } catch (e) {}
+                                                                          }
+
+                                                                          // String
+                                                                          //     url =
+                                                                          //     '${MyConstant().domain}/UPC_Invoice.php?isAdd=true&ren=$ren&qser_in=$qser_in&qty=$value&ser_user=$ser_user&ovalue=$ovalue&nvalue=$nvalue&_celvat=$_celvat&_cqty_vat=$_cqty_vat&con_ser=$_cser&tran_ser=$tran_ser&tran_sern=$tran_sern&qser_inn=$qser_inn&tran_expser=$tran_expser';
+
+                                                                          // try {
+                                                                          //   var response =
+                                                                          //       await http.get(Uri.parse(url));
+
+                                                                          //   var result =
+                                                                          //       json.decode(response.body);
+                                                                          //   print(result);
+                                                                          //   if (result.toString() !=
+                                                                          //       'null') {
+                                                                          //     setState(() {
+                                                                          //       red_Trans(_cser);
+                                                                          //     });
+                                                                          //   }
+                                                                          // } catch (e) {}
                                                                         }
                                                                       }
                                                                     },
@@ -1519,8 +1657,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
 
                                                                             //fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T)),
-                                                                    inputFormatters: <
-                                                                        TextInputFormatter>[
+                                                                    inputFormatters: <TextInputFormatter>[
                                                                       // for below version 2 use this
                                                                       FilteringTextInputFormatter
                                                                           .allow(
@@ -1534,7 +1671,7 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                               : Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       Container(
@@ -1562,10 +1699,11 @@ class _MeterWaterElectricState extends State<MeterWaterElectric> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Text(
-                                                                      '${nFormat.format(double.parse(_TransModels[indextran].nvalue!))}',
+                                                                      '${_TransModels[indextran].nvalue!.padLeft(4, '0')}', // '${nFormat.format(double.parse(_TransModels[indextran].nvalue!))}',
                                                                       // '${_TransModels[indextran].nvalue}',
                                                                       textAlign:
                                                                           TextAlign

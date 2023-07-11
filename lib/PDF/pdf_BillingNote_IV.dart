@@ -12,6 +12,7 @@ import 'package:printing/printing.dart';
 import '../ChaoArea/ChaoAreaRenew_Screen.dart';
 import '../Constant/Myconstant.dart';
 import '../PeopleChao/Bills_.dart';
+import '../Style/ThaiBaht.dart';
 
 class Pdfgen_BillingNoteInvlice {
   //////////---------------------------------------------------->(ใบวางบิล แจ้งหนี้)
@@ -49,7 +50,9 @@ class Pdfgen_BillingNoteInvlice {
     // var dataint = fontData.buffer
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/Sarabun-Light.ttf");
+    // final PdfFont font = PdfFont.of(pdf, data: dataint);
+    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    var Colors_pd = PdfColors.black;
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
     var nFormat3 = NumberFormat("###-##-##0", "en_US");
@@ -95,132 +98,7 @@ class Pdfgen_BillingNoteInvlice {
     //       // '${_TransModels[index].pvat}',
     //     ],
     // ];
-    ///////////////////////------------------------------------------------->
-    final List<String> _digitThai = [
-      'ศูนย์',
-      'หนึ่ง',
-      'สอง',
-      'สาม',
-      'สี่',
-      'ห้า',
-      'หก',
-      'เจ็ด',
-      'แปด',
-      'เก้า'
-    ];
 
-    final List<String> _positionThai = [
-      '',
-      'สิบ',
-      'ร้อย',
-      'พัน',
-      'หมื่น',
-      'แสน',
-      'ล้าน'
-    ];
-/////////////////////////////------------------------>(จำนวนเต็ม)
-    String convertNumberToText(int number) {
-      String result = '';
-      int numberIntPart = number.toInt();
-      int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-/////////////////////////////------------------------>(จำนวนทศนิยม สตางค์)
-    String convertNumberToText2(int number2) {
-      String result = '';
-      int numberIntPart = number2.toInt();
-      int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
-
-////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
-    var number_ = "${nFormat2.format(double.parse('$Total'))}";
-    var parts = number_.split('.');
-    var front = parts[0];
-    var back = parts[1];
-
-////////////////--------------------------------->(บาท)
-    double number = double.parse(front);
-    final int numberIntPart = number.toInt();
-    final double numberDecimalPart = (number - numberIntPart) * 100;
-    final String numberText = convertNumberToText(numberIntPart);
-    final String decimalText = convertNumberToText(numberDecimalPart.toInt());
-////////////////---------------------------------->(สตางค์)
-    double number2 = double.parse(number_);
-    final int numberIntPart2 = number.toInt();
-    final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
-    final String numberText2 = convertNumberToText2(numberIntPart2);
-    final String decimalText2 =
-        convertNumberToText2(numberDecimalPart2.toInt());
-////////////////------------------------------->(เช็คและเพิ่มตัวอักษร)
-    final String formattedNumber = (decimalText2.replaceAll(
-                _digitThai[0], "") ==
-            '')
-        ? '$numberTextบาทถ้วน'
-        : (back[0].toString() == '0')
-            ? '$numberTextบาทศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
-            : '$numberTextบาท${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
-
-    String text_Number1 = formattedNumber;
-    RegExp exp1 = RegExp(r"สองสิบ");
-    if (exp1.hasMatch(text_Number1)) {
-      text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
-    }
-    String text_Number2 = text_Number1;
-    RegExp exp2 = RegExp(r"สิบหนึ่ง");
-    if (exp2.hasMatch(text_Number2)) {
-      text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
-    }
-///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
         header: (context) {
@@ -239,7 +117,7 @@ class Pdfgen_BillingNoteInvlice {
                             style: pw.TextStyle(
                               fontSize: 8,
                               font: ttf,
-                              color: PdfColors.grey300,
+                              color: Colors_pd,
                             ),
                           ),
                         ))
@@ -265,7 +143,8 @@ class Pdfgen_BillingNoteInvlice {
                         '$bill_name',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 11.0,
+                          fontSize: 10.0,
+                          color: Colors_pd,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
@@ -275,7 +154,7 @@ class Pdfgen_BillingNoteInvlice {
                         maxLines: 3,
                         style: pw.TextStyle(
                           fontSize: 10.0,
-                          color: PdfColors.grey800,
+                          color: Colors_pd,
                           font: ttf,
                         ),
                       ),
@@ -294,9 +173,10 @@ class Pdfgen_BillingNoteInvlice {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (bill_email.toString() == '' ||
@@ -307,9 +187,10 @@ class Pdfgen_BillingNoteInvlice {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (bill_tax.toString() == '' ||
@@ -319,9 +200,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'เลขประจำตัวผู้เสียภาษี: $bill_tax',
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -345,6 +227,7 @@ class Pdfgen_BillingNoteInvlice {
                     fontSize: 12.0,
                     fontWeight: pw.FontWeight.bold,
                     font: ttf,
+                    color: Colors_pd,
                   ),
                 ),
               ],
@@ -365,6 +248,7 @@ class Pdfgen_BillingNoteInvlice {
                           fontSize: 12.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
+                          color: Colors_pd,
                         ),
                       ),
                       pw.Text(
@@ -375,9 +259,10 @@ class Pdfgen_BillingNoteInvlice {
                             : '${sname_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (addr_.toString() == '' ||
@@ -387,9 +272,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'ที่อยู่ : ${addr_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       // pw.Text(
                       //   'โทรศัพท์: ${tel_}',
@@ -408,9 +294,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'อีเมล : ${email_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (tax_.toString() == '' ||
@@ -420,9 +307,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'เลขประจำตัวผู้เสียภาษี : ${tax_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -437,9 +325,10 @@ class Pdfgen_BillingNoteInvlice {
                       pw.Text(
                         'เลขที่อ้างอิง(Reference ID)',
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (cFinn.toString() == '' ||
@@ -456,9 +345,10 @@ class Pdfgen_BillingNoteInvlice {
                       pw.Text(
                         'วันที่ทำรายการ(Transation Date)',
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (thaiDate.toString() == '' ||
@@ -471,7 +361,7 @@ class Pdfgen_BillingNoteInvlice {
                           fontSize: 12.00,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
-                          color: PdfColors.black,
+                          color: Colors_pd,
                         ),
                       ),
                     ],
@@ -492,7 +382,7 @@ class Pdfgen_BillingNoteInvlice {
                   fontSize: 10.0,
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
-                  color: PdfColors.grey800,
+                  color: Colors_pd,
                 ),
               ),
             ]),
@@ -1055,7 +945,7 @@ class Pdfgen_BillingNoteInvlice {
                       pw.Expanded(
                         flex: 4,
                         child: pw.Text(
-                          '(~${text_Number2}~)',
+                          '(~${convertToThaiBaht(double.parse(Total.toString()))}~)',
                           style: pw.TextStyle(
                             fontSize: 10,
                             fontWeight: pw.FontWeight.bold,
@@ -1426,10 +1316,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้รับวางบิล',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1438,10 +1329,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้รับเงิน',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1450,10 +1342,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้ตรวจสอบ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1462,15 +1355,16 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้อนุมัติ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 4 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Row(
                         children: [
                           pw.Expanded(
@@ -1479,9 +1373,10 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1490,10 +1385,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1502,10 +1398,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1514,10 +1411,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
@@ -1531,9 +1429,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1542,9 +1441,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1553,9 +1453,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1564,9 +1465,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
@@ -1580,31 +1482,10 @@ class Pdfgen_BillingNoteInvlice {
                               'วันที่........../........../..........',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
-                            ),
-                          ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Text(
-                              'วันที่........../........../..........',
-                              textAlign: pw.TextAlign.center,
-                              style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
-                            ),
-                          ),
-                          pw.Expanded(
-                            flex: 1,
-                            child: pw.Text(
-                              'วันที่........../........../..........',
-                              textAlign: pw.TextAlign.center,
-                              style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -1615,7 +1496,31 @@ class Pdfgen_BillingNoteInvlice {
                               style: pw.TextStyle(
                                 fontSize: 10,
                                 font: ttf,
-                                color: PdfColors.grey800,
+                                color: Colors_pd,
+                              ),
+                            ),
+                          ),
+                          pw.Expanded(
+                            flex: 1,
+                            child: pw.Text(
+                              'วันที่........../........../..........',
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
+                            ),
+                          ),
+                          pw.Expanded(
+                            flex: 1,
+                            child: pw.Text(
+                              'วันที่........../........../..........',
+                              textAlign: pw.TextAlign.center,
+                              style: pw.TextStyle(
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
                               ),
                             ),
                           ),
@@ -1631,7 +1536,7 @@ class Pdfgen_BillingNoteInvlice {
                             style: pw.TextStyle(
                                 fontSize: 10,
                                 font: ttf,
-                                color: PdfColors.black,
+                                color: Colors_pd,
                                 fontWeight: pw.FontWeight.bold),
                           ),
                         ],
@@ -1645,41 +1550,13 @@ class Pdfgen_BillingNoteInvlice {
                             textAlign: pw.TextAlign.left,
                             maxLines: 1,
                             style: pw.TextStyle(
-                                fontSize: 10,
-                                font: ttf,
-                                color: PdfColors.grey800),
+                              fontSize: 10,
+                              font: ttf,
+                              color: Colors_pd,
+                            ),
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
-                      pw.Row(
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(
-                            '  ...............................................................................................................................................................................................',
-                            textAlign: pw.TextAlign.left,
-                            maxLines: 1,
-                            style: pw.TextStyle(
-                                fontSize: 10,
-                                font: ttf,
-                                color: PdfColors.grey800),
-                          ),
-                        ],
-                      ),
-                      // pw.Bullet(
-                      //   text:
-                      //       '.................................................................................................................................................................................',
-                      //   textAlign: pw.TextAlign.left,
-                      //   style: pw.TextStyle(
-                      //       fontSize: 10, font: ttf, color: PdfColors.grey800),
-                      // ),
-                      // pw.Bullet(
-                      //   text:
-                      //       '..................................................................................................',
-                      //   textAlign: pw.TextAlign.left,
-                      //   style: pw.TextStyle(
-                      //       fontSize: 10, font: ttf, color: PdfColors.grey800),
-                      // ),
                       pw.SizedBox(height: 3 * PdfPageFormat.mm),
                     ],
                   )),
@@ -1692,7 +1569,7 @@ class Pdfgen_BillingNoteInvlice {
                   style: pw.TextStyle(
                     fontSize: 10,
                     font: ttf,
-                    color: PdfColors.grey800,
+                    color: Colors_pd,
                     // fontWeight: pw.FontWeight.bold
                   ),
                 ),
@@ -1759,7 +1636,9 @@ class Pdfgen_BillingNoteInvlice {
     // var dataint = fontData.buffer
     //     .asUint8List(fontData.offsetInBytes, fontData.lengthInBytes);
     // final PdfFont font = PdfFont.of(pdf, data: dataint);
-    final font = await rootBundle.load("fonts/Sarabun-Light.ttf");
+    // final PdfFont font = PdfFont.of(pdf, data: dataint);
+    final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
+    var Colors_pd = PdfColors.black;
     var nFormat = NumberFormat("#,##0.00", "en_US");
     var nFormat2 = NumberFormat("###0.00", "en_US");
     // double percen =
@@ -1803,133 +1682,133 @@ class Pdfgen_BillingNoteInvlice {
         ],
     ];
     ///////////////////////------------------------------------------------->
-    final List<String> _digitThai = [
-      'ศูนย์',
-      'หนึ่ง',
-      'สอง',
-      'สาม',
-      'สี่',
-      'ห้า',
-      'หก',
-      'เจ็ด',
-      'แปด',
-      'เก้า'
-    ];
+    // final List<String> _digitThai = [
+    //   'ศูนย์',
+    //   'หนึ่ง',
+    //   'สอง',
+    //   'สาม',
+    //   'สี่',
+    //   'ห้า',
+    //   'หก',
+    //   'เจ็ด',
+    //   'แปด',
+    //   'เก้า'
+    // ];
 
-    final List<String> _positionThai = [
-      '',
-      'สิบ',
-      'ร้อย',
-      'พัน',
-      'หมื่น',
-      'แสน',
-      'ล้าน'
-    ];
+    // final List<String> _positionThai = [
+    //   '',
+    //   'สิบ',
+    //   'ร้อย',
+    //   'พัน',
+    //   'หมื่น',
+    //   'แสน',
+    //   'ล้าน'
+    // ];
 /////////////////////////////------------------------>(จำนวนเต็ม)
-    String convertNumberToText(int number) {
-      String result = '';
-      int numberIntPart = number.toInt();
-      int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
+    // String convertNumberToText(int number) {
+    //   String result = '';
+    //   int numberIntPart = number.toInt();
+    //   int numberDecimalPart = ((number - numberIntPart) * 100).toInt();
+    //   final List<String> digits = numberIntPart.toString().split('');
+    //   int position = digits.length - 1;
+    //   for (int i = 0; i < digits.length; i++) {
+    //     final int digit = int.parse(digits[i]);
+    //     if (digit != 0) {
+    //       if (position == 6) {
+    //         result = '$result${_positionThai[6]}';
+    //       }
+    //       if (position != 6 && position != 8) {
+    //         if (digit == 1 && position == 1) {
+    //           // result = '$resultเอ็ด';
+    //           result = '$resultสิบ';
+    //         } else {
+    //           result =
+    //               '$result${_digitThai[digit]}${_positionThai[position % 6]}';
+    //         }
+    //       } else if (position == 8) {
+    //         result = '$result${_digitThai[digit]}${_positionThai[6]}';
+    //       }
+    //     }
+    //     position--;
+    //   }
+    //   // final String decimalText =
+    //   //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
+    //   return result;
+    // }
 
 /////////////////////////////------------------------>(จำนวนทศนิยม สตางค์)
-    String convertNumberToText2(int number2) {
-      String result = '';
-      int numberIntPart = number2.toInt();
-      int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
-      final List<String> digits = numberIntPart.toString().split('');
-      int position = digits.length - 1;
-      for (int i = 0; i < digits.length; i++) {
-        final int digit = int.parse(digits[i]);
-        if (digit != 0) {
-          if (position == 6) {
-            result = '$result${_positionThai[6]}';
-          }
-          if (position != 6 && position != 8) {
-            if (digit == 1 && position == 1) {
-              // result = '$resultเอ็ด';
-              result = '$resultสิบ';
-            } else {
-              result =
-                  '$result${_digitThai[digit]}${_positionThai[position % 6]}';
-            }
-          } else if (position == 8) {
-            result = '$result${_digitThai[digit]}${_positionThai[6]}';
-          }
-        }
-        position--;
-      }
-      // final String decimalText =
-      //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
-      return result;
-    }
+    // String convertNumberToText2(int number2) {
+    //   String result = '';
+    //   int numberIntPart = number2.toInt();
+    //   int numberDecimalPart = ((number2 - numberIntPart) * 100).toInt();
+    //   final List<String> digits = numberIntPart.toString().split('');
+    //   int position = digits.length - 1;
+    //   for (int i = 0; i < digits.length; i++) {
+    //     final int digit = int.parse(digits[i]);
+    //     if (digit != 0) {
+    //       if (position == 6) {
+    //         result = '$result${_positionThai[6]}';
+    //       }
+    //       if (position != 6 && position != 8) {
+    //         if (digit == 1 && position == 1) {
+    //           // result = '$resultเอ็ด';
+    //           result = '$resultสิบ';
+    //         } else {
+    //           result =
+    //               '$result${_digitThai[digit]}${_positionThai[position % 6]}';
+    //         }
+    //       } else if (position == 8) {
+    //         result = '$result${_digitThai[digit]}${_positionThai[6]}';
+    //       }
+    //     }
+    //     position--;
+    //   }
+    //   // final String decimalText =
+    //   //     convertNumberToText(numberDecimalPart).replaceAll(_digitThai[0], "");
+    //   return result;
+    // }
 
 ////////////////----------------------------->(ตัด หน้าจุดกับหลังจุดออกจากกัน)
 
-    var number_ =
-        "${nFormat2.format(double.parse(sum_amt) - double.parse(sum_disamt))}";
+    // var number_ =
+    //     "${nFormat2.format(double.parse(sum_amt) - double.parse(sum_disamt))}";
 
-    var parts = number_.split('.');
-    var front = parts[0];
-    var back = parts[1];
+    // var parts = number_.split('.');
+    // var front = parts[0];
+    // var back = parts[1];
 
 ////////////////--------------------------------->(บาท)
-    double number = double.parse(front);
-    final int numberIntPart = number.toInt();
-    final double numberDecimalPart = (number - numberIntPart) * 100;
-    final String numberText = convertNumberToText(numberIntPart);
-    final String decimalText = convertNumberToText(numberDecimalPart.toInt());
+    // double number = double.parse(front);
+    // final int numberIntPart = number.toInt();
+    // final double numberDecimalPart = (number - numberIntPart) * 100;
+    // final String numberText = convertNumberToText(numberIntPart);
+    // final String decimalText = convertNumberToText(numberDecimalPart.toInt());
 ////////////////---------------------------------->(สตางค์)
-    double number2 = double.parse(number_);
-    final int numberIntPart2 = number.toInt();
-    final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
-    final String numberText2 = convertNumberToText2(numberIntPart2);
-    final String decimalText2 =
-        convertNumberToText2(numberDecimalPart2.toInt());
+    // double number2 = double.parse(number_);
+    // final int numberIntPart2 = number.toInt();
+    // final int numberDecimalPart2 = ((number2 - numberIntPart2) * 100).round();
+    // final String numberText2 = convertNumberToText2(numberIntPart2);
+    // final String decimalText2 =
+    //     convertNumberToText2(numberDecimalPart2.toInt());
 ////////////////------------------------------->(เช็คและเพิ่มตัวอักษร)
-    final String formattedNumber = (decimalText2.replaceAll(
-                _digitThai[0], "") ==
-            '')
-        ? '$numberTextบาทถ้วน'
-        : (back[0].toString() == '0')
-            ? '$numberTextบาทศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
-            : '$numberTextบาท${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
+    // final String formattedNumber = (decimalText2.replaceAll(
+    //             _digitThai[0], "") ==
+    //         '')
+    //     ? '$numberTextบาทถ้วน'
+    //     : (back[0].toString() == '0')
+    //         ? '$numberTextบาทศูนย์${decimalText2.replaceAll(_digitThai[0], "")}สตางค์'
+    //         : '$numberTextบาท${decimalText2.replaceAll(_digitThai[0], "")}สตางค์';
 
-    String text_Number1 = formattedNumber;
-    RegExp exp1 = RegExp(r"สองสิบ");
-    if (exp1.hasMatch(text_Number1)) {
-      text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
-    }
-    String text_Number2 = text_Number1;
-    RegExp exp2 = RegExp(r"สิบหนึ่ง");
-    if (exp2.hasMatch(text_Number2)) {
-      text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
-    }
+    // String text_Number1 = formattedNumber;
+    // RegExp exp1 = RegExp(r"สองสิบ");
+    // if (exp1.hasMatch(text_Number1)) {
+    //   text_Number1 = text_Number1.replaceAll(exp1, 'ยี่สิบ');
+    // }
+    // String text_Number2 = text_Number1;
+    // RegExp exp2 = RegExp(r"สิบหนึ่ง");
+    // if (exp2.hasMatch(text_Number2)) {
+    //   text_Number2 = text_Number2.replaceAll(exp2, 'สิบเอ็ด');
+    // }
 ///////////////////////------------------------------------------------->
     pdf.addPage(
       pw.MultiPage(
@@ -1949,7 +1828,7 @@ class Pdfgen_BillingNoteInvlice {
                             style: pw.TextStyle(
                               fontSize: 8,
                               font: ttf,
-                              color: PdfColors.grey300,
+                              color: Colors_pd,
                             ),
                           ),
                         ))
@@ -1975,7 +1854,8 @@ class Pdfgen_BillingNoteInvlice {
                         '$bill_name ',
                         maxLines: 2,
                         style: pw.TextStyle(
-                          fontSize: 11.0,
+                          color: Colors_pd,
+                          fontSize: 10.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
                         ),
@@ -1984,8 +1864,8 @@ class Pdfgen_BillingNoteInvlice {
                         '$bill_addr',
                         maxLines: 3,
                         style: pw.TextStyle(
+                          color: Colors_pd,
                           fontSize: 10.0,
-                          color: PdfColors.grey800,
                           font: ttf,
                         ),
                       ),
@@ -2018,9 +1898,10 @@ class Pdfgen_BillingNoteInvlice {
                         textAlign: pw.TextAlign.right,
                         maxLines: 1,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (bill_email.toString() == '' ||
@@ -2031,9 +1912,10 @@ class Pdfgen_BillingNoteInvlice {
                         maxLines: 1,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (bill_tax.toString() == '' ||
@@ -2044,9 +1926,10 @@ class Pdfgen_BillingNoteInvlice {
                         // textAlign: pw.TextAlign.justify,
                         textAlign: pw.TextAlign.right,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -2067,10 +1950,11 @@ class Pdfgen_BillingNoteInvlice {
                   'ใบวางบิล/ใบแจ้งหนี้',
                   textAlign: pw.TextAlign.center,
                   style: pw.TextStyle(
-                      fontSize: 11.0,
-                      fontWeight: pw.FontWeight.bold,
-                      font: ttf,
-                      color: PdfColors.black),
+                    fontSize: 11.0,
+                    fontWeight: pw.FontWeight.bold,
+                    font: ttf,
+                    color: Colors_pd,
+                  ),
                 ),
               ],
             ),
@@ -2090,6 +1974,7 @@ class Pdfgen_BillingNoteInvlice {
                           fontSize: 12.0,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
+                          color: Colors_pd,
                         ),
                       ),
                       pw.Text(
@@ -2100,9 +1985,10 @@ class Pdfgen_BillingNoteInvlice {
                             : '${sname_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (addr_.toString() == '' ||
@@ -2112,9 +1998,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'ที่อยู่ : ${addr_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       // pw.Text(
                       //   'โทรศัพท์: ${tel_}',
@@ -2133,9 +2020,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'อีเมล : ${email_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         (tax_.toString() == '' ||
@@ -2145,9 +2033,10 @@ class Pdfgen_BillingNoteInvlice {
                             : 'เลขประจำตัวผู้เสียภาษี : ${tax_}',
                         textAlign: pw.TextAlign.justify,
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                     ],
                   ),
@@ -2162,24 +2051,27 @@ class Pdfgen_BillingNoteInvlice {
                       pw.Text(
                         'เลขที่อ้างอิง(Reference ID)',
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         '${numinvoice}',
                         style: pw.TextStyle(
-                            fontSize: 12.00,
-                            fontWeight: pw.FontWeight.bold,
-                            font: ttf,
-                            color: PdfColors.black),
+                          fontSize: 12.00,
+                          fontWeight: pw.FontWeight.bold,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         'วันที่ทำรายการ(Transation Date)',
                         style: pw.TextStyle(
-                            fontSize: 10.0,
-                            font: ttf,
-                            color: PdfColors.grey800),
+                          fontSize: 10.0,
+                          font: ttf,
+                          color: Colors_pd,
+                        ),
                       ),
                       pw.Text(
                         '$thaiDate ${DateTime.now().year + 543}',
@@ -2188,7 +2080,7 @@ class Pdfgen_BillingNoteInvlice {
                           fontSize: 12.00,
                           fontWeight: pw.FontWeight.bold,
                           font: ttf,
-                          color: PdfColors.black,
+                          color: Colors_pd,
                         ),
                       ),
                     ],
@@ -2209,7 +2101,7 @@ class Pdfgen_BillingNoteInvlice {
                   fontSize: 10.0,
                   font: ttf,
                   fontWeight: pw.FontWeight.bold,
-                  color: PdfColors.grey800,
+                  color: Colors_pd,
                 ),
               ),
             ]),
@@ -2776,7 +2668,8 @@ class Pdfgen_BillingNoteInvlice {
                       pw.Expanded(
                         flex: 4,
                         child: pw.Text(
-                          '(~${text_Number2}~)',
+                          //"${nFormat2.format(double.parse(sum_amt) - double.parse(sum_disamt))}";
+                          '(~${convertToThaiBaht(double.parse(sum_amt) - double.parse(sum_disamt))}~)',
                           style: pw.TextStyle(
                             fontSize: 10,
                             fontWeight: pw.FontWeight.bold,
@@ -2826,309 +2719,6 @@ class Pdfgen_BillingNoteInvlice {
                   ),
                 )),
             pw.SizedBox(height: 10 * PdfPageFormat.mm),
-            // pw.Stack(
-            //   children: [
-            //     pw.Positioned(
-            //         left: 0,
-            //         bottom: 120,
-            //         child: pw.Transform.rotate(
-            //           angle: 15 * math.pi / 190,
-            //           child: pw.Text(
-            //             '$renTal_name $renTal_name $renTal_name ',
-            //             style: pw.TextStyle(
-            //               fontSize: 40,
-            //               color: PdfColors.grey200,
-            //               font: ttf,
-            //             ),
-            //           ),
-            //           //         pw.Image(
-            //           //     pw.MemoryImage(iconImage),
-            //           //     height: 300,
-            //           //     width: 400,
-            //           //   ),
-            //           // )
-            //         )),
-            //     pw.Container(
-            //       child: pw.Column(
-            //         children: [
-            //           pw.Table.fromTextArray(
-            //             headers: tableHeaders,
-            //             data: tableData,
-            //             border: null,
-            //             headerStyle: pw.TextStyle(
-            //                 fontSize: 10.0,
-            //                 fontWeight: pw.FontWeight.bold,
-            //                 font: ttf,
-            //                 color: PdfColors.green900),
-            //             headerDecoration: const pw.BoxDecoration(
-            //               color: PdfColors.green100,
-            //               border: pw.Border(
-            //                 bottom: pw.BorderSide(color: PdfColors.green900),
-            //               ),
-            //             ),
-            //             cellStyle: pw.TextStyle(
-            //                 fontSize: 10.0,
-            //                 font: ttf,
-            //                 color: PdfColors.grey800),
-            //             cellHeight: 25.0,
-            //             cellAlignments: {
-            //               0: pw.Alignment.centerLeft,
-            //               1: pw.Alignment.centerRight,
-            //               2: pw.Alignment.centerRight,
-            //               3: pw.Alignment.centerRight,
-            //               4: pw.Alignment.centerRight,
-            //               5: pw.Alignment.centerRight,
-            //               6: pw.Alignment.centerRight,
-            //               7: pw.Alignment.centerRight,
-            //               7: pw.Alignment.centerRight,
-            //             },
-            //           ),
-            //           pw.Divider(color: PdfColors.grey),
-            //           pw.Container(
-            //             alignment: pw.Alignment.centerRight,
-            //             child: pw.Row(
-            //               children: [
-            //                 pw.Spacer(flex: 6),
-            //                 pw.Expanded(
-            //                   flex: 4,
-            //                   child: pw.Column(
-            //                     crossAxisAlignment: pw.CrossAxisAlignment.start,
-            //                     children: [
-            //                       // SubTotal, Vat, Deduct, Sum_SubTotal, DisC, Total
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'รวมราคาสินค้า/Sub Total',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_pvat.toString()))}',
-            //                             // '$sum_pvat',
-            //                             // '$SubTotal',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ภาษีมูลค่าเพิ่ม/Vat',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_vat.toString()))}',
-            //                             // '$sum_vat',
-            //                             // '$Vat',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'หัก ณ ที่จ่าย',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_wht.toString()))}',
-            //                             //'$sum_wht',
-            //                             // '$Deduct',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ยอดรวม',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_amt))}',
-            //                             //'$sum_amt',
-            //                             // '$Sum_SubTotal',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ส่วนลด/Discount()',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_disp.toString()))}',
-            //                             //'$sum_disp',
-            //                             // '$DisC',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                       pw.Divider(color: PdfColors.grey),
-            //                       pw.Row(
-            //                         children: [
-            //                           pw.Expanded(
-            //                             child: pw.Text(
-            //                               'ยอดชำระ',
-            //                               style: pw.TextStyle(
-            //                                   fontSize: 10,
-            //                                   fontWeight: pw.FontWeight.bold,
-            //                                   font: ttf,
-            //                                   color: PdfColors.green900),
-            //                             ),
-            //                           ),
-            //                           pw.Text(
-            //                             '${nFormat.format(double.parse(sum_disamt.toString()))}',
-            //                             //'$sum_disamt',
-            //                             style: pw.TextStyle(
-            //                                 fontSize: 10,
-            //                                 fontWeight: pw.FontWeight.bold,
-            //                                 font: ttf,
-            //                                 color: PdfColors.green900),
-            //                           ),
-            //                         ],
-            //                       ),
-            //                     ],
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //           pw.SizedBox(height: 2 * PdfPageFormat.mm),
-            //           pw.Container(
-            //               height: 25,
-            //               decoration: const pw.BoxDecoration(
-            //                 color: PdfColors.green100,
-            //                 border: pw.Border(
-            //                   top: pw.BorderSide(color: PdfColors.green900),
-            //                 ),
-            //               ),
-            //               alignment: pw.Alignment.centerRight,
-            //               child: pw.Center(
-            //                 child: pw.Row(
-            //                   children: [
-            //                     pw.SizedBox(width: 2 * PdfPageFormat.mm),
-            //                     pw.Text(
-            //                       'ตัวอักษร ',
-            //                       style: pw.TextStyle(
-            //                           fontSize: 10,
-            //                           fontWeight: pw.FontWeight.bold,
-            //                           font: ttf,
-            //                           fontStyle: pw.FontStyle.italic,
-            //                           color: PdfColors.green900),
-            //                     ),
-            //                     pw.Expanded(
-            //                       flex: 4,
-            //                       child: pw.Text(
-            //                         '(~${text_Number2}~)',
-            //                         style: pw.TextStyle(
-            //                           fontSize: 10,
-            //                           fontWeight: pw.FontWeight.bold,
-            //                           font: ttf,
-            //                           fontStyle: pw.FontStyle.italic,
-            //                           // decoration:
-            //                           //     pw.TextDecoration.lineThrough,
-            //                           color: PdfColors.green900,
-            //                         ),
-            //                       ),
-            //                     ),
-            //                     pw.Expanded(
-            //                       flex: 2,
-            //                       child: pw.Column(
-            //                         mainAxisAlignment:
-            //                             pw.MainAxisAlignment.center,
-            //                         crossAxisAlignment:
-            //                             pw.CrossAxisAlignment.start,
-            //                         children: [
-            //                           pw.Row(
-            //                             children: [
-            //                               pw.Expanded(
-            //                                 flex: 2,
-            //                                 child: pw.Text(
-            //                                   'ยอดชำระทั้งหมด/Total',
-            //                                   textAlign: pw.TextAlign.left,
-            //                                   style: pw.TextStyle(
-            //                                       fontWeight:
-            //                                           pw.FontWeight.bold,
-            //                                       font: ttf,
-            //                                       fontSize: 10,
-            //                                       color: PdfColors.green900),
-            //                                 ),
-            //                               ),
-            //                               pw.Text(
-            //                                 '${nFormat.format(double.parse(sum_amt) - double.parse(sum_disamt))}',
-            //                                 // '${int.parse(sum_amt) - int.parse(sum_disamt)}',
-            //                                 style: pw.TextStyle(
-            //                                     fontWeight: pw.FontWeight.bold,
-            //                                     font: ttf,
-            //                                     fontSize: 10,
-            //                                     color: PdfColors.green900),
-            //                               ),
-            //                             ],
-            //                           ),
-            //                         ],
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               )),
-            //           pw.SizedBox(height: 10 * PdfPageFormat.mm),
-            //         ],
-            //       ),
-            //     ),
-            //   ],
-            // )
           ];
         },
         footer: (context) {
@@ -3152,10 +2742,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้รับวางบิล',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3164,10 +2755,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้รับเงิน',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3176,10 +2768,11 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้ตรวจสอบ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3188,15 +2781,16 @@ class Pdfgen_BillingNoteInvlice {
                               'ผู้อนุมัติ',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: pw.FontWeight.bold,
-                                  font: ttf,
-                                  color: PdfColors.black),
+                                fontSize: 10,
+                                fontWeight: pw.FontWeight.bold,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                      pw.SizedBox(height: 4 * PdfPageFormat.mm),
+                      pw.SizedBox(height: 2 * PdfPageFormat.mm),
                       pw.Row(
                         children: [
                           pw.Expanded(
@@ -3205,9 +2799,10 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3216,10 +2811,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3228,10 +2824,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3240,10 +2837,11 @@ class Pdfgen_BillingNoteInvlice {
                               '..........................................',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontWeight: pw.FontWeight.bold,
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
@@ -3257,9 +2855,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3268,9 +2867,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3279,9 +2879,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3290,9 +2891,10 @@ class Pdfgen_BillingNoteInvlice {
                               '(................................)',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                         ],
@@ -3306,9 +2908,10 @@ class Pdfgen_BillingNoteInvlice {
                               'วันที่........../........../..........',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3317,9 +2920,10 @@ class Pdfgen_BillingNoteInvlice {
                               'วันที่........../........../..........',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3328,9 +2932,10 @@ class Pdfgen_BillingNoteInvlice {
                               'วันที่........../........../..........',
                               textAlign: pw.TextAlign.center,
                               style: pw.TextStyle(
-                                  fontSize: 10,
-                                  font: ttf,
-                                  color: PdfColors.grey800),
+                                fontSize: 10,
+                                font: ttf,
+                                color: Colors_pd,
+                              ),
                             ),
                           ),
                           pw.Expanded(
@@ -3356,7 +2961,7 @@ class Pdfgen_BillingNoteInvlice {
                             style: pw.TextStyle(
                                 fontSize: 10,
                                 font: ttf,
-                                color: PdfColors.black,
+                                color: Colors_pd,
                                 fontWeight: pw.FontWeight.bold),
                           ),
                         ],
@@ -3370,42 +2975,13 @@ class Pdfgen_BillingNoteInvlice {
                             textAlign: pw.TextAlign.left,
                             maxLines: 1,
                             style: pw.TextStyle(
-                                fontSize: 10,
-                                font: ttf,
-                                color: PdfColors.grey800),
+                              fontSize: 10,
+                              font: ttf,
+                              color: Colors_pd,
+                            ),
                           ),
                         ],
                       ),
-
-                      pw.SizedBox(height: 1 * PdfPageFormat.mm),
-                      pw.Row(
-                        mainAxisAlignment: pw.MainAxisAlignment.center,
-                        children: [
-                          pw.Text(
-                            '  ...............................................................................................................................................................................................',
-                            textAlign: pw.TextAlign.left,
-                            maxLines: 1,
-                            style: pw.TextStyle(
-                                fontSize: 10,
-                                font: ttf,
-                                color: PdfColors.grey800),
-                          ),
-                        ],
-                      ),
-                      // pw.Bullet(
-                      //   text:
-                      //       '.................................................................................................................................................................................',
-                      //   textAlign: pw.TextAlign.left,
-                      //   style: pw.TextStyle(
-                      //       fontSize: 10, font: ttf, color: PdfColors.grey800),
-                      // ),
-                      // pw.Bullet(
-                      //   text:
-                      //       '..................................................................................................',
-                      //   textAlign: pw.TextAlign.left,
-                      //   style: pw.TextStyle(
-                      //       fontSize: 10, font: ttf, color: PdfColors.grey800),
-                      // ),
                       pw.SizedBox(height: 3 * PdfPageFormat.mm),
                     ],
                   )),
@@ -3418,7 +2994,7 @@ class Pdfgen_BillingNoteInvlice {
                   style: pw.TextStyle(
                     fontSize: 10,
                     font: ttf,
-                    color: PdfColors.grey800,
+                    color: Colors_pd,
                     // fontWeight: pw.FontWeight.bold
                   ),
                 ),

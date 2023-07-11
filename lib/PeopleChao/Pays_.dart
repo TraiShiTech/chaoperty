@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
@@ -24,6 +25,7 @@ import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GetCFinnancetrans_Model.dart';
 import '../Model/GetContractf_Model.dart';
+import '../Model/GetExp_Model.dart';
 import '../Model/GetInvoice_Model.dart';
 import '../Model/GetInvoice_history_Model.dart';
 import '../Model/GetPayMent_Model.dart';
@@ -76,6 +78,7 @@ class _PaysState extends State<Pays> {
   List<RenTalModel> renTalModels = [];
   List<ContractfModel> contractfModels = [];
   List<TeNantModel> teNantModels = [];
+  List<ExpModel> expModels = [];
   final sum_disamtx = TextEditingController();
   final sum_dispx = TextEditingController();
   final Form_payment1 = TextEditingController();
@@ -173,6 +176,35 @@ class _PaysState extends State<Pays> {
     Value_newDateD = DateFormat('dd-MM-yyyy').format(newDatetime);
     GC_contractf();
     read_data();
+    read_GC_Exp();
+  }
+
+  Future<Null> read_GC_Exp() async {
+    if (expModels.isNotEmpty) {
+      expModels.clear();
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_exp_setring.php?isAdd=true&ren=$ren';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      print(result);
+      if (result != null) {
+        for (var map in result) {
+          ExpModel expModel = ExpModel.fromJson(map);
+
+          setState(() {
+            expModels.add(expModel);
+          });
+        }
+      } else {}
+    } catch (e) {}
   }
 
   Future<Null> read_data() async {
@@ -453,9 +485,14 @@ class _PaysState extends State<Pays> {
         });
         for (var map in result) {
           TransBillModel _TransBillModel = TransBillModel.fromJson(map);
+          var menu =
+              double.parse(_TransBillModel.total.toString()).toStringAsFixed(2);
+          print('menumenumenu>>>>>>>>>$menu');
           setState(() {
             if (_TransBillModel.invoice == null) {
-              _TransBillModels.add(_TransBillModel);
+              if (menu != '0.00') {
+                _TransBillModels.add(_TransBillModel);
+              }
             }
             // _TransBillModels.add(_TransBillModel);
           });
@@ -623,13 +660,14 @@ class _PaysState extends State<Pays> {
       if (result.toString() == 'true') {
         setState(() {
           red_Trans_select2();
-
+          red_Trans_bill();
           text_add.clear();
           price_add.clear();
         });
         print('rrrrrrrrrrrrrr');
       } else if (result.toString() == 'false') {
         setState(() {
+          red_Trans_bill();
           red_Trans_select2();
           text_add.clear();
           price_add.clear();
@@ -637,6 +675,7 @@ class _PaysState extends State<Pays> {
         print('rrrrrrrrrrrrrrfalse');
       } else {
         setState(() {
+          red_Trans_bill();
           red_Trans_select2();
           text_add.clear();
           price_add.clear();
@@ -1015,6 +1054,7 @@ class _PaysState extends State<Pays> {
       setState(() {
         Form_payment1.text =
             (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+        red_Invoice();
       });
     } catch (e) {}
   }
@@ -2116,51 +2156,52 @@ class _PaysState extends State<Pays> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  addPlay();
-                                                },
-                                                child: Container(
-                                                  width: 100,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.green,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    10),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    10)),
-                                                    // border: Border.all(color: Colors.white, width: 1),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Center(
-                                                    child: AutoSizeText(
-                                                      minFontSize: 8,
-                                                      maxFontSize: 15,
-                                                      'เพิ่มใหม่',
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
+                                              select_page == 1
+                                                  ? SizedBox()
+                                                  : InkWell(
+                                                      onTap: () {
+                                                        addPlaySelect();
+                                                        // addPlay();
+                                                      },
+                                                      child: Container(
+                                                        width: 100,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius: BorderRadius.only(
+                                                              topLeft: Radius
+                                                                  .circular(10),
+                                                              topRight: Radius
+                                                                  .circular(10),
+                                                              bottomLeft: Radius
+                                                                  .circular(10),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          10)),
+                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: const Center(
+                                                          child: AutoSizeText(
+                                                            minFontSize: 8,
+                                                            maxFontSize: 15,
+                                                            'เพิ่มใหม่',
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text2_,
+                                                                //fontWeight: FontWeight.bold,
+                                                                fontFamily: Font_
+                                                                    .Fonts_T),
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
                                             ],
                                           ),
                                         ),
@@ -2189,7 +2230,7 @@ class _PaysState extends State<Pays> {
                                                           color: Colors
                                                               .grey.shade300,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2260,7 +2301,7 @@ class _PaysState extends State<Pays> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.grey[300],
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -2323,7 +2364,7 @@ class _PaysState extends State<Pays> {
                                                           color: Colors
                                                               .grey.shade300,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2397,7 +2438,7 @@ class _PaysState extends State<Pays> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.grey[300],
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -2815,7 +2856,10 @@ class _PaysState extends State<Pays> {
                                               minFontSize: 10,
                                               maxFontSize: 15,
                                               maxLines: 1,
-                                              '${_TransModels[index].unit_con}',
+                                              _TransModels[index].unit_con ==
+                                                      null
+                                                  ? ''
+                                                  : '${_TransModels[index].unit_con}',
                                               textAlign: TextAlign.end,
                                               style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
@@ -3284,8 +3328,7 @@ class _PaysState extends State<Pays> {
 
                                                                       //fontWeight: FontWeight.bold,
                                                                       fontFamily: Font_.Fonts_T)),
-                                                              inputFormatters: <
-                                                                  TextInputFormatter>[
+                                                              inputFormatters: <TextInputFormatter>[
                                                                 FilteringTextInputFormatter
                                                                     .allow(RegExp(
                                                                         r'[0-9 .]')),
@@ -3423,8 +3466,7 @@ class _PaysState extends State<Pays> {
 
                                                                       //fontWeight: FontWeight.bold,
                                                                       fontFamily: Font_.Fonts_T)),
-                                                          inputFormatters: <
-                                                              TextInputFormatter>[
+                                                          inputFormatters: <TextInputFormatter>[
                                                             FilteringTextInputFormatter
                                                                 .allow(RegExp(
                                                                     r'[0-9 .]')),
@@ -3940,7 +3982,11 @@ class _PaysState extends State<Pays> {
                                                   minFontSize: 10,
                                                   maxFontSize: 15,
                                                   maxLines: 1,
-                                                  '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
+                                                  _InvoiceHistoryModels[index]
+                                                              .nvalue !=
+                                                          '0'
+                                                      ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))}'
+                                                      : '${nFormat.format(double.parse(_InvoiceHistoryModels[index].nvat!))}',
                                                   textAlign: TextAlign.end,
                                                   style: const TextStyle(
                                                       color:
@@ -6471,8 +6517,7 @@ class _PaysState extends State<Pays> {
                                                       // fontWeight: FontWeight.bold,
                                                       fontFamily:
                                                           Font_.Fonts_T)),
-                                              inputFormatters: <
-                                                  TextInputFormatter>[
+                                              inputFormatters: <TextInputFormatter>[
                                                 // for below version 2 use this
                                                 FilteringTextInputFormatter
                                                     .allow(RegExp(r'[0-9 .]')),
@@ -6917,8 +6962,7 @@ class _PaysState extends State<Pays> {
                                                           content:
                                                               SingleChildScrollView(
                                                             child: ListBody(
-                                                              children: const <
-                                                                  Widget>[
+                                                              children: const <Widget>[
                                                                 Text(
                                                                   'มีไฟล์ slip อยู่แล้ว หากต้องการอัพโหลดกรุณาลบไฟล์ที่มีอยู่แล้วก่อน',
                                                                   style: TextStyle(
@@ -6940,7 +6984,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -6949,7 +6993,8 @@ class _PaysState extends State<Pays> {
                                                                         decoration: BoxDecoration(
                                                                           color:
                                                                               Colors.red[600],
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(10),
                                                                               topRight: Radius.circular(10),
                                                                               bottomLeft: Radius.circular(10),
@@ -6981,7 +7026,7 @@ class _PaysState extends State<Pays> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -7616,7 +7661,7 @@ class _PaysState extends State<Pays> {
                                                                       .white,
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .fromLTRB(
+                                                                          .fromLTRB(
                                                                           4,
                                                                           8,
                                                                           4,
@@ -7641,8 +7686,9 @@ class _PaysState extends State<Pays> {
                                                                                 bottomLeft: Radius.circular(0),
                                                                                 bottomRight: Radius.circular(0)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Center(
                                                                             child:
@@ -7786,7 +7832,7 @@ class _PaysState extends State<Pays> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(
@@ -7895,7 +7941,8 @@ class _PaysState extends State<Pays> {
                                                                               Radius.circular(10)),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         TextButton(
@@ -8540,14 +8587,19 @@ class _PaysState extends State<Pays> {
                                                   //                   .Fonts_T))),
                                                   // );
                                                 } else {
-                                                  if (paymentName1
-                                                              .toString()
-                                                              .trim() ==
-                                                          'เงินโอน' ||
+                                                  if (paymentName1.toString().trim() == 'เงินโอน' ||
                                                       paymentName2
                                                               .toString()
                                                               .trim() ==
-                                                          'เงินโอน') {
+                                                          'เงินโอน' ||
+                                                      paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
                                                     if (base64_Slip != null) {
                                                       try {
                                                         OKuploadFile_Slip();
@@ -8653,14 +8705,19 @@ class _PaysState extends State<Pays> {
                                                   //                           .Fonts_T))),
                                                   // );
                                                 } else {
-                                                  if (paymentName1
-                                                              .toString()
-                                                              .trim() ==
-                                                          'เงินโอน' ||
+                                                  if (paymentName1.toString().trim() == 'เงินโอน' ||
                                                       paymentName2
                                                               .toString()
                                                               .trim() ==
-                                                          'เงินโอน') {
+                                                          'เงินโอน' ||
+                                                      paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
                                                     if (base64_Slip != null) {
                                                       try {
                                                         final tableData00 = [
@@ -8798,14 +8855,19 @@ class _PaysState extends State<Pays> {
                                                   //                           .Fonts_T))),
                                                   // );
                                                 } else {
-                                                  if (paymentName1
-                                                              .toString()
-                                                              .trim() ==
-                                                          'เงินโอน' ||
+                                                  if (paymentName1.toString().trim() == 'เงินโอน' ||
                                                       paymentName2
                                                               .toString()
                                                               .trim() ==
-                                                          'เงินโอน') {
+                                                          'เงินโอน' ||
+                                                      paymentName1
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment' ||
+                                                      paymentName2
+                                                              .toString()
+                                                              .trim() ==
+                                                          'Online Payment') {
                                                     if (base64_Slip != null) {
                                                       try {
                                                         OKuploadFile_Slip();
@@ -8926,6 +8988,351 @@ class _PaysState extends State<Pays> {
         )
       ],
     );
+  }
+
+  Future<void> addPlaySelect() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListBody(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'เพิ่มรายการชำระ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(seconds: 0)),
+                                builder: (context, snapshot) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 350,
+                                    child: GridView.count(
+                                      crossAxisCount:
+                                          Responsive.isDesktop(context) ? 5 : 2,
+                                      children: [
+                                        // Card(
+                                        //   child: InkWell(
+                                        //     onTap: () async {
+                                        //       Navigator.of(context).pop();
+                                        //       addPlay();
+                                        //     },
+                                        //     child:
+                                        //         Icon(Icons.add_circle_outline),
+                                        //   ),
+                                        // ),
+                                        for (int i = 0;
+                                            i < expModels.length;
+                                            i++)
+                                          Card(
+                                            color: text_add.text ==
+                                                    expModels[i].expname
+                                                ? Colors.lime
+                                                : Colors.white,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  text_add.text = expModels[i]
+                                                      .expname
+                                                      .toString();
+                                                  price_add.text = expModels[i]
+                                                      .pri_auto
+                                                      .toString();
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  children: [
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${expModels[i].expname}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${nFormat.format(double.parse(expModels[i].pri_auto!))}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ],
+                        )),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: Container(
+                          height: 350,
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        // keyboardType: TextInputType.name,
+                                        controller: text_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'รายการชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: price_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'ยอดชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade900,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          if (text_add.text != '' && price_add.text != '') {
+                            if (price_add.text != '0') {
+                              in_Trans_add();
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
   }
 
   Future<void> addPlay() {
@@ -9413,6 +9820,7 @@ class _PaysState extends State<Pays> {
                                   } catch (e) {}
                                 }
                                 print('index == ' '');
+
                                 red_Trans_selectde();
                                 print('index == ' 'ลบทั้งหมดทีเดียว');
                                 Navigator.pop(context);

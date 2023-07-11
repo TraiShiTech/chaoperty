@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'dart:js_util';
 
@@ -869,59 +870,64 @@ class _AccessrightsState extends State<Accessrights> {
                                         for (int index = 0;
                                             index < perMissionModels.length;
                                             index++)
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Checkbox(
-                                                    activeColor: Colors
-                                                        .blue, // ​​color when activated
-                                                    value: _isChecks[index],
-                                                    onChanged: (bool? val) {
-                                                      setState(() {
-                                                        _isChecks[index] = val!;
-                                                      });
-                                                      // print(checked_Add);
-                                                      checked_value = '';
-                                                      for (var i = 0;
-                                                          i < list.length;
-                                                          i++) {
-                                                        String idmenu =
-                                                            list[i].title;
-                                                        String pnmenu =
-                                                            list[i].content;
-                                                        if (_isChecks[i] ==
-                                                            true) {
-                                                          setState(() {
-                                                            checked_value =
-                                                                '$checked_value' +
-                                                                    '$idmenu' +
-                                                                    ',';
-                                                          });
+                                          if (perMissionModels[index]
+                                                  .perm
+                                                  .toString() !=
+                                              'จัดการข้อมูลส่วนตัว')
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Checkbox(
+                                                      activeColor: Colors
+                                                          .blue, // ​​color when activated
+                                                      value: _isChecks[index],
+                                                      onChanged: (bool? val) {
+                                                        setState(() {
+                                                          _isChecks[index] =
+                                                              val!;
+                                                        });
+                                                        // print(checked_Add);
+                                                        checked_value = '';
+                                                        for (var i = 0;
+                                                            i < list.length;
+                                                            i++) {
+                                                          String idmenu =
+                                                              list[i].title;
+                                                          String pnmenu =
+                                                              list[i].content;
+                                                          if (_isChecks[i] ==
+                                                              true) {
+                                                            setState(() {
+                                                              checked_value =
+                                                                  '$checked_value' +
+                                                                      '$idmenu' +
+                                                                      ',';
+                                                            });
+                                                          }
                                                         }
-                                                      }
-                                                      print('$checked_value');
-                                                    }),
-                                              ),
-                                              Expanded(
-                                                flex: 8,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 15,
-                                                  '${perMissionModels[index].perm}',
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                                        print('$checked_value');
+                                                      }),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                                Expanded(
+                                                  flex: 8,
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    '${perMissionModels[index].perm}',
+                                                    textAlign: TextAlign.start,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                       ],
                                     );
                                   }),
@@ -1759,59 +1765,64 @@ class _AccessrightsState extends State<Accessrights> {
                                         for (int index = 0;
                                             index < perMissionModels.length;
                                             index++)
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                flex: 1,
-                                                child: Checkbox(
-                                                    activeColor: Colors
-                                                        .blue, // ​​color when activated
-                                                    value: _isChecks[index],
-                                                    onChanged: (bool? val) {
-                                                      setState(() {
-                                                        _isChecks[index] = val!;
-                                                      });
-                                                      // print(checked_Add);
-                                                      checked_value = '';
-                                                      for (var i = 0;
-                                                          i < list.length;
-                                                          i++) {
-                                                        String idmenu =
-                                                            list[i].title;
-                                                        String pnmenu =
-                                                            list[i].content;
-                                                        if (_isChecks[i] ==
-                                                            true) {
-                                                          setState(() {
-                                                            checked_value =
-                                                                '$checked_value' +
-                                                                    '$idmenu' +
-                                                                    ',';
-                                                          });
+                                          if (perMissionModels[index]
+                                                  .perm
+                                                  .toString() !=
+                                              'จัดการข้อมูลส่วนตัว')
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Checkbox(
+                                                      activeColor: Colors
+                                                          .blue, // ​​color when activated
+                                                      value: _isChecks[index],
+                                                      onChanged: (bool? val) {
+                                                        setState(() {
+                                                          _isChecks[index] =
+                                                              val!;
+                                                        });
+                                                        // print(checked_Add);
+                                                        checked_value = '';
+                                                        for (var i = 0;
+                                                            i < list.length;
+                                                            i++) {
+                                                          String idmenu =
+                                                              list[i].title;
+                                                          String pnmenu =
+                                                              list[i].content;
+                                                          if (_isChecks[i] ==
+                                                              true) {
+                                                            setState(() {
+                                                              checked_value =
+                                                                  '$checked_value' +
+                                                                      '$idmenu' +
+                                                                      ',';
+                                                            });
+                                                          }
                                                         }
-                                                      }
-                                                      print('$checked_value');
-                                                    }),
-                                              ),
-                                              Expanded(
-                                                flex: 8,
-                                                child: AutoSizeText(
-                                                  minFontSize: 10,
-                                                  maxFontSize: 15,
-                                                  '${perMissionModels[index].perm}',
-                                                  textAlign: TextAlign.start,
-                                                  style: const TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T),
+                                                        print('$checked_value');
+                                                      }),
                                                 ),
-                                              ),
-                                            ],
-                                          ),
+                                                Expanded(
+                                                  flex: 8,
+                                                  child: AutoSizeText(
+                                                    minFontSize: 10,
+                                                    maxFontSize: 15,
+                                                    '${perMissionModels[index].perm}',
+                                                    textAlign: TextAlign.start,
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text1_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily: FontWeight_
+                                                            .Fonts_T),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                       ],
                                     );
                                   }),

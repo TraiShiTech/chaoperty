@@ -5,9 +5,16 @@ class ZoneModel {
   String? qty;
   String? img;
   String? data_update;
+  String? img_floorplan;
 
   ZoneModel(
-      {this.ser, this.rser, this.zn, this.qty, this.img, this.data_update});
+      {this.ser,
+      this.rser,
+      this.zn,
+      this.qty,
+      this.img,
+      this.data_update,
+      this.img_floorplan});
 
   ZoneModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -16,6 +23,7 @@ class ZoneModel {
     qty = json['qty'];
     img = json['img'];
     data_update = json['data_update'];
+    img_floorplan = json['img_floorplan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -26,6 +34,7 @@ class ZoneModel {
     data['qty'] = this.qty;
     data['img'] = this.img;
     data['data_update'] = this.data_update;
+    data['img_floorplan'] = this.img_floorplan;
     return data;
   }
 }

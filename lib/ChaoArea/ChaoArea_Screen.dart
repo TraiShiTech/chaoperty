@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:convert';
 import 'dart:html';
 
@@ -25,6 +26,9 @@ import 'package:http/http.dart' as http;
 
 import 'ChaoAreaBid_Screen.dart';
 import 'ChaoAreaRenew_Screen.dart';
+import 'package:xml/xml.dart';
+
+import 'loadSvgImage.dart';
 
 class ChaoAreaScreen extends StatefulWidget {
   const ChaoAreaScreen({super.key});
@@ -46,6 +50,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
   List<ZoneModel> zoneModels = [];
   List<AreaModel> areaModels = [];
+  List<AreaModel> areaFloorplanModels = [];
   List<AreaModel> _areaModels = <AreaModel>[];
   List<RenTalModel> renTalModels = [];
 
@@ -79,7 +84,14 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     for (int i = 0; i < 10; i++) '${2565 - i}',
   ];
 
-  String? renTal_user, renTal_name, zone_ser, zone_name, Value_cid;
+  String? renTal_user,
+      renTal_name,
+      zone_ser,
+      zone_name,
+      Value_cid,
+      Ln_name,
+      Img_Zone,
+      Imgfloorplan;
   String? ser_user,
       foder,
       position_user,
@@ -94,6 +106,21 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
   String? a_ser, a_area, a_rent, a_ln, a_page, ser_cidtan;
   String? rtname, type, typex, renname, pkname, ser_Zonex;
   int? pkqty, pkuser, countarae;
+  /////////////----------------------------------------->
+  // List<Country> countries = [];
+  AreaModel? areaFloorplanModelss;
+  TransformationController _controller = TransformationController();
+  Key _countriesKey = UniqueKey();
+  void _zoomInSVG() {
+    _controller.value *= Matrix4.identity()..scale(1.2);
+  }
+
+  void _zoomOutSVG() {
+    _controller.value *= Matrix4.identity()..scale(0.8);
+  }
+
+  //////////////---------------------------------------------->
+  String? Name_, Img_, Img_logo_, Province_, DBN_, Typex_, Img_rental_;
   @override
   void initState() {
     super.initState();
@@ -147,6 +174,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
             renname = name;
             pkqty = pkqtyx;
             pkuser = pkuserx;
+            DBN_ = renTalModel.dbn;
             pkname = pkx;
             img_ = img;
             img_logo = imglogo;
@@ -224,10 +252,57 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       if (result != null) {
         for (var map in result) {
           AreaModel areaModel = AreaModel.fromJson(map);
+
           setState(() {
             areaModels.add(areaModel);
+
+            // areaFloorplanModels.add(AreaModel(
+            //   ser: areaModel.ser!,
+            //   rser: areaModel.rser!,
+            //   zser: areaModel.zser!,
+            //   lncode: areaModel.lncode!,
+            //   ln: areaModel.ln!,
+            //   area: areaModel.area!,
+            //   rent: areaModel.rent!,
+            //   st: areaModel.st!,
+            //   img: areaModel.img!,
+            //   data_update: areaModel.data_update!,
+            //   quantity: areaModel.quantity!,
+            //   ldate: areaModel.ldate!,
+            //   cid: areaModel.cid!,
+            //   total: areaModel.total!,
+            //   ln_c: areaModel.ln_c!,
+            //   area_c: areaModel.area_c!,
+            //   docno: areaModel.docno!,
+            //   ln_q: areaModel.ln_q!,
+            //   ldate_q: areaModel.ldate_q!,
+            //   area_q: areaModel.area_q!,
+            //   total_q: areaModel.total_q!,
+            //   sname: areaModel.sname!,
+            //   sname_q: areaModel.sname_q!,
+            //   cname: areaModel.cname!,
+            //   cname_q: areaModel.cname_q!,
+            //   custno: areaModel.custno!,
+            //   zn: areaModel.zn!,
+
+            //   datex: areaModel.datex!,
+            //   timex: areaModel.timex!,
+            //   cser: areaModel.cser!,
+            //   aser: areaModel.aser!,
+            //   aserQout: areaModel.aserQout!,
+            //   type: areaModel.type!,
+            //   sdate: areaModel.sdate!,
+            //   dataUpdate: areaModel.dataUpdate!,
+            //   // id  : '',
+            //   // path  : '',
+            //   // color  : '',
+            //   // name  : '',
+            // ));
           });
         }
+        setState(() {
+          loadSvg();
+        });
       } else {
         setState(() {
           if (areaModels.isEmpty) {
@@ -247,6 +322,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
       print(
           'zoneModels >>. ${zoneModels.length} ${areaModels.map((e) => e.zser).toString()}');
     } catch (e) {}
+  }
+
+  void loadSvg() async {
+    setState(() {
+      areaFloorplanModels.clear();
+    });
+
+    // Update the key of the KeyedSubtree widget
+    _countriesKey = UniqueKey();
+
+    List<AreaModel> loadedCountries =
+        await loadSvgImage(svgImage: '$Imgfloorplan', areaModels: areaModels);
+
+    setState(() {
+      areaFloorplanModels = loadedCountries;
+    });
+  }
+
+  void onCountrySelected(AreaModel areaFloorplanModel) {
+    if (areaFloorplanModel.name == null || areaFloorplanModel.name! == 'null') {
+    } else {
+      setState(() {
+        if (areaFloorplanModelss != areaFloorplanModel) {
+          areaFloorplanModelss = areaFloorplanModel;
+        } else {
+          areaFloorplanModelss = null;
+        }
+      });
+    }
   }
 
   Future<Null> read_GC_areaSelect(int select) async {
@@ -635,9 +739,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       border: Border.all(color: Colors.white, width: 2),
                     ),
                     padding: const EdgeInsets.all(5.0),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         AutoSizeText(
                           'พื้นที่เช่า ',
                           overflow: TextOverflow.ellipsis,
@@ -713,17 +817,17 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               bottomRight: Radius.circular(10)),
                         ),
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
+                        child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.all(4.0),
                               child: Icon(
                                 Icons.close,
                                 color: Colors.white,
                               ),
                             ),
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.all(4.0),
                               child: Text(
                                 'ปิด',
@@ -754,12 +858,12 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       bottomRight: Radius.circular(0)),
                   // border: Border.all(color: Colors.white, width: 1),
                 ),
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
                     MediaQuery.of(context).size.shortestSide <
                             MediaQuery.of(context).size.width * 1
-                        ? Expanded(
+                        ? const Expanded(
                             flex: 1,
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
@@ -771,7 +875,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                     fontFamily: FontWeight_.Fonts_T),
                               ),
                             ))
-                        : SizedBox(),
+                        : const SizedBox(),
                     Expanded(
                       flex: MediaQuery.of(context).size.shortestSide <
                               MediaQuery.of(context).size.width * 1
@@ -844,9 +948,27 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               preferences.setString(
                                   'zonesName', zonesName.toString());
 
+                              int selectedIndex = zoneModels.indexWhere(
+                                  (element) =>
+                                      element.ser == zoneSer &&
+                                      element.zn == zonesName);
+
+                              print('Selected index: $selectedIndex');
+                              if (selectedIndex == 0) {
+                              } else {
+                                Img_Zone =
+                                    'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/zone/${zoneModels[selectedIndex].img}';
+                                Imgfloorplan =
+                                    '${MyConstant().domain}/files/${DBN_}/zone/${zoneModels[selectedIndex].img_floorplan}';
+                              }
+
                               setState(() {
                                 read_GC_area();
                               });
+                              print(selectedIndex);
+                              print(selectedIndex);
+                              print(selectedIndex);
+                              print(selectedIndex);
                             },
                             // onSaved: (value) {
                             //   // selectedValue = value.toString();
@@ -860,7 +982,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                               MediaQuery.of(context).size.width * 1
                           ? 1
                           : 2,
-                      child: Padding(
+                      child: const Padding(
                         padding: EdgeInsets.all(8.0),
                         child: Text(
                           'ค้นหา:',
@@ -1212,9 +1334,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   child: Container(
                                       padding: const EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
-                                      child: Row(
+                                      child: const Row(
                                         children: [
-                                          const Expanded(
+                                          Expanded(
                                             child: Text(
                                               '+ เสนอราคา',
                                               style: TextStyle(
@@ -1260,9 +1382,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                   child: Container(
                                       padding: const EdgeInsets.all(10),
                                       width: MediaQuery.of(context).size.width,
-                                      child: Row(
+                                      child: const Row(
                                         children: [
-                                          const Expanded(
+                                          Expanded(
                                             child: Text(
                                               '+ ทำ/ต่อสัญญา',
                                               style: TextStyle(
@@ -1595,21 +1717,41 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                           switcherIndex1 = index;
                                           if (index + 1 == 1) {
                                             setState(() {
+                                              Visit_ = 'grid';
+                                            });
+                                          } else if (index + 1 == 2) {
+                                            setState(() {
                                               Visit_ = 'list';
                                             });
                                           } else {
                                             setState(() {
-                                              Visit_ = 'grid';
+                                              Visit_ = 'map';
                                             });
                                           }
                                         });
                                       },
                                       containerHeight: 40,
-                                      containerWight: 70,
+                                      containerWight: 100,
                                       containerColor: Colors.grey,
                                       children: [
-                                        const Icon(Icons.list),
-                                        const Icon(Icons.grid_view_rounded)
+                                        Icon(
+                                          Icons.grid_view_rounded,
+                                          color: (Visit_ == 'grid')
+                                              ? Colors.blue[900]
+                                              : Colors.black,
+                                        ),
+                                        Icon(
+                                          Icons.list,
+                                          color: (Visit_ == 'list')
+                                              ? Colors.blue[900]
+                                              : Colors.black,
+                                        ),
+                                        Icon(
+                                          Icons.map_outlined,
+                                          color: (Visit_ == 'map')
+                                              ? Colors.blue[900]
+                                              : Colors.black,
+                                        )
                                       ],
                                     ),
                                   ),
@@ -1677,9 +1819,9 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                           bottomRight: Radius.circular(0)),
                     ),
                     padding: const EdgeInsets.all(8.0),
-                    child: Row(
+                    child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
+                      children: [
                         // Expanded(
                         //   flex: 1,
                         //   child: Padding(
@@ -1848,19 +1990,21 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                     StreamBuilder(
                                       stream: Stream.periodic(
-                                          Duration(milliseconds: 25), (i) => i),
+                                          const Duration(milliseconds: 25),
+                                          (i) => i),
                                       builder: (context, snapshot) {
-                                        if (!snapshot.hasData) return Text('');
+                                        if (!snapshot.hasData)
+                                          return const Text('');
                                         double elapsed = double.parse(
                                                 snapshot.data.toString()) *
                                             0.05;
                                         return Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: (elapsed > 8.00)
-                                              ? Text(
+                                              ? const Text(
                                                   'ไม่พบข้อมูล',
                                                   style: TextStyle(
                                                       color:
@@ -1873,7 +2017,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                               : Text(
                                                   'ดาวน์โหลด : ${elapsed.toStringAsFixed(2)} s.',
                                                   // 'Time : ${elapsed.toStringAsFixed(2)} seconds',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       color:
                                                           PeopleChaoScreen_Color
                                                               .Colors_Text2_,
@@ -2425,548 +2569,2378 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               )
             ],
           )
-        : Column(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                  // border: Border.all(color: Colors.grey, width: 1),
-                ),
-                padding: const EdgeInsets.all(20),
-                // color: Colors.white,
-                child: zone_ser == '0' || zone_ser == '' || zone_ser == null
-                    ? ListView.builder(
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: zoneModels.length,
-                        itemBuilder: (BuildContext context, int zindex) {
-                          return zoneModels[zindex].ser == '0'
-                              ? SizedBox()
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Container(
-                                              child: Text(
-                                                'โซน ${zoneModels[zindex].ser} (${zoneModels[zindex].zn})',
-                                                style: const TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily:
-                                                        FontWeight_.Fonts_T
+        : (Visit_ == 'grid')
+            ? Column(
+                children: [
+                  Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      // border: Border.all(color: Colors.grey, width: 1),
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    // color: Colors.white,
+                    child: zone_ser == '0' || zone_ser == '' || zone_ser == null
+                        ? ListView.builder(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: zoneModels.length,
+                            itemBuilder: (BuildContext context, int zindex) {
+                              return zoneModels[zindex].ser == '0'
+                                  ? const SizedBox()
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                flex: 1,
+                                                child: Container(
+                                                  child: Text(
+                                                    'โซน (${zoneModels[zindex].zn})',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            FontWeight_.Fonts_T
 
-                                                    //fontSize: 10.0
-                                                    ),
+                                                        //fontSize: 10.0
+                                                        ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
+                                        Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: ScrollConfiguration(
+                                              behavior: ScrollConfiguration.of(
+                                                      context)
+                                                  .copyWith(dragDevices: {
+                                                PointerDeviceKind.touch,
+                                                PointerDeviceKind.mouse,
+                                              }),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Container(
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    height: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .shortestSide <
+                                                            MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width *
+                                                                1
+                                                        ? 500
+                                                        : 350,
+                                                    child: GridView.count(
+                                                      crossAxisCount: MediaQuery
+                                                                      .of(
+                                                                          context)
+                                                                  .size
+                                                                  .shortestSide <
+                                                              MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  1
+                                                          ? 12
+                                                          : 6,
+                                                      children: [
+                                                        for (int i = 0;
+                                                            i <
+                                                                areaModels
+                                                                    .length;
+                                                            i++)
+                                                          if (zoneModels[zindex]
+                                                                  .ser ==
+                                                              areaModels[i]
+                                                                  .zser)
+                                                            createCard(i),
+                                                      ],
+                                                    ),
+                                                  )
+
+                                                  // SizedBox(
+                                                  //   width: 300,
+                                                  // )
+
+                                                  // ScrollConfiguration(
+                                                  //   behavior: ScrollConfiguration
+                                                  //           .of(context)
+                                                  //       .copyWith(
+                                                  //           dragDevices: {
+                                                  //         PointerDeviceKind
+                                                  //             .touch,
+                                                  //         PointerDeviceKind
+                                                  //             .mouse,
+                                                  //       }),
+                                                  //   child:
+                                                  //       SingleChildScrollView(
+                                                  //     scrollDirection:
+                                                  //         Axis.vertical,
+                                                  //     dragStartBehavior:
+                                                  //         DragStartBehavior
+                                                  //             .start,
+                                                  //     child: Row(
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .start,
+                                                  //         children: [
+                                                  //           for (int i =
+                                                  //                   0;
+                                                  //               i <
+                                                  //                   areaModels
+                                                  //                       .length;
+                                                  //               i++)
+                                                  //             zoneModels[zindex].ser ==
+                                                  //                     areaModels[i].zser
+                                                  //                 ? Column(
+                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                  //                     children: [
+                                                  //                       areaModels[i].quantity == null
+                                                  //                           ? Row(
+                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                  //                               children: [
+                                                  //                                 createCard(i),
+                                                  //                               ],
+                                                  //                             )
+                                                  //                           : SizedBox()
+                                                  //                     ],
+                                                  //                   )
+                                                  //                 : SizedBox(),
+                                                  //           SizedBox(
+                                                  //             width:
+                                                  //                 300,
+                                                  //           )
+                                                  //         ]),
+                                                  //   ),
+                                                  // ),
+                                                  // ScrollConfiguration(
+                                                  //   behavior: ScrollConfiguration
+                                                  //           .of(context)
+                                                  //       .copyWith(
+                                                  //           dragDevices: {
+                                                  //         PointerDeviceKind
+                                                  //             .touch,
+                                                  //         PointerDeviceKind
+                                                  //             .mouse,
+                                                  //       }),
+                                                  //   child:
+                                                  //       SingleChildScrollView(
+                                                  //     scrollDirection:
+                                                  //         Axis.horizontal,
+                                                  //     dragStartBehavior:
+                                                  //         DragStartBehavior
+                                                  //             .start,
+                                                  //     child: Row(
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .start,
+                                                  //         children: [
+                                                  //           for (int i =
+                                                  //                   0;
+                                                  //               i <
+                                                  //                   areaModels
+                                                  //                       .length;
+                                                  //               i++)
+                                                  //             zoneModels[zindex].ser ==
+                                                  //                     areaModels[i].zser
+                                                  //                 ? Column(
+                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                  //                     children: [
+                                                  //                       areaModels[i].quantity == '2'
+                                                  //                           ? Row(
+                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                  //                               children: [
+                                                  //                                 createCard(i),
+                                                  //                               ],
+                                                  //                             )
+                                                  //                           : SizedBox(),
+                                                  //                     ],
+                                                  //                   )
+                                                  //                 : SizedBox(),
+                                                  //           SizedBox(
+                                                  //             width:
+                                                  //                 300,
+                                                  //           )
+                                                  //         ]),
+                                                  //   ),
+                                                  // ),
+                                                  // ScrollConfiguration(
+                                                  //   behavior: ScrollConfiguration
+                                                  //           .of(context)
+                                                  //       .copyWith(
+                                                  //           dragDevices: {
+                                                  //         PointerDeviceKind
+                                                  //             .touch,
+                                                  //         PointerDeviceKind
+                                                  //             .mouse,
+                                                  //       }),
+                                                  //   child:
+                                                  //       SingleChildScrollView(
+                                                  //     scrollDirection:
+                                                  //         Axis.horizontal,
+                                                  //     dragStartBehavior:
+                                                  //         DragStartBehavior
+                                                  //             .start,
+                                                  //     child: Row(
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .start,
+                                                  //         children: [
+                                                  //           for (int i =
+                                                  //                   0;
+                                                  //               i <
+                                                  //                   areaModels
+                                                  //                       .length;
+                                                  //               i++)
+                                                  //             zoneModels[zindex].ser ==
+                                                  //                     areaModels[i].zser
+                                                  //                 ? Column(
+                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                  //                     children: [
+                                                  //                       areaModels[i].quantity == '1'
+                                                  //                           ? Row(
+                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                  //                               children: [
+                                                  //                                 createCard(i),
+                                                  //                               ],
+                                                  //                             )
+                                                  //                           : SizedBox(),
+                                                  //                     ],
+                                                  //                   )
+                                                  //                 : SizedBox(),
+                                                  //           SizedBox(
+                                                  //             width:
+                                                  //                 300,
+                                                  //           )
+                                                  //         ]),
+                                                  //   ),
+                                                  // ),
+                                                  // ScrollConfiguration(
+                                                  //   behavior: ScrollConfiguration
+                                                  //           .of(context)
+                                                  //       .copyWith(
+                                                  //           dragDevices: {
+                                                  //         PointerDeviceKind
+                                                  //             .touch,
+                                                  //         PointerDeviceKind
+                                                  //             .mouse,
+                                                  //       }),
+                                                  //   child:
+                                                  //       SingleChildScrollView(
+                                                  //     scrollDirection:
+                                                  //         Axis.horizontal,
+                                                  //     dragStartBehavior:
+                                                  //         DragStartBehavior
+                                                  //             .start,
+                                                  //     child: Row(
+                                                  //         mainAxisAlignment:
+                                                  //             MainAxisAlignment
+                                                  //                 .start,
+                                                  //         children: [
+                                                  //           for (int i =
+                                                  //                   0;
+                                                  //               i <
+                                                  //                   areaModels
+                                                  //                       .length;
+                                                  //               i++)
+                                                  //             zoneModels[zindex].ser ==
+                                                  //                     areaModels[i].zser
+                                                  //                 ? Column(
+                                                  //                     crossAxisAlignment: CrossAxisAlignment.start,
+                                                  //                     children: [
+                                                  //                       areaModels[i].quantity == '3'
+                                                  //                           ? Row(
+                                                  //                               mainAxisAlignment: MainAxisAlignment.start,
+                                                  //                               children: [
+                                                  //                                 createCard(i),
+                                                  //                               ],
+                                                  //                             )
+                                                  //                           : SizedBox(),
+                                                  //                     ],
+                                                  //                   )
+                                                  //                 : SizedBox(),
+                                                  //           SizedBox(
+                                                  //             width:
+                                                  //                 300,
+                                                  //           )
+                                                  //         ]),
+                                                  //   ),
+                                                  // ),
+                                                ],
+                                              ),
+                                            ))
+                                      ],
+                                    );
+                            })
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Container(
+                                        child: Text(
+                                          zone_ser == null
+                                              ? 'โซน ทั้งหมด'
+                                              : 'โซน $zone_ser ($zone_name)',
+                                          style: const TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T
+
+                                              //fontSize: 10.0
+                                              ),
+                                        ),
                                       ),
                                     ),
-                                    Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: ScrollConfiguration(
-                                          behavior:
-                                              ScrollConfiguration.of(context)
-                                                  .copyWith(dragDevices: {
-                                            PointerDeviceKind.touch,
-                                            PointerDeviceKind.mouse,
-                                          }),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                height: MediaQuery.of(context)
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ScrollConfiguration(
+                                    behavior: ScrollConfiguration.of(context)
+                                        .copyWith(dragDevices: {
+                                      PointerDeviceKind.touch,
+                                      PointerDeviceKind.mouse,
+                                    }),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          height: 600,
+                                          child: GridView.count(
+                                            crossAxisCount:
+                                                MediaQuery.of(context)
                                                             .size
                                                             .shortestSide <
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .width *
                                                             1
-                                                    ? 500
-                                                    : 350,
-                                                child: GridView.count(
-                                                  crossAxisCount: MediaQuery.of(
-                                                                  context)
-                                                              .size
-                                                              .shortestSide <
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              1
-                                                      ? 12
-                                                      : 6,
-                                                  children: [
-                                                    for (int i = 0;
-                                                        i < areaModels.length;
-                                                        i++)
-                                                      if (zoneModels[zindex]
-                                                              .ser ==
-                                                          areaModels[i].zser)
-                                                        createCard(i),
-                                                  ],
-                                                ),
-                                              )
-
-                                              // SizedBox(
-                                              //   width: 300,
-                                              // )
-
-                                              // ScrollConfiguration(
-                                              //   behavior: ScrollConfiguration
-                                              //           .of(context)
-                                              //       .copyWith(
-                                              //           dragDevices: {
-                                              //         PointerDeviceKind
-                                              //             .touch,
-                                              //         PointerDeviceKind
-                                              //             .mouse,
-                                              //       }),
-                                              //   child:
-                                              //       SingleChildScrollView(
-                                              //     scrollDirection:
-                                              //         Axis.vertical,
-                                              //     dragStartBehavior:
-                                              //         DragStartBehavior
-                                              //             .start,
-                                              //     child: Row(
-                                              //         mainAxisAlignment:
-                                              //             MainAxisAlignment
-                                              //                 .start,
-                                              //         children: [
-                                              //           for (int i =
-                                              //                   0;
-                                              //               i <
-                                              //                   areaModels
-                                              //                       .length;
-                                              //               i++)
-                                              //             zoneModels[zindex].ser ==
-                                              //                     areaModels[i].zser
-                                              //                 ? Column(
-                                              //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                              //                     children: [
-                                              //                       areaModels[i].quantity == null
-                                              //                           ? Row(
-                                              //                               mainAxisAlignment: MainAxisAlignment.start,
-                                              //                               children: [
-                                              //                                 createCard(i),
-                                              //                               ],
-                                              //                             )
-                                              //                           : SizedBox()
-                                              //                     ],
-                                              //                   )
-                                              //                 : SizedBox(),
-                                              //           SizedBox(
-                                              //             width:
-                                              //                 300,
-                                              //           )
-                                              //         ]),
-                                              //   ),
-                                              // ),
-                                              // ScrollConfiguration(
-                                              //   behavior: ScrollConfiguration
-                                              //           .of(context)
-                                              //       .copyWith(
-                                              //           dragDevices: {
-                                              //         PointerDeviceKind
-                                              //             .touch,
-                                              //         PointerDeviceKind
-                                              //             .mouse,
-                                              //       }),
-                                              //   child:
-                                              //       SingleChildScrollView(
-                                              //     scrollDirection:
-                                              //         Axis.horizontal,
-                                              //     dragStartBehavior:
-                                              //         DragStartBehavior
-                                              //             .start,
-                                              //     child: Row(
-                                              //         mainAxisAlignment:
-                                              //             MainAxisAlignment
-                                              //                 .start,
-                                              //         children: [
-                                              //           for (int i =
-                                              //                   0;
-                                              //               i <
-                                              //                   areaModels
-                                              //                       .length;
-                                              //               i++)
-                                              //             zoneModels[zindex].ser ==
-                                              //                     areaModels[i].zser
-                                              //                 ? Column(
-                                              //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                              //                     children: [
-                                              //                       areaModels[i].quantity == '2'
-                                              //                           ? Row(
-                                              //                               mainAxisAlignment: MainAxisAlignment.start,
-                                              //                               children: [
-                                              //                                 createCard(i),
-                                              //                               ],
-                                              //                             )
-                                              //                           : SizedBox(),
-                                              //                     ],
-                                              //                   )
-                                              //                 : SizedBox(),
-                                              //           SizedBox(
-                                              //             width:
-                                              //                 300,
-                                              //           )
-                                              //         ]),
-                                              //   ),
-                                              // ),
-                                              // ScrollConfiguration(
-                                              //   behavior: ScrollConfiguration
-                                              //           .of(context)
-                                              //       .copyWith(
-                                              //           dragDevices: {
-                                              //         PointerDeviceKind
-                                              //             .touch,
-                                              //         PointerDeviceKind
-                                              //             .mouse,
-                                              //       }),
-                                              //   child:
-                                              //       SingleChildScrollView(
-                                              //     scrollDirection:
-                                              //         Axis.horizontal,
-                                              //     dragStartBehavior:
-                                              //         DragStartBehavior
-                                              //             .start,
-                                              //     child: Row(
-                                              //         mainAxisAlignment:
-                                              //             MainAxisAlignment
-                                              //                 .start,
-                                              //         children: [
-                                              //           for (int i =
-                                              //                   0;
-                                              //               i <
-                                              //                   areaModels
-                                              //                       .length;
-                                              //               i++)
-                                              //             zoneModels[zindex].ser ==
-                                              //                     areaModels[i].zser
-                                              //                 ? Column(
-                                              //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                              //                     children: [
-                                              //                       areaModels[i].quantity == '1'
-                                              //                           ? Row(
-                                              //                               mainAxisAlignment: MainAxisAlignment.start,
-                                              //                               children: [
-                                              //                                 createCard(i),
-                                              //                               ],
-                                              //                             )
-                                              //                           : SizedBox(),
-                                              //                     ],
-                                              //                   )
-                                              //                 : SizedBox(),
-                                              //           SizedBox(
-                                              //             width:
-                                              //                 300,
-                                              //           )
-                                              //         ]),
-                                              //   ),
-                                              // ),
-                                              // ScrollConfiguration(
-                                              //   behavior: ScrollConfiguration
-                                              //           .of(context)
-                                              //       .copyWith(
-                                              //           dragDevices: {
-                                              //         PointerDeviceKind
-                                              //             .touch,
-                                              //         PointerDeviceKind
-                                              //             .mouse,
-                                              //       }),
-                                              //   child:
-                                              //       SingleChildScrollView(
-                                              //     scrollDirection:
-                                              //         Axis.horizontal,
-                                              //     dragStartBehavior:
-                                              //         DragStartBehavior
-                                              //             .start,
-                                              //     child: Row(
-                                              //         mainAxisAlignment:
-                                              //             MainAxisAlignment
-                                              //                 .start,
-                                              //         children: [
-                                              //           for (int i =
-                                              //                   0;
-                                              //               i <
-                                              //                   areaModels
-                                              //                       .length;
-                                              //               i++)
-                                              //             zoneModels[zindex].ser ==
-                                              //                     areaModels[i].zser
-                                              //                 ? Column(
-                                              //                     crossAxisAlignment: CrossAxisAlignment.start,
-                                              //                     children: [
-                                              //                       areaModels[i].quantity == '3'
-                                              //                           ? Row(
-                                              //                               mainAxisAlignment: MainAxisAlignment.start,
-                                              //                               children: [
-                                              //                                 createCard(i),
-                                              //                               ],
-                                              //                             )
-                                              //                           : SizedBox(),
-                                              //                     ],
-                                              //                   )
-                                              //                 : SizedBox(),
-                                              //           SizedBox(
-                                              //             width:
-                                              //                 300,
-                                              //           )
-                                              //         ]),
-                                              //   ),
-                                              // ),
+                                                    ? 12
+                                                    : 6,
+                                            children: [
+                                              for (int i = 0;
+                                                  i < areaModels.length;
+                                                  i++)
+                                                createCard(i),
                                             ],
                                           ),
-                                        ))
-                                  ],
-                                );
-                        })
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    child: Text(
-                                      zone_ser == null
-                                          ? 'โซน ทั้งหมด'
-                                          : 'โซน $zone_ser ($zone_name)',
-                                      style: const TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: FontWeight_.Fonts_T
-
-                                          //fontSize: 10.0
+                                        )
+                                      ],
+                                    ),
+                                  )),
+                              // Container(
+                              //   width: MediaQuery.of(context).size.width,
+                              //   height: 500,
+                              //   child: Column(
+                              //     crossAxisAlignment: CrossAxisAlignment.start,
+                              //     children: [
+                              //       ScrollConfiguration(
+                              //         behavior: ScrollConfiguration.of(context)
+                              //             .copyWith(dragDevices: {
+                              //           PointerDeviceKind.touch,
+                              //           PointerDeviceKind.mouse,
+                              //         }),
+                              //         child: SingleChildScrollView(
+                              //           scrollDirection: Axis.horizontal,
+                              //           dragStartBehavior: DragStartBehavior.start,
+                              //           child: Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.start,
+                              //               children: [
+                              //                 for (int i = 0;
+                              //                     i < areaModels.length;
+                              //                     i++)
+                              //                   Column(
+                              //                     crossAxisAlignment:
+                              //                         CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       areaModels[i].quantity == null
+                              //                           ? Row(
+                              //                               mainAxisAlignment:
+                              //                                   MainAxisAlignment
+                              //                                       .start,
+                              //                               children: [
+                              //                                 createCard(i),
+                              //                               ],
+                              //                             )
+                              //                           : SizedBox()
+                              //                     ],
+                              //                   ),
+                              //                 SizedBox(
+                              //                   width: 300,
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ),
+                              //       ScrollConfiguration(
+                              //         behavior: ScrollConfiguration.of(context)
+                              //             .copyWith(dragDevices: {
+                              //           PointerDeviceKind.touch,
+                              //           PointerDeviceKind.mouse,
+                              //         }),
+                              //         child: SingleChildScrollView(
+                              //           scrollDirection: Axis.horizontal,
+                              //           dragStartBehavior: DragStartBehavior.start,
+                              //           child: Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.start,
+                              //               children: [
+                              //                 for (int i = 0;
+                              //                     i < areaModels.length;
+                              //                     i++)
+                              //                   Column(
+                              //                     crossAxisAlignment:
+                              //                         CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       areaModels[i].quantity == '2'
+                              //                           ? Row(
+                              //                               mainAxisAlignment:
+                              //                                   MainAxisAlignment
+                              //                                       .start,
+                              //                               children: [
+                              //                                 createCard(i),
+                              //                               ],
+                              //                             )
+                              //                           : SizedBox(),
+                              //                     ],
+                              //                   ),
+                              //                 SizedBox(
+                              //                   width: 300,
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ),
+                              //       ScrollConfiguration(
+                              //         behavior: ScrollConfiguration.of(context)
+                              //             .copyWith(dragDevices: {
+                              //           PointerDeviceKind.touch,
+                              //           PointerDeviceKind.mouse,
+                              //         }),
+                              //         child: SingleChildScrollView(
+                              //           scrollDirection: Axis.horizontal,
+                              //           dragStartBehavior: DragStartBehavior.start,
+                              //           child: Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.start,
+                              //               children: [
+                              //                 for (int i = 0;
+                              //                     i < areaModels.length;
+                              //                     i++)
+                              //                   Column(
+                              //                     crossAxisAlignment:
+                              //                         CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       areaModels[i].quantity == '1'
+                              //                           ? Row(
+                              //                               mainAxisAlignment:
+                              //                                   MainAxisAlignment
+                              //                                       .start,
+                              //                               children: [
+                              //                                 createCard(i),
+                              //                               ],
+                              //                             )
+                              //                           : SizedBox(),
+                              //                     ],
+                              //                   ),
+                              //                 const SizedBox(
+                              //                   width: 300,
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ),
+                              //       ScrollConfiguration(
+                              //         behavior: ScrollConfiguration.of(context)
+                              //             .copyWith(dragDevices: {
+                              //           PointerDeviceKind.touch,
+                              //           PointerDeviceKind.mouse,
+                              //         }),
+                              //         child: SingleChildScrollView(
+                              //           scrollDirection: Axis.horizontal,
+                              //           dragStartBehavior: DragStartBehavior.start,
+                              //           child: Row(
+                              //               mainAxisAlignment:
+                              //                   MainAxisAlignment.start,
+                              //               children: [
+                              //                 for (int i = 0;
+                              //                     i < areaModels.length;
+                              //                     i++)
+                              //                   Column(
+                              //                     crossAxisAlignment:
+                              //                         CrossAxisAlignment.start,
+                              //                     children: [
+                              //                       areaModels[i].quantity == '3'
+                              //                           ? Row(
+                              //                               mainAxisAlignment:
+                              //                                   MainAxisAlignment
+                              //                                       .start,
+                              //                               children: [
+                              //                                 createCard(i),
+                              //                               ],
+                              //                             )
+                              //                           : SizedBox(),
+                              //                     ],
+                              //                   ),
+                              //                 SizedBox(
+                              //                   width: 300,
+                              //                 )
+                              //               ]),
+                              //         ),
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                  )
+                ],
+              )
+            : (renTal_user != '72')
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 600,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[50],
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          // padding: const EdgeInsets.all(20),
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: Container(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              if (!Responsive.isDesktop(
+                                                  context))
+                                                Stack(
+                                                  children: [
+                                                    Container(
+                                                      height: 300,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Container(
+                                                              width: 300,
+                                                              height: 300,
+                                                              child:
+                                                                  InteractiveViewer(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                scaleEnabled:
+                                                                    false,
+                                                                trackpadScrollCausesScale:
+                                                                    false,
+                                                                transformationController:
+                                                                    _controller,
+                                                                minScale: 0.8,
+                                                                maxScale: 2.0,
+                                                                constrained:
+                                                                    true,
+                                                                boundaryMargin:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        double
+                                                                            .infinity),
+                                                                child: Stack(
+                                                                  children: [
+                                                                    Container(
+                                                                      width:
+                                                                          300,
+                                                                      height:
+                                                                          300,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        color: Colors
+                                                                            .grey[50],
+                                                                        image:
+                                                                            DecorationImage(
+                                                                          image:
+                                                                              AssetImage("images/Floor-plan-try.png"),
+                                                                          // fit: BoxFit.cover,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 80,
+                                                                      right: 33,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          showDialog<
+                                                                              String>(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Column(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    'พื้นที่ : A',
+                                                                                    style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  ),
+                                                                                ],
+                                                                              )),
+                                                                              content: const SingleChildScrollView(
+                                                                                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                                Text(
+                                                                                  'สถานะ : เช่าแล้ว',
+                                                                                  style: TextStyle(
+                                                                                      color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ])),
+                                                                              actions: <Widget>[
+                                                                                Column(
+                                                                                  children: [
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    const Divider(
+                                                                                      color: Colors.grey,
+                                                                                      height: 4.0,
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(4.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 100,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.redAccent,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                    child: const Text(
+                                                                                                      'ปิด',
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              80,
+                                                                          height:
+                                                                              60,
+                                                                          color: Colors
+                                                                              .red[200]!
+                                                                              .withOpacity(0.5),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'A',
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      top: 95,
+                                                                      left: 70,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          showDialog<
+                                                                              String>(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Column(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    'พื้นที่ : B',
+                                                                                    style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  ),
+                                                                                ],
+                                                                              )),
+                                                                              content: const SingleChildScrollView(
+                                                                                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                                Text(
+                                                                                  'สถานะ : ว่าง',
+                                                                                  style: TextStyle(
+                                                                                      color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ])),
+                                                                              actions: <Widget>[
+                                                                                Column(
+                                                                                  children: [
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    const Divider(
+                                                                                      color: Colors.grey,
+                                                                                      height: 4.0,
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(4.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 100,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.redAccent,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                    child: const Text(
+                                                                                                      'ปิด',
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              105,
+                                                                          height:
+                                                                              45,
+                                                                          color: Colors
+                                                                              .green[200]!
+                                                                              .withOpacity(0.5),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'B',
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      bottom:
+                                                                          75,
+                                                                      left: 72,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          showDialog<
+                                                                              String>(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Column(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    'พื้นที่ : C',
+                                                                                    style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  ),
+                                                                                ],
+                                                                              )),
+                                                                              content: const SingleChildScrollView(
+                                                                                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                                Text(
+                                                                                  'สถานะ : ว่าง',
+                                                                                  style: TextStyle(
+                                                                                      color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ])),
+                                                                              actions: <Widget>[
+                                                                                Column(
+                                                                                  children: [
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    const Divider(
+                                                                                      color: Colors.grey,
+                                                                                      height: 4.0,
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(4.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 100,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.redAccent,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                    child: const Text(
+                                                                                                      'ปิด',
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              193,
+                                                                          height:
+                                                                              65,
+                                                                          color: Colors
+                                                                              .green[200]!
+                                                                              .withOpacity(0.5),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'C',
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    Positioned(
+                                                                      bottom:
+                                                                          75,
+                                                                      left: 25,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          showDialog<
+                                                                              String>(
+                                                                            context:
+                                                                                context,
+                                                                            builder: (BuildContext context) =>
+                                                                                AlertDialog(
+                                                                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                              title: const Center(
+                                                                                  child: Column(
+                                                                                children: [
+                                                                                  Text(
+                                                                                    'พื้นที่ : D',
+                                                                                    style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                  ),
+                                                                                ],
+                                                                              )),
+                                                                              content: const SingleChildScrollView(
+                                                                                  child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                                Text(
+                                                                                  'สถานะ : เช่าแล้ว',
+                                                                                  style: TextStyle(
+                                                                                      color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                      // fontWeight: FontWeight.bold,
+                                                                                      fontFamily: Font_.Fonts_T),
+                                                                                ),
+                                                                              ])),
+                                                                              actions: <Widget>[
+                                                                                Column(
+                                                                                  children: [
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    const Divider(
+                                                                                      color: Colors.grey,
+                                                                                      height: 4.0,
+                                                                                    ),
+                                                                                    const SizedBox(
+                                                                                      height: 2.0,
+                                                                                    ),
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(8.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Padding(
+                                                                                            padding: const EdgeInsets.all(4.0),
+                                                                                            child: Row(
+                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                              children: [
+                                                                                                Container(
+                                                                                                  width: 100,
+                                                                                                  decoration: const BoxDecoration(
+                                                                                                    color: Colors.redAccent,
+                                                                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  ),
+                                                                                                  padding: const EdgeInsets.all(5.0),
+                                                                                                  child: TextButton(
+                                                                                                    onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                    child: const Text(
+                                                                                                      'ปิด',
+                                                                                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          );
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              45,
+                                                                          height:
+                                                                              100,
+                                                                          color: Colors
+                                                                              .red[200]!
+                                                                              .withOpacity(0.5),
+                                                                          child:
+                                                                              const Center(
+                                                                            child:
+                                                                                Text(
+                                                                              'D',
+                                                                              overflow: TextOverflow.ellipsis,
+                                                                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Positioned(
+                                                      top: 10,
+                                                      right: 10,
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: Colors.blueGrey
+                                                              .withOpacity(0.5),
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    5),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    5),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    5),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    5),
+                                                          ),
+                                                        ),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(2.0),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            IconButton(
+                                                              icon: const Icon(
+                                                                Icons.zoom_in,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onPressed:
+                                                                  _zoomInSVG,
+                                                            ),
+                                                            IconButton(
+                                                              icon: const Icon(
+                                                                Icons.zoom_out,
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                              onPressed:
+                                                                  _zoomOutSVG,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              Center(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    'Floorplans แผนผังพื้นที่ ',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 3,
+                                                    style: TextStyle(
+                                                        fontSize: 30,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              const Center(
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    'ดูสถานะพื้นที่เช่าได้อย่างง่ายดายด้วย Floorplans แผนผังพื้นที่',
+                                                    maxLines: 3,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        color:
+                                                            PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontFamily:
+                                                            Font_.Fonts_T),
+                                                  ),
+                                                ),
+                                              ),
+                                              Center(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: InkWell(
+                                                    onTap: () {},
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.orange[600],
+                                                        borderRadius: const BorderRadius
+                                                                .only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    10),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    10)),
+                                                        // border: Border.all(color: Colors.grey, width: 1),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: const Text(
+                                                        'อัพเกรด ( Upgrade ) ',
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
+                                        ),
+                                      ),
+                                    ),
+                                    if (Responsive.isDesktop(context))
+                                      Expanded(
+                                        flex: 3,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[50],
+                                            image: DecorationImage(
+                                              image:
+                                                  AssetImage("images/Lap2.png"),
+                                              // fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 500,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Align(
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Container(
+                                                        width: 400,
+                                                        height: 250,
+                                                        child:
+                                                            InteractiveViewer(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          scaleEnabled: false,
+                                                          trackpadScrollCausesScale:
+                                                              false,
+                                                          transformationController:
+                                                              _controller,
+                                                          minScale: 0.8,
+                                                          maxScale: 1.5,
+                                                          constrained: true,
+                                                          boundaryMargin:
+                                                              const EdgeInsets
+                                                                      .all(
+                                                                  double
+                                                                      .infinity),
+                                                          child: Stack(
+                                                            children: [
+                                                              Container(
+                                                                width: 280,
+                                                                height: 280,
+                                                                decoration:
+                                                                    const BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image: AssetImage(
+                                                                        "images/Floor-plan-try.png"),
+                                                                    // fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 55,
+                                                                right: 150,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: const Center(
+                                                                            child: Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              'พื้นที่ : A',
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                        content:
+                                                                            const SingleChildScrollView(
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: <Widget>[
+                                                                              Text(
+                                                                                'สถานะ : เช่าแล้ว',
+                                                                                style: TextStyle(
+                                                                                    color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                    // fontWeight: FontWeight.bold,
+                                                                                    fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            ),
+                                                                                            padding: const EdgeInsets.all(5.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ปิด',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 75,
+                                                                    height: 58,
+                                                                    color: Colors
+                                                                        .red[
+                                                                            200]!
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'A',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                top: 55,
+                                                                left: 70,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: const Center(
+                                                                            child: Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              'พื้นที่ : B',
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                        content:
+                                                                            const SingleChildScrollView(
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                          Text(
+                                                                            'สถานะ : ว่าง',
+                                                                            style: TextStyle(
+                                                                                color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ])),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            ),
+                                                                                            padding: const EdgeInsets.all(5.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ปิด',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 105,
+                                                                    height: 53,
+                                                                    color: Colors
+                                                                        .green[
+                                                                            200]!
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'B',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                bottom: 55,
+                                                                left: 65,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: const Center(
+                                                                            child: Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              'พื้นที่ : C',
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                        content:
+                                                                            const SingleChildScrollView(
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                          Text(
+                                                                            'สถานะ : ว่าง',
+                                                                            style: TextStyle(
+                                                                                color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ])),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            ),
+                                                                                            padding: const EdgeInsets.all(5.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ปิด',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 185,
+                                                                    height: 65,
+                                                                    color: Colors
+                                                                        .green[
+                                                                            200]!
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'C',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Positioned(
+                                                                bottom: 50,
+                                                                left: 22,
+                                                                child: InkWell(
+                                                                  onTap: () {
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: const Center(
+                                                                            child: Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              'พื้นที่ : D',
+                                                                              style: TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                        content:
+                                                                            const SingleChildScrollView(
+                                                                                child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
+                                                                          Text(
+                                                                            'สถานะ : เช่าแล้ว',
+                                                                            style: TextStyle(
+                                                                                color: AdminScafScreen_Color.Colors_Text1_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ])),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                            ),
+                                                                                            padding: const EdgeInsets.all(5.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ปิด',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                              ),
+                                                                                            ),
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
+                                                                                    ),
+                                                                                  ],
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 45,
+                                                                    height: 100,
+                                                                    color: Colors
+                                                                        .red[
+                                                                            200]!
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    child:
+                                                                        const Center(
+                                                                      child:
+                                                                          Text(
+                                                                        'D',
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                        style: TextStyle(
+                                                                            color:
+                                                                                Colors.black,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            fontFamily: Font_.Fonts_T),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Positioned(
+                                                top: 10,
+                                                right: 10,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.blueGrey
+                                                        .withOpacity(0.5),
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(5),
+                                                      topRight:
+                                                          Radius.circular(5),
+                                                      bottomLeft:
+                                                          Radius.circular(5),
+                                                      bottomRight:
+                                                          Radius.circular(5),
+                                                    ),
+                                                  ),
+                                                  padding:
+                                                      const EdgeInsets.all(2.0),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                          Icons.zoom_in,
+                                                          color: Colors.white,
+                                                        ),
+                                                        onPressed: _zoomInSVG,
+                                                      ),
+                                                      IconButton(
+                                                        icon: const Icon(
+                                                          Icons.zoom_out,
+                                                          color: Colors.white,
+                                                        ),
+                                                        onPressed: _zoomOutSVG,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                decoration: const BoxDecoration(
+                                    // color: AppBarColors.ABar_Colors,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(100),
+                                        topRight: Radius.circular(20),
+                                        bottomLeft: Radius.circular(0),
+                                        bottomRight: Radius.circular(0)),
+                                    // border: Border.all(color: Colors.grey, width: 1),
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Colors.white,
+                                        // Color.fromARGB(255, 244, 245, 242),
+                                        Color.fromARGB(255, 216, 231, 199),
+                                        Color.fromARGB(255, 199, 219, 175),
+                                        AppBarColors.ABar_Colors,
+                                      ],
+                                    )),
+                                height: 80,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                          height: MediaQuery.of(context).size.height / 1.2,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(20),
+                          // color: Colors.white,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                // for (int index = 0;
+                                //     index < areaFloorplanModels.length;
+                                //     index++)
+                                //   Text(
+                                //       ' ${areaFloorplanModels[index].id}  /// ${areaFloorplanModels[index].name}'),
+                                // for (int index = 0;
+                                //     index < areaModels.length;
+                                //     index++)
+                                //   Text(
+                                //       '**${areaModels[index].ser}//${areaModels[index].ln}')
+
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    color: Colors.grey[200],
+                                    height: 500,
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Column(
+                                      children: [
+                                        Expanded(
+                                            child: Row(
+                                          children: [
+                                            // Expanded(
+                                            //   flex: 2,
+                                            //   child: Padding(
+                                            //     padding: const EdgeInsets.all(8.0),
+                                            //     child: Container(
+                                            //       decoration: const BoxDecoration(
+                                            //         color: Colors.white,
+                                            //         borderRadius: BorderRadius.only(
+                                            //           topLeft: Radius.circular(10),
+                                            //           topRight: Radius.circular(10),
+                                            //           bottomLeft: Radius.circular(10),
+                                            //           bottomRight: Radius.circular(10),
+                                            //         ),
+                                            //       ),
+                                            //       child: InkWell(
+                                            //         child: Container(
+                                            //           height: 500, width: 800,
+                                            //           child:
+                                            //               //  (Img_rental_ == null)
+                                            //               //     ? Center(
+                                            //               //         child: Icon(Icons
+                                            //               //             .image_not_supported))
+                                            //               //     :
+                                            //               (sre_zone == 0)
+                                            //                   ? Image.network(
+                                            //                       // '${MyConstant().domain}/files/kad_taii/logo/${Img_logo_}',
+                                            //                       'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/contract/${Img_rental_}',
+                                            //                       fit: BoxFit.fill,
+                                            //                     )
+                                            //                   : Image.network(
+                                            //                       //'${MyConstant().domainIMG}/files/${DBN_}/contract/${Img_rental_}',
+                                            //                       '${Img_Zone}',
+                                            //                       fit: BoxFit.fill,
+                                            //                     ),
+                                            //           //Img_rental_
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            // SizedBox(
+                                            //   width: 10,
+                                            // ),
+                                            Expanded(
+                                                flex: 2,
+                                                child: Align(
+                                                  // alignment: Alignment.center,
+                                                  child: Container(
+                                                    color: Colors.white,
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Stack(
+                                                          children: [
+                                                            InteractiveViewer(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              scaleEnabled:
+                                                                  false,
+                                                              trackpadScrollCausesScale:
+                                                                  false,
+                                                              transformationController:
+                                                                  _controller,
+                                                              minScale: 0.8,
+                                                              maxScale: 2.0,
+                                                              constrained: true,
+                                                              boundaryMargin:
+                                                                  const EdgeInsets
+                                                                          .all(
+                                                                      double
+                                                                          .infinity),
+                                                              child: Container(
+                                                                height: 500,
+                                                                width: 850,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  image:
+                                                                      DecorationImage(
+                                                                    image: NetworkImage(
+                                                                        "$Img_Zone"),
+                                                                    // fit: BoxFit.cover,
+                                                                  ),
+                                                                ),
+                                                                child: Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  child: KeyedSubtree(
+                                                                      key: _countriesKey,
+                                                                      child: Stack(children: [
+                                                                        for (var areaModels
+                                                                            in areaFloorplanModels)
+                                                                          Center(
+                                                                            child:
+                                                                                ClipPath(
+                                                                              clipper: Clipper(
+                                                                                svgPath: areaModels.path!,
+                                                                                height: 15.0,
+                                                                                width: 23.2,
+                                                                              ),
+                                                                              child: InkWell(
+                                                                                onTap: () async {
+                                                                                  onCountrySelected.call(areaModels);
+                                                                                  print('${areaModels.id}  ');
+                                                                                  setState(() {
+                                                                                    Ln_name = '${areaModels.lncode} (${areaModels.ln})';
+                                                                                    // Ln_name = '${country.}//${areaModels.length}';
+                                                                                  });
+                                                                                  showDialog<String>(
+                                                                                    context: context,
+                                                                                    builder: (BuildContext context) => AlertDialog(
+                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                                                                                      title: Center(
+                                                                                          child: Column(
+                                                                                        children: [
+                                                                                          Text(
+                                                                                            '$Ln_name',
+                                                                                            style: const TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                          ),
+                                                                                          const SizedBox(
+                                                                                            height: 5.0,
+                                                                                          ),
+                                                                                          Divider(
+                                                                                            color: Colors.grey[100],
+                                                                                            height: 4.0,
+                                                                                          ),
+                                                                                          const SizedBox(
+                                                                                            height: 5.0,
+                                                                                          ),
+                                                                                        ],
+                                                                                      )),
+                                                                                      content: SingleChildScrollView(
+                                                                                        child: Column(
+                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                                                                          children: <Widget>[
+                                                                                            if (areaModels.quantity != '1')
+                                                                                              ListTile(
+                                                                                                  onTap: () async {
+                                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                    preferences.setString('zoneSer', areaModels.zser.toString());
+                                                                                                    preferences.setString('zonesName', areaModels.zn.toString());
+                                                                                                    setState(() {
+                                                                                                      Ser_Body = 1;
+                                                                                                      a_ln = areaModels.lncode;
+                                                                                                      a_ser = areaModels.ser;
+                                                                                                      a_area = areaModels.area;
+                                                                                                      a_rent = areaModels.rent;
+                                                                                                      a_page = '1';
+                                                                                                    });
+
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  title: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[100],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      // width: MediaQuery.of(context).size.width,
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          Expanded(
+                                                                                                              child: Text(
+                                                                                                            'เสนอราคา: ${areaModels.lncode} (${areaModels.ln})',
+                                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                                          ))
+                                                                                                        ],
+                                                                                                      ))),
+                                                                                            if (areaModels.quantity != '1')
+                                                                                              ListTile(
+                                                                                                  onTap: () async {
+                                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                    preferences.setString('zoneSer', areaModels.zser.toString());
+                                                                                                    preferences.setString('zonesName', areaModels.zn.toString());
+
+                                                                                                    setState(() {
+                                                                                                      Ser_Body = 2;
+                                                                                                      a_ln = areaModels.lncode;
+                                                                                                      a_ser = areaModels.ser;
+                                                                                                      a_area = areaModels.area;
+                                                                                                      a_rent = areaModels.rent;
+                                                                                                      a_page = '1';
+                                                                                                    });
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  title: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[100],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      // width: MediaQuery.of(context).size.width,
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          Expanded(
+                                                                                                              child: Text(
+                                                                                                            'ทำสัญญา: ${areaModels.lncode} (${areaModels.ln})',
+                                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                                          ))
+                                                                                                        ],
+                                                                                                      ))),
+                                                                                            if (areaModels.quantity == '1')
+                                                                                              ListTile(
+                                                                                                  onTap: () async {
+                                                                                                    setState(() {
+                                                                                                      Ser_Body = 3;
+                                                                                                      Value_cid = areaModels.cid;
+                                                                                                      ser_cidtan = '1';
+                                                                                                    });
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  title: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[100],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      // width: MediaQuery.of(context).size.width,
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          Expanded(
+                                                                                                              child: Text(
+                                                                                                            'เช่าอยู่: ${areaModels.cid}',
+                                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                                          ))
+                                                                                                        ],
+                                                                                                      ))),
+                                                                                            if (areaModels.quantity == '1')
+                                                                                              ListTile(
+                                                                                                  onTap: () async {
+                                                                                                    setState(() {
+                                                                                                      Ser_Body = 4;
+                                                                                                      Value_cid = areaModels.cid;
+                                                                                                      ser_cidtan = '1';
+                                                                                                    });
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  title: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[100],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      // width: MediaQuery.of(context).size.width,
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          Expanded(
+                                                                                                              child: Text(
+                                                                                                            'รับชำระ: ${areaModels.cid}',
+                                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                                          ))
+                                                                                                        ],
+                                                                                                      ))),
+                                                                                            if (areaModels.quantity == '2')
+                                                                                              ListTile(
+                                                                                                  onTap: () async {
+                                                                                                    setState(() {
+                                                                                                      Ser_Body = 3;
+                                                                                                      Value_cid = areaModels.docno;
+                                                                                                      ser_cidtan = '2';
+                                                                                                    });
+                                                                                                    Navigator.pop(context);
+                                                                                                  },
+                                                                                                  title: Container(
+                                                                                                      decoration: BoxDecoration(
+                                                                                                        color: Colors.grey[100],
+                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                      ),
+                                                                                                      padding: const EdgeInsets.all(10),
+                                                                                                      // width: MediaQuery.of(context).size.width,
+                                                                                                      child: Row(
+                                                                                                        children: [
+                                                                                                          Expanded(
+                                                                                                              child: Text(
+                                                                                                            'เสนอราคา: ${areaModels.docno}',
+                                                                                                            overflow: TextOverflow.ellipsis,
+                                                                                                            style: const TextStyle(
+                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                                //fontWeight: FontWeight.bold,
+                                                                                                                fontFamily: Font_.Fonts_T),
+                                                                                                          ))
+                                                                                                        ],
+                                                                                                      ))),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ),
+                                                                                      actions: <Widget>[
+                                                                                        Column(
+                                                                                          children: [
+                                                                                            const SizedBox(
+                                                                                              height: 2.0,
+                                                                                            ),
+                                                                                            const Divider(
+                                                                                              color: Colors.grey,
+                                                                                              height: 4.0,
+                                                                                            ),
+                                                                                            const SizedBox(
+                                                                                              height: 2.0,
+                                                                                            ),
+                                                                                            Padding(
+                                                                                              padding: const EdgeInsets.all(8.0),
+                                                                                              child: Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Padding(
+                                                                                                    padding: const EdgeInsets.all(4.0),
+                                                                                                    child: Row(
+                                                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                      children: [
+                                                                                                        Container(
+                                                                                                          width: 100,
+                                                                                                          decoration: const BoxDecoration(
+                                                                                                            color: Colors.redAccent,
+                                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                          ),
+                                                                                                          padding: const EdgeInsets.all(5.0),
+                                                                                                          child: TextButton(
+                                                                                                            onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                                            child: const Text(
+                                                                                                              'ปิด',
+                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                                                            ),
+                                                                                                          ),
+                                                                                                        ),
+                                                                                                      ],
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ),
+                                                                                          ],
+                                                                                        ),
+                                                                                      ],
+                                                                                    ),
+                                                                                  );
+                                                                                },
+                                                                                child: Container(
+                                                                                  decoration: BoxDecoration(
+                                                                                    color: (areaFloorplanModelss?.id == areaModels.id)
+                                                                                        ? areaModels.quantity == '1'
+                                                                                            ? Colors.red[800]!.withOpacity(0.5)
+                                                                                            : areaModels.quantity == '2'
+                                                                                                ? Colors.blue[800]!.withOpacity(0.5)
+                                                                                                : areaModels.quantity == '3'
+                                                                                                    ? Colors.purple[800]!.withOpacity(0.5)
+                                                                                                    : Colors.green[800]!.withOpacity(0.5)
+                                                                                        : areaModels.quantity == '1'
+                                                                                            ? Colors.red[200]!.withOpacity(0.5)
+                                                                                            : areaModels.quantity == '2'
+                                                                                                ? Colors.blue[200]!.withOpacity(0.5)
+                                                                                                : areaModels.quantity == '3'
+                                                                                                    ? Colors.purple[200]!.withOpacity(0.5)
+                                                                                                    : Colors.green[200]!.withOpacity(0.5),
+                                                                                    //  color: (areaFloorplanModelss?.id == areaModels.id) ? Colors.deepPurple[400]!.withOpacity(0.5) : Colors.blue[600]!.withOpacity(0.5),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                      ])),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Positioned(
+                                                              top: 10,
+                                                              right: 10,
+                                                              child: Container(
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: Colors
+                                                                      .blueGrey
+                                                                      .withOpacity(
+                                                                          0.5),
+                                                                  borderRadius:
+                                                                      const BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    topRight: Radius
+                                                                        .circular(
+                                                                            5),
+                                                                    bottomLeft:
+                                                                        Radius.circular(
+                                                                            5),
+                                                                    bottomRight:
+                                                                        Radius.circular(
+                                                                            5),
+                                                                  ),
+                                                                ),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        2.0),
+                                                                child: Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    IconButton(
+                                                                      icon:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .zoom_in,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      onPressed:
+                                                                          _zoomInSVG,
+                                                                    ),
+                                                                    IconButton(
+                                                                      icon:
+                                                                          const Icon(
+                                                                        Icons
+                                                                            .zoom_out,
+                                                                        color: Colors
+                                                                            .white,
+                                                                      ),
+                                                                      onPressed:
+                                                                          _zoomOutSVG,
+                                                                    ),
+                                                                    // Container(
+                                                                    //   decoration:
+                                                                    //       BoxDecoration(
+                                                                    //     color: Colors
+                                                                    //         .grey,
+                                                                    //     borderRadius:
+                                                                    //         const BorderRadius.only(
+                                                                    //       topLeft:
+                                                                    //           Radius.circular(5),
+                                                                    //       topRight:
+                                                                    //           Radius.circular(5),
+                                                                    //       bottomLeft:
+                                                                    //           Radius.circular(5),
+                                                                    //       bottomRight:
+                                                                    //           Radius.circular(5),
+                                                                    //     ),
+                                                                    //   ),
+                                                                    //   child:
+                                                                    //       Text(
+                                                                    //     (Ln_name ==
+                                                                    //             null)
+                                                                    //         ? "รหัสพื้นที่ :  "
+                                                                    //         : "รหัสพื้นที่ : $Ln_name ",
+                                                                    //     overflow:
+                                                                    //         TextOverflow.ellipsis,
+                                                                    //     // minFontSize: 1,
+                                                                    //     // maxFontSize: 12,
+                                                                    //     maxLines:
+                                                                    //         1,
+                                                                    //     textAlign:
+                                                                    //         TextAlign.left,
+                                                                    //     style:
+                                                                    //         TextStyle(
+                                                                    //       color:
+                                                                    //           Colors.white,
+                                                                    //       fontFamily:
+                                                                    //           Font_.Fonts_T,
+
+                                                                    //       //fontSize: 10.0s
+                                                                    //     ),
+                                                                    //   ),
+                                                                    // ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+
+                                                  // MyApp1(
+                                                  //     floorplan: zoneModels[
+                                                  //             Serindex_zoneModels_value]
+                                                  //         .img_floorplan,
+                                                  //     DBN_: DBN_)
+                                                ))
+                                          ],
+                                        ))
+                                      ],
                                     ),
                                   ),
                                 ),
                               ],
                             ),
-                          ),
-                          Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ScrollConfiguration(
-                                behavior: ScrollConfiguration.of(context)
-                                    .copyWith(dragDevices: {
-                                  PointerDeviceKind.touch,
-                                  PointerDeviceKind.mouse,
-                                }),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: 600,
-                                      child: GridView.count(
-                                        crossAxisCount: MediaQuery.of(context)
-                                                    .size
-                                                    .shortestSide <
-                                                MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    1
-                                            ? 12
-                                            : 6,
-                                        children: [
-                                          for (int i = 0;
-                                              i < areaModels.length;
-                                              i++)
-                                            createCard(i),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )),
-                          // Container(
-                          //   width: MediaQuery.of(context).size.width,
-                          //   height: 500,
-                          //   child: Column(
-                          //     crossAxisAlignment: CrossAxisAlignment.start,
-                          //     children: [
-                          //       ScrollConfiguration(
-                          //         behavior: ScrollConfiguration.of(context)
-                          //             .copyWith(dragDevices: {
-                          //           PointerDeviceKind.touch,
-                          //           PointerDeviceKind.mouse,
-                          //         }),
-                          //         child: SingleChildScrollView(
-                          //           scrollDirection: Axis.horizontal,
-                          //           dragStartBehavior: DragStartBehavior.start,
-                          //           child: Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.start,
-                          //               children: [
-                          //                 for (int i = 0;
-                          //                     i < areaModels.length;
-                          //                     i++)
-                          //                   Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.start,
-                          //                     children: [
-                          //                       areaModels[i].quantity == null
-                          //                           ? Row(
-                          //                               mainAxisAlignment:
-                          //                                   MainAxisAlignment
-                          //                                       .start,
-                          //                               children: [
-                          //                                 createCard(i),
-                          //                               ],
-                          //                             )
-                          //                           : SizedBox()
-                          //                     ],
-                          //                   ),
-                          //                 SizedBox(
-                          //                   width: 300,
-                          //                 )
-                          //               ]),
-                          //         ),
-                          //       ),
-                          //       ScrollConfiguration(
-                          //         behavior: ScrollConfiguration.of(context)
-                          //             .copyWith(dragDevices: {
-                          //           PointerDeviceKind.touch,
-                          //           PointerDeviceKind.mouse,
-                          //         }),
-                          //         child: SingleChildScrollView(
-                          //           scrollDirection: Axis.horizontal,
-                          //           dragStartBehavior: DragStartBehavior.start,
-                          //           child: Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.start,
-                          //               children: [
-                          //                 for (int i = 0;
-                          //                     i < areaModels.length;
-                          //                     i++)
-                          //                   Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.start,
-                          //                     children: [
-                          //                       areaModels[i].quantity == '2'
-                          //                           ? Row(
-                          //                               mainAxisAlignment:
-                          //                                   MainAxisAlignment
-                          //                                       .start,
-                          //                               children: [
-                          //                                 createCard(i),
-                          //                               ],
-                          //                             )
-                          //                           : SizedBox(),
-                          //                     ],
-                          //                   ),
-                          //                 SizedBox(
-                          //                   width: 300,
-                          //                 )
-                          //               ]),
-                          //         ),
-                          //       ),
-                          //       ScrollConfiguration(
-                          //         behavior: ScrollConfiguration.of(context)
-                          //             .copyWith(dragDevices: {
-                          //           PointerDeviceKind.touch,
-                          //           PointerDeviceKind.mouse,
-                          //         }),
-                          //         child: SingleChildScrollView(
-                          //           scrollDirection: Axis.horizontal,
-                          //           dragStartBehavior: DragStartBehavior.start,
-                          //           child: Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.start,
-                          //               children: [
-                          //                 for (int i = 0;
-                          //                     i < areaModels.length;
-                          //                     i++)
-                          //                   Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.start,
-                          //                     children: [
-                          //                       areaModels[i].quantity == '1'
-                          //                           ? Row(
-                          //                               mainAxisAlignment:
-                          //                                   MainAxisAlignment
-                          //                                       .start,
-                          //                               children: [
-                          //                                 createCard(i),
-                          //                               ],
-                          //                             )
-                          //                           : SizedBox(),
-                          //                     ],
-                          //                   ),
-                          //                 const SizedBox(
-                          //                   width: 300,
-                          //                 )
-                          //               ]),
-                          //         ),
-                          //       ),
-                          //       ScrollConfiguration(
-                          //         behavior: ScrollConfiguration.of(context)
-                          //             .copyWith(dragDevices: {
-                          //           PointerDeviceKind.touch,
-                          //           PointerDeviceKind.mouse,
-                          //         }),
-                          //         child: SingleChildScrollView(
-                          //           scrollDirection: Axis.horizontal,
-                          //           dragStartBehavior: DragStartBehavior.start,
-                          //           child: Row(
-                          //               mainAxisAlignment:
-                          //                   MainAxisAlignment.start,
-                          //               children: [
-                          //                 for (int i = 0;
-                          //                     i < areaModels.length;
-                          //                     i++)
-                          //                   Column(
-                          //                     crossAxisAlignment:
-                          //                         CrossAxisAlignment.start,
-                          //                     children: [
-                          //                       areaModels[i].quantity == '3'
-                          //                           ? Row(
-                          //                               mainAxisAlignment:
-                          //                                   MainAxisAlignment
-                          //                                       .start,
-                          //                               children: [
-                          //                                 createCard(i),
-                          //                               ],
-                          //                             )
-                          //                           : SizedBox(),
-                          //                     ],
-                          //                   ),
-                          //                 SizedBox(
-                          //                   width: 300,
-                          //                 )
-                          //               ]),
-                          //         ),
-                          //       ),
-                          //     ],
-                          //   ),
-                          // ),
-                        ],
-                      ),
-              )
-            ],
-          );
+                          )),
+                    )
+                  ]);
   }
 
   Widget createCard(int index) {
@@ -3152,7 +5126,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
               minFontSize: 10,
               maxFontSize: 18,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 // fontSize: 20,
                 fontFamily: Font_.Fonts_T,
                 color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -3187,858 +5161,858 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
     ));
   }
 
-  Widget BodyHome_mobile() {
-    return (Visit_ == 'list')
-        ? Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              decoration: const BoxDecoration(
-                color: AppbackgroundColor.Sub_Abg_Colors,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10)),
-                // border: Border.all(color: Colors.grey, width: 1),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(context)
-                          .copyWith(dragDevices: {
-                        PointerDeviceKind.touch,
-                        PointerDeviceKind.mouse,
-                      }),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        dragStartBehavior: DragStartBehavior.start,
-                        child: Row(
-                          children: [
-                            Container(
-                                width: 1000,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                        width: 1000,
-                                        decoration: const BoxDecoration(
-                                          color:
-                                              AppbackgroundColor.TiTile_Colors,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(0)),
-                                        ),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: const [
-                                            // Expanded(
-                                            //   flex: 1,
-                                            //   child: Padding(
-                                            //     padding: EdgeInsets.all(8.0),
-                                            //     child: Text(
-                                            //       '',
-                                            //       style: TextStyle(
-                                            //         color: Colors.black,
-                                            //         fontWeight: FontWeight.bold,
-                                            //         //fontSize: 10.0
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'โซนพื้นที่',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'รหัสพื้นที่',
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'ขนาดพื้นที่(ต.ร.ม.)',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'ค่าเช่าต่องวด',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'เลขที่ใบสัญญา',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'เลขที่ใบเสนอราคา',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'วันสิ้นสุดสัญญา',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              flex: 1,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Text(
-                                                  'สถานะ',
-                                                  textAlign: TextAlign.end,
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text1_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T
-                                                      //fontSize: 10.0
-                                                      ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )),
-                                    Container(
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                1.7,
-                                        width: 1000,
-                                        decoration: const BoxDecoration(
-                                          color:
-                                              AppbackgroundColor.Sub_Abg_Colors,
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(0),
-                                              topRight: Radius.circular(0),
-                                              bottomLeft: Radius.circular(0),
-                                              bottomRight: Radius.circular(0)),
-                                          // border: Border.all(color: Colors.grey, width: 1),
-                                        ),
-                                        child: ListView.builder(
-                                            controller: _scrollController1,
-                                            // itemExtent: 50,
-                                            physics:
-                                                const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
-                                            shrinkWrap: true,
-                                            itemCount: areaModels.length,
-                                            itemBuilder: (BuildContext context,
-                                                int index) {
-                                              int daysBetween(
-                                                  DateTime from, DateTime to) {
-                                                from = DateTime(from.year,
-                                                    from.month, from.day);
-                                                to = DateTime(
-                                                    to.year, to.month, to.day);
-                                                return (to
-                                                            .difference(from)
-                                                            .inHours /
-                                                        24)
-                                                    .round();
-                                              }
+  // Widget BodyHome_mobile() {
+  //   return (Visit_ == 'list')
+  //       ? Padding(
+  //           padding: const EdgeInsets.all(8.0),
+  //           child: Container(
+  //             width: MediaQuery.of(context).size.width,
+  //             decoration: const BoxDecoration(
+  //               color: AppbackgroundColor.Sub_Abg_Colors,
+  //               borderRadius: BorderRadius.only(
+  //                   topLeft: Radius.circular(10),
+  //                   topRight: Radius.circular(10),
+  //                   bottomLeft: Radius.circular(10),
+  //                   bottomRight: Radius.circular(10)),
+  //               // border: Border.all(color: Colors.grey, width: 1),
+  //             ),
+  //             child: Column(
+  //               children: [
+  //                 Padding(
+  //                   padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+  //                   child: ScrollConfiguration(
+  //                     behavior: ScrollConfiguration.of(context)
+  //                         .copyWith(dragDevices: {
+  //                       PointerDeviceKind.touch,
+  //                       PointerDeviceKind.mouse,
+  //                     }),
+  //                     child: SingleChildScrollView(
+  //                       scrollDirection: Axis.horizontal,
+  //                       dragStartBehavior: DragStartBehavior.start,
+  //                       child: Row(
+  //                         children: [
+  //                           Container(
+  //                               width: 1000,
+  //                               child: Column(
+  //                                 children: [
+  //                                   Container(
+  //                                       width: 1000,
+  //                                       decoration: const BoxDecoration(
+  //                                         color:
+  //                                             AppbackgroundColor.TiTile_Colors,
+  //                                         borderRadius: BorderRadius.only(
+  //                                             topLeft: Radius.circular(10),
+  //                                             topRight: Radius.circular(10),
+  //                                             bottomLeft: Radius.circular(0),
+  //                                             bottomRight: Radius.circular(0)),
+  //                                       ),
+  //                                       padding: const EdgeInsets.all(8.0),
+  //                                       child: Row(
+  //                                         mainAxisAlignment:
+  //                                             MainAxisAlignment.center,
+  //                                         children: const [
+  //                                           // Expanded(
+  //                                           //   flex: 1,
+  //                                           //   child: Padding(
+  //                                           //     padding: EdgeInsets.all(8.0),
+  //                                           //     child: Text(
+  //                                           //       '',
+  //                                           //       style: TextStyle(
+  //                                           //         color: Colors.black,
+  //                                           //         fontWeight: FontWeight.bold,
+  //                                           //         //fontSize: 10.0
+  //                                           //       ),
+  //                                           //     ),
+  //                                           //   ),
+  //                                           // ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'โซนพื้นที่',
+  //                                                 textAlign: TextAlign.center,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'รหัสพื้นที่',
+  //                                                 textAlign: TextAlign.center,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'ขนาดพื้นที่(ต.ร.ม.)',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'ค่าเช่าต่องวด',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'เลขที่ใบสัญญา',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'เลขที่ใบเสนอราคา',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'วันสิ้นสุดสัญญา',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                           Expanded(
+  //                                             flex: 1,
+  //                                             child: Padding(
+  //                                               padding: EdgeInsets.all(8.0),
+  //                                               child: Text(
+  //                                                 'สถานะ',
+  //                                                 textAlign: TextAlign.end,
+  //                                                 style: TextStyle(
+  //                                                     color:
+  //                                                         PeopleChaoScreen_Color
+  //                                                             .Colors_Text1_,
+  //                                                     fontWeight:
+  //                                                         FontWeight.bold,
+  //                                                     fontFamily:
+  //                                                         FontWeight_.Fonts_T
+  //                                                     //fontSize: 10.0
+  //                                                     ),
+  //                                               ),
+  //                                             ),
+  //                                           ),
+  //                                         ],
+  //                                       )),
+  //                                   Container(
+  //                                       height:
+  //                                           MediaQuery.of(context).size.height /
+  //                                               1.7,
+  //                                       width: 1000,
+  //                                       decoration: const BoxDecoration(
+  //                                         color:
+  //                                             AppbackgroundColor.Sub_Abg_Colors,
+  //                                         borderRadius: BorderRadius.only(
+  //                                             topLeft: Radius.circular(0),
+  //                                             topRight: Radius.circular(0),
+  //                                             bottomLeft: Radius.circular(0),
+  //                                             bottomRight: Radius.circular(0)),
+  //                                         // border: Border.all(color: Colors.grey, width: 1),
+  //                                       ),
+  //                                       child: ListView.builder(
+  //                                           controller: _scrollController1,
+  //                                           // itemExtent: 50,
+  //                                           physics:
+  //                                               const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
+  //                                           shrinkWrap: true,
+  //                                           itemCount: areaModels.length,
+  //                                           itemBuilder: (BuildContext context,
+  //                                               int index) {
+  //                                             int daysBetween(
+  //                                                 DateTime from, DateTime to) {
+  //                                               from = DateTime(from.year,
+  //                                                   from.month, from.day);
+  //                                               to = DateTime(
+  //                                                   to.year, to.month, to.day);
+  //                                               return (to
+  //                                                           .difference(from)
+  //                                                           .inHours /
+  //                                                       24)
+  //                                                   .round();
+  //                                             }
 
-                                              var daterz =
-                                                  areaModels[index].ldate ==
-                                                          null
-                                                      ? '0000-00-00'
-                                                      : areaModels[index].ldate;
+  //                                             var daterz =
+  //                                                 areaModels[index].ldate ==
+  //                                                         null
+  //                                                     ? '0000-00-00'
+  //                                                     : areaModels[index].ldate;
 
-                                              var birthday = DateTime.parse(
-                                                      '$daterz 00:00:00.000')
-                                                  .add(const Duration(
-                                                      days: -30));
-                                              var date2 = DateTime.now();
-                                              var difference =
-                                                  daysBetween(birthday, date2);
+  //                                             var birthday = DateTime.parse(
+  //                                                     '$daterz 00:00:00.000')
+  //                                                 .add(const Duration(
+  //                                                     days: -30));
+  //                                             var date2 = DateTime.now();
+  //                                             var difference =
+  //                                                 daysBetween(birthday, date2);
 
-                                              return Container(
-                                                color: tappedIndex_ ==
-                                                        index.toString()
-                                                    ? tappedIndex_Color
-                                                        .tappedIndex_Colors
-                                                    : null,
-                                                child: ListTile(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        tappedIndex_ =
-                                                            index.toString();
-                                                      });
-                                                    },
-                                                    title: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              'โซน ${areaModels[index].zser} (${areaModels[index].zn})',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              areaModels[index]
-                                                                          .ln_c ==
-                                                                      null
-                                                                  ? areaModels[index]
-                                                                              .ln_q ==
-                                                                          null
-                                                                      ? '${areaModels[index].lncode}'
-                                                                      : '${areaModels[index].ln_q}'
-                                                                  : '${areaModels[index].ln_c}',
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: const TextStyle(
-                                                                  color: PeopleChaoScreen_Color
-                                                                      .Colors_Text2_,
-                                                                  fontFamily:
-                                                                      Font_
-                                                                          .Fonts_T
-                                                                  //fontSize: 10.0
-                                                                  ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            areaModels[index]
-                                                                        .area_c ==
-                                                                    null
-                                                                ? areaModels[index]
-                                                                            .ln_q ==
-                                                                        null
-                                                                    ? nFormat.format(double.parse(
-                                                                        areaModels[index]
-                                                                            .area!))
-                                                                    : nFormat.format(
-                                                                        double.parse(areaModels[index]
-                                                                            .area_q!))
-                                                                : nFormat.format(
-                                                                    double.parse(
-                                                                        areaModels[index]
-                                                                            .area_c!)),
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style: const TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            areaModels[index]
-                                                                        .total ==
-                                                                    null
-                                                                ? areaModels[index]
-                                                                            .total_q ==
-                                                                        null
-                                                                    ? nFormat.format(double.parse(
-                                                                        areaModels[index]
-                                                                            .rent!))
-                                                                    : nFormat.format(
-                                                                        double.parse(areaModels[index]
-                                                                            .total_q!))
-                                                                : nFormat.format(
-                                                                    double.parse(
-                                                                        areaModels[index]
-                                                                            .total!)),
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style: const TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text2_,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Text(
-                                                                areaModels[index]
-                                                                            .cid ==
-                                                                        null
-                                                                    ? ''
-                                                                    : '${areaModels[index].cid}',
-                                                                maxLines: 2,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: const TextStyle(
-                                                                    color: PeopleChaoScreen_Color
-                                                                        .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                              )),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Text(
-                                                                areaModels[index]
-                                                                            .docno ==
-                                                                        null
-                                                                    ? ''
-                                                                    : '${areaModels[index].docno}',
-                                                                maxLines: 2,
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .end,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                style: TextStyle(
-                                                                    color: areaModels[index].docno !=
-                                                                            null
-                                                                        ? Colors
-                                                                            .blue
-                                                                        : PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T),
-                                                              )),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Text(
-                                                              areaModels[index]
-                                                                          .ldate ==
-                                                                      null
-                                                                  ? areaModels[index]
-                                                                              .ldate_q ==
-                                                                          null
-                                                                      ? ''
-                                                                      : DateFormat(
-                                                                              'dd-MM-yyyy')
-                                                                          .format(DateTime.parse(
-                                                                              '${areaModels[index].ldate_q} 00:00:00'))
-                                                                          .toString()
-                                                                  : DateFormat(
-                                                                          'dd-MM-yyyy')
-                                                                      .format(DateTime
-                                                                          .parse(
-                                                                              '${areaModels[index].ldate} 00:00:00'))
-                                                                      .toString(),
-                                                              maxLines: 1,
-                                                              textAlign:
-                                                                  TextAlign.end,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  color: areaModels[index]
-                                                                              .quantity ==
-                                                                          '1'
-                                                                      ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
-                                                                              true
-                                                                          ? Colors
-                                                                              .red
-                                                                          : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
-                                                                                  true
-                                                                              ? Colors
-                                                                                  .orange.shade900
-                                                                              : PeopleChaoScreen_Color
-                                                                                  .Colors_Text2_
-                                                                      : areaModels[index].quantity ==
-                                                                              '2'
-                                                                          ? Colors
-                                                                              .blue
-                                                                          : areaModels[index].quantity ==
-                                                                                  '3'
-                                                                              ? Colors
-                                                                                  .blue
-                                                                              : Colors
-                                                                                  .green,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            areaModels[index]
-                                                                        .quantity ==
-                                                                    '1'
-                                                                ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(
-                                                                            days:
-                                                                                0))) ==
-                                                                        true
-                                                                    ? 'หมดสัญญา'
-                                                                    : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
-                                                                            true
-                                                                        ? 'ใกล้หมดสัญญา'
-                                                                        : 'เช่าอยู่'
-                                                                : areaModels[index]
-                                                                            .quantity ==
-                                                                        '2'
-                                                                    ? 'เสนอราคา'
-                                                                    : areaModels[index].quantity ==
-                                                                            '3'
-                                                                        ? 'เสนอราคา(มัดจำ)'
-                                                                        : 'ว่าง',
-                                                            textAlign:
-                                                                TextAlign.end,
-                                                            style: TextStyle(
-                                                                color: areaModels[index]
-                                                                            .quantity ==
-                                                                        '1'
-                                                                    ? datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
-                                                                            true
-                                                                        ? Colors
-                                                                            .red
-                                                                        : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
-                                                                                true
-                                                                            ? Colors
-                                                                                .orange.shade900
-                                                                            : PeopleChaoScreen_Color
-                                                                                .Colors_Text2_
-                                                                    : areaModels[index].quantity ==
-                                                                            '2'
-                                                                        ? Colors
-                                                                            .blue
-                                                                        : areaModels[index].quantity ==
-                                                                                '3'
-                                                                            ? Colors
-                                                                                .blue
-                                                                            : Colors
-                                                                                .green,
-                                                                fontFamily:
-                                                                    Font_
-                                                                        .Fonts_T
+  //                                             return Container(
+  //                                               color: tappedIndex_ ==
+  //                                                       index.toString()
+  //                                                   ? tappedIndex_Color
+  //                                                       .tappedIndex_Colors
+  //                                                   : null,
+  //                                               child: ListTile(
+  //                                                   onTap: () {
+  //                                                     setState(() {
+  //                                                       tappedIndex_ =
+  //                                                           index.toString();
+  //                                                     });
+  //                                                   },
+  //                                                   title: Row(
+  //                                                     mainAxisAlignment:
+  //                                                         MainAxisAlignment
+  //                                                             .center,
+  //                                                     children: [
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Padding(
+  //                                                           padding:
+  //                                                               const EdgeInsets
+  //                                                                   .all(8.0),
+  //                                                           child: Text(
+  //                                                             'โซน ${areaModels[index].zser} (${areaModels[index].zn})',
+  //                                                             textAlign:
+  //                                                                 TextAlign
+  //                                                                     .center,
+  //                                                             style: const TextStyle(
+  //                                                                 color: PeopleChaoScreen_Color
+  //                                                                     .Colors_Text2_,
+  //                                                                 fontFamily:
+  //                                                                     Font_
+  //                                                                         .Fonts_T
+  //                                                                 //fontSize: 10.0
+  //                                                                 ),
+  //                                                           ),
+  //                                                         ),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Padding(
+  //                                                           padding:
+  //                                                               const EdgeInsets
+  //                                                                   .all(8.0),
+  //                                                           child: Text(
+  //                                                             areaModels[index]
+  //                                                                         .ln_c ==
+  //                                                                     null
+  //                                                                 ? areaModels[index]
+  //                                                                             .ln_q ==
+  //                                                                         null
+  //                                                                     ? '${areaModels[index].lncode}'
+  //                                                                     : '${areaModels[index].ln_q}'
+  //                                                                 : '${areaModels[index].ln_c}',
+  //                                                             textAlign:
+  //                                                                 TextAlign
+  //                                                                     .center,
+  //                                                             style: const TextStyle(
+  //                                                                 color: PeopleChaoScreen_Color
+  //                                                                     .Colors_Text2_,
+  //                                                                 fontFamily:
+  //                                                                     Font_
+  //                                                                         .Fonts_T
+  //                                                                 //fontSize: 10.0
+  //                                                                 ),
+  //                                                           ),
+  //                                                         ),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Text(
+  //                                                           areaModels[index]
+  //                                                                       .area_c ==
+  //                                                                   null
+  //                                                               ? areaModels[index]
+  //                                                                           .ln_q ==
+  //                                                                       null
+  //                                                                   ? nFormat.format(double.parse(
+  //                                                                       areaModels[index]
+  //                                                                           .area!))
+  //                                                                   : nFormat.format(
+  //                                                                       double.parse(areaModels[index]
+  //                                                                           .area_q!))
+  //                                                               : nFormat.format(
+  //                                                                   double.parse(
+  //                                                                       areaModels[index]
+  //                                                                           .area_c!)),
+  //                                                           textAlign:
+  //                                                               TextAlign.end,
+  //                                                           style: const TextStyle(
+  //                                                               color: PeopleChaoScreen_Color
+  //                                                                   .Colors_Text2_,
+  //                                                               fontFamily:
+  //                                                                   Font_
+  //                                                                       .Fonts_T
+  //                                                               //fontSize: 10.0
+  //                                                               ),
+  //                                                         ),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Text(
+  //                                                           areaModels[index]
+  //                                                                       .total ==
+  //                                                                   null
+  //                                                               ? areaModels[index]
+  //                                                                           .total_q ==
+  //                                                                       null
+  //                                                                   ? nFormat.format(double.parse(
+  //                                                                       areaModels[index]
+  //                                                                           .rent!))
+  //                                                                   : nFormat.format(
+  //                                                                       double.parse(areaModels[index]
+  //                                                                           .total_q!))
+  //                                                               : nFormat.format(
+  //                                                                   double.parse(
+  //                                                                       areaModels[index]
+  //                                                                           .total!)),
+  //                                                           textAlign:
+  //                                                               TextAlign.end,
+  //                                                           style: const TextStyle(
+  //                                                               color: PeopleChaoScreen_Color
+  //                                                                   .Colors_Text2_,
+  //                                                               fontFamily:
+  //                                                                   Font_
+  //                                                                       .Fonts_T
+  //                                                               //fontSize: 10.0
+  //                                                               ),
+  //                                                         ),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Padding(
+  //                                                             padding:
+  //                                                                 const EdgeInsets
+  //                                                                     .all(8.0),
+  //                                                             child: Text(
+  //                                                               areaModels[index]
+  //                                                                           .cid ==
+  //                                                                       null
+  //                                                                   ? ''
+  //                                                                   : '${areaModels[index].cid}',
+  //                                                               maxLines: 2,
+  //                                                               textAlign:
+  //                                                                   TextAlign
+  //                                                                       .end,
+  //                                                               overflow:
+  //                                                                   TextOverflow
+  //                                                                       .ellipsis,
+  //                                                               style: const TextStyle(
+  //                                                                   color: PeopleChaoScreen_Color
+  //                                                                       .Colors_Text2_,
+  //                                                                   fontFamily:
+  //                                                                       Font_
+  //                                                                           .Fonts_T),
+  //                                                             )),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Padding(
+  //                                                             padding:
+  //                                                                 const EdgeInsets
+  //                                                                     .all(8.0),
+  //                                                             child: Text(
+  //                                                               areaModels[index]
+  //                                                                           .docno ==
+  //                                                                       null
+  //                                                                   ? ''
+  //                                                                   : '${areaModels[index].docno}',
+  //                                                               maxLines: 2,
+  //                                                               textAlign:
+  //                                                                   TextAlign
+  //                                                                       .end,
+  //                                                               overflow:
+  //                                                                   TextOverflow
+  //                                                                       .ellipsis,
+  //                                                               style: TextStyle(
+  //                                                                   color: areaModels[index].docno !=
+  //                                                                           null
+  //                                                                       ? Colors
+  //                                                                           .blue
+  //                                                                       : PeopleChaoScreen_Color
+  //                                                                           .Colors_Text2_,
+  //                                                                   fontFamily:
+  //                                                                       Font_
+  //                                                                           .Fonts_T),
+  //                                                             )),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Padding(
+  //                                                           padding:
+  //                                                               const EdgeInsets
+  //                                                                   .all(8.0),
+  //                                                           child: Text(
+  //                                                             areaModels[index]
+  //                                                                         .ldate ==
+  //                                                                     null
+  //                                                                 ? areaModels[index]
+  //                                                                             .ldate_q ==
+  //                                                                         null
+  //                                                                     ? ''
+  //                                                                     : DateFormat(
+  //                                                                             'dd-MM-yyyy')
+  //                                                                         .format(DateTime.parse(
+  //                                                                             '${areaModels[index].ldate_q} 00:00:00'))
+  //                                                                         .toString()
+  //                                                                 : DateFormat(
+  //                                                                         'dd-MM-yyyy')
+  //                                                                     .format(DateTime
+  //                                                                         .parse(
+  //                                                                             '${areaModels[index].ldate} 00:00:00'))
+  //                                                                     .toString(),
+  //                                                             maxLines: 1,
+  //                                                             textAlign:
+  //                                                                 TextAlign.end,
+  //                                                             overflow:
+  //                                                                 TextOverflow
+  //                                                                     .ellipsis,
+  //                                                             style: TextStyle(
+  //                                                                 color: areaModels[index]
+  //                                                                             .quantity ==
+  //                                                                         '1'
+  //                                                                     ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+  //                                                                             true
+  //                                                                         ? Colors
+  //                                                                             .red
+  //                                                                         : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                                 true
+  //                                                                             ? Colors
+  //                                                                                 .orange.shade900
+  //                                                                             : PeopleChaoScreen_Color
+  //                                                                                 .Colors_Text2_
+  //                                                                     : areaModels[index].quantity ==
+  //                                                                             '2'
+  //                                                                         ? Colors
+  //                                                                             .blue
+  //                                                                         : areaModels[index].quantity ==
+  //                                                                                 '3'
+  //                                                                             ? Colors
+  //                                                                                 .blue
+  //                                                                             : Colors
+  //                                                                                 .green,
+  //                                                                 fontFamily: Font_
+  //                                                                     .Fonts_T),
+  //                                                           ),
+  //                                                         ),
+  //                                                       ),
+  //                                                       Expanded(
+  //                                                         flex: 1,
+  //                                                         child: Text(
+  //                                                           areaModels[index]
+  //                                                                       .quantity ==
+  //                                                                   '1'
+  //                                                               ? datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(
+  //                                                                           days:
+  //                                                                               0))) ==
+  //                                                                       true
+  //                                                                   ? 'หมดสัญญา'
+  //                                                                   : datex.isAfter(DateTime.parse('${areaModels[index].ldate == null ? DateFormat('yyyy-MM-dd').format(datex) : areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                           true
+  //                                                                       ? 'ใกล้หมดสัญญา'
+  //                                                                       : 'เช่าอยู่'
+  //                                                               : areaModels[index]
+  //                                                                           .quantity ==
+  //                                                                       '2'
+  //                                                                   ? 'เสนอราคา'
+  //                                                                   : areaModels[index].quantity ==
+  //                                                                           '3'
+  //                                                                       ? 'เสนอราคา(มัดจำ)'
+  //                                                                       : 'ว่าง',
+  //                                                           textAlign:
+  //                                                               TextAlign.end,
+  //                                                           style: TextStyle(
+  //                                                               color: areaModels[index]
+  //                                                                           .quantity ==
+  //                                                                       '1'
+  //                                                                   ? datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 0))) ==
+  //                                                                           true
+  //                                                                       ? Colors
+  //                                                                           .red
+  //                                                                       : datex.isAfter(DateTime.parse('${areaModels[index].ldate} 00:00:00.000').subtract(const Duration(days: 30))) ==
+  //                                                                               true
+  //                                                                           ? Colors
+  //                                                                               .orange.shade900
+  //                                                                           : PeopleChaoScreen_Color
+  //                                                                               .Colors_Text2_
+  //                                                                   : areaModels[index].quantity ==
+  //                                                                           '2'
+  //                                                                       ? Colors
+  //                                                                           .blue
+  //                                                                       : areaModels[index].quantity ==
+  //                                                                               '3'
+  //                                                                           ? Colors
+  //                                                                               .blue
+  //                                                                           : Colors
+  //                                                                               .green,
+  //                                                               fontFamily:
+  //                                                                   Font_
+  //                                                                       .Fonts_T
 
-                                                                //fontSize: 10.0
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )),
-                                              );
-                                            })),
-                                  ],
-                                )),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: const BoxDecoration(
-                        color: AppbackgroundColor.Sub_Abg_Colors,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(0),
-                            topRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      _scrollController1.animateTo(
-                                        0,
-                                        duration: const Duration(seconds: 1),
-                                        curve: Curves.easeOut,
-                                      );
-                                    },
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                          // color: AppbackgroundColor
-                                          //     .TiTile_Colors,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(6),
-                                              topRight: Radius.circular(6),
-                                              bottomLeft: Radius.circular(6),
-                                              bottomRight: Radius.circular(8)),
-                                          border: Border.all(
-                                              color: Colors.grey, width: 1),
-                                        ),
-                                        padding: const EdgeInsets.all(3.0),
-                                        child: const Text(
-                                          'Top',
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 10.0),
-                                        )),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    if (_scrollController1.hasClients) {
-                                      final position = _scrollController1
-                                          .position.maxScrollExtent;
-                                      _scrollController1.animateTo(
-                                        position,
-                                        duration: const Duration(seconds: 1),
-                                        curve: Curves.easeOut,
-                                      );
-                                    }
-                                  },
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        // color: AppbackgroundColor
-                                        //     .TiTile_Colors,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(6),
-                                            topRight: Radius.circular(6),
-                                            bottomLeft: Radius.circular(6),
-                                            bottomRight: Radius.circular(6)),
-                                        border: Border.all(
-                                            color: Colors.grey, width: 1),
-                                      ),
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: const Text(
-                                        'Down',
-                                        style: TextStyle(
-                                            color: Colors.grey, fontSize: 10.0),
-                                      )),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerRight,
-                            child: Row(
-                              children: [
-                                InkWell(
-                                  onTap: _moveUp1,
-                                  child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Icon(
-                                          Icons.arrow_upward,
-                                          color: Colors.grey,
-                                        ),
-                                      )),
-                                ),
-                                Container(
-                                    decoration: BoxDecoration(
-                                      // color: AppbackgroundColor
-                                      //     .TiTile_Colors,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1),
-                                    ),
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: const Text(
-                                      'Scroll',
-                                      style: TextStyle(
-                                          color: Colors.grey, fontSize: 10.0),
-                                    )),
-                                InkWell(
-                                  onTap: _moveDown1,
-                                  child: const Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: Icon(
-                                          Icons.arrow_downward,
-                                          color: Colors.grey,
-                                        ),
-                                      )),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      )),
-                  const SizedBox(
-                    height: 20,
-                  )
-                ],
-              ),
-            ),
-          )
-        : Column(
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
-                  // border: Border.all(color: Colors.grey, width: 1),
-                ),
-                padding: const EdgeInsets.all(20),
-                // color: Colors.white,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              child: Text(
-                                zone_ser == null
-                                    ? 'โซน ทั้งหมด'
-                                    : zone_ser == '0'
-                                        ? 'โซน ($zone_name)'
-                                        : 'โซน $zone_ser ($zone_name)',
-                                style: const TextStyle(
-                                    color: PeopleChaoScreen_Color.Colors_Text1_,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontWeight_.Fonts_T
-                                    //fontSize: 10.0
-                                    ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 500,
-                      child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(dragDevices: {
-                          PointerDeviceKind.touch,
-                          PointerDeviceKind.mouse,
-                        }),
-                        child: ResponsiveGridList(
-                          horizontalGridSpacing:
-                              16, // Horizontal space between grid items
+  //                                                               //fontSize: 10.0
+  //                                                               ),
+  //                                                         ),
+  //                                                       ),
+  //                                                     ],
+  //                                                   )),
+  //                                             );
+  //                                           })),
+  //                                 ],
+  //                               )),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     decoration: const BoxDecoration(
+  //                       color: AppbackgroundColor.Sub_Abg_Colors,
+  //                       borderRadius: BorderRadius.only(
+  //                           topLeft: Radius.circular(0),
+  //                           topRight: Radius.circular(0),
+  //                           bottomLeft: Radius.circular(10),
+  //                           bottomRight: Radius.circular(10)),
+  //                     ),
+  //                     child: Row(
+  //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                       children: [
+  //                         Align(
+  //                           alignment: Alignment.centerLeft,
+  //                           child: Row(
+  //                             children: [
+  //                               Padding(
+  //                                 padding: const EdgeInsets.all(8.0),
+  //                                 child: InkWell(
+  //                                   onTap: () {
+  //                                     _scrollController1.animateTo(
+  //                                       0,
+  //                                       duration: const Duration(seconds: 1),
+  //                                       curve: Curves.easeOut,
+  //                                     );
+  //                                   },
+  //                                   child: Container(
+  //                                       decoration: BoxDecoration(
+  //                                         // color: AppbackgroundColor
+  //                                         //     .TiTile_Colors,
+  //                                         borderRadius: const BorderRadius.only(
+  //                                             topLeft: Radius.circular(6),
+  //                                             topRight: Radius.circular(6),
+  //                                             bottomLeft: Radius.circular(6),
+  //                                             bottomRight: Radius.circular(8)),
+  //                                         border: Border.all(
+  //                                             color: Colors.grey, width: 1),
+  //                                       ),
+  //                                       padding: const EdgeInsets.all(3.0),
+  //                                       child: const Text(
+  //                                         'Top',
+  //                                         style: TextStyle(
+  //                                             color: Colors.grey,
+  //                                             fontSize: 10.0),
+  //                                       )),
+  //                                 ),
+  //                               ),
+  //                               InkWell(
+  //                                 onTap: () {
+  //                                   if (_scrollController1.hasClients) {
+  //                                     final position = _scrollController1
+  //                                         .position.maxScrollExtent;
+  //                                     _scrollController1.animateTo(
+  //                                       position,
+  //                                       duration: const Duration(seconds: 1),
+  //                                       curve: Curves.easeOut,
+  //                                     );
+  //                                   }
+  //                                 },
+  //                                 child: Container(
+  //                                     decoration: BoxDecoration(
+  //                                       // color: AppbackgroundColor
+  //                                       //     .TiTile_Colors,
+  //                                       borderRadius: const BorderRadius.only(
+  //                                           topLeft: Radius.circular(6),
+  //                                           topRight: Radius.circular(6),
+  //                                           bottomLeft: Radius.circular(6),
+  //                                           bottomRight: Radius.circular(6)),
+  //                                       border: Border.all(
+  //                                           color: Colors.grey, width: 1),
+  //                                     ),
+  //                                     padding: const EdgeInsets.all(3.0),
+  //                                     child: const Text(
+  //                                       'Down',
+  //                                       style: TextStyle(
+  //                                           color: Colors.grey, fontSize: 10.0),
+  //                                     )),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                         Align(
+  //                           alignment: Alignment.centerRight,
+  //                           child: Row(
+  //                             children: [
+  //                               InkWell(
+  //                                 onTap: _moveUp1,
+  //                                 child: const Padding(
+  //                                     padding: EdgeInsets.all(8.0),
+  //                                     child: Align(
+  //                                       alignment: Alignment.centerLeft,
+  //                                       child: Icon(
+  //                                         Icons.arrow_upward,
+  //                                         color: Colors.grey,
+  //                                       ),
+  //                                     )),
+  //                               ),
+  //                               Container(
+  //                                   decoration: BoxDecoration(
+  //                                     // color: AppbackgroundColor
+  //                                     //     .TiTile_Colors,
+  //                                     borderRadius: const BorderRadius.only(
+  //                                         topLeft: Radius.circular(6),
+  //                                         topRight: Radius.circular(6),
+  //                                         bottomLeft: Radius.circular(6),
+  //                                         bottomRight: Radius.circular(6)),
+  //                                     border: Border.all(
+  //                                         color: Colors.grey, width: 1),
+  //                                   ),
+  //                                   padding: const EdgeInsets.all(3.0),
+  //                                   child: const Text(
+  //                                     'Scroll',
+  //                                     style: TextStyle(
+  //                                         color: Colors.grey, fontSize: 10.0),
+  //                                   )),
+  //                               InkWell(
+  //                                 onTap: _moveDown1,
+  //                                 child: const Padding(
+  //                                     padding: EdgeInsets.all(8.0),
+  //                                     child: Align(
+  //                                       alignment: Alignment.centerRight,
+  //                                       child: Icon(
+  //                                         Icons.arrow_downward,
+  //                                         color: Colors.grey,
+  //                                       ),
+  //                                     )),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         )
+  //                       ],
+  //                     )),
+  //                 const SizedBox(
+  //                   height: 20,
+  //                 )
+  //               ],
+  //             ),
+  //           ),
+  //         )
+  //       : Column(
+  //           children: [
+  //             Container(
+  //               decoration: const BoxDecoration(
+  //                 color: Colors.white,
+  //                 borderRadius: BorderRadius.only(
+  //                     topLeft: Radius.circular(10),
+  //                     topRight: Radius.circular(10),
+  //                     bottomLeft: Radius.circular(10),
+  //                     bottomRight: Radius.circular(10)),
+  //                 // border: Border.all(color: Colors.grey, width: 1),
+  //               ),
+  //               padding: const EdgeInsets.all(20),
+  //               // color: Colors.white,
+  //               child: Column(
+  //                 children: [
+  //                   Padding(
+  //                     padding: const EdgeInsets.all(8.0),
+  //                     child: Row(
+  //                       children: [
+  //                         Expanded(
+  //                           flex: 1,
+  //                           child: Container(
+  //                             child: Text(
+  //                               zone_ser == null
+  //                                   ? 'โซน ทั้งหมด'
+  //                                   : zone_ser == '0'
+  //                                       ? 'โซน ($zone_name)'
+  //                                       : 'โซน $zone_ser ($zone_name)',
+  //                               style: const TextStyle(
+  //                                   color: PeopleChaoScreen_Color.Colors_Text1_,
+  //                                   fontWeight: FontWeight.bold,
+  //                                   fontFamily: FontWeight_.Fonts_T
+  //                                   //fontSize: 10.0
+  //                                   ),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   Container(
+  //                     width: MediaQuery.of(context).size.width,
+  //                     height: 500,
+  //                     child: ScrollConfiguration(
+  //                       behavior: ScrollConfiguration.of(context)
+  //                           .copyWith(dragDevices: {
+  //                         PointerDeviceKind.touch,
+  //                         PointerDeviceKind.mouse,
+  //                       }),
+  //                       child: ResponsiveGridList(
+  //                         horizontalGridSpacing:
+  //                             16, // Horizontal space between grid items
 
-                          horizontalGridMargin:
-                              50, // Horizontal space around the grid
-                          verticalGridMargin:
-                              50, // Vertical space around the grid
-                          minItemWidth:
-                              300, // The minimum item width (can be smaller, if the layout constraints are smaller)
-                          minItemsPerRow:
-                              2, // The minimum items to show in a single row. Takes precedence over minItemWidth
-                          maxItemsPerRow:
-                              12, // The maximum items to show in a single row. Can be useful on large screens
-                          listViewBuilderOptions:
-                              ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
-                          children: List.generate(
-                            areaModels.length,
-                            (index) => Padding(
-                              padding: const EdgeInsets.all(2.0),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width * 0.07,
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: areaModels[index].quantity == '1'
-                                      ? Colors.red.shade200
-                                      : areaModels[index].quantity == '2'
-                                          ? Colors.blue.shade200
-                                          : areaModels[index].quantity == '3'
-                                              ? Colors.blue.shade200
-                                              : Colors.green.shade200,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                  // border: Border.all(color: Colors.grey, width: 1),
-                                ),
-                                // padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '${areaModels[index].lncode} (${areaModels[index].zn})',
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          );
-  }
+  //                         horizontalGridMargin:
+  //                             50, // Horizontal space around the grid
+  //                         verticalGridMargin:
+  //                             50, // Vertical space around the grid
+  //                         minItemWidth:
+  //                             300, // The minimum item width (can be smaller, if the layout constraints are smaller)
+  //                         minItemsPerRow:
+  //                             2, // The minimum items to show in a single row. Takes precedence over minItemWidth
+  //                         maxItemsPerRow:
+  //                             12, // The maximum items to show in a single row. Can be useful on large screens
+  //                         listViewBuilderOptions:
+  //                             ListViewBuilderOptions(), // Options that are getting passed to the ListView.builder() function
+  //                         children: List.generate(
+  //                           areaModels.length,
+  //                           (index) => Padding(
+  //                             padding: const EdgeInsets.all(2.0),
+  //                             child: Container(
+  //                               width: MediaQuery.of(context).size.width * 0.07,
+  //                               height: 50,
+  //                               decoration: BoxDecoration(
+  //                                 color: areaModels[index].quantity == '1'
+  //                                     ? Colors.red.shade200
+  //                                     : areaModels[index].quantity == '2'
+  //                                         ? Colors.blue.shade200
+  //                                         : areaModels[index].quantity == '3'
+  //                                             ? Colors.blue.shade200
+  //                                             : Colors.green.shade200,
+  //                                 borderRadius: const BorderRadius.only(
+  //                                     topLeft: Radius.circular(10),
+  //                                     topRight: Radius.circular(10),
+  //                                     bottomLeft: Radius.circular(10),
+  //                                     bottomRight: Radius.circular(10)),
+  //                                 // border: Border.all(color: Colors.grey, width: 1),
+  //                               ),
+  //                               // padding: const EdgeInsets.all(8.0),
+  //                               child: Row(
+  //                                 mainAxisAlignment: MainAxisAlignment.center,
+  //                                 children: [
+  //                                   Text(
+  //                                     '${areaModels[index].lncode} (${areaModels[index].zn})',
+  //                                     textAlign: TextAlign.center,
+  //                                     style: const TextStyle(
+  //                                         color: PeopleChaoScreen_Color
+  //                                             .Colors_Text2_,
+  //                                         // fontWeight: FontWeight.bold,
+  //                                         fontFamily: Font_.Fonts_T
+  //                                         //fontSize: 10.0
+  //                                         ),
+  //                                   ),
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ),
+  //             )
+  //           ],
+  //         );
+  // }
 
   Widget Body_Renew(context) {
     return ChaoAreaRenewScreen(

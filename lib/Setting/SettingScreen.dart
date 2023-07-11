@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'dart:html';
 
@@ -2573,1089 +2574,1103 @@ class _SettingScreenState extends State<SettingScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        Container(
+                          // width: 230,
                           width: (!Responsive.isDesktop(context))
                               ? MediaQuery.of(context).size.width * 0.5
                               : MediaQuery.of(context).size.width * 0.22,
+
+                          padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              AutoSizeText(
-                                minFontSize: 10,
-                                maxFontSize: 18,
-                                'Package $pkname : $pkqty ล็อค/แผง \n จำนวน $pkuser สิทธิผู้ใช้งาน',
-                                textAlign: TextAlign.end,
-                                style: const TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: Font_.Fonts_T),
+                              Container(
+                                decoration: BoxDecoration(
+                                  // color: Colors.purple.shade600,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(10),
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10),
+                                      bottomRight: Radius.circular(10)),
+                                ),
+                                padding: const EdgeInsets.all(8.0),
+                                child: AutoSizeText(
+                                  minFontSize: 10,
+                                  maxFontSize: 18,
+                                  'Package $pkname : $pkqty ล็อค/แผง \n จำนวน $pkuser สิทธิผู้ใช้งาน',
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                      color: SettingScreen_Color.Colors_Text1_,
+                                      fontFamily: Font_.Fonts_T),
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: InkWell(
-                            child: Container(
-                              width: 150,
-                              decoration: BoxDecoration(
-                                color: Colors.purple.shade600,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Text('ซื้อ Package',
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: SettingScreen_Color.Colors_Text3_,
-                                      fontFamily: Font_.Fonts_T)),
-                            ),
-                            onTap: () {
-                              showDialog<String>(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(20.0))),
-                                  title: Row(
-                                    children: [
-                                      const Expanded(child: SizedBox()),
-                                      const Expanded(
-                                        child: Center(
-                                            child: Text(
-                                          'Package',
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text1_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )),
-                                      ),
-                                      Expanded(
-                                          child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Center(
-                                              child: Padding(
-                                                padding: EdgeInsets.all(8.0),
-                                                child: Icon(Icons.highlight_off,
-                                                    size: 35,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )),
-                                    ],
-                                  ),
-                                  content: SingleChildScrollView(
-                                    child: Container(
-                                      // height: MediaQuery.of(context).size.height / 1.5,
-                                      width: MediaQuery.of(context).size.width /
-                                          1.2,
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              2,
-                                      decoration: const BoxDecoration(
-                                        // color: Colors.grey[300],
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        // border: Border.all(color: Colors.white, width: 1),
-                                      ),
-                                      child: ScrollConfiguration(
-                                        behavior: AppScrollBehavior(),
-                                        child: GridView.builder(
-                                          gridDelegate:
-                                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                            mainAxisSpacing: 2.0,
-                                            crossAxisSpacing: 2.0,
-                                            crossAxisCount: 1,
-                                            childAspectRatio: 2,
-                                          ),
-                                          physics: const BouncingScrollPhysics(
-                                              parent:
-                                                  AlwaysScrollableScrollPhysics()),
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: packageModels.length,
-                                          itemBuilder: (context, index) {
-                                            return Container(
-                                              width: 50,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius: BorderRadius.only(
-                                                    topLeft:
-                                                        Radius.circular(30),
-                                                    topRight:
-                                                        Radius.circular(30),
-                                                    bottomLeft:
-                                                        Radius.circular(20),
-                                                    bottomRight:
-                                                        Radius.circular(20)),
-                                                // border: Border.all(color: Colors.white, width: 1),
-                                              ),
-                                              child: Card(
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(30),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  30),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  20),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  20)),
-                                                ),
-                                                child: SizedBox(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.5,
-                                                  child: Column(
-                                                    children: [
-                                                      Container(
-                                                        // width: MediaQuery.of(
-                                                        //         context)
-                                                        //     .size
-                                                        //     .width,
-                                                        // height: MediaQuery.of(
-                                                        //             context)
-                                                        //         .size
-                                                        //         .width *
-                                                        //     0.05,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors
-                                                              .lime.shade400,
-                                                          borderRadius: const BorderRadius
-                                                                  .only(
-                                                              topLeft: Radius
-                                                                  .circular(30),
-                                                              topRight: Radius
-                                                                  .circular(30),
-                                                              bottomLeft: Radius
-                                                                  .circular(0),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          0)),
-                                                          // border: Border.all(color: Colors.white, width: 1),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Column(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .center,
-                                                            children: [
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  AutoSizeText(
-                                                                    minFontSize:
-                                                                        20,
-                                                                    maxFontSize:
-                                                                        30,
-                                                                    'Package ${packageModels[index].pk}',
-                                                                    style: const TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text1_,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                              const SizedBox(
-                                                                height: 5,
-                                                              ),
-                                                              Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .center,
-                                                                children: [
-                                                                  AutoSizeText(
-                                                                    minFontSize:
-                                                                        10,
-                                                                    maxFontSize:
-                                                                        12,
-                                                                    'จัดการสูงสุด ${packageModels[index].qty} ล็อค/แผงเช่า',
-                                                                    style: TextStyle(
-                                                                        color: Colors
-                                                                            .grey
-                                                                            .shade700,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 12,
-                                                            'จากปกติ ราคาเดือนละ ${nFormat.format(double.parse(packageModels[index].rpri!))}.-',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .red
-                                                                    .shade900,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 12,
-                                                            'ราคาพิเศษ',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          AutoSizeText(
-                                                            minFontSize: 30,
-                                                            maxFontSize: 50,
-                                                            '  ${nFormat.format(double.parse(packageModels[index].spri!))}.-',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .lime
-                                                                    .shade700,
-                                                                fontFamily:
-                                                                    FontWeight_
-                                                                        .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 12,
-                                                            'บาทต่อเดือน',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 12,
-                                                            '(ชำระรายปียอด ${nFormat.format(double.parse(packageModels[index].spri!) * 12)} บาท)',
-                                                            style: const TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Divider(
-                                                        height: 2,
-                                                        color: Colors
-                                                            .grey.shade600,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: const [
-                                                          AutoSizeText(
-                                                            minFontSize: 10,
-                                                            maxFontSize: 12,
-                                                            'รายละเอียด',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .black,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            const Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              '${packageModels[index].user} สิทธิผู้ใช้งาน',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            const Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'จัดการพื้นที่ได้มากสุด ${packageModels[index].qty} แผง',
-                                                              style: const TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ไม่จำกัดจำนวนทะเบียนลูกค้า',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ไม่จำกัดใบเสนอราคา',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ตั้งค่าพื้นที่',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ตั้งค่าประเภทค่าบริการ',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'เรียกดูพื้นที่ว่างแบบ real time',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ทำสัญญา',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ตั้งหนี้ล่วงหน้า',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'วางบิล',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'รับชำระ พร้อม ออกบิล',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ประวัติการรับชำระ',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'รายงานสรุป',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: const [
-                                                            Icon(
-                                                              Icons.check,
-                                                              size: 15,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'online training',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .black,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.close,
-                                                              size: 15,
-                                                              color: Colors.grey
-                                                                  .shade700,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ค่า migrate ข้อมูล',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade700,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.close,
-                                                              size: 15,
-                                                              color: Colors.grey
-                                                                  .shade700,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'customise ระบบ',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade700,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .only(
-                                                                left: 8,
-                                                                right: 8),
-                                                        child: Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Icon(
-                                                              Icons.close,
-                                                              size: 15,
-                                                              color: Colors.grey
-                                                                  .shade700,
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 5,
-                                                            ),
-                                                            AutoSizeText(
-                                                              minFontSize: 10,
-                                                              maxFontSize: 12,
-                                                              'ค่า hardware & อุปกรณ์',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .grey
-                                                                      .shade700,
-                                                                  fontFamily: Font_
-                                                                      .Fonts_T),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      const Divider(
-                                                        height: 2,
-                                                      ),
-                                                      Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: Container(
-                                                              width: 150,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: int.parse(packageModels[index]
-                                                                            .qty!) <
-                                                                        countarae!
-                                                                    ? Colors
-                                                                        .grey
-                                                                        .shade300
-                                                                    : Colors
-                                                                        .purple
-                                                                        .shade600,
-                                                                borderRadius: const BorderRadius
-                                                                        .only(
-                                                                    topLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            10),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            10),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            10)),
-                                                              ),
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: TextButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  if (int.parse(
-                                                                          packageModels[index]
-                                                                              .qty!) <
-                                                                      countarae!) {
-                                                                  } else {
-                                                                    SharedPreferences
-                                                                        preferences =
-                                                                        await SharedPreferences
-                                                                            .getInstance();
-                                                                    String?
-                                                                        ren =
-                                                                        preferences
-                                                                            .getString('renTalSer');
-                                                                    String?
-                                                                        ser_user =
-                                                                        preferences
-                                                                            .getString('ser');
-                                                                    String?
-                                                                        ser_pk =
-                                                                        packageModels[index]
-                                                                            .ser;
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: InkWell(
+                        //     child: Container(
+                        //       width: 150,
+                        //       decoration: BoxDecoration(
+                        //         color: Colors.purple.shade600,
+                        //         borderRadius: const BorderRadius.only(
+                        //             topLeft: Radius.circular(10),
+                        //             topRight: Radius.circular(10),
+                        //             bottomLeft: Radius.circular(10),
+                        //             bottomRight: Radius.circular(10)),
+                        //       ),
+                        //       padding: const EdgeInsets.all(8.0),
+                        //       child: const Text('ซื้อ Package',
+                        //           maxLines: 3,
+                        //           overflow: TextOverflow.ellipsis,
+                        //           softWrap: false,
+                        //           textAlign: TextAlign.center,
+                        //           style: TextStyle(
+                        //               fontSize: 15,
+                        //               color: SettingScreen_Color.Colors_Text3_,
+                        //               fontFamily: Font_.Fonts_T)),
+                        //     ),
+                        //     onTap: () {
+                        //       showDialog<String>(
+                        //         barrierDismissible: false,
+                        //         context: context,
+                        //         builder: (BuildContext context) => AlertDialog(
+                        //           shape: const RoundedRectangleBorder(
+                        //               borderRadius: BorderRadius.all(
+                        //                   Radius.circular(20.0))),
+                        //           title: Row(
+                        //             children: [
+                        //               const Expanded(child: SizedBox()),
+                        //               const Expanded(
+                        //                 child: Center(
+                        //                     child: Text(
+                        //                   'Package',
+                        //                   style: TextStyle(
+                        //                     color: SettingScreen_Color
+                        //                         .Colors_Text1_,
+                        //                     fontFamily: FontWeight_.Fonts_T,
+                        //                     fontWeight: FontWeight.bold,
+                        //                   ),
+                        //                 )),
+                        //               ),
+                        //               Expanded(
+                        //                   child: Row(
+                        //                 mainAxisAlignment:
+                        //                     MainAxisAlignment.end,
+                        //                 children: [
+                        //                   InkWell(
+                        //                     onTap: () {
+                        //                       Navigator.pop(context);
+                        //                     },
+                        //                     child: const Center(
+                        //                       child: Padding(
+                        //                         padding: EdgeInsets.all(8.0),
+                        //                         child: Icon(Icons.highlight_off,
+                        //                             size: 35,
+                        //                             color: Colors.black),
+                        //                       ),
+                        //                     ),
+                        //                   ),
+                        //                 ],
+                        //               )),
+                        //             ],
+                        //           ),
+                        //           content: SingleChildScrollView(
+                        //             child: Container(
+                        //               // height: MediaQuery.of(context).size.height / 1.5,
+                        //               width: MediaQuery.of(context).size.width /
+                        //                   1.2,
+                        //               height:
+                        //                   MediaQuery.of(context).size.height *
+                        //                       2,
+                        //               decoration: const BoxDecoration(
+                        //                 // color: Colors.grey[300],
+                        //                 borderRadius: BorderRadius.only(
+                        //                     topLeft: Radius.circular(10),
+                        //                     topRight: Radius.circular(10),
+                        //                     bottomLeft: Radius.circular(10),
+                        //                     bottomRight: Radius.circular(10)),
+                        //                 // border: Border.all(color: Colors.white, width: 1),
+                        //               ),
+                        //               child: ScrollConfiguration(
+                        //                 behavior: AppScrollBehavior(),
+                        //                 child: GridView.builder(
+                        //                   gridDelegate:
+                        //                       const SliverGridDelegateWithFixedCrossAxisCount(
+                        //                     mainAxisSpacing: 2.0,
+                        //                     crossAxisSpacing: 2.0,
+                        //                     crossAxisCount: 1,
+                        //                     childAspectRatio: 2,
+                        //                   ),
+                        //                   physics: const BouncingScrollPhysics(
+                        //                       parent:
+                        //                           AlwaysScrollableScrollPhysics()),
+                        //                   shrinkWrap: true,
+                        //                   scrollDirection: Axis.horizontal,
+                        //                   itemCount: packageModels.length,
+                        //                   itemBuilder: (context, index) {
+                        //                     return Container(
+                        //                       width: 50,
+                        //                       decoration: const BoxDecoration(
+                        //                         color: Colors.white,
+                        //                         borderRadius: BorderRadius.only(
+                        //                             topLeft:
+                        //                                 Radius.circular(30),
+                        //                             topRight:
+                        //                                 Radius.circular(30),
+                        //                             bottomLeft:
+                        //                                 Radius.circular(20),
+                        //                             bottomRight:
+                        //                                 Radius.circular(20)),
+                        //                         // border: Border.all(color: Colors.white, width: 1),
+                        //                       ),
+                        //                       child: Card(
+                        //                         shape:
+                        //                             const RoundedRectangleBorder(
+                        //                           borderRadius:
+                        //                               BorderRadius.only(
+                        //                                   topLeft: Radius
+                        //                                       .circular(30),
+                        //                                   topRight:
+                        //                                       Radius.circular(
+                        //                                           30),
+                        //                                   bottomLeft:
+                        //                                       Radius.circular(
+                        //                                           20),
+                        //                                   bottomRight:
+                        //                                       Radius.circular(
+                        //                                           20)),
+                        //                         ),
+                        //                         child: SizedBox(
+                        //                           width: MediaQuery.of(context)
+                        //                                   .size
+                        //                                   .width *
+                        //                               0.5,
+                        //                           child: Column(
+                        //                             children: [
+                        //                               Container(
+                        //                                 // width: MediaQuery.of(
+                        //                                 //         context)
+                        //                                 //     .size
+                        //                                 //     .width,
+                        //                                 // height: MediaQuery.of(
+                        //                                 //             context)
+                        //                                 //         .size
+                        //                                 //         .width *
+                        //                                 //     0.05,
+                        //                                 decoration:
+                        //                                     BoxDecoration(
+                        //                                   color: Colors
+                        //                                       .lime.shade400,
+                        //                                   borderRadius: const BorderRadius
+                        //                                           .only(
+                        //                                       topLeft: Radius
+                        //                                           .circular(30),
+                        //                                       topRight: Radius
+                        //                                           .circular(30),
+                        //                                       bottomLeft: Radius
+                        //                                           .circular(0),
+                        //                                       bottomRight:
+                        //                                           Radius
+                        //                                               .circular(
+                        //                                                   0)),
+                        //                                   // border: Border.all(color: Colors.white, width: 1),
+                        //                                 ),
+                        //                                 child: Padding(
+                        //                                   padding:
+                        //                                       const EdgeInsets
+                        //                                           .all(8.0),
+                        //                                   child: Column(
+                        //                                     mainAxisAlignment:
+                        //                                         MainAxisAlignment
+                        //                                             .center,
+                        //                                     children: [
+                        //                                       Row(
+                        //                                         mainAxisAlignment:
+                        //                                             MainAxisAlignment
+                        //                                                 .center,
+                        //                                         children: [
+                        //                                           AutoSizeText(
+                        //                                             minFontSize:
+                        //                                                 20,
+                        //                                             maxFontSize:
+                        //                                                 30,
+                        //                                             'Package ${packageModels[index].pk}',
+                        //                                             style: const TextStyle(
+                        //                                                 color: PeopleChaoScreen_Color
+                        //                                                     .Colors_Text1_,
+                        //                                                 fontWeight:
+                        //                                                     FontWeight
+                        //                                                         .bold,
+                        //                                                 fontFamily:
+                        //                                                     FontWeight_.Fonts_T),
+                        //                                           ),
+                        //                                         ],
+                        //                                       ),
+                        //                                       const SizedBox(
+                        //                                         height: 5,
+                        //                                       ),
+                        //                                       Row(
+                        //                                         mainAxisAlignment:
+                        //                                             MainAxisAlignment
+                        //                                                 .center,
+                        //                                         children: [
+                        //                                           AutoSizeText(
+                        //                                             minFontSize:
+                        //                                                 10,
+                        //                                             maxFontSize:
+                        //                                                 12,
+                        //                                             'จัดการสูงสุด ${packageModels[index].qty} ล็อค/แผงเช่า',
+                        //                                             style: TextStyle(
+                        //                                                 color: Colors
+                        //                                                     .grey
+                        //                                                     .shade700,
+                        //                                                 fontFamily:
+                        //                                                     Font_.Fonts_T),
+                        //                                           ),
+                        //                                         ],
+                        //                                       ),
+                        //                                     ],
+                        //                                   ),
+                        //                                 ),
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 10,
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 10,
+                        //                                     maxFontSize: 12,
+                        //                                     'จากปกติ ราคาเดือนละ ${nFormat.format(double.parse(packageModels[index].rpri!))}.-',
+                        //                                     style: TextStyle(
+                        //                                         color: Colors
+                        //                                             .red
+                        //                                             .shade900,
+                        //                                         fontFamily: Font_
+                        //                                             .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 10,
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: const [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 10,
+                        //                                     maxFontSize: 12,
+                        //                                     'ราคาพิเศษ',
+                        //                                     style: TextStyle(
+                        //                                         color: Colors
+                        //                                             .black,
+                        //                                         fontFamily: Font_
+                        //                                             .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 30,
+                        //                                     maxFontSize: 50,
+                        //                                     '  ${nFormat.format(double.parse(packageModels[index].spri!))}.-',
+                        //                                     style: TextStyle(
+                        //                                         color: Colors
+                        //                                             .lime
+                        //                                             .shade700,
+                        //                                         fontFamily:
+                        //                                             FontWeight_
+                        //                                                 .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: const [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 10,
+                        //                                     maxFontSize: 12,
+                        //                                     'บาทต่อเดือน',
+                        //                                     style: TextStyle(
+                        //                                         color: Colors
+                        //                                             .black,
+                        //                                         fontFamily: Font_
+                        //                                             .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 10,
+                        //                                     maxFontSize: 12,
+                        //                                     '(ชำระรายปียอด ${nFormat.format(double.parse(packageModels[index].spri!) * 12)} บาท)',
+                        //                                     style: const TextStyle(
+                        //                                         color: Colors
+                        //                                             .black,
+                        //                                         fontFamily: Font_
+                        //                                             .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 10,
+                        //                               ),
+                        //                               Divider(
+                        //                                 height: 2,
+                        //                                 color: Colors
+                        //                                     .grey.shade600,
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 10,
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: const [
+                        //                                   AutoSizeText(
+                        //                                     minFontSize: 10,
+                        //                                     maxFontSize: 12,
+                        //                                     'รายละเอียด',
+                        //                                     style: TextStyle(
+                        //                                         color: Colors
+                        //                                             .black,
+                        //                                         fontFamily: Font_
+                        //                                             .Fonts_T),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 5,
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: [
+                        //                                     const Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     const SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       '${packageModels[index].user} สิทธิผู้ใช้งาน',
+                        //                                       style: const TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: [
+                        //                                     const Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     const SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'จัดการพื้นที่ได้มากสุด ${packageModels[index].qty} แผง',
+                        //                                       style: const TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ไม่จำกัดจำนวนทะเบียนลูกค้า',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ไม่จำกัดใบเสนอราคา',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ตั้งค่าพื้นที่',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ตั้งค่าประเภทค่าบริการ',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'เรียกดูพื้นที่ว่างแบบ real time',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ทำสัญญา',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ตั้งหนี้ล่วงหน้า',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'วางบิล',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'รับชำระ พร้อม ออกบิล',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ประวัติการรับชำระ',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'รายงานสรุป',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: const [
+                        //                                     Icon(
+                        //                                       Icons.check,
+                        //                                       size: 15,
+                        //                                       color:
+                        //                                           Colors.black,
+                        //                                     ),
+                        //                                     SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'online training',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .black,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: [
+                        //                                     Icon(
+                        //                                       Icons.close,
+                        //                                       size: 15,
+                        //                                       color: Colors.grey
+                        //                                           .shade700,
+                        //                                     ),
+                        //                                     const SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ค่า migrate ข้อมูล',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .grey
+                        //                                               .shade700,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: [
+                        //                                     Icon(
+                        //                                       Icons.close,
+                        //                                       size: 15,
+                        //                                       color: Colors.grey
+                        //                                           .shade700,
+                        //                                     ),
+                        //                                     const SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'customise ระบบ',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .grey
+                        //                                               .shade700,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               Padding(
+                        //                                 padding:
+                        //                                     const EdgeInsets
+                        //                                             .only(
+                        //                                         left: 8,
+                        //                                         right: 8),
+                        //                                 child: Row(
+                        //                                   mainAxisAlignment:
+                        //                                       MainAxisAlignment
+                        //                                           .start,
+                        //                                   children: [
+                        //                                     Icon(
+                        //                                       Icons.close,
+                        //                                       size: 15,
+                        //                                       color: Colors.grey
+                        //                                           .shade700,
+                        //                                     ),
+                        //                                     const SizedBox(
+                        //                                       width: 5,
+                        //                                     ),
+                        //                                     AutoSizeText(
+                        //                                       minFontSize: 10,
+                        //                                       maxFontSize: 12,
+                        //                                       'ค่า hardware & อุปกรณ์',
+                        //                                       style: TextStyle(
+                        //                                           color: Colors
+                        //                                               .grey
+                        //                                               .shade700,
+                        //                                           fontFamily: Font_
+                        //                                               .Fonts_T),
+                        //                                     ),
+                        //                                   ],
+                        //                                 ),
+                        //                               ),
+                        //                               const SizedBox(
+                        //                                 height: 5,
+                        //                               ),
+                        //                               const Divider(
+                        //                                 height: 2,
+                        //                               ),
+                        //                               Row(
+                        //                                 mainAxisAlignment:
+                        //                                     MainAxisAlignment
+                        //                                         .center,
+                        //                                 children: [
+                        //                                   Padding(
+                        //                                     padding:
+                        //                                         const EdgeInsets
+                        //                                             .all(8.0),
+                        //                                     child: Container(
+                        //                                       width: 150,
+                        //                                       decoration:
+                        //                                           BoxDecoration(
+                        //                                         color: int.parse(packageModels[index]
+                        //                                                     .qty!) <
+                        //                                                 countarae!
+                        //                                             ? Colors
+                        //                                                 .grey
+                        //                                                 .shade300
+                        //                                             : Colors
+                        //                                                 .purple
+                        //                                                 .shade600,
+                        //                                         borderRadius: const BorderRadius
+                        //                                                 .only(
+                        //                                             topLeft:
+                        //                                                 Radius.circular(
+                        //                                                     10),
+                        //                                             topRight: Radius
+                        //                                                 .circular(
+                        //                                                     10),
+                        //                                             bottomLeft:
+                        //                                                 Radius.circular(
+                        //                                                     10),
+                        //                                             bottomRight:
+                        //                                                 Radius.circular(
+                        //                                                     10)),
+                        //                                       ),
+                        //                                       padding:
+                        //                                           const EdgeInsets
+                        //                                               .all(8.0),
+                        //                                       child: TextButton(
+                        //                                         onPressed:
+                        //                                             () async {
+                        //                                           if (int.parse(
+                        //                                                   packageModels[index]
+                        //                                                       .qty!) <
+                        //                                               countarae!) {
+                        //                                           } else {
+                        //                                             SharedPreferences
+                        //                                                 preferences =
+                        //                                                 await SharedPreferences
+                        //                                                     .getInstance();
+                        //                                             String?
+                        //                                                 ren =
+                        //                                                 preferences
+                        //                                                     .getString('renTalSer');
+                        //                                             String?
+                        //                                                 ser_user =
+                        //                                                 preferences
+                        //                                                     .getString('ser');
+                        //                                             String?
+                        //                                                 ser_pk =
+                        //                                                 packageModels[index]
+                        //                                                     .ser;
 
-                                                                    String?
-                                                                        Package =
-                                                                        'Package ${packageModels[index].pk}';
+                        //                                             String?
+                        //                                                 Package =
+                        //                                                 'Package ${packageModels[index].pk}';
 
-                                                                    String url =
-                                                                        '${MyConstant().domain}/UpC_rental_pk.php?isAdd=true&ren=$ren&ser_pk=$ser_pk&ser_user=$ser_user';
+                        //                                             String url =
+                        //                                                 '${MyConstant().domain}/UpC_rental_pk.php?isAdd=true&ren=$ren&ser_pk=$ser_pk&ser_user=$ser_user';
 
-                                                                    try {
-                                                                      var response =
-                                                                          await http
-                                                                              .get(Uri.parse(url));
+                        //                                             try {
+                        //                                               var response =
+                        //                                                   await http
+                        //                                                       .get(Uri.parse(url));
 
-                                                                      var result =
-                                                                          json.decode(
-                                                                              response.body);
-                                                                      print(
-                                                                          result);
-                                                                      if (result
-                                                                              .toString() ==
-                                                                          'true') {
-                                                                        Insert_log.Insert_logs(
-                                                                            'ตั้งค่า',
-                                                                            'พื้นที่>>ซื้อPackkage(${Package.toString()})');
-                                                                        setState(
-                                                                            () {
-                                                                          read_GC_rental();
-                                                                          read_GC_zone();
-                                                                          read_GC_area();
-                                                                        });
-                                                                      } else {}
-                                                                    } catch (e) {}
-                                                                    setState(
-                                                                        () {
-                                                                      read_GC_rental();
-                                                                      read_GC_zone();
-                                                                      read_GC_area();
-                                                                    });
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  }
-                                                                },
-                                                                child:
-                                                                    const Text(
-                                                                  'เลือก',
-                                                                  style:
-                                                                      TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                        //                                               var result =
+                        //                                                   json.decode(
+                        //                                                       response.body);
+                        //                                               print(
+                        //                                                   result);
+                        //                                               if (result
+                        //                                                       .toString() ==
+                        //                                                   'true') {
+                        //                                                 Insert_log.Insert_logs(
+                        //                                                     'ตั้งค่า',
+                        //                                                     'พื้นที่>>ซื้อPackkage(${Package.toString()})');
+                        //                                                 setState(
+                        //                                                     () {
+                        //                                                   read_GC_rental();
+                        //                                                   read_GC_zone();
+                        //                                                   read_GC_area();
+                        //                                                 });
+                        //                                               } else {}
+                        //                                             } catch (e) {}
+                        //                                             setState(
+                        //                                                 () {
+                        //                                               read_GC_rental();
+                        //                                               read_GC_zone();
+                        //                                               read_GC_area();
+                        //                                             });
+                        //                                             Navigator.pop(
+                        //                                                 context);
+                        //                                           }
+                        //                                         },
+                        //                                         child:
+                        //                                             const Text(
+                        //                                           'เลือก',
+                        //                                           style:
+                        //                                               TextStyle(
+                        //                                             color: Colors
+                        //                                                 .white,
+                        //                                             fontFamily:
+                        //                                                 FontWeight_
+                        //                                                     .Fonts_T,
+                        //                                             fontWeight:
+                        //                                                 FontWeight
+                        //                                                     .bold,
+                        //                                           ),
+                        //                                         ),
+                        //                                       ),
+                        //                                     ),
+                        //                                   ),
+                        //                                 ],
+                        //                               ),
+                        //                             ],
+                        //                           ),
+                        //                         ),
+                        //                       ),
+                        //                     );
+                        //                   },
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
                         InkWell(
                           child: Container(
                             width: 150,
@@ -4792,8 +4807,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -4896,8 +4910,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                         fontFamily:
                                                                             FontWeight_.Fonts_T,
                                                                       )),
-                                                                  inputFormatters: <
-                                                                      TextInputFormatter>[
+                                                                  inputFormatters: <TextInputFormatter>[
                                                                     FilteringTextInputFormatter
                                                                         .deny(RegExp(
                                                                             "[' ']")),
@@ -5970,8 +5983,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                           fontFamily:
                                                                               FontWeight_.Fonts_T,
                                                                         )),
-                                                                inputFormatters: <
-                                                                    TextInputFormatter>[
+                                                                inputFormatters: <TextInputFormatter>[
                                                                   FilteringTextInputFormatter
                                                                       .deny(RegExp(
                                                                           "[' ']")),
@@ -6082,8 +6094,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                           fontFamily:
                                                                               FontWeight_.Fonts_T,
                                                                         )),
-                                                                inputFormatters: <
-                                                                    TextInputFormatter>[
+                                                                inputFormatters: <TextInputFormatter>[
                                                                   FilteringTextInputFormatter
                                                                       .deny(RegExp(
                                                                           "[' ']")),
@@ -6154,7 +6165,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           const EdgeInsets.all(
                                                               8.0),
                                                       child: TextButton(
-                                                       onPressed: () async {
+                                                        onPressed: () async {
                                                           if (_formKey2
                                                               .currentState!
                                                               .validate()) {
@@ -6301,7 +6312,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                     Navigator.pop(
                                                                         context,
                                                                         'OK');
-                                                                        
+
                                                                     Navigator.pop(
                                                                         context,
                                                                         'OK');
@@ -7032,8 +7043,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <
-                                                                          TextInputFormatter>[
+                                                                      inputFormatters: <TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),
@@ -7157,8 +7167,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                             // fontWeight: FontWeight.bold,
                                                                             fontFamily: Font_.Fonts_T),
                                                                       ),
-                                                                      inputFormatters: <
-                                                                          TextInputFormatter>[
+                                                                      inputFormatters: <TextInputFormatter>[
                                                                         // for below version 2 use this
                                                                         FilteringTextInputFormatter.allow(
                                                                             RegExp(r'[0-9 .]')),

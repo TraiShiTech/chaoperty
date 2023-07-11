@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -855,7 +856,10 @@ class _BillsState extends State<Bills> {
                                                 minFontSize: 10,
                                                 maxFontSize: 25,
                                                 maxLines: 1,
-                                                '${_TransBillModels[index].expname}',
+                                                _TransBillModels[index].dtype ==
+                                                        'KU'
+                                                    ? '${_TransBillModels[index].expname} ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransBillModels[index].date} 00:00:00')))}'
+                                                    : '${_TransBillModels[index].expname}',
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: const TextStyle(
@@ -873,7 +877,10 @@ class _BillsState extends State<Bills> {
                                               minFontSize: 10,
                                               maxFontSize: 25,
                                               maxLines: 1,
-                                              '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
+                                              _TransBillModels[index].dtype ==
+                                                      'KU'
+                                                  ? '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].duedate} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].duedate} 00:00:00').year + 543}'
+                                                  : '${DateFormat('dd-MM').format(DateTime.parse('${_TransBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransBillModels[index].date} 00:00:00').year + 543}',
                                               textAlign: TextAlign.center,
                                               overflow: TextOverflow.ellipsis,
                                               style: const TextStyle(
@@ -957,49 +964,49 @@ class _BillsState extends State<Bills> {
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.start,
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {},
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                        // border: Border.all(color: Colors.white, width: 1),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: const Center(
-                                                        child: AutoSizeText(
-                                                          minFontSize: 10,
-                                                          maxFontSize: 15,
-                                                          'เพิ่มใหม่',
-                                                          style: TextStyle(
-                                                              color: PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                              //fontWeight: FontWeight.bold,
-                                                              fontFamily: Font_
-                                                                  .Fonts_T),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                                // children: [
+                                                //   InkWell(
+                                                //     onTap: () {},
+                                                //     child: Container(
+                                                //       width: 100,
+                                                //       decoration:
+                                                //           const BoxDecoration(
+                                                //         color: Colors.green,
+                                                //         borderRadius:
+                                                //             BorderRadius.only(
+                                                //                 topLeft: Radius
+                                                //                     .circular(
+                                                //                         10),
+                                                //                 topRight: Radius
+                                                //                     .circular(
+                                                //                         10),
+                                                //                 bottomLeft: Radius
+                                                //                     .circular(
+                                                //                         10),
+                                                //                 bottomRight: Radius
+                                                //                     .circular(
+                                                //                         10)),
+                                                //         // border: Border.all(color: Colors.white, width: 1),
+                                                //       ),
+                                                //       padding:
+                                                //           const EdgeInsets.all(
+                                                //               8.0),
+                                                //       child: const Center(
+                                                //         child: AutoSizeText(
+                                                //           minFontSize: 10,
+                                                //           maxFontSize: 15,
+                                                //           'เพิ่มใหม่',
+                                                //           style: TextStyle(
+                                                //               color: PeopleChaoScreen_Color
+                                                //                   .Colors_Text2_,
+                                                //               //fontWeight: FontWeight.bold,
+                                                //               fontFamily: Font_
+                                                //                   .Fonts_T),
+                                                //         ),
+                                                //       ),
+                                                //     ),
+                                                //   ),
+                                                // ],
                                               ),
                                             ),
                                             // Expanded(
@@ -1027,7 +1034,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .grey.shade300,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -1080,7 +1087,7 @@ class _BillsState extends State<Bills> {
                                                         color: Colors
                                                             .yellow.shade700,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -1431,7 +1438,9 @@ class _BillsState extends State<Bills> {
                                             minFontSize: 10,
                                             maxFontSize: 15,
                                             maxLines: 1,
-                                            '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
+                                            _TransModels[index].dtype == 'KU'
+                                                ? '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].duedate} 00:00:00'))}'
+                                                : '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${_TransModels[index].date} 00:00:00'))}',
                                             textAlign: TextAlign.center,
                                             overflow: TextOverflow.ellipsis,
                                             style: const TextStyle(
@@ -1817,8 +1826,7 @@ class _BillsState extends State<Bills> {
                                                                       fontFamily:
                                                                           Font_
                                                                               .Fonts_T)),
-                                                      inputFormatters: <
-                                                          TextInputFormatter>[
+                                                      inputFormatters: <TextInputFormatter>[
                                                         FilteringTextInputFormatter
                                                             .allow(RegExp(
                                                                 r'[0-9 .]')),
@@ -1935,8 +1943,7 @@ class _BillsState extends State<Bills> {
                                                               //fontWeight: FontWeight.bold,
                                                               fontFamily: Font_
                                                                   .Fonts_T)),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
+                                                  inputFormatters: <TextInputFormatter>[
                                                     FilteringTextInputFormatter
                                                         .allow(
                                                             RegExp(r'[0-9 .]')),
@@ -2417,8 +2424,7 @@ class PreviewPdfgen_Bills extends StatelessWidget {
           maxPageWidth: MediaQuery.of(context).size.width * 0.6,
           // scrollViewDecoration:,
           initialPageFormat: PdfPageFormat.a4,
-          pdfFileName:
-              "$nameBills.pdf",
+          pdfFileName: "$nameBills.pdf",
         ),
       ),
     );

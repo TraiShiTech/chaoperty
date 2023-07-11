@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';

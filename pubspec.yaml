@@ -53,7 +53,7 @@ dependencies:
   email_otp: ^1.0.4
   email_auth: ^1.0.0
   tap_debouncer: ^2.0.2
-  image_picker: ^0.8.6
+  image_picker: ^0.8.9
   file_picker: ^5.2.2
   mysql1: ^0.20.0
   # date_time_picker: ^2.1.0
@@ -86,7 +86,11 @@ dependencies:
   hand_signature: ^3.0.1
   syncfusion_flutter_pdfviewer: ^20.4.54
   flutter_localization: ^0.1.12
-  
+  widgets_to_image: ^0.0.2
+  syncfusion_flutter_barcodes: any
+  screenshot: ^2.1.0
+  dart_barcode: ^2.0.0
+  path_drawing: ^1.0.1
 
 
 dev_dependencies:

@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -985,7 +986,9 @@ class _BillsHistoryState extends State<BillsHistory> {
                                       minFontSize: 10,
                                       maxFontSize: 15,
                                       maxLines: 1,
-                                      '${_InvoiceHistoryModels[index].nvat}',
+                                      _InvoiceHistoryModels[index].nvalue != '0'
+                                          ? '${nFormat.format(double.parse(_InvoiceHistoryModels[index].pri!))}'
+                                          : '${_InvoiceHistoryModels[index].nvat}',
                                       textAlign: TextAlign.end,
                                       style: const TextStyle(
                                           color: PeopleChaoScreen_Color
@@ -1489,14 +1492,35 @@ class _BillsHistoryState extends State<BillsHistory> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              'เลขที่ใบเสร็จ\n$numinvoice',
-                                              textAlign: TextAlign.center,
-                                              style: const TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text2_,
-                                                  //fontWeight: FontWeight.bold,
-                                                  fontFamily: Font_.Fonts_T),
+                                            Expanded(
+                                              child: Text(
+                                                'เลขที่ใบเสร็จ',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                '$numinvoice',
+                                                textAlign: TextAlign.center,
+                                                style: const TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text2_,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -1526,7 +1550,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                                                         color: Colors
                                                             .green.shade500,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -1573,7 +1597,7 @@ class _BillsHistoryState extends State<BillsHistory> {
                                                       decoration: BoxDecoration(
                                                         color: Colors.black,
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(6),
                                                             topRight:
@@ -1666,11 +1690,11 @@ class _BillsHistoryState extends State<BillsHistory> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-
+      print('result>>>>>>> $result');
       print('numinvoice 3 $numinvoice');
-      print(result);
+
       if (result.toString() == 'true') {
-        setState(() {
+        setState(() async {
           print('numinvoice 4 $numinvoice');
           red_Invoice();
           _InvoiceHistoryModels.clear();

@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -70,6 +71,7 @@ class _HistoryBillsState extends State<HistoryBills> {
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
   String? dtypeselect;
   String? numinvoice,
+      Slip_history,
       numdoctax,
       paymentSer1,
       paymentName1,
@@ -275,6 +277,7 @@ class _HistoryBillsState extends State<HistoryBills> {
           var siddisper = double.parse(finnancetransModel.disper!);
           print('>>>>>>>>>>>dd>>> in $sidamt $siddisper');
           setState(() {
+            Slip_history = finnancetransModel.slip;
             if (int.parse(finnancetransModel.receiptSer!) != 0) {
               finnancetransModels.add(finnancetransModel);
             } else {
@@ -286,28 +289,6 @@ class _HistoryBillsState extends State<HistoryBills> {
           });
         }
       }
-      // print('>>>>>>>>>>>>>> in222 ${finnancetransModels.length}');
-      // print(result);
-      // if (result.toString() != 'null') {
-      //   for (var map in result) {
-      //     FinnancetransModel _FinnancetransModel =
-      //         FinnancetransModel.fromJson(map);
-      //     var sidamt = double.parse(_FinnancetransModel.amt!);
-      //     var siddisper = double.parse(_FinnancetransModel.disper!);
-      //     print(
-      //         '>>>>>>>>>>>dd>>> in ${int.parse(_FinnancetransModel.receiptSer!)}');
-      //     setState(() {
-      //       // if (int.parse(_FinnancetransModel.receiptSer!) != 0) {
-      //       _FinnancetransModels.add(_FinnancetransModel);
-      //       // } else {
-      //       //   if (_FinnancetransModel.type!.trim() == 'DISCOUNT') {
-      //       //     sum_disamt = sidamt;
-      //       //     sum_disp = siddisper;
-      //       //   }
-      //       // }
-      //     });
-      //   }
-      // }
     } catch (e) {}
   }
 
@@ -534,6 +515,7 @@ class _HistoryBillsState extends State<HistoryBills> {
           // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
           // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
           var numinvoiceent = _TransReBillHistoryModel.docno;
+
           setState(() {
             sum_pvat = sum_pvat + sum_pvatx;
             sum_vat = sum_vat + sum_vatx;
@@ -708,7 +690,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                           //     color: Colors.grey, width: 1),
                                         ),
                                         padding: const EdgeInsets.all(8.0),
-                                        child: const Center(
+                                        child: Center(
                                           child: Text(
                                             'รายการรับชำระ',
                                             textAlign: TextAlign.center,
@@ -2050,6 +2032,265 @@ class _HistoryBillsState extends State<HistoryBills> {
                               Row(
                                 children: [
                                   Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 10,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'หลักฐานการโอน',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: FontWeight_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 2,
+                                    child: InkWell(
+                                      child: Container(
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                          color: (Slip_history.toString() ==
+                                                      null ||
+                                                  Slip_history == null ||
+                                                  Slip_history.toString() ==
+                                                      'null')
+                                              ? Colors.green[200]
+                                              : Colors.green,
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(8),
+                                              topRight: Radius.circular(8),
+                                              bottomLeft: Radius.circular(8),
+                                              bottomRight: Radius.circular(8)),
+                                          // border: Border.all(
+                                          //     color: Colors.grey, width: 2),
+                                        ),
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Center(
+                                          child: Text(
+                                            (Slip_history.toString() == null ||
+                                                    Slip_history == null ||
+                                                    Slip_history.toString() ==
+                                                        'null')
+                                                ? 'ไม่พบหลักฐาน'
+                                                : 'พบหลักฐาน ',
+                                            textAlign: TextAlign.center,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: Font_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
+                                          ),
+                                        ),
+                                      ),
+                                      onTap:
+                                          (Slip_history.toString() == null ||
+                                                  Slip_history == null ||
+                                                  Slip_history.toString() ==
+                                                      'null')
+                                              ? null
+                                              : () async {
+                                                  String Url =
+                                                      await '${MyConstant().domain}/files/$foder/slip/${Slip_history}';
+                                                  showDialog(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AlertDialog(
+                                                            title: Center(
+                                                              child: Column(
+                                                                children: [
+                                                                  Text(
+                                                                    numinvoice ==
+                                                                            null
+                                                                        ? 'บิลเลขที่'
+                                                                        : numdoctax ==
+                                                                                ''
+                                                                            ? 'บิลเลขที่ $numinvoice'
+                                                                            : 'บิลเลขที่ $numdoctax',
+                                                                    maxLines: 1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .start,
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            FontWeight_
+                                                                                .Fonts_T,
+                                                                        fontSize:
+                                                                            12.0),
+                                                                  ),
+                                                                  Text(
+                                                                    '${Slip_history}',
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            FontWeight_
+                                                                                .Fonts_T,
+                                                                        fontSize:
+                                                                            12.0),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            content: Stack(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              children: <Widget>[
+                                                                Image.network(
+                                                                    '$Url')
+                                                              ],
+                                                            ),
+                                                            actions: <Widget>[
+                                                          Column(
+                                                            children: [
+                                                              const SizedBox(
+                                                                height: 5.0,
+                                                              ),
+                                                              const Divider(
+                                                                color:
+                                                                    Colors.grey,
+                                                                height: 4.0,
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 5.0,
+                                                              ),
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsets.all(
+                                                                            8.0),
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          100,
+                                                                      decoration:
+                                                                          const BoxDecoration(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        borderRadius: BorderRadius.only(
+                                                                            topLeft:
+                                                                                Radius.circular(10),
+                                                                            topRight: Radius.circular(10),
+                                                                            bottomLeft: Radius.circular(10),
+                                                                            bottomRight: Radius.circular(10)),
+                                                                      ),
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              8.0),
+                                                                      child:
+                                                                          TextButton(
+                                                                        onPressed: () => Navigator.pop(
+                                                                            context,
+                                                                            'OK'),
+                                                                        child:
+                                                                            const Text(
+                                                                          'ปิด',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: FontWeight_.Fonts_T),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ]),
+                                                  );
+                                                },
+                                    ),
+                                  ),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Container(
+                                      height: 40,
+                                      color: AppbackgroundColor.Sub_Abg_Colors,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '',
+                                        textAlign: TextAlign.end,
+                                        style: TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text1_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
                                     flex: 2,
                                     child: Container(
                                       height: 40,
@@ -2738,81 +2979,82 @@ class _HistoryBillsState extends State<HistoryBills> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: InkWell(
-                                        onTap: (_TransReBillHistoryModels.length ==
+                                        onTap:
+                                            (_TransReBillHistoryModels.length ==
                                                     0)
                                                 ? null
-                                                :  () {
-                                          final tableData00 = [
-                                            for (int index = 0;
-                                                index <
-                                                    _TransReBillHistoryModels
-                                                        .length;
-                                                index++)
-                                              [
-                                                '${index + 1}',
-                                                '${_TransReBillHistoryModels[index].date}',
-                                                '${_TransReBillHistoryModels[index].expname}',
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
-                                                '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
-                                              ],
-                                          ];
+                                                : () {
+                                                    final tableData00 = [
+                                                      for (int index = 0;
+                                                          index <
+                                                              _TransReBillHistoryModels
+                                                                  .length;
+                                                          index++)
+                                                        [
+                                                          '${index + 1}',
+                                                          '${_TransReBillHistoryModels[index].date}',
+                                                          '${_TransReBillHistoryModels[index].expname}',
+                                                          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].nvat!))}',
+                                                          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].wht!))}',
+                                                          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].amt!))}',
+                                                          '${nFormat.format(double.parse(_TransReBillHistoryModels[index].total!))}',
+                                                        ],
+                                                    ];
 
-                                          List newValuePDFimg = [];
-                                          for (int index = 0;
-                                              index < 1;
-                                              index++) {
-                                            if (renTalModels[0]
-                                                    .imglogo!
-                                                    .trim() ==
-                                                '') {
-                                              // newValuePDFimg.add(
-                                              //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
-                                            } else {
-                                              newValuePDFimg.add(
-                                                  '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
-                                            }
-                                          }
+                                                    List newValuePDFimg = [];
+                                                    for (int index = 0;
+                                                        index < 1;
+                                                        index++) {
+                                                      if (renTalModels[0]
+                                                              .imglogo!
+                                                              .trim() ==
+                                                          '') {
+                                                        // newValuePDFimg.add(
+                                                        //     'https://png.pngtree.com/png-vector/20190820/ourmid/pngtree-no-image-vector-illustration-isolated-png-image_1694547.jpg');
+                                                      } else {
+                                                        newValuePDFimg.add(
+                                                            '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
+                                                      }
+                                                    }
 
-                                          // String? Form_nameshop,
-                                          //     Form_typeshop,
-                                          //     Form_bussshop,
-                                          //     Form_bussscontact,
-                                          //     Form_address,
-                                          //     Form_tel,
-                                          //     Form_email,
-                                          //     Form_tax;
-                                          Pdfgen_his_statusbill2
-                                              .exportPDF_statusbill2(
-                                                  tableData00,
-                                                  context,
-                                                  numdoctax == ''
-                                                      ? '$numinvoice'
-                                                      : '$numdoctax',
-                                                  sum_pvat,
-                                                  sum_vat,
-                                                  sum_wht,
-                                                  sum_amt,
-                                                  sum_disp,
-                                                  sum_disamt,
-                                                  renTal_name,
-                                                  Form_bussscontact,
-                                                  // cname,
-                                                  Form_address,
-                                                  Form_tax,
-                                                  bill_addr,
-                                                  bill_email,
-                                                  bill_tel,
-                                                  bill_tax,
-                                                  bill_name,
-                                                  newValuePDFimg,
-                                                  numinvoice,
-                                                  finnancetransModels
+                                                    // String? Form_nameshop,
+                                                    //     Form_typeshop,
+                                                    //     Form_bussshop,
+                                                    //     Form_bussscontact,
+                                                    //     Form_address,
+                                                    //     Form_tel,
+                                                    //     Form_email,
+                                                    //     Form_tax;
+                                                    Pdfgen_his_statusbill2
+                                                        .exportPDF_statusbill2(
+                                                            tableData00,
+                                                            context,
+                                                            numdoctax == ''
+                                                                ? '$numinvoice'
+                                                                : '$numdoctax',
+                                                            sum_pvat,
+                                                            sum_vat,
+                                                            sum_wht,
+                                                            sum_amt,
+                                                            sum_disp,
+                                                            sum_disamt,
+                                                            renTal_name,
+                                                            Form_bussscontact,
+                                                            // cname,
+                                                            Form_address,
+                                                            Form_tax,
+                                                            bill_addr,
+                                                            bill_email,
+                                                            bill_tel,
+                                                            bill_tax,
+                                                            bill_name,
+                                                            newValuePDFimg,
+                                                            numinvoice,
+                                                            finnancetransModels
 
-                                                  // finnancetransModels
-                                                  );
-                                        },
+                                                            // finnancetransModels
+                                                            );
+                                                  },
                                         child: Container(
                                             height: 50,
                                             decoration: const BoxDecoration(

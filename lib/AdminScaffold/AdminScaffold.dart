@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:async';
 import 'dart:convert';
 
@@ -15,6 +16,7 @@ import 'package:side_sheet/side_sheet.dart';
 // import 'package:timer_builder/timer_builder.dart';
 
 import '../Account/Account_Screen.dart';
+import '../Account/Play_column.dart';
 import '../Bureau_Registration/Bureau_Screen.dart';
 import '../ChaoArea/ChaoArea_Screen.dart';
 import '../Constant/Myconstant.dart';
@@ -819,7 +821,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: const [
@@ -1138,7 +1140,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(
@@ -1873,7 +1875,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: const [
@@ -2192,7 +2194,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(

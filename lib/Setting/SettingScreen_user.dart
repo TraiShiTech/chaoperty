@@ -28,6 +28,7 @@ import '../Model/GetZone_Model.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import '../Style/colors.dart';
 import 'Access_Rights.dart';
 import 'Bill_Document.dart';

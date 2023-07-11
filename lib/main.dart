@@ -19,6 +19,9 @@ void main() {
 ///  flutter build web --web-renderer html --release --dart-define=web-browser-flag=--disable-web-security (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 ///  flutter build web --web-renderer html --release --no-sound-null-safety --dart-define=web-browser-flag=--disable-web-security (แก้ปัญหา security  CORS (Cross-Origin Resource Sharing))
 ///  flutter build web --release --web-renderer=html --dart-define=web-browser-flag=--disable-web-security
+///
+///  flutter build web --web-renderer html --release --dart-define=web-browser-flag=--disable-web-security --no-tree-shake-icons (แก้ปัญหา This application cannot tree shake icons fonts. It has non-constant instances of IconData at the following location)
+
 //----------------------------------------------------->
 //----(Git Lab)
 //1.----> git add .
@@ -32,6 +35,7 @@ void main() {
 //3.-------->git commit -m "commit message"
 //4.-----------> git push origin main
 //----------------------------------------------------->
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

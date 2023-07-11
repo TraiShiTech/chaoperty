@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -68,12 +69,14 @@ class ChaoAreaRenewScreen extends StatefulWidget {
   final Get_Value_rent_sum;
   final Get_Value_page;
 
-  const ChaoAreaRenewScreen({super.key,
+  const ChaoAreaRenewScreen({
+    super.key,
     this.Get_Value_area_index,
     this.Get_Value_area_ln,
     this.Get_Value_area_sum,
     this.Get_Value_rent_sum,
-    this.Get_Value_page,});
+    this.Get_Value_page,
+  });
 
   @override
   State<ChaoAreaRenewScreen> createState() => _ChaoAreaRenewScreenState();
@@ -88,6 +91,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
   DateTime _dateTime = DateTime.now();
   List<AreaModel> areaModels = [];
   List<AreaModel> _areaModels = <AreaModel>[];
+  List<ContractfModel> Other_file = [];
   String? renTal_user,
       renTal_name,
       zone_ser,
@@ -143,7 +147,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
       dateselect.add(dates[i]);
     }
 
-     if (widget.Get_Value_page == '1') {
+    if (widget.Get_Value_page == '1') {
       _area_sum = _area_sum + double.parse(widget.Get_Value_area_sum);
       _area_rent_sum = _area_rent_sum + double.parse(widget.Get_Value_rent_sum);
       _selecteSer.add('${widget.Get_Value_area_index}');
@@ -152,7 +156,6 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     print('ssss>>>> $_area_sum    $_area_rent_sum');
     print(
         'aaaa>>>> ${_selecteSerbool.map((e) => e)}    ${_selecteSer.map((e) => e)} ');
-        
   }
 
   Future<Null> read_GC_ExpAuto() async {
@@ -4453,6 +4456,12 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                           index]
                                                                       .period
                                                                       .toString(); //จำนวน วัน เดือน ปี
+                                                              rental_count_text
+                                                                      .text =
+                                                                  customerModels[
+                                                                          index]
+                                                                      .period
+                                                                      .toString();
                                                               _area_sum = double.parse(
                                                                   customerModels[
                                                                           index]
@@ -5111,6 +5120,12 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                           });
                                         } else {
                                           setState(() {
+                                            Value_D_start = '';
+                                            Value_D_end = '';
+                                            Value_DateTime_end = '';
+                                            Value_DateTime_Step2 = '';
+                                          });
+                                          setState(() {
                                             Value_rental_type_ = rtnameName;
                                             if (rtnameName == 'รายวัน') {
                                               Value_rental_type_2 = 'วัน';
@@ -5182,7 +5197,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                       TextInputType.number,
                                                   initialValue:
                                                       Value_rental_count_,
-                                                  // controller: rental_count_text,
+
                                                   onChanged: (value) {
                                                     setState(() {
                                                       Value_rental_count_ =
@@ -5253,8 +5268,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                         fontFamily:
                                                             Font_.Fonts_T,
                                                       )),
-                                                  inputFormatters: <
-                                                      TextInputFormatter>[
+                                                  inputFormatters: <TextInputFormatter>[
                                                     // for below version 2 use this
                                                     FilteringTextInputFormatter
                                                         .allow(
@@ -5331,7 +5345,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                           onTap: () async {
                                             DateTime? newDate =
                                                 await showDatePicker(
-                                              locale: const Locale('th', 'TH'),
+                                              // locale: const Locale('th', 'TH'),
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime(1000, 1, 01),
@@ -5408,26 +5422,28 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                     ? DateTime(
                                                         newDate.year,
                                                         newDate.month,
-                                                        newDate.day + countday)
+                                                        newDate.day +
+                                                            (countday - 1))
                                                     : Value_rental_type_2 ==
                                                             'สัปดาห์'
                                                         ? DateTime(
                                                             newDate.year,
                                                             newDate.month,
                                                             newDate.day +
-                                                                (countday * 7))
+                                                                (countday * 6))
                                                         : Value_rental_type_2 ==
                                                                 'เดือน'
                                                             ? DateTime(
                                                                 newDate.year,
                                                                 newDate.month +
                                                                     countday,
-                                                                newDate.day)
+                                                                newDate.day - 1)
                                                             : DateTime(
                                                                 newDate.year +
                                                                     countday,
                                                                 newDate.month,
-                                                                newDate.day);
+                                                                newDate.day -
+                                                                    1);
                                                 // var birthday = DateTime.parse(
                                                 //         '$newDate 00:00:00.000')
                                                 //     .add(Duration(
@@ -5451,7 +5467,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                         .format(birthday);
 
                                                 print(
-                                                    '$start $end ...... $birthday');
+                                                    '$start $end ...... $birthday >>>>>> $countday');
                                                 setState(() {
                                                   Value_D_start = start;
                                                   Value_D_end = end;
@@ -5787,10 +5803,15 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                               if (result2.toString() == 'true') {
                                 for (var i = 0; i < expAutoModels.length; i++) {
                                   print(
-                                      'auto>>>>>>>>>>>${expAutoModels[i].auto}');
+                                      'auto>>>>>>>>>>>${expAutoModels[i].auto} ${expAutoModels[i].ser} ${expAutoModels[i].expname}');
                                   if (expAutoModels[i].auto == '1') {
                                     var serex = expAutoModels[i].ser;
-                                    var sdate = expAutoModels[i].sday;
+                                    var sdate = expAutoModels[i].unitser == '6'
+                                        ? expAutoModels[i].sday
+                                        : DateFormat('dd')
+                                            .format(DateTime.parse(
+                                                '$Value_D_start 00:00:00'))
+                                            .toString();
                                     add_quot_auto(serex, sdate, i);
                                   }
                                 }
@@ -5802,10 +5823,18 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                             } catch (e) {}
                           } else {
                             for (var i = 0; i < expAutoModels.length; i++) {
-                              print('auto>>>>>>>>>>>${expAutoModels[i].auto}');
+                              print(
+                                  'auto>>>>>>>>>>>${expAutoModels[i].auto} ${expAutoModels[i].ser} ${expAutoModels[i].expname}');
                               if (expAutoModels[i].auto == '1') {
                                 var serex = expAutoModels[i].ser;
-                                var sdate = expAutoModels[i].sday;
+
+                                var sdate = expAutoModels[i].unitser == '6'
+                                    ? expAutoModels[i].sday
+                                    : DateFormat('dd')
+                                        .format(DateTime.parse(
+                                            '$Value_D_start 00:00:00'))
+                                        .toString();
+
                                 add_quot_auto(serex, sdate, i);
                               }
                             }
@@ -6237,20 +6266,22 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     var valut_email = _Form_email; //email
     var valut_tax = _Form_tax == 'null' ? '-' : _Form_tax; //เลข tax
     var valut_DateTime_Step2 = Value_DateTime_Step2; //เลือก ว-ด-ป
-    var valut_rental_type = expAutoModels[i].unitser == '0'
-        ? Value_rental_type_
-        : expAutoModels[i].unit; //รายวัน เดือน ปี
+    var valut_rental_type = Value_rental_type_; //รายวัน เดือน ปี
+    // var valut_rental_type = expAutoModels[i].unitser == '0'
+    //     ? Value_rental_type_
+    //     : expAutoModels[i].unit; //รายวัน เดือน ปี
     var valut_D_type = Value_rental_type_2; //วัน เดือน ปี
     var valut_D = Value_DateTime_end; //หมดสัญญา ว-ด-ป
     var valut_D_start = Value_D_start; //เริ่มสัญญา ป-ด-ว
     var valut_D_start_dmy = dmy; //เริ่มสัญญา ป-ด-ว set
     var valut_D_end = Value_D_end; //หมดสัญญา ป-ด-ว
     var valut_D_end_dmy = dmye; //หมดสัญญา ป-ด-ว set
-    var valut_D_count = expAutoModels[i].unitser == '0'
-        ? Value_rental_count_
-        : expAutoModels[i].unit == 'ครั้งเดียว'
-            ? '1'
-            : Value_rental_count_; //จำนวน วัน เดือน ปี
+    var valut_D_count = Value_rental_count_; //จำนวน วัน เดือน ปี
+    // var valut_D_count = expAutoModels[i].unitser == '0'
+    //     ? Value_rental_count_
+    //     : expAutoModels[i].unit == 'ครั้งเดียว'
+    //         ? '1'
+    //         : Value_rental_count_; //จำนวน วัน เดือน ปี
     var ser_area = _selecteSer.map((e) => e).toString().substring(
         1, _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
     var name_area = _selecteSerbool.map((e) => e).toString().substring(
@@ -6264,6 +6295,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             ? '0'
             : _area_rent_sum; //ราคาพื้นที่
     var ser_expt = serex;
+
+    print(
+        '>>>ออออ>>>>>>>>$valut_rental_type >>>>>>>>>>>>>${expAutoModels[i].unitser}>>>>>>>>>>>>>$Value_rental_type_');
 
     String url =
         '${MyConstant().domain}/In_Qootx_select.php?isAdd=true&ren=$ren';
@@ -6337,16 +6371,21 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     //'verify'
     //'permission'
     print(
-        '>>>>>$_Date>>>>>>>>>>>>>>>>>>>>> $Value_D_start ------ $Value_D_end>>>>>  $Value_DateTime_Step2 ------ $Value_DateTime_end');
+        'dvdv>>>>>$_Date>>>>>>>>>$Value_rental_count_>>>>>>>>>>>> $Value_D_start ------ $Value_D_end>>>>>  $Value_DateTime_Step2 ------ $Value_DateTime_end');
 
     String _Mount =
         DateFormat('yyyy-MM').format(DateTime.parse('$Value_D_start 00:00:00'));
+    String _day =
+        DateFormat('dd').format(DateTime.parse('$Value_D_start 00:00:00'));
 
     String _Mounte =
         DateFormat('yyyy-MM').format(DateTime.parse('$Value_D_end 00:00:00'));
 
-    var dmy = '$_Mount-$_Date';
-    var dmye = '$_Mounte-$_Date';
+    var dmy =
+        expModels[index].unit == 'มิเตอร์' ? '$_Mount-$_Date' : '$_Mount-$_day';
+    var dmye = expModels[index].unit == 'มิเตอร์'
+        ? '$_Mounte-$_Date'
+        : '$_Mount-$_day';
     print('>>>>>>>>>>>>>>>>>>>>>>>>>> $dmy ------ $dmye');
 
     var valut_type = Value_AreaSer_ + 1; // ser ประเภท
@@ -6360,20 +6399,36 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     var valut_email = _Form_email; //email
     var valut_tax = _Form_tax == 'null' ? '-' : _Form_tax; //เลข tax
     var valut_DateTime_Step2 = Value_DateTime_Step2; //เลือก ว-ด-ป
-    var valut_rental_type = expModels[index].unitser == '0'
+    // var valut_rental_type = Value_rental_type_; //รายวัน เดือน ปี
+
+    // var valut_rental_type = expModels[index].unitser == '0'
+    //     ? Value_rental_type_
+    //     : expModels[index].unit; //รายวัน เดือน ปี
+    var valut_rental_type = expModels[index].etype == 'R'
         ? Value_rental_type_
-        : expModels[index].unit; //รายวัน เดือน ปี
+        : expModels[index].unitser == '0'
+            ? Value_rental_type_
+            : expModels[index].unit;
     var valut_D_type = Value_rental_type_2; //วัน เดือน ปี
     var valut_D = Value_DateTime_end; //หมดสัญญา ว-ด-ป
     var valut_D_start = Value_D_start; //เริ่มสัญญา ป-ด-ว
     var valut_D_start_dmy = dmy; //เริ่มสัญญา ป-ด-ว set
     var valut_D_end = Value_D_end; //หมดสัญญา ป-ด-ว
     var valut_D_end_dmy = dmye; //หมดสัญญา ป-ด-ว set
-    var valut_D_count = expModels[index].unitser == '0'
+    // var valut_D_count = Value_rental_count_; //จำนวน วัน เดือน ปี
+    // var valut_D_count = expModels[index].unitser == '0'
+    //     ? Value_rental_count_
+    //     : expModels[index].unit == 'ครั้งเดียว'
+    //         ? '1'
+    //         : Value_rental_count_; //จำนวน วัน เดือน ปี
+
+    var valut_D_count = expModels[index].etype == 'R'
         ? Value_rental_count_
-        : expModels[index].unit == 'ครั้งเดียว'
-            ? '1'
-            : Value_rental_count_; //จำนวน วัน เดือน ปี
+        : expModels[index].unitser == '0'
+            ? Value_rental_count_
+            : expModels[index].unit == 'ครั้งเดียว'
+                ? '1'
+                : Value_rental_count_;
     var ser_area = _selecteSer.map((e) => e).toString().substring(
         1, _selecteSer.map((e) => e).toString().length - 1); // serพื้นที่
     var name_area = _selecteSerbool.map((e) => e).toString().substring(
@@ -6611,8 +6666,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -6640,8 +6696,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                       flex: 1,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -6674,7 +6731,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -6913,7 +6970,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                           ),
                                                         ),
                                                         const Expanded(
-                                                          flex: 1,
+                                                          flex: 2,
                                                           child: Padding(
                                                             padding:
                                                                 EdgeInsets.all(
@@ -8340,7 +8397,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                 ),
                                                                               ),
                                                                               Expanded(
-                                                                                flex: 1,
+                                                                                flex: 2,
                                                                                 child: Padding(
                                                                                   padding: EdgeInsets.all(8),
                                                                                   child: quotxSelectModels[index].dtype == 'KU'
@@ -8588,10 +8645,11 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                         ),
                                                                                       ],
                                                                                     ),
-                                                                                    icon: const Icon(
-                                                                                      Icons.arrow_drop_down,
-                                                                                      color: Colors.black45,
-                                                                                    ),
+                                                                                    icon: Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+                                                                                    // icon: const Icon(
+                                                                                    //   Icons.arrow_drop_down,
+                                                                                    //   color: Colors.black45,
+                                                                                    // ),
                                                                                     iconSize: 30,
                                                                                     buttonHeight: 60,
                                                                                     buttonPadding: const EdgeInsets.only(left: 10, right: 10),
@@ -9191,7 +9249,6 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                                             QuotxSelectModel quotxSelectModel = QuotxSelectModel.fromJson(map);
                                                                                             setState(() {
                                                                                               quotxSelectModels.add(quotxSelectModel);
-                                                                                              
                                                                                             });
                                                                                           }
                                                                                         } else {
@@ -9563,7 +9620,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -9630,7 +9687,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -9707,7 +9764,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -10472,8 +10529,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -10499,8 +10557,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             maxLines:
@@ -10695,7 +10754,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -10762,7 +10821,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -10838,7 +10897,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -11907,7 +11966,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                                   // ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       AutoSizeText(
@@ -12336,6 +12395,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
       contractfModels.clear();
     }
     setState(() {
+      Other_file = [];
       cxname_card = null;
       cxname_lease = null;
       cxname_other = null;
@@ -12372,6 +12432,9 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
           } else if (contractfModelss.cxname.toString() == 'contract/other') {
             cxname_other = contractfModelss.filename.toString();
             cxname_other_ser = contractfModelss.ser.toString();
+            setState(() {
+              Other_file.add(contractfModelss);
+            });
           } else {}
         }
 
@@ -12570,7 +12633,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
     String date_ = DateFormat('ddMMyyyy')
         .format(DateTime.parse('${dateTimeNow}'))
         .toString();
-    String fileName = 'other_${Get_Value_cid}_$date_.pdf';
+    String fileName =
+        'other_${Get_Value_cid}_${date_}_${Other_file.length + 1}.pdf';
     String MixPath_ = '$Path_foder/$Path_foderSub';
 
     InsertFile_SQL(fileName, MixPath_);
@@ -12657,26 +12721,215 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
         ),
         child: Row(
           children: [
+            // Expanded(
+            //   flex: 2,
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(8.0),
+            //     child: (cxname_card != null)
+            //         ? Container(
+            //             decoration: BoxDecoration(
+            //               color: Colors.grey[300],
+            //               borderRadius: const BorderRadius.only(
+            //                   topLeft: Radius.circular(10),
+            //                   topRight: Radius.circular(10),
+            //                   bottomLeft: Radius.circular(10),
+            //                   bottomRight: Radius.circular(10)),
+            //             ),
+            //             child: Center(
+            //               child: Column(
+            //                 mainAxisAlignment: MainAxisAlignment.center,
+            //                 children: [
+            //                   Text(
+            //                     'พบเอกสาร',
+            //                     textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         color: PeopleChaoScreen_Color.Colors_Text2_,
+            //                         // fontWeight: FontWeight.bold,
+            //                         fontFamily: Font_.Fonts_T
+
+            //                         //fontSize: 10.0
+            //                         ),
+            //                   ),
+            //                   Text(
+            //                     '$cxname_card',
+            //                     textAlign: TextAlign.center,
+            //                     style: TextStyle(
+            //                         color: Colors.blue[800],
+            //                         // fontWeight: FontWeight.bold,
+            //                         fontFamily: Font_.Fonts_T,
+            //                         fontSize: 8.0),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           )
+            //         : Container(
+            //             decoration: BoxDecoration(
+            //               color: Colors.grey[300],
+            //               borderRadius: const BorderRadius.only(
+            //                   topLeft: Radius.circular(10),
+            //                   topRight: Radius.circular(10),
+            //                   bottomLeft: Radius.circular(10),
+            //                   bottomRight: Radius.circular(10)),
+            //             ),
+            //             child: const Center(
+            //               child: Text(
+            //                 'ไม่พบเอกสาร',
+            //                 textAlign: TextAlign.center,
+            //                 style: TextStyle(
+            //                     color: PeopleChaoScreen_Color.Colors_Text2_,
+            //                     // fontWeight: FontWeight.bold,
+            //                     fontFamily: Font_.Fonts_T
+
+            //                     //fontSize: 10.0
+            //                     ),
+            //               ),
+            //             ),
+            //           ),
+            //   ),
+            // ),
             Expanded(
               flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: (cxname_card != null)
-                    ? Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                        ),
-                        child: Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
+              child: Stack(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: (cxname_card != null)
+                        ? Stack(
                             children: [
-                              Text(
-                                'พบเอกสาร',
+                              Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[300],
+                                    borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                  ),
+                                  child: Image.network(
+                                    '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
+                                    // '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
+                                    // width: 200,
+                                    // height: 160,
+                                    fit: BoxFit.cover,
+                                  )
+                                  //  Center(
+                                  //   child: Column(
+                                  //     mainAxisAlignment: MainAxisAlignment.center,
+                                  //     children: [
+                                  //       Text(
+                                  //         'พบเอกสาร',
+                                  //         textAlign: TextAlign.center,
+                                  //         style: TextStyle(
+                                  //             color: PeopleChaoScreen_Color
+                                  //                 .Colors_Text2_,
+                                  //             // fontWeight: FontWeight.bold,
+                                  //             fontFamily: Font_.Fonts_T
+
+                                  //             //fontSize: 10.0
+                                  //             ),
+                                  //       ),
+                                  //       Text(
+                                  //         '$cxname_card',
+                                  //         textAlign: TextAlign.center,
+                                  //         style: TextStyle(
+                                  //             color: Colors.blue[800],
+                                  //             // fontWeight: FontWeight.bold,
+                                  //             fontFamily: Font_.Fonts_T,
+                                  //             fontSize: 8.0),
+                                  //       ),
+                                  //     ],
+                                  //   ),
+                                  // ),
+                                  ),
+                              Positioned(
+                                top: 20,
+                                right: 10,
+                                child: InkWell(
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.red[900]!.withOpacity(0.8),
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                    ),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Center(
+                                      child: Text(
+                                        'ดูเอกสาร',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T
+
+                                            //fontSize: 10.0
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (_) => Dialog(
+                                        child: Stack(
+                                          children: [
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8,
+                                              child: FittedBox(
+                                                fit: BoxFit.contain,
+                                                child: (cxname_card == null ||
+                                                        cxname_card
+                                                                .toString() ==
+                                                            '')
+                                                    ? Icon(Icons
+                                                        .image_not_supported)
+                                                    : Image.network(
+                                                        '${MyConstant().domain}/files/$foder/contract/card/$cxname_card',
+
+                                                        // '${MyConstant().domain}/files/$foder/contract/card/$cxname_card'
+                                                      ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                                top: 10,
+                                                right: 10,
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Icon(
+                                                    Icons.cancel_outlined,
+                                                    size: 40,
+                                                    color: Colors.red,
+                                                  ),
+                                                ))
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            ],
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'ไม่พบเอกสาร',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -12686,42 +12939,10 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                     //fontSize: 10.0
                                     ),
                               ),
-                              Text(
-                                '$cxname_card',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.blue[800],
-                                    // fontWeight: FontWeight.bold,
-                                    fontFamily: Font_.Fonts_T,
-                                    fontSize: 8.0),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
-                      )
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10)),
-                        ),
-                        child: const Center(
-                          child: Text(
-                            'ไม่พบเอกสาร',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: Font_.Fonts_T
-
-                                //fontSize: 10.0
-                                ),
-                          ),
-                        ),
-                      ),
+                  ),
+                ],
               ),
             ),
             if (Responsive.isDesktop(context))
@@ -12866,7 +13087,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                                               color: Colors
                                                                   .red[600],
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -13012,8 +13233,8 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                       ),
                                       onTap: () async {
                                         String Url =
-                                            await '${MyConstant().domain}/files/kad_taii/contract/card/$cxname_card';
-                                        print(Url);
+                                            await '${MyConstant().domain}/files/$foder/contract/card/$cxname_card';
+                                        //    print(Url);
                                         Idcard_(context, Url);
                                       },
                                     ),
@@ -13229,50 +13450,63 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                         '${MyConstant().domain}/files/$foder/logo/${renTalModels[0].imglogo!.trim()}');
                                   }
                                 }
+                                final tableData00 = [
+                                  for (int index = 0;
+                                      index < quotxSelectModels.length;
+                                      index++)
+                                    [
+                                      '${quotxSelectModels[index].unit} / ${quotxSelectModels[index].term} (งวด)',
+                                      '${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].sdate!} 00:00:00'))} - ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${quotxSelectModels[index].ldate!} 00:00:00'))}',
+                                      '${quotxSelectModels[index].expname}',
+                                      '${nFormat.format(double.parse(quotxSelectModels[index].total!))}',
+                                      '${nFormat.format(int.parse(quotxSelectModels[index].term!) * double.parse(quotxSelectModels[index].total!))}',
+                                    ],
+                                ];
                                 SharedPreferences preferences =
                                     await SharedPreferences.getInstance();
                                 var renTal_name =
                                     preferences.getString('renTalName');
 
                                 Pdfgen_Agreement.exportPDF_Agreement(
-                                  context,
-                                  '{widget.Get_Value_NameShop_index}',
-                                  '${Get_Value_cid}',
-                                  _verticalGroupValue,
-                                  Form_nameshop.text,
-                                  Form_typeshop.text,
-                                  Form_bussshop.text,
-                                  Form_bussscontact.text,
-                                  Form_address.text,
-                                  Form_tel.text,
-                                  Form_email.text,
-                                  Form_tax.text,
-                                  '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
-                                  // '$Form_ln',
-                                  '$zone_name',
-                                  // '$Form_zn.',
-                                  '${nFormat.format(_area_sum)}',
-                                  // '$Form_area',
-                                  '$Form_qty',
-                                  '$Value_DateTime_Step2',
-                                  //  '$Form_sdate',
-                                  '$Value_DateTime_end',
-                                  //  '$Form_ldate',
-                                  '$Value_rental_count_',
-                                  // 'Form_period.text',
-                                  '${Value_rental_type_}',
-                                  // 'Form_rtname.text',
-                                  quotxSelectModels,
-                                  '_TransModels',
-                                  '$renTal_name',
-                                  '${renTalModels[0].bill_addr}',
-                                  '${renTalModels[0].bill_email}',
-                                  '${renTalModels[0].bill_tel}',
-                                  '${renTalModels[0].bill_tax}',
-                                  '${renTalModels[0].bill_name}',
-                                  newValuePDFimg,''
-                                  // (ser_user == null) ? '' : ser_user
-                                );
+                                    context,
+                                    '{widget.Get_Value_NameShop_index}',
+                                    '${Get_Value_cid}',
+                                    _verticalGroupValue,
+                                    Form_nameshop.text,
+                                    Form_typeshop.text,
+                                    Form_bussshop.text,
+                                    Form_bussscontact.text,
+                                    Form_address.text,
+                                    Form_tel.text,
+                                    Form_email.text,
+                                    Form_tax.text,
+                                    '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1)}',
+                                    // '$Form_ln',
+                                    '$zone_name',
+                                    // '$Form_zn.',
+                                    '${nFormat.format(_area_sum)}',
+                                    // '$Form_area',
+                                    '$Form_qty',
+                                    '$Value_DateTime_Step2',
+                                    //  '$Form_sdate',
+                                    '$Value_DateTime_end',
+                                    //  '$Form_ldate',
+                                    '$Value_rental_count_',
+                                    // 'Form_period.text',
+                                    '${Value_rental_type_}',
+                                    // 'Form_rtname.text',
+                                    quotxSelectModels,
+                                    '_TransModels',
+                                    '$renTal_name',
+                                    '${renTalModels[0].bill_addr}',
+                                    '${renTalModels[0].bill_email}',
+                                    '${renTalModels[0].bill_tel}',
+                                    '${renTalModels[0].bill_tax}',
+                                    '${renTalModels[0].bill_name}',
+                                    newValuePDFimg,
+                                    tableData00
+                                    // (ser_user == null) ? '' : ser_user
+                                    );
                               },
                             ),
                           ),
@@ -13287,6 +13521,461 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
             //   flex: 1,
             //   child: Text(''),
             // ),
+            // Expanded(
+            //   flex: 2,
+            //   child: Container(
+            //     child: Column(
+            //       children: [
+            //         Padding(
+            //           padding: EdgeInsets.all(8.0),
+            //           child: Text(
+            //             'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+            //             textAlign: TextAlign.start,
+            //             style: TextStyle(
+            //                 color: PeopleChaoScreen_Color.Colors_Text2_,
+            //                 fontWeight: FontWeight.bold,
+            //                 fontFamily: FontWeight_.Fonts_T
+            //                 //fontSize: 10.0
+            //                 ),
+            //           ),
+            //         ),
+            //         Row(
+            //           children: [
+            //             Expanded(
+            //               flex: 1,
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: Container(
+            //                   height: 60,
+            //                   decoration: const BoxDecoration(
+            //                     // color: Colors.orange[600],
+            //                     borderRadius: BorderRadius.only(
+            //                         topLeft: Radius.circular(10),
+            //                         topRight: Radius.circular(10),
+            //                         bottomLeft: Radius.circular(10),
+            //                         bottomRight: Radius.circular(10)),
+            //                   ),
+            //                   child: Center(
+            //                     child: Column(
+            //                       mainAxisAlignment: MainAxisAlignment.center,
+            //                       children: [
+            //                         Text(
+            //                           (cxname_lease != null)
+            //                               ? 'พบเอกสาร'
+            //                               : 'ไม่พบเอกสาร',
+            //                           textAlign: TextAlign.start,
+            //                           style: TextStyle(
+            //                               color: (cxname_lease != null)
+            //                                   ? Colors.black
+            //                                   : Colors.red,
+            //                               // fontWeight: FontWeight.bold,
+            //                               fontFamily: Font_.Fonts_T
+            //                               //fontSize: 10.0
+            //                               ),
+            //                         ),
+            //                         Text(
+            //                           (cxname_lease != null)
+            //                               ? '$cxname_lease'
+            //                               : '',
+            //                           textAlign: TextAlign.start,
+            //                           style: TextStyle(
+            //                               color: Colors.blue[800],
+            //                               // fontWeight: FontWeight.bold,
+            //                               fontFamily: Font_.Fonts_T,
+            //                               fontSize: 8.0),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         Row(
+            //           children: [
+            //             Expanded(
+            //               flex: 1,
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: InkWell(
+            //                   child: Container(
+            //                     height: 40,
+            //                     decoration: BoxDecoration(
+            //                       color: Colors.blue[400],
+            //                       borderRadius: const BorderRadius.only(
+            //                           topLeft: Radius.circular(10),
+            //                           topRight: Radius.circular(10),
+            //                           bottomLeft: Radius.circular(10),
+            //                           bottomRight: Radius.circular(10)),
+            //                     ),
+            //                     child: const Center(
+            //                       child: Text(
+            //                         'อัพโหลดไฟล์(PDF)',
+            //                         textAlign: TextAlign.start,
+            //                         style: TextStyle(
+            //                             color: PeopleChaoScreen_Color
+            //                                 .Colors_Text2_,
+            //                             // fontWeight: FontWeight.bold,
+            //                             fontFamily: Font_.Fonts_T
+            //                             //fontSize: 10.0
+            //                             ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                   onTap: () async {
+            //                     // uploadFile_Agreement();
+
+            //                     (cxname_lease == null)
+            //                         ? uploadFile_Agreement(
+            //                             '${cxname_lease}',
+            //                             ' $cxname_lease_ser',
+            //                           )
+            //                         : showDialog<void>(
+            //                             context: context,
+            //                             barrierDismissible:
+            //                                 false, // user must tap button!
+            //                             builder: (BuildContext context) {
+            //                               return AlertDialog(
+            //                                 shape: const RoundedRectangleBorder(
+            //                                     borderRadius: BorderRadius.all(
+            //                                         Radius.circular(10.0))),
+            //                                 title: const Center(
+            //                                     child: Text(
+            //                                   'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
+            //                                   style: TextStyle(
+            //                                       color: PeopleChaoScreen_Color
+            //                                           .Colors_Text1_,
+            //                                       fontWeight: FontWeight.bold,
+            //                                       fontFamily:
+            //                                           FontWeight_.Fonts_T),
+            //                                 )),
+            //                                 content: SingleChildScrollView(
+            //                                   child: ListBody(
+            //                                     children: const <Widget>[
+            //                                       Text(
+            //                                         'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
+            //                                         style: TextStyle(
+            //                                             color:
+            //                                                 PeopleChaoScreen_Color
+            //                                                     .Colors_Text2_,
+            //                                             fontFamily:
+            //                                                 Font_.Fonts_T),
+            //                                       ),
+            //                                     ],
+            //                                   ),
+            //                                 ),
+            //                                 actions: <Widget>[
+            //                                   Row(
+            //                                     mainAxisAlignment:
+            //                                         MainAxisAlignment.center,
+            //                                     children: [
+            //                                       Padding(
+            //                                         padding:
+            //                                             const EdgeInsets.all(
+            //                                                 8.0),
+            //                                         child: InkWell(
+            //                                           child: Container(
+            //                                               width: 100,
+            //                                               decoration:
+            //                                                   BoxDecoration(
+            //                                                 color:
+            //                                                     Colors.red[600],
+            //                                                 borderRadius: const BorderRadius
+            //                                                         .only(
+            //                                                     topLeft: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     topRight: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     bottomLeft: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     bottomRight: Radius
+            //                                                         .circular(
+            //                                                             10)),
+            //                                                 // border: Border.all(color: Colors.white, width: 1),
+            //                                               ),
+            //                                               padding:
+            //                                                   const EdgeInsets
+            //                                                       .all(8.0),
+            //                                               child: const Center(
+            //                                                   child: Text(
+            //                                                 'ลบเอกสาร',
+            //                                                 style: TextStyle(
+            //                                                     color: PeopleChaoScreen_Color
+            //                                                         .Colors_Text3_,
+            //                                                     fontWeight:
+            //                                                         FontWeight
+            //                                                             .bold,
+            //                                                     fontFamily: Font_
+            //                                                         .Fonts_T),
+            //                                               ))),
+            //                                           onTap: () async {
+            //                                             deletedFile_SQL(
+            //                                                 '$cxname_lease_ser');
+            //                                             deletedFile_(
+            //                                                 '${cxname_lease}',
+            //                                                 ' $cxname_lease_ser',
+            //                                                 'lease');
+
+            //                                             GC_contractf();
+            //                                             Navigator.of(context)
+            //                                                 .pop();
+            //                                           },
+            //                                         ),
+            //                                       ),
+            //                                       Padding(
+            //                                         padding:
+            //                                             const EdgeInsets.all(
+            //                                                 8.0),
+            //                                         child: InkWell(
+            //                                           child: Container(
+            //                                               width: 100,
+            //                                               decoration:
+            //                                                   const BoxDecoration(
+            //                                                 color: Colors.black,
+            //                                                 borderRadius: BorderRadius.only(
+            //                                                     topLeft: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     topRight: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     bottomLeft: Radius
+            //                                                         .circular(
+            //                                                             10),
+            //                                                     bottomRight: Radius
+            //                                                         .circular(
+            //                                                             10)),
+            //                                                 // border: Border.all(color: Colors.white, width: 1),
+            //                                               ),
+            //                                               padding:
+            //                                                   const EdgeInsets
+            //                                                       .all(8.0),
+            //                                               child: const Center(
+            //                                                   child: Text(
+            //                                                 'ปิด',
+            //                                                 style: TextStyle(
+            //                                                     color: PeopleChaoScreen_Color
+            //                                                         .Colors_Text3_,
+            //                                                     fontWeight:
+            //                                                         FontWeight
+            //                                                             .bold,
+            //                                                     fontFamily: Font_
+            //                                                         .Fonts_T),
+            //                                               ))),
+            //                                           onTap: () {
+            //                                             GC_contractf();
+            //                                             Navigator.of(context)
+            //                                                 .pop();
+            //                                           },
+            //                                         ),
+            //                                       ),
+            //                                     ],
+            //                                   ),
+            //                                 ],
+            //                               );
+            //                             },
+            //                           );
+            //                   },
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //         Row(
+            //           children: [
+            //             // Expanded(
+            //             //   flex: 1,
+            //             //   child: Padding(
+            //             //     padding: const EdgeInsets.all(8.0),
+            //             //     child: InkWell(
+            //             //       child: Container(
+            //             //         height: 40,
+            //             //         decoration: BoxDecoration(
+            //             //           color: Colors.red[400],
+            //             //           borderRadius: const BorderRadius.only(
+            //             //               topLeft: Radius.circular(10),
+            //             //               topRight: Radius.circular(10),
+            //             //               bottomLeft: Radius.circular(10),
+            //             //               bottomRight: Radius.circular(10)),
+            //             //         ),
+            //             //         child: const Center(
+            //             //           child: Text(
+            //             //             'ลบ(PDF)',
+            //             //             textAlign: TextAlign.start,
+            //             //             style: TextStyle(
+            //             //                 color: PeopleChaoScreen_Color
+            //             //                     .Colors_Text2_,
+            //             //                 // fontWeight: FontWeight.bold,
+            //             //                 fontFamily: Font_.Fonts_T
+            //             //                 //fontSize: 10.0
+            //             //                 ),
+            //             //           ),
+            //             //         ),
+            //             //       ),
+            //             //       onTap: () async {
+            //             //         deletedFile_('${cxname_lease}',
+            //             //             ' $cxname_lease_ser');
+            //             //         // final file = await pickFile_agreement();
+            //             //         // if (file != null) {
+            //             //         //   // Upload the file to the server
+            //             //         //   uploadFile_Agreement(file);
+            //             //         // }
+            //             //       },
+            //             //     ),
+            //             //   ),
+            //             // ),
+            //             Expanded(
+            //               flex: 1,
+            //               child: Padding(
+            //                 padding: const EdgeInsets.all(8.0),
+            //                 child: InkWell(
+            //                   child: Container(
+            //                     height: 40,
+            //                     decoration: BoxDecoration(
+            //                       color: Colors.orange[400],
+            //                       borderRadius: const BorderRadius.only(
+            //                           topLeft: Radius.circular(10),
+            //                           topRight: Radius.circular(10),
+            //                           bottomLeft: Radius.circular(10),
+            //                           bottomRight: Radius.circular(10)),
+            //                     ),
+            //                     child: Row(
+            //                       mainAxisAlignment: MainAxisAlignment.center,
+            //                       children: const [
+            //                         Padding(
+            //                           padding: EdgeInsets.all(4.0),
+            //                           child: Icon(
+            //                             Icons.print,
+            //                             color: Colors.white,
+            //                           ),
+            //                         ),
+            //                         Text(
+            //                           'พิมพ์',
+            //                           textAlign: TextAlign.start,
+            //                           style: TextStyle(
+            //                               color: PeopleChaoScreen_Color
+            //                                   .Colors_Text2_,
+            //                               // fontWeight: FontWeight.bold,
+            //                               fontFamily: Font_.Fonts_T
+            //                               //fontSize: 10.0
+            //                               ),
+            //                         ),
+            //                       ],
+            //                     ),
+            //                   ),
+            //                   onTap: () async {
+            //                     // String Url =
+            //                     //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+            //                     String Url =
+            //                         await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
+            //                     print(Url);
+            //                     if (Url == '') {
+            //                       showDialog<void>(
+            //                         context: context,
+            //                         barrierDismissible:
+            //                             false, // user must tap button!
+            //                         builder: (BuildContext context) {
+            //                           return AlertDialog(
+            //                             shape: const RoundedRectangleBorder(
+            //                                 borderRadius: BorderRadius.all(
+            //                                     Radius.circular(10.0))),
+            //                             title: const Center(
+            //                                 child: Text(
+            //                               'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
+            //                               style: TextStyle(
+            //                                   color: PeopleChaoScreen_Color
+            //                                       .Colors_Text1_,
+            //                                   fontWeight: FontWeight.bold,
+            //                                   fontFamily: FontWeight_.Fonts_T),
+            //                             )),
+            //                             content: SingleChildScrollView(
+            //                               child: ListBody(
+            //                                 children: const <Widget>[
+            //                                   Text(
+            //                                     'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+            //                                     style: TextStyle(
+            //                                         color:
+            //                                             PeopleChaoScreen_Color
+            //                                                 .Colors_Text2_,
+            //                                         fontFamily: Font_.Fonts_T),
+            //                                   ),
+            //                                 ],
+            //                               ),
+            //                             ),
+            //                             actions: <Widget>[
+            //                               InkWell(
+            //                                 child: Container(
+            //                                     width: 100,
+            //                                     decoration: const BoxDecoration(
+            //                                       color: Colors.black,
+            //                                       borderRadius:
+            //                                           BorderRadius.only(
+            //                                               topLeft: Radius
+            //                                                   .circular(10),
+            //                                               topRight:
+            //                                                   Radius.circular(
+            //                                                       10),
+            //                                               bottomLeft:
+            //                                                   Radius.circular(
+            //                                                       10),
+            //                                               bottomRight:
+            //                                                   Radius.circular(
+            //                                                       10)),
+            //                                       // border: Border.all(color: Colors.white, width: 1),
+            //                                     ),
+            //                                     padding:
+            //                                         const EdgeInsets.all(8.0),
+            //                                     child: const Center(
+            //                                         child: Text(
+            //                                       'ปิด',
+            //                                       style: TextStyle(
+            //                                           color:
+            //                                               PeopleChaoScreen_Color
+            //                                                   .Colors_Text3_,
+            //                                           fontWeight:
+            //                                               FontWeight.bold,
+            //                                           fontFamily:
+            //                                               Font_.Fonts_T),
+            //                                     ))),
+            //                                 onTap: () {
+            //                                   Navigator.of(context).pop();
+            //                                 },
+            //                               ),
+            //                               // TextButton(
+            //                               //   child: const Text('ตกลง'),
+            //                               //   onPressed: () {
+            //                               //     Navigator.of(context).pop();
+            //                               //   },
+            //                               // ),
+            //                             ],
+            //                           );
+            //                         },
+            //                       );
+            //                     } else {
+            //                       Navigator.push(
+            //                           context,
+            //                           MaterialPageRoute(
+            //                             builder: (context) =>
+            //                                 PreviewScreenRental_(
+            //                                     title:
+            //                                         'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+            //                                     Url: Url),
+            //                           ));
+            //                     }
+            //                   },
+            //                 ),
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Expanded(
               flex: 2,
               child: Container(
@@ -13295,7 +13984,7 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                     Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        'เอกสารสัญญาเช่า(เซ็นแล้ว)',
+                        'เอกสารอื่นๆ ${Other_file.length} รายการ',
                         textAlign: TextAlign.start,
                         style: TextStyle(
                             color: PeopleChaoScreen_Color.Colors_Text2_,
@@ -13305,6 +13994,59 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                             ),
                       ),
                     ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: Container(
+                    //           height: 60,
+                    //           decoration: const BoxDecoration(
+                    //             // color: Colors.orange[600],
+                    //             borderRadius: BorderRadius.only(
+                    //                 topLeft: Radius.circular(10),
+                    //                 topRight: Radius.circular(10),
+                    //                 bottomLeft: Radius.circular(10),
+                    //                 bottomRight: Radius.circular(10)),
+                    //           ),
+                    //           child: Center(
+                    //             child: Column(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 Text(
+                    //                   (cxname_other != null)
+                    //                       ? 'พบเอกสาร'
+                    //                       : 'ไม่พบเอกสาร',
+                    //                   textAlign: TextAlign.start,
+                    //                   style: TextStyle(
+                    //                       color: (cxname_other != null)
+                    //                           ? Colors.black
+                    //                           : Colors.red,
+                    //                       // fontWeight: FontWeight.bold,
+                    //                       fontFamily: Font_.Fonts_T
+                    //                       //fontSize: 10.0
+                    //                       ),
+                    //                 ),
+                    //                 Text(
+                    //                   (cxname_other != null)
+                    //                       ? '$cxname_other'
+                    //                       : '',
+                    //                   textAlign: TextAlign.start,
+                    //                   style: TextStyle(
+                    //                       color: Colors.blue[800],
+                    //                       // fontWeight: FontWeight.bold,
+                    //                       fontFamily: Font_.Fonts_T,
+                    //                       fontSize: 8.0),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Row(
                       children: [
                         Expanded(
@@ -13312,45 +14054,322 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                // color: Colors.orange[600],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
+                              height: 110,
+                              padding: const EdgeInsets.all(4.0),
+                              decoration: BoxDecoration(
+                                // color: Colors.green,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                    bottomLeft: Radius.circular(8),
+                                    bottomRight: Radius.circular(8)),
+                                border:
+                                    Border.all(color: Colors.grey, width: 2),
                               ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      (cxname_lease != null)
-                                          ? 'พบเอกสาร'
-                                          : 'ไม่พบเอกสาร',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: (cxname_lease != null)
-                                              ? Colors.black
-                                              : Colors.red,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                    Text(
-                                      (cxname_lease != null)
-                                          ? '$cxname_lease'
-                                          : '',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: Colors.blue[800],
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T,
-                                          fontSize: 8.0),
-                                    ),
-                                  ],
+                              child: ScrollConfiguration(
+                                behavior: ScrollConfiguration.of(context)
+                                    .copyWith(dragDevices: {
+                                  PointerDeviceKind.touch,
+                                  PointerDeviceKind.mouse,
+                                }),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    children: [
+                                      for (int index = 0;
+                                          index < Other_file.length;
+                                          index++)
+                                        Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  // String Url =
+                                                  //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                                                  String Url =
+                                                      await '${MyConstant().domain}/files/$foder/contract/other/${Other_file[index].filename}';
+                                                  print(Url);
+                                                  if (Url == '') {
+                                                    showDialog<void>(
+                                                      context: context,
+                                                      barrierDismissible:
+                                                          false, // user must tap button!
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          10.0))),
+                                                          title: const Center(
+                                                              child: Text(
+                                                            'ไม่พบเอกสารอื่นๆ',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          )),
+                                                          content:
+                                                              const SingleChildScrollView(
+                                                            child: ListBody(
+                                                              children: <Widget>[
+                                                                Text(
+                                                                  'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                                                                  style: TextStyle(
+                                                                      color: PeopleChaoScreen_Color
+                                                                          .Colors_Text2_,
+                                                                      fontFamily:
+                                                                          Font_
+                                                                              .Fonts_T),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          actions: <Widget>[
+                                                            InkWell(
+                                                              child: Container(
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    borderRadius: BorderRadius.only(
+                                                                        topLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        topRight:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomLeft:
+                                                                            Radius.circular(
+                                                                                10),
+                                                                        bottomRight:
+                                                                            Radius.circular(10)),
+                                                                    // border: Border.all(color: Colors.white, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      const Center(
+                                                                          child:
+                                                                              Text(
+                                                                    'ปิด',
+                                                                    style: TextStyle(
+                                                                        color: PeopleChaoScreen_Color
+                                                                            .Colors_Text3_,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold,
+                                                                        fontFamily:
+                                                                            Font_.Fonts_T),
+                                                                  ))),
+                                                              onTap: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                            ),
+                                                            // TextButton(
+                                                            //   child: const Text('ตกลง'),
+                                                            //   onPressed: () {
+                                                            //     Navigator.of(context).pop();
+                                                            //   },
+                                                            // ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  } else {
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              PreviewScreenRental_(
+                                                                  title:
+                                                                      'เอกสารอื่นๆ',
+                                                                  Url: Url),
+                                                        ));
+                                                  }
+                                                },
+                                                child: Container(
+                                                    width: 150,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .only(
+                                                              topLeft: Radius
+                                                                  .circular(8),
+                                                              topRight: Radius
+                                                                  .circular(8),
+                                                              bottomLeft: Radius
+                                                                  .circular(8),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          8)),
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 2),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Text(
+                                                      '${Other_file[index].filename}',
+                                                      style: TextStyle(
+                                                          color:
+                                                              Colors.blue[800],
+                                                          // fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T,
+                                                          fontSize: 12.0),
+                                                    )),
+                                              ),
+                                            ),
+                                            Positioned(
+                                                top: 0,
+                                                right: 2,
+                                                child: InkWell(
+                                                  child: Icon(
+                                                    Icons.close_sharp,
+                                                    color: Colors.red,
+                                                  ),
+                                                  onTap: () {
+                                                    showDialog<void>(
+                                                      context: context,
+                                                      barrierDismissible:
+                                                          false, // user must tap button!
+                                                      builder: (BuildContext
+                                                          context) {
+                                                        return AlertDialog(
+                                                          shape: const RoundedRectangleBorder(
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          10.0))),
+                                                          title: const Center(
+                                                              child: Text(
+                                                            'ลบเอกสาร',
+                                                            style: TextStyle(
+                                                                color: PeopleChaoScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T),
+                                                          )),
+                                                          actions: <Widget>[
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      InkWell(
+                                                                    child: Container(
+                                                                        width: 100,
+                                                                        decoration: BoxDecoration(
+                                                                          color:
+                                                                              Colors.red[600],
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(8.0),
+                                                                        child: const Center(
+                                                                            child: Text(
+                                                                          'ลบเอกสาร',
+                                                                          style: TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ))),
+                                                                    onTap:
+                                                                        () async {
+                                                                      deletedFile_(
+                                                                          '${Other_file[index].filename}',
+                                                                          ' ${Other_file[index].ser}',
+                                                                          'other');
+
+                                                                      deletedFile_SQL(
+                                                                          '${Other_file[index].ser}');
+                                                                      GC_contractf();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      InkWell(
+                                                                    child: Container(
+                                                                        width: 100,
+                                                                        decoration: const BoxDecoration(
+                                                                          color:
+                                                                              Colors.black,
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topLeft: Radius.circular(10),
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10)),
+                                                                          // border: Border.all(color: Colors.white, width: 1),
+                                                                        ),
+                                                                        padding: const EdgeInsets.all(8.0),
+                                                                        child: const Center(
+                                                                            child: Text(
+                                                                          'ปิด',
+                                                                          style: TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text3_,
+                                                                              fontWeight: FontWeight.bold,
+                                                                              fontFamily: Font_.Fonts_T),
+                                                                        ))),
+                                                                    onTap: () {
+                                                                      GC_contractf();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                ))
+                                          ],
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -13390,766 +14409,353 @@ class _ChaoAreaRenewScreenState extends State<ChaoAreaRenewScreen> {
                                 ),
                               ),
                               onTap: () async {
-                                // uploadFile_Agreement();
-
-                                (cxname_lease == null)
-                                    ? uploadFile_Agreement(
-                                        '${cxname_lease}',
-                                        ' $cxname_lease_ser',
-                                      )
-                                    : showDialog<void>(
-                                        context: context,
-                                        barrierDismissible:
-                                            false, // user must tap button!
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0))),
-                                            title: const Center(
-                                                child: Text(
-                                              'มีเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว',
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            )),
-                                            content: SingleChildScrollView(
-                                              child: ListBody(
-                                                children: const <Widget>[
-                                                  Text(
-                                                    'มีเอกสารเอกสารสัญญาเช่า(เซ็นแล้ว)อยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      child: Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color:
-                                                                Colors.red[600],
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Center(
-                                                              child: Text(
-                                                            'ลบเอกสาร',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text3_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ))),
-                                                      onTap: () async {
-                                                        deletedFile_SQL(
-                                                            '$cxname_lease_ser');
-                                                        deletedFile_(
-                                                            '${cxname_lease}',
-                                                            ' $cxname_lease_ser',
-                                                            'lease');
-
-                                                        GC_contractf();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      child: Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.black,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Center(
-                                                              child: Text(
-                                                            'ปิด',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text3_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ))),
-                                                      onTap: () {
-                                                        GC_contractf();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
+                                uploadFile_Documentmore(
+                                  '${cxname_other}',
+                                  ' $cxname_other_ser',
+                                );
                               },
                             ),
                           ),
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        // Expanded(
-                        //   flex: 1,
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.all(8.0),
-                        //     child: InkWell(
-                        //       child: Container(
-                        //         height: 40,
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.red[400],
-                        //           borderRadius: const BorderRadius.only(
-                        //               topLeft: Radius.circular(10),
-                        //               topRight: Radius.circular(10),
-                        //               bottomLeft: Radius.circular(10),
-                        //               bottomRight: Radius.circular(10)),
-                        //         ),
-                        //         child: const Center(
-                        //           child: Text(
-                        //             'ลบ(PDF)',
-                        //             textAlign: TextAlign.start,
-                        //             style: TextStyle(
-                        //                 color: PeopleChaoScreen_Color
-                        //                     .Colors_Text2_,
-                        //                 // fontWeight: FontWeight.bold,
-                        //                 fontFamily: Font_.Fonts_T
-                        //                 //fontSize: 10.0
-                        //                 ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       onTap: () async {
-                        //         deletedFile_('${cxname_lease}',
-                        //             ' $cxname_lease_ser');
-                        //         // final file = await pickFile_agreement();
-                        //         // if (file != null) {
-                        //         //   // Upload the file to the server
-                        //         //   uploadFile_Agreement(file);
-                        //         // }
-                        //       },
-                        //     ),
-                        //   ),
-                        // ),
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.orange[400],
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.print,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      'พิมพ์',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              onTap: () async {
-                                // String Url =
-                                //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                String Url =
-                                    await '${MyConstant().domain}/files/kad_taii/contract/lease/$cxname_lease';
-                                print(Url);
-                                if (Url == '') {
-                                  showDialog<void>(
-                                    context: context,
-                                    barrierDismissible:
-                                        false, // user must tap button!
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0))),
-                                        title: const Center(
-                                            child: Text(
-                                          'ไม่พบเอกสารสัญญาเช่า(เซ็นแล้ว)',
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T),
-                                        )),
-                                        content: SingleChildScrollView(
-                                          child: ListBody(
-                                            children: const <Widget>[
-                                              Text(
-                                                'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          InkWell(
-                                            child: Container(
-                                                width: 100,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Center(
-                                                    child: Text(
-                                                  'ปิด',
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text3_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ))),
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          // TextButton(
-                                          //   child: const Text('ตกลง'),
-                                          //   onPressed: () {
-                                          //     Navigator.of(context).pop();
-                                          //   },
-                                          // ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PreviewScreenRental_(
-                                                title:
-                                                    'เอกสารสัญญาเช่า(เซ็นแล้ว)',
-                                                Url: Url),
-                                      ));
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Container(
-                child: Column(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'เอกสารอื่นๆ',
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: FontWeight_.Fonts_T
-                            //fontSize: 10.0
-                            ),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                // color: Colors.orange[600],
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10)),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      (cxname_other != null)
-                                          ? 'พบเอกสาร'
-                                          : 'ไม่พบเอกสาร',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: (cxname_other != null)
-                                              ? Colors.black
-                                              : Colors.red,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                    Text(
-                                      (cxname_other != null)
-                                          ? '$cxname_other'
-                                          : '',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: Colors.blue[800],
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T,
-                                          fontSize: 8.0),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.blue[400],
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'อัพโหลดไฟล์(PDF)',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: PeopleChaoScreen_Color
-                                            .Colors_Text2_,
-                                        // fontWeight: FontWeight.bold,
-                                        fontFamily: Font_.Fonts_T
-                                        //fontSize: 10.0
-                                        ),
-                                  ),
-                                ),
-                              ),
-                              onTap: () async {
-                                // uploadFile_Documentmore();
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: InkWell(
+                    //           child: Container(
+                    //             height: 40,
+                    //             decoration: BoxDecoration(
+                    //               color: Colors.blue[400],
+                    //               borderRadius: const BorderRadius.only(
+                    //                   topLeft: Radius.circular(10),
+                    //                   topRight: Radius.circular(10),
+                    //                   bottomLeft: Radius.circular(10),
+                    //                   bottomRight: Radius.circular(10)),
+                    //             ),
+                    //             child: const Center(
+                    //               child: Text(
+                    //                 'อัพโหลดไฟล์(PDF)',
+                    //                 textAlign: TextAlign.start,
+                    //                 style: TextStyle(
+                    //                     color: PeopleChaoScreen_Color
+                    //                         .Colors_Text2_,
+                    //                     // fontWeight: FontWeight.bold,
+                    //                     fontFamily: Font_.Fonts_T
+                    //                     //fontSize: 10.0
+                    //                     ),
+                    //               ),
+                    //             ),
+                    //           ),
+                    //           onTap: () async {
+                    //             // uploadFile_Documentmore();
 
-                                (cxname_other == null)
-                                    ? uploadFile_Documentmore(
-                                        '${cxname_other}',
-                                        ' $cxname_other_ser',
-                                      )
-                                    : showDialog<void>(
-                                        context: context,
-                                        barrierDismissible:
-                                            false, // user must tap button!
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10.0))),
-                                            title: const Center(
-                                                child: Text(
-                                              'มีเอกสารอื่นๆอยู่แล้ว',
-                                              style: TextStyle(
-                                                  color: PeopleChaoScreen_Color
-                                                      .Colors_Text1_,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily:
-                                                      FontWeight_.Fonts_T),
-                                            )),
-                                            content: SingleChildScrollView(
-                                              child: ListBody(
-                                                children: const <Widget>[
-                                                  Text(
-                                                    'มีเอกสารอื่นๆอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
-                                                    style: TextStyle(
-                                                        color:
-                                                            PeopleChaoScreen_Color
-                                                                .Colors_Text2_,
-                                                        fontFamily:
-                                                            Font_.Fonts_T),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: <Widget>[
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      child: Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color:
-                                                                Colors.red[600],
-                                                            borderRadius: const BorderRadius
-                                                                    .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Center(
-                                                              child: Text(
-                                                            'ลบเอกสาร',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text3_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ))),
-                                                      onTap: () async {
-                                                        deletedFile_(
-                                                            '${cxname_other}',
-                                                            ' $cxname_other_ser',
-                                                            'other');
+                    //             (cxname_other == null)
+                    //                 ? uploadFile_Documentmore(
+                    //                     '${cxname_other}',
+                    //                     ' $cxname_other_ser',
+                    //                   )
+                    //                 : showDialog<void>(
+                    //                     context: context,
+                    //                     barrierDismissible:
+                    //                         false, // user must tap button!
+                    //                     builder: (BuildContext context) {
+                    //                       return AlertDialog(
+                    //                         shape: const RoundedRectangleBorder(
+                    //                             borderRadius: BorderRadius.all(
+                    //                                 Radius.circular(10.0))),
+                    //                         title: const Center(
+                    //                             child: Text(
+                    //                           'มีเอกสารอื่นๆอยู่แล้ว',
+                    //                           style: TextStyle(
+                    //                               color: PeopleChaoScreen_Color
+                    //                                   .Colors_Text1_,
+                    //                               fontWeight: FontWeight.bold,
+                    //                               fontFamily:
+                    //                                   FontWeight_.Fonts_T),
+                    //                         )),
+                    //                         content: SingleChildScrollView(
+                    //                           child: ListBody(
+                    //                             children: const <Widget>[
+                    //                               Text(
+                    //                                 'มีเอกสารอื่นๆอยู่แล้ว หากต้องการอัพโหลดกรุณาลบเอกสารที่มีอยู่แล้วก่อน',
+                    //                                 style: TextStyle(
+                    //                                     color:
+                    //                                         PeopleChaoScreen_Color
+                    //                                             .Colors_Text2_,
+                    //                                     fontFamily:
+                    //                                         Font_.Fonts_T),
+                    //                               ),
+                    //                             ],
+                    //                           ),
+                    //                         ),
+                    //                         actions: <Widget>[
+                    //                           Row(
+                    //                             mainAxisAlignment:
+                    //                                 MainAxisAlignment.center,
+                    //                             children: [
+                    //                               Padding(
+                    //                                 padding:
+                    //                                     const EdgeInsets.all(
+                    //                                         8.0),
+                    //                                 child: InkWell(
+                    //                                   child: Container(
+                    //                                       width: 100,
+                    //                                       decoration:
+                    //                                           BoxDecoration(
+                    //                                         color:
+                    //                                             Colors.red[600],
+                    //                                         borderRadius: const BorderRadius
+                    //                                                 .only(
+                    //                                             topLeft: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             topRight: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             bottomLeft: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             bottomRight: Radius
+                    //                                                 .circular(
+                    //                                                     10)),
+                    //                                         // border: Border.all(color: Colors.white, width: 1),
+                    //                                       ),
+                    //                                       padding:
+                    //                                           const EdgeInsets
+                    //                                               .all(8.0),
+                    //                                       child: const Center(
+                    //                                           child: Text(
+                    //                                         'ลบเอกสาร',
+                    //                                         style: TextStyle(
+                    //                                             color: PeopleChaoScreen_Color
+                    //                                                 .Colors_Text3_,
+                    //                                             fontWeight:
+                    //                                                 FontWeight
+                    //                                                     .bold,
+                    //                                             fontFamily: Font_
+                    //                                                 .Fonts_T),
+                    //                                       ))),
+                    //                                   onTap: () async {
+                    //                                     deletedFile_(
+                    //                                         '${cxname_other}',
+                    //                                         ' $cxname_other_ser',
+                    //                                         'other');
 
-                                                        deletedFile_SQL(
-                                                            '$cxname_other_ser');
-                                                        GC_contractf();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: InkWell(
-                                                      child: Container(
-                                                          width: 100,
-                                                          decoration:
-                                                              const BoxDecoration(
-                                                            color: Colors.black,
-                                                            borderRadius: BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                            // border: Border.all(color: Colors.white, width: 1),
-                                                          ),
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: const Center(
-                                                              child: Text(
-                                                            'ปิด',
-                                                            style: TextStyle(
-                                                                color: PeopleChaoScreen_Color
-                                                                    .Colors_Text3_,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontFamily: Font_
-                                                                    .Fonts_T),
-                                                          ))),
-                                                      onTap: () {
-                                                        GC_contractf();
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.orange[400],
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(10),
-                                      bottomRight: Radius.circular(10)),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Padding(
-                                      padding: EdgeInsets.all(4.0),
-                                      child: Icon(
-                                        Icons.print,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Text(
-                                      'พิมพ์',
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                          color: PeopleChaoScreen_Color
-                                              .Colors_Text2_,
-                                          // fontWeight: FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T
-                                          //fontSize: 10.0
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              onTap: () async {
-                                // String Url =
-                                //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
-                                String Url =
-                                    await '${MyConstant().domain}/files/kad_taii/contract/other/$cxname_other';
-                                print(Url);
-                                if (Url == '') {
-                                  showDialog<void>(
-                                    context: context,
-                                    barrierDismissible:
-                                        false, // user must tap button!
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0))),
-                                        title: const Center(
-                                            child: Text(
-                                          'ไม่พบเอกสารอื่นๆ',
-                                          style: TextStyle(
-                                              color: PeopleChaoScreen_Color
-                                                  .Colors_Text1_,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: FontWeight_.Fonts_T),
-                                        )),
-                                        content: SingleChildScrollView(
-                                          child: ListBody(
-                                            children: const <Widget>[
-                                              Text(
-                                                'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
-                                                style: TextStyle(
-                                                    color:
-                                                        PeopleChaoScreen_Color
-                                                            .Colors_Text2_,
-                                                    fontFamily: Font_.Fonts_T),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          InkWell(
-                                            child: Container(
-                                                width: 100,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.black,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                          topLeft: Radius
-                                                              .circular(10),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10)),
-                                                  // border: Border.all(color: Colors.white, width: 1),
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Center(
-                                                    child: Text(
-                                                  'ปิด',
-                                                  style: TextStyle(
-                                                      color:
-                                                          PeopleChaoScreen_Color
-                                                              .Colors_Text3_,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontFamily:
-                                                          Font_.Fonts_T),
-                                                ))),
-                                            onTap: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          // TextButton(
-                                          //   child: const Text('ตกลง'),
-                                          //   onPressed: () {
-                                          //     Navigator.of(context).pop();
-                                          //   },
-                                          // ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                } else {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PreviewScreenRental_(
-                                                title: 'เอกสารอื่นๆ', Url: Url),
-                                      ));
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    //                                     deletedFile_SQL(
+                    //                                         '$cxname_other_ser');
+                    //                                     GC_contractf();
+                    //                                     Navigator.of(context)
+                    //                                         .pop();
+                    //                                   },
+                    //                                 ),
+                    //                               ),
+                    //                               Padding(
+                    //                                 padding:
+                    //                                     const EdgeInsets.all(
+                    //                                         8.0),
+                    //                                 child: InkWell(
+                    //                                   child: Container(
+                    //                                       width: 100,
+                    //                                       decoration:
+                    //                                           const BoxDecoration(
+                    //                                         color: Colors.black,
+                    //                                         borderRadius: BorderRadius.only(
+                    //                                             topLeft: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             topRight: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             bottomLeft: Radius
+                    //                                                 .circular(
+                    //                                                     10),
+                    //                                             bottomRight: Radius
+                    //                                                 .circular(
+                    //                                                     10)),
+                    //                                         // border: Border.all(color: Colors.white, width: 1),
+                    //                                       ),
+                    //                                       padding:
+                    //                                           const EdgeInsets
+                    //                                               .all(8.0),
+                    //                                       child: const Center(
+                    //                                           child: Text(
+                    //                                         'ปิด',
+                    //                                         style: TextStyle(
+                    //                                             color: PeopleChaoScreen_Color
+                    //                                                 .Colors_Text3_,
+                    //                                             fontWeight:
+                    //                                                 FontWeight
+                    //                                                     .bold,
+                    //                                             fontFamily: Font_
+                    //                                                 .Fonts_T),
+                    //                                       ))),
+                    //                                   onTap: () {
+                    //                                     GC_contractf();
+                    //                                     Navigator.of(context)
+                    //                                         .pop();
+                    //                                   },
+                    //                                 ),
+                    //                               ),
+                    //                             ],
+                    //                           ),
+                    //                         ],
+                    //                       );
+                    //                     },
+                    //                   );
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Expanded(
+                    //       flex: 1,
+                    //       child: Padding(
+                    //         padding: const EdgeInsets.all(8.0),
+                    //         child: InkWell(
+                    //           child: Container(
+                    //             height: 40,
+                    //             decoration: BoxDecoration(
+                    //               color: Colors.orange[400],
+                    //               borderRadius: const BorderRadius.only(
+                    //                   topLeft: Radius.circular(10),
+                    //                   topRight: Radius.circular(10),
+                    //                   bottomLeft: Radius.circular(10),
+                    //                   bottomRight: Radius.circular(10)),
+                    //             ),
+                    //             child: Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: const [
+                    //                 Padding(
+                    //                   padding: EdgeInsets.all(4.0),
+                    //                   child: Icon(
+                    //                     Icons.print,
+                    //                     color: Colors.white,
+                    //                   ),
+                    //                 ),
+                    //                 Text(
+                    //                   'พิมพ์',
+                    //                   textAlign: TextAlign.start,
+                    //                   style: TextStyle(
+                    //                       color: PeopleChaoScreen_Color
+                    //                           .Colors_Text2_,
+                    //                       // fontWeight: FontWeight.bold,
+                    //                       fontFamily: Font_.Fonts_T
+                    //                       //fontSize: 10.0
+                    //                       ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ),
+                    //           onTap: () async {
+                    //             // String Url =
+                    //             //     'https://www.etda.or.th/getattachment/78750426-4a58-4c36-85d3-d1c11c3db1f3/IUB-65-Final.pdf.aspx';
+                    //             String Url =
+                    //                 await '${MyConstant().domain}/files/kad_taii/contract/other/$cxname_other';
+                    //             print(Url);
+                    //             if (Url == '') {
+                    //               showDialog<void>(
+                    //                 context: context,
+                    //                 barrierDismissible:
+                    //                     false, // user must tap button!
+                    //                 builder: (BuildContext context) {
+                    //                   return AlertDialog(
+                    //                     shape: const RoundedRectangleBorder(
+                    //                         borderRadius: BorderRadius.all(
+                    //                             Radius.circular(10.0))),
+                    //                     title: const Center(
+                    //                         child: Text(
+                    //                       'ไม่พบเอกสารอื่นๆ',
+                    //                       style: TextStyle(
+                    //                           color: PeopleChaoScreen_Color
+                    //                               .Colors_Text1_,
+                    //                           fontWeight: FontWeight.bold,
+                    //                           fontFamily: FontWeight_.Fonts_T),
+                    //                     )),
+                    //                     content: SingleChildScrollView(
+                    //                       child: ListBody(
+                    //                         children: const <Widget>[
+                    //                           Text(
+                    //                             'ไม่พบเอกสาร หรือ กรุณาอัพโหลดก่อน จึงจะสามารถพิมพ์ได้',
+                    //                             style: TextStyle(
+                    //                                 color:
+                    //                                     PeopleChaoScreen_Color
+                    //                                         .Colors_Text2_,
+                    //                                 fontFamily: Font_.Fonts_T),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                     actions: <Widget>[
+                    //                       InkWell(
+                    //                         child: Container(
+                    //                             width: 100,
+                    //                             decoration: const BoxDecoration(
+                    //                               color: Colors.black,
+                    //                               borderRadius:
+                    //                                   BorderRadius.only(
+                    //                                       topLeft: Radius
+                    //                                           .circular(10),
+                    //                                       topRight:
+                    //                                           Radius.circular(
+                    //                                               10),
+                    //                                       bottomLeft:
+                    //                                           Radius.circular(
+                    //                                               10),
+                    //                                       bottomRight:
+                    //                                           Radius.circular(
+                    //                                               10)),
+                    //                               // border: Border.all(color: Colors.white, width: 1),
+                    //                             ),
+                    //                             padding:
+                    //                                 const EdgeInsets.all(8.0),
+                    //                             child: const Center(
+                    //                                 child: Text(
+                    //                               'ปิด',
+                    //                               style: TextStyle(
+                    //                                   color:
+                    //                                       PeopleChaoScreen_Color
+                    //                                           .Colors_Text3_,
+                    //                                   fontWeight:
+                    //                                       FontWeight.bold,
+                    //                                   fontFamily:
+                    //                                       Font_.Fonts_T),
+                    //                             ))),
+                    //                         onTap: () {
+                    //                           Navigator.of(context).pop();
+                    //                         },
+                    //                       ),
+                    //                       // TextButton(
+                    //                       //   child: const Text('ตกลง'),
+                    //                       //   onPressed: () {
+                    //                       //     Navigator.of(context).pop();
+                    //                       //   },
+                    //                       // ),
+                    //                     ],
+                    //                   );
+                    //                 },
+                    //               );
+                    //             } else {
+                    //               Navigator.push(
+                    //                   context,
+                    //                   MaterialPageRoute(
+                    //                     builder: (context) =>
+                    //                         PreviewScreenRental_(
+                    //                             title: 'เอกสารอื่นๆ', Url: Url),
+                    //                   ));
+                    //             }
+                    //           },
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),

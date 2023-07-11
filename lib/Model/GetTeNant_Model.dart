@@ -50,6 +50,7 @@ class TeNantModel {
   String? ser_tran;
   String? custno_1;
   String? custno_2;
+  String? duedate;
 
   TeNantModel({
     this.ser,
@@ -103,6 +104,7 @@ class TeNantModel {
     this.ser_tran,
     this.custno_1,
     this.custno_2,
+    this.duedate,
   });
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
@@ -159,6 +161,7 @@ class TeNantModel {
 
     custno_1 = json['custno_1'];
     custno_2 = json['custno_2'];
+    duedate = json['duedate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -215,6 +218,7 @@ class TeNantModel {
 
     data['custno_1'] = this.custno_1;
     data['custno_2'] = this.custno_2;
+    data['duedate'] = this.duedate;
 
     return data;
   }

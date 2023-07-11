@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -3893,6 +3894,12 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                           });
                                         } else {
                                           setState(() {
+                                            Value_D_start = '';
+                                            Value_D_end = '';
+                                            Value_DateTime_end = '';
+                                            Value_DateTime_Step2 = '';
+                                          });
+                                          setState(() {
                                             Value_rental_type_ = rtnameName;
                                             if (rtnameName == 'รายวัน') {
                                               Value_rental_type_2 = 'วัน';
@@ -4112,7 +4119,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                           onTap: () async {
                                             DateTime? newDate =
                                                 await showDatePicker(
-                                              locale: const Locale('th', 'TH'),
+                                              // locale: const Locale('th', 'TH'),
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime(1000, 1, 01),
@@ -5326,8 +5333,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 6,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -5355,8 +5363,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Container(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             const AutoSizeText(
                                                                           maxLines:
@@ -5389,7 +5398,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         8,
                                                                         0,
                                                                         8,
@@ -8292,7 +8301,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -8359,7 +8368,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -8436,7 +8445,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -9195,8 +9204,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -9224,8 +9234,9 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                       flex: 1,
                                                                       child:
                                                                           Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             AutoSizeText(
                                                                           maxLines:
@@ -9425,7 +9436,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // color: AppbackgroundColor
                                                                 //     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             6),
@@ -9492,7 +9503,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               // color: AppbackgroundColor
                                                               //     .TiTile_Colors,
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft: Radius
                                                                       .circular(
                                                                           6),
@@ -9568,7 +9579,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -10630,7 +10641,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                                 // ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child:
                                                                     AutoSizeText(
@@ -11584,7 +11595,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                               color: Colors
                                                                   .red[600],
                                                               borderRadius: const BorderRadius
-                                                                      .only(
+                                                                  .only(
                                                                   topLeft:
                                                                       Radius.circular(
                                                                           10),
@@ -12167,7 +12178,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             color:
                                                                 Colors.red[600],
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -12622,7 +12633,7 @@ class _ChaoReContactState extends State<ChaoReContact> {
                                                             color:
                                                                 Colors.red[600],
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),

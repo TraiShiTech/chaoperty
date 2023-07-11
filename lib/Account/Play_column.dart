@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:convert';
 import 'dart:ui';
 
@@ -41,7 +42,7 @@ class PlayColumn extends StatefulWidget {
 
 class _PlayColumnState extends State<PlayColumn> {
   var nFormat = NumberFormat("#,##0.00", "en_US");
-  var formatter = DateFormat.yMMMMEEEEd('th');
+  // var formatter = DateFormat.yMMMMEEEEd();
 
   List<ExpModel> expModels = [];
   List<TransPlayModel> transPlayModels = [];
@@ -62,6 +63,9 @@ class _PlayColumnState extends State<PlayColumn> {
   final Form_time = TextEditingController();
   final Formbecause_ = TextEditingController();
   final Form_note = TextEditingController();
+
+  final text_add = TextEditingController();
+  final price_add = TextEditingController();
   DateTime newDatetime = DateTime.now();
   int listOrder = 0;
   String? Slip_status;
@@ -402,8 +406,8 @@ class _PlayColumnState extends State<PlayColumn> {
       }
 
       setState(() {
-        // Form_payment1.text =
-        //     (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+        Form_payment1.text =
+            (sum_amt - sum_disamt).toStringAsFixed(2).toString();
       });
     } catch (e) {}
   }
@@ -774,15 +778,45 @@ class _PlayColumnState extends State<PlayColumn> {
                             ),
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              '',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
+                            child: refnoselect == null
+                                ? Text(
+                                    '',
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  )
+                                : InkWell(
+                                    onTap: () {
+                                      addPlaySelect();
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        // border: Border.all(color: Colors.white, width: 1),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: AutoSizeText(
+                                          minFontSize: 8,
+                                          maxFontSize: 15,
+                                          'เพิ่มรายการ',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              //fontWeight: FontWeight.bold,
+                                              fontFamily: FontWeight_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -919,6 +953,9 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                   ),
                                                                           )
                                                                     : SizedBox(),
+                                                              // Expanded(
+                                                              //     child: Text(
+                                                              //         '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}')),
                                                             ],
                                                           ),
                                                         ),
@@ -1015,10 +1052,10 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                               onTap: () async {
                                                                                                 in_Trans_select(v, i);
-                                                                                                // var ciddoc = transPlayModels[index].cid;
-                                                                                                // setState(() {
-                                                                                                //   red_listdate(ciddoc);
-                                                                                                // });
+                                                                                                var ciddoc = transPlayModels[index].cid;
+                                                                                                setState(() {
+                                                                                                  red_listdate(ciddoc);
+                                                                                                });
                                                                                                 setState(() {
                                                                                                   insexselect = v;
                                                                                                   areaselect = transPlayModels[index].ln;
@@ -1299,6 +1336,19 @@ class _PlayColumnState extends State<PlayColumn> {
                                                 fontFamily: FontWeight_.Fonts_T
                                                 //fontSize: 10.0
                                                 ),
+                                          )),
+                                      Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            '',
+                                            textAlign: TextAlign.end,
+                                            style: TextStyle(
+                                                color: PeopleChaoScreen_Color
+                                                    .Colors_Text1_,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: FontWeight_.Fonts_T
+                                                //fontSize: 10.0
+                                                ),
                                           ))
                                     ]),
                                     Container(
@@ -1374,7 +1424,41 @@ class _PlayColumnState extends State<PlayColumn> {
                                                             Font_.Fonts_T
                                                         //fontSize: 10.0
                                                         ),
-                                                  ))
+                                                  )),
+                                              Expanded(
+                                                flex: 1,
+                                                child: _TransModels[index]
+                                                            .docno
+                                                            .toString()
+                                                            .substring(
+                                                                _TransModels[
+                                                                            index]
+                                                                        .docno
+                                                                        .toString()
+                                                                        .indexOf(
+                                                                            '-') +
+                                                                    1,
+                                                                _TransModels[
+                                                                        index]
+                                                                    .docno
+                                                                    .toString()
+                                                                    .indexOf(
+                                                                        '/')) ==
+                                                        'O'
+                                                    ? IconButton(
+                                                        onPressed: () {
+                                                          deall_Trans_select(
+                                                              index);
+                                                        },
+                                                        icon: Icon(
+                                                          Icons
+                                                              .remove_circle_outline,
+                                                          color: Colors.red,
+                                                        ))
+                                                    : Text(
+                                                        '',
+                                                      ),
+                                              )
                                             ]);
                                           }),
                                     ),
@@ -1794,7 +1878,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                       onTap: () async {
                                         DateTime? newDate =
                                             await showDatePicker(
-                                          locale: const Locale('th', 'TH'),
+                                          // locale: const Locale('th', 'TH'),
                                           context: context,
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime.now()
@@ -1912,7 +1996,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                       onTap: () async {
                                         DateTime? newDate =
                                             await showDatePicker(
-                                          locale: const Locale('th', 'TH'),
+                                          // locale: const Locale('th', 'TH'),
                                           context: context,
                                           initialDate: DateTime.now(),
                                           firstDate: DateTime.now()
@@ -2175,7 +2259,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                             .red[
                                                                         600],
                                                                     borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 10),
@@ -2191,7 +2275,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -2245,7 +2329,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       const Center(
@@ -2582,9 +2666,8 @@ class _PlayColumnState extends State<PlayColumn> {
                                         });
                                         setState(() {
                                           totalQr_ = double.parse(
-                                                  '${Form_payment1.text}') +
-                                              double.parse(
-                                                  '${Form_payment2.text}');
+                                                  Form_payment1.text) +
+                                              double.parse(Form_payment2.text);
                                         });
                                       } else if (paymentName1
                                               .toString()
@@ -2670,7 +2753,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                         color: Colors.white,
                                                         padding:
                                                             const EdgeInsets
-                                                                    .fromLTRB(
+                                                                .fromLTRB(
                                                                 4, 8, 4, 2),
                                                         child: Column(
                                                           crossAxisAlignment:
@@ -2701,7 +2784,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: Center(
                                                                   child: Text(
@@ -3346,6 +3429,412 @@ class _PlayColumnState extends State<PlayColumn> {
         ));
   }
 
+  Future<void> addPlaySelect() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListBody(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'เพิ่มรายการชำระ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(seconds: 0)),
+                                builder: (context, snapshot) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 350,
+                                    child: GridView.count(
+                                      crossAxisCount:
+                                          Responsive.isDesktop(context) ? 5 : 2,
+                                      children: [
+                                        // Card(
+                                        //   child: InkWell(
+                                        //     onTap: () async {
+                                        //       Navigator.of(context).pop();
+                                        //       addPlay();
+                                        //     },
+                                        //     child:
+                                        //         Icon(Icons.add_circle_outline),
+                                        //   ),
+                                        // ),
+                                        for (int i = 0;
+                                            i < expModels.length;
+                                            i++)
+                                          Card(
+                                            color: text_add.text ==
+                                                    expModels[i].expname
+                                                ? Colors.lime
+                                                : Colors.white,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  text_add.text = expModels[i]
+                                                      .expname
+                                                      .toString();
+                                                  price_add.text = expModels[i]
+                                                      .pri_auto
+                                                      .toString();
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  children: [
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${expModels[i].expname}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${nFormat.format(double.parse(expModels[i].pri_auto!))}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ],
+                        )),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: Container(
+                          height: 350,
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        // keyboardType: TextInputType.name,
+                                        controller: text_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'รายการชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: price_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'ยอดชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade900,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          if (text_add.text != '' && price_add.text != '') {
+                            if (price_add.text != '0') {
+                              in_Trans_add();
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<Null> in_Trans_add() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+
+    var ciddoc = refnoselect;
+    var qutser = areaselect;
+
+    var textadd = text_add.text;
+    var priceadd = price_add.text;
+
+    String url =
+        '${MyConstant().domain}/In_tran_select_add.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('rr>>>>>> $result');
+      if (result.toString() == 'true') {
+        setState(() {
+          red_Trans_select22();
+          // red_Trans_bill();
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          // red_Trans_bill();
+          red_Trans_select22();
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        setState(() {
+          // red_Trans_bill();
+          red_Trans_select22();
+          text_add.clear();
+          price_add.clear();
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //       content: Text(
+        //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+        //           style: TextStyle(
+        //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+        // );
+      }
+    } catch (e) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+      //           style:
+      //               TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      // );
+      print('rrrrrrrrrrrrrr $e');
+    }
+  }
+
   Padding fortablet() {
     return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -3642,10 +4131,10 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                               onTap: () async {
                                                                                                 in_Trans_select(v, i);
-                                                                                                // var ciddoc = transPlayModels[index].cid;
-                                                                                                // setState(() {
-                                                                                                //   red_listdate(ciddoc);
-                                                                                                // });
+                                                                                                var ciddoc = transPlayModels[index].cid;
+                                                                                                setState(() {
+                                                                                                  red_listdate(ciddoc);
+                                                                                                });
                                                                                                 setState(() {
                                                                                                   insexselect = v;
                                                                                                   areaselect = transPlayModels[index].ln;
@@ -3937,7 +4426,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                         FontWeight_.Fonts_T
                                                     //fontSize: 10.0
                                                     ),
-                                              ))
+                                              )),
                                         ]),
                                         Container(
                                           height: MediaQuery.of(context)
@@ -4449,7 +4938,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                           onTap: () async {
                                             DateTime? newDate =
                                                 await showDatePicker(
-                                              locale: const Locale('th', 'TH'),
+                                              // locale: const Locale('th', 'TH'),
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime.now().add(
@@ -4570,7 +5059,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                           onTap: () async {
                                             DateTime? newDate =
                                                 await showDatePicker(
-                                              locale: const Locale('th', 'TH'),
+                                              // locale: const Locale('th', 'TH'),
                                               context: context,
                                               initialDate: DateTime.now(),
                                               firstDate: DateTime.now().add(
@@ -4837,7 +5326,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: InkWell(
                                                                   child: Container(
@@ -4845,7 +5334,8 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                       decoration: BoxDecoration(
                                                                         color: Colors
                                                                             .red[600],
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
@@ -4879,7 +5369,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                               Padding(
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         8.0),
                                                                 child: InkWell(
                                                                   child: Container(
@@ -5334,7 +5824,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                     .white,
                                                                 padding:
                                                                     const EdgeInsets
-                                                                            .fromLTRB(
+                                                                        .fromLTRB(
                                                                         4,
                                                                         8,
                                                                         4,
@@ -5359,8 +5849,9 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                               bottomLeft: Radius.circular(0),
                                                                               bottomRight: Radius.circular(0)),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             Center(
                                                                           child:
@@ -5617,7 +6108,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       TextButton(
@@ -6287,7 +6778,7 @@ class _PlayColumnState extends State<PlayColumn> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
-    var ciddoc = transPlayxModels[index].docno_trans;
+    var ciddoc = _TransModels[index].docno;
 
     String url =
         '${MyConstant().domain}/D_tran_select_column.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&user=$user';
@@ -6298,8 +6789,8 @@ class _PlayColumnState extends State<PlayColumn> {
       // print(result);
       if (result.toString() == 'true') {
         setState(() {
-          red_Trans_select2(index);
-          sum = sum - double.parse(transPlayxModels[index].pvat_trans!);
+          red_Trans_select22();
+          sum = sum - double.parse(_TransModels[index].pvat!);
         });
         print('rrrrrrrrrrrrrr');
       } else if (result.toString() == 'false') {
@@ -6388,6 +6879,7 @@ class _PlayColumnState extends State<PlayColumn> {
           refnoselect = null;
           nameselect = null;
           areaselect = null;
+          Form_payment1.text = '0.00';
           insexselect = 0;
           transPlayListModels.clear();
           transPlayListxModels.clear();
@@ -6456,6 +6948,17 @@ class _PlayColumnState extends State<PlayColumn> {
             _TransModels.add(_TransModel);
           });
         }
+
+        setState(() {
+          print('>>>>>>>>>>>ssssss>>>>$sum_amt');
+          Form_payment1.text =
+              (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+        });
+      } else {
+        setState(() {
+          print('>>>>>>>>>>>ssssss>>>>$sum_amt');
+          Form_payment1.text = '0.00';
+        });
       }
 
       print(
@@ -6463,21 +6966,119 @@ class _PlayColumnState extends State<PlayColumn> {
 
       setState(() {
         read_data();
-
+        Form_payment1.text =
+            (sum_amt - sum_disamt).toStringAsFixed(2).toString();
         if (_TransModels.length == 0) {
           refnoselect = null;
           nameselect = null;
           areaselect = null;
           insexselect = 0;
+          Form_payment1.text = '0.00';
           transPlayListModels.clear();
           transPlayListxModels.clear();
+
           // for (var i = 0; i < expModels.length; i++) {
           //   listcolor.add('0');
           // }
         }
+      });
 
+      if (refnoselect == null) {
+        d_tran_selectall();
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> red_Trans_select22() async {
+    if (_TransModels.isNotEmpty) {
+      setState(() {
+        _TransModels.clear();
+        // listcolor.clear();
+
+        sum_pvat = 0;
+        sum_vat = 0;
+        sum_wht = 0;
+        sum_amt = 0;
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    var ciddoc = refnoselect;
+    var qutser = '1';
+
+    String url =
+        '${MyConstant().domain}/GC_tran_select.php?isAdd=true&ren=$ren&user=$user&ciddoc=$ciddoc';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        setState(() {
+          // listcolor.clear();
+          _TransModels.clear();
+          sum_pvat = 0;
+          sum_vat = 0;
+          sum_wht = 0;
+          sum_amt = 0;
+          refnoselect = null;
+        });
+        for (var map in result) {
+          TransModel _TransModel = TransModel.fromJson(map);
+          var refnox = _TransModel.refno.toString().trim();
+
+          var docnox = _TransModel.docno.toString().trim();
+          var sum_pvatx = double.parse(_TransModel.pvat!);
+          var sum_vatx = double.parse(_TransModel.vat!);
+          var sum_whtx = double.parse(_TransModel.wht!);
+          var sum_amtx = double.parse(_TransModel.total!);
+          setState(() {
+            // listcolor.add(docnox);
+
+            // listcolor.insert(index, docnox);
+            sum_pvat = sum_pvat + sum_pvatx;
+            sum_vat = sum_vat + sum_vatx;
+            sum_wht = sum_wht + sum_whtx;
+            sum_amt = sum_amt + sum_amtx;
+            refnoselect = refnox;
+
+            _TransModels.add(_TransModel);
+          });
+        }
+
+        setState(() {
+          print('>>>>>>>>>>>ssssss>>>>$sum_amt');
+          Form_payment1.text =
+              (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+        });
+      } else {
+        setState(() {
+          print('>>>>>>>>>>>ssssss>>>>$sum_amt');
+          Form_payment1.text = '0.00';
+        });
+      }
+
+      // print(
+      //     '${listcolor.length}  ${listcolor.map((e) => e)} ${listcolor[index]} ${transPlayxModels[index].date_trans}');
+
+      setState(() {
+        read_data();
         Form_payment1.text =
             (sum_amt - sum_disamt).toStringAsFixed(2).toString();
+        if (_TransModels.length == 0) {
+          refnoselect = null;
+          nameselect = null;
+          areaselect = null;
+          insexselect = 0;
+          Form_payment1.text = '0.00';
+          transPlayListModels.clear();
+          transPlayListxModels.clear();
+
+          // for (var i = 0; i < expModels.length; i++) {
+          //   listcolor.add('0');
+          // }
+        }
       });
     } catch (e) {}
   }
@@ -6737,13 +7338,17 @@ class _PlayColumnState extends State<PlayColumn> {
             cFinn,
             Value_newDateD);
         setState(() async {
-          read_GC_Playcolumn();
-          red_Trans_select2(insexselect);
-          red_Trans_select3(insexselect);
-          sum_disamtx.text = '0.00';
-          sum_dispx.clear();
-          Form_payment1.clear();
+          Form_payment1.text = '0.00';
           Form_payment2.clear();
+          // read_GC_Exp();
+          read_GC_Playcolumn();
+
+          red_Trans_select2(insexselect);
+          // red_Trans_select3(insexselect);
+          sum_disamtx.clear();
+          sum_dispx.clear();
+          sum_disamt = 0;
+
           Form_time.clear();
           Form_note.clear();
           // Value_newDateY = null;

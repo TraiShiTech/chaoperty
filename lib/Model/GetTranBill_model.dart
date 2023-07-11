@@ -8,6 +8,7 @@ class TransBillModel {
   String? expname;
   String? invoice;
   String? descr;
+  String? duedate;
 
   TransBillModel(
       {this.ser,
@@ -18,7 +19,8 @@ class TransBillModel {
       this.total,
       this.expname,
       this.invoice,
-      this.descr});
+      this.descr,
+      this.duedate});
 
   TransBillModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -30,6 +32,7 @@ class TransBillModel {
     expname = json['expname'];
     invoice = json['invoice'];
     descr = json['descr'];
+    duedate = json['duedate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,8 @@ class TransBillModel {
     data['expname'] = this.expname;
     data['invoice'] = this.invoice;
     data['descr'] = this.descr;
+    data['duedate'] = this.duedate;
+
     return data;
   }
 }

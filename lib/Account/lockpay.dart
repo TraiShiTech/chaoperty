@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member
 import 'dart:convert';
 import 'dart:html';
 import 'dart:ui';
@@ -178,6 +179,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
   final Form_payment2 = TextEditingController();
   final Form_time = TextEditingController();
   final Form_note = TextEditingController();
+  final text_add = TextEditingController();
+  final price_add = TextEditingController();
 
   int select_page = 0,
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
@@ -598,6 +601,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
+      zone_ser = preferences.getString('zoneSer');
+      zone_name = preferences.getString('zonesName');
     });
   }
 
@@ -634,6 +639,18 @@ class _LockpayScreenState extends State<LockpayScreen> {
         ZoneModel zoneModel = ZoneModel.fromJson(map);
         setState(() {
           zoneModels.add(zoneModel);
+        });
+      }
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+
+      var ser = preferences.getString('zoneSer');
+      var _name = preferences.getString('zonesName');
+
+      if (ser == null || ser == 'null') {
+        preferences.setString('zoneSer', 0.toString());
+        preferences.setString('zonesName', "ทั้งหมด");
+        setState(() {
+          checkPreferance();
         });
       }
     } catch (e) {}
@@ -801,7 +818,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
   Future<Null> _select_Date(BuildContext context) async {
     final Future<DateTime?> picked = showDatePicker(
-      locale: const Locale('th', 'TH'),
+      // locale: const Locale('th', 'TH'),
       helpText: 'เลือกวันที่เริ่มต้น', confirmText: 'ตกลง',
       cancelText: 'ยกเลิก',
       context: context,
@@ -844,23 +861,35 @@ class _LockpayScreenState extends State<LockpayScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
-    // var ciddoc = widget.Get_Value_cid;
-    // var qutser = widget.Get_Value_NameShop_index;
+    var zone = preferences.getString('zoneSer');
 
     DateTime newDatetimex = DateTime.now();
 
     var tser = expModels[index].ser;
 
-    var selecte = _selecteSerbool.length;
-    var selecte_ln =
-        '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
+    var selecte = No_Area_ == 'ไม่ระบุพื้นที่'
+        ? 1
+        : _selecteSerbool.length == 0
+            ? 1
+            : _selecteSerbool.length;
+    var selecte_ln = No_Area_ == 'ไม่ระบุพื้นที่'
+        ? 'ล็อคเสียบ'
+        : _selecteSerbool.length == 0
+            ? 'ล็อคเสียบ'
+            : '${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
 
     var day = DateFormat('dd').format(newDatetimex);
     var timex = DateFormat('HHmmss').format(newDatetimex);
 
+    var vts = DateTime.now().toUtc().millisecondsSinceEpoch;
+
     var ciddoc = No_Area_ == 'ไม่ระบุพื้นที่'
-        ? 'L$day$timex-${Status5Form_NoArea_.text}'
-        : 'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}'; //In_c_paynew
+        ? _selecteSerbool.length == 0
+            ? 'L$day$timex-$vts'
+            : 'L$day$timex-${Status5Form_NoArea_.text}'
+        : _selecteSerbool.length == 0
+            ? 'L$day$timex-$vts'
+            : 'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}'; //In_c_paynew
 
     print('$tser>>>>$selecte>>>>$_area_rent_sum');
 
@@ -870,7 +899,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
 
     // print('object $tdocno');
     String url =
-        '${MyConstant().domain}/In_c_paynew.php?isAdd=true&ren=$ren&tser=$tser&selecte=$selecte&selecte_ln=$selecte_ln&_area_rent_sum=$area_rent_sum&user=$user&ciddoc=$ciddoc';
+        '${MyConstant().domain}/In_c_paynew.php?isAdd=true&ren=$ren&tser=$tser&selecte=$selecte&selecte_ln=$selecte_ln&_area_rent_sum=$area_rent_sum&user=$user&ciddoc=$ciddoc&zone=$zone';
     try {
       var response = await http.get(Uri.parse(url));
 
@@ -1703,7 +1732,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                 color: AppbackgroundColor
                                                                     .TiTile_Colors,
                                                                 borderRadius: const BorderRadius
-                                                                        .only(
+                                                                    .only(
                                                                     topLeft:
                                                                         Radius.circular(
                                                                             10),
@@ -2302,7 +2331,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           BoxDecoration(
                                                                         color: AppbackgroundColor
                                                                             .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
+                                                                        borderRadius: const BorderRadius
+                                                                            .only(
                                                                             topLeft:
                                                                                 Radius.circular(10),
                                                                             topRight: Radius.circular(10),
@@ -2313,9 +2343,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 Colors.black,
                                                                             width: 1),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           AutoSizeText(
                                                                         minFontSize:
@@ -3799,8 +3829,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                         ),
                         Container(
                           height: (Responsive.isDesktop(context))
-                              ? MediaQuery.of(context).size.height * 0.6
-                              : MediaQuery.of(context).size.height * 0.76,
+                              ? MediaQuery.of(context).size.height * 0.53
+                              : MediaQuery.of(context).size.height * 0.753,
                           decoration: const BoxDecoration(
                             color: AppbackgroundColor.Sub_Abg_Colors,
                             borderRadius: BorderRadius.only(
@@ -3867,52 +3897,58 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                         Expanded(
                                             flex: 1,
                                             child: IconButton(
-                                                onPressed: () {
-                                                  if (_formKey.currentState!
-                                                      .validate()) {
-                                                    //   print('---------------------------------->');
-                                                    print(Status4Form_typeshop
-                                                        .text);
-                                                    print(Status4Form_nameshop
-                                                        .text);
-                                                    print(Status4Form_typeshop
-                                                        .text);
-                                                    print(Status4Form_bussshop
-                                                        .text);
-                                                    print(
-                                                        Status4Form_bussscontact
-                                                            .text);
-                                                    print(Status4Form_address
-                                                        .text);
-                                                    print(Status4Form_tel.text);
-                                                    print(
-                                                        Status4Form_email.text);
-                                                    print(Status4Form_tax.text);
-                                                    print(Status5Form_NoArea_
-                                                        .text);
-                                                    //   print('----------------------------------');
+                                                onPressed: () async {
+                                                  // if (_formKey.currentState!
+                                                  //     .validate()) {
+                                                  //   print('---------------------------------->');
 
-                                                    if (_selecteSerbool
-                                                                .length !=
-                                                            0 ||
-                                                        No_Area_ != '') {
-                                                      in_Trans_select(index);
-                                                    } else {
-                                                      ScaffoldMessenger.of(
-                                                              context)
-                                                          .showSnackBar(
-                                                        const SnackBar(
-                                                            content: Text(
-                                                                'กรุณาเลือกพื้นที่',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontFamily:
-                                                                        Font_
-                                                                            .Fonts_T))),
-                                                      );
-                                                    }
+                                                  print(Status4Form_typeshop
+                                                      .text);
+                                                  print(Status4Form_nameshop
+                                                      .text);
+                                                  print(Status4Form_typeshop
+                                                      .text);
+                                                  print(Status4Form_bussshop
+                                                      .text);
+                                                  print(Status4Form_bussscontact
+                                                      .text);
+                                                  print(
+                                                      Status4Form_address.text);
+                                                  print(Status4Form_tel.text);
+                                                  print(Status4Form_email.text);
+                                                  print(Status4Form_tax.text);
+                                                  print(
+                                                      Status5Form_NoArea_.text);
+                                                  //   print('----------------------------------');
+                                                  SharedPreferences
+                                                      preferences =
+                                                      await SharedPreferences
+                                                          .getInstance();
+                                                  zone_ser = preferences
+                                                      .getString('zoneSer');
+                                                  zone_name = preferences
+                                                      .getString('zonesName');
+
+                                                  print(
+                                                      'zone_ser>>>>$zone_ser');
+
+                                                  if (zone_ser != '0') {
+                                                    in_Trans_select(index);
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      const SnackBar(
+                                                          content: Text(
+                                                              'กรุณาเลือกโซนพื้นที่',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T))),
+                                                    );
                                                   }
+                                                  // }
                                                 },
                                                 icon: Icon(Icons.east))),
                                       ],
@@ -3921,6 +3957,62 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                 ),
                               );
                             },
+                          ),
+                        ),
+                        Container(
+                          color: Colors.white,
+                          padding: EdgeInsets.all(8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  SharedPreferences preferences =
+                                      await SharedPreferences.getInstance();
+                                  zone_ser = preferences.getString('zoneSer');
+                                  zone_name =
+                                      preferences.getString('zonesName');
+
+                                  if (zone_ser != '0') {
+                                    addPlaySelect();
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text('กรุณาเลือกโซนพื้นที่',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: Font_.Fonts_T))),
+                                    );
+                                  }
+                                },
+                                child: Container(
+                                  width: 100,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                        bottomLeft: Radius.circular(10),
+                                        bottomRight: Radius.circular(10)),
+                                    // border: Border.all(color: Colors.white, width: 1),
+                                  ),
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: const Center(
+                                    child: AutoSizeText(
+                                      minFontSize: 8,
+                                      maxFontSize: 15,
+                                      'เพิ่มใหม่',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          //fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ])),
@@ -5574,8 +5666,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   onTap: () async {
                                                     DateTime? newDate =
                                                         await showDatePicker(
-                                                      locale: const Locale(
-                                                          'th', 'TH'),
+                                                      // locale: const Locale(
+                                                      // 'th', 'TH'),
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
@@ -5719,8 +5811,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   onTap: () async {
                                                     DateTime? newDate =
                                                         await showDatePicker(
-                                                      locale: const Locale(
-                                                          'th', 'TH'),
+                                                      // locale: const Locale(
+                                                      // 'th', 'TH'),
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
@@ -6021,8 +6113,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -6048,8 +6141,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -6766,7 +6860,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           Container(
                                                                         color: Colors
                                                                             .white,
-                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                        padding: const EdgeInsets
+                                                                            .fromLTRB(
                                                                             4,
                                                                             8,
                                                                             4,
@@ -6898,9 +6993,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed:
@@ -6971,7 +7066,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -6991,8 +7087,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -8326,8 +8423,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   onTap: () async {
                                                     DateTime? newDate =
                                                         await showDatePicker(
-                                                      locale: const Locale(
-                                                          'th', 'TH'),
+                                                      // locale: const Locale(
+                                                      // 'th', 'TH'),
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
@@ -8471,8 +8568,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                   onTap: () async {
                                                     DateTime? newDate =
                                                         await showDatePicker(
-                                                      locale: const Locale(
-                                                          'th', 'TH'),
+                                                      // locale: const Locale(
+                                                      //     'th', 'TH'),
                                                       context: context,
                                                       initialDate:
                                                           DateTime.now(),
@@ -8773,8 +8870,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             .center,
                                                                     children: [
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -8800,8 +8898,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                         ),
                                                                       ),
                                                                       Padding(
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            8.0),
                                                                         child:
                                                                             InkWell(
                                                                           child: Container(
@@ -9518,7 +9617,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                           Container(
                                                                         color: Colors
                                                                             .white,
-                                                                        padding: const EdgeInsets.fromLTRB(
+                                                                        padding: const EdgeInsets
+                                                                            .fromLTRB(
                                                                             4,
                                                                             8,
                                                                             4,
@@ -9650,9 +9750,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed:
@@ -9723,7 +9823,8 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Row(
                                                                       mainAxisAlignment:
@@ -9743,8 +9844,9 @@ class _LockpayScreenState extends State<LockpayScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               TextButton(
                                                                             onPressed: () =>
@@ -10217,6 +10319,417 @@ class _LockpayScreenState extends State<LockpayScreen> {
                   ],
                 )
         ]));
+  }
+
+  Future<void> addPlaySelect() {
+    return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            // title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ListBody(
+                    children: <Widget>[
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'เพิ่มรายการชำระ',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: PeopleChaoScreen_Color.Colors_Text1_,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontWeight_.Fonts_T
+                                //fontSize: 10.0
+                                ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: Column(
+                          children: [
+                            StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(seconds: 0)),
+                                builder: (context, snapshot) {
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 350,
+                                    child: GridView.count(
+                                      crossAxisCount:
+                                          Responsive.isDesktop(context) ? 5 : 2,
+                                      children: [
+                                        // Card(
+                                        //   child: InkWell(
+                                        //     onTap: () async {
+                                        //       Navigator.of(context).pop();
+                                        //       addPlay();
+                                        //     },
+                                        //     child:
+                                        //         Icon(Icons.add_circle_outline),
+                                        //   ),
+                                        // ),
+                                        for (int i = 0;
+                                            i < expModels.length;
+                                            i++)
+                                          Card(
+                                            color: text_add.text ==
+                                                    expModels[i].expname
+                                                ? Colors.lime
+                                                : Colors.white,
+                                            child: InkWell(
+                                              onTap: () async {
+                                                setState(() {
+                                                  text_add.text = expModels[i]
+                                                      .expname
+                                                      .toString();
+                                                  price_add.text = expModels[i]
+                                                      .pri_auto
+                                                      .toString();
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Column(
+                                                  children: [
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${expModels[i].expname}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                    AutoSizeText(
+                                                      minFontSize: 10,
+                                                      maxFontSize: 15,
+                                                      maxLines: 1,
+                                                      '${nFormat.format(double.parse(expModels[i].pri_auto!))}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                          color:
+                                                              PeopleChaoScreen_Color
+                                                                  .Colors_Text2_,
+                                                          //fontWeight: FontWeight.bold,
+                                                          fontFamily:
+                                                              Font_.Fonts_T),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                      ],
+                                    ),
+                                  );
+                                }),
+                          ],
+                        )),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                            child: Container(
+                          height: 350,
+                          child: Row(
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        // keyboardType: TextInputType.name,
+                                        controller: text_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'รายการชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.6 /
+                                        2.5,
+                                    height: 50,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: price_add,
+
+                                        maxLines: 1,
+                                        // maxLength: 13,
+                                        cursorColor: Colors.green,
+                                        decoration: InputDecoration(
+                                          fillColor:
+                                              Colors.white.withOpacity(0.3),
+                                          filled: true,
+                                          // prefixIcon:
+                                          //     const Icon(Icons.person, color: Colors.black),
+                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                          focusedBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          enabledBorder:
+                                              const OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(15),
+                                              topLeft: Radius.circular(15),
+                                              bottomRight: Radius.circular(15),
+                                              bottomLeft: Radius.circular(15),
+                                            ),
+                                            borderSide: BorderSide(
+                                              width: 1,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          labelText: 'ยอดชำระ',
+                                          labelStyle: const TextStyle(
+                                            color: PeopleChaoScreen_Color
+                                                .Colors_Text2_,
+                                            // fontWeight: FontWeight.bold,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.green.shade900,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ตกลง',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          if (text_add.text != '' && price_add.text != '') {
+                            if (price_add.text != '0') {
+                              in_Trans_add();
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                              // border: Border.all(color: Colors.white, width: 1),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Center(
+                                child: Text(
+                              'ปิด',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontWeight_.Fonts_T
+                                  //fontSize: 10.0
+                                  ),
+                            ))),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  Future<Null> in_Trans_add() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    DateTime newDatetime = DateTime.now();
+    var day = DateFormat('dd').format(newDatetime);
+    var timex = DateFormat('mmss').format(newDatetime);
+    var ciddocx = 'L$day$timex';
+    var ciddoc = ciddocx;
+    var qutser = 1.toString();
+
+    var textadd = text_add.text;
+    var priceadd = price_add.text;
+
+    print('ciddoc>>>ciddoc>>>>>>>>>>>>>>>>>>>>>>>>>>>$ciddoc');
+
+    String url =
+        '${MyConstant().domain}/In_tran_select_add_h.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&textadd=$textadd&priceadd=$priceadd&user=$user&ser_zser=$zone_ser';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('rr>>>>>> $result');
+      if (result.toString() == 'true') {
+        setState(() {
+          red_Trans_select2();
+          red_Trans_bill();
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrr');
+      } else if (result.toString() == 'false') {
+        setState(() {
+          red_Trans_bill();
+          red_Trans_select2();
+          text_add.clear();
+          price_add.clear();
+        });
+        print('rrrrrrrrrrrrrrfalse');
+      } else {
+        setState(() {
+          red_Trans_bill();
+          red_Trans_select2();
+          text_add.clear();
+          price_add.clear();
+        });
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   SnackBar(
+        //       content: Text(
+        //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+        //           style: TextStyle(
+        //               color: Colors.white, fontFamily: Font_.Fonts_T))),
+        // );
+      }
+    } catch (e) {
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       content: Text(
+      //           'มีผู้ใช้อื่นกำลังทำรายการอยู่ หรือ ท่านเลือกรายการนี้แล้ว....',
+      //           style:
+      //               TextStyle(color: Colors.white, fontFamily: Font_.Fonts_T))),
+      // );
+      print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   // Future<Null> in_Trans_invoice_P(newValuePDFimg) async {

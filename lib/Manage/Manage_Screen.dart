@@ -1,3 +1,4 @@
+// ignore_for_file: unused_import, unused_local_variable, unnecessary_null_comparison, unused_field, override_on_non_overriding_member, duplicate_import, must_be_immutable, body_might_complete_normally_nullable
 import 'dart:convert';
 
 import 'package:auto_size_text/auto_size_text.dart';
@@ -2050,7 +2051,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                               Expanded(
                                                 flex: 3,
                                                 child: Text(
-                                                  '${transMeterModels[index].expname}',
+                                                  '${transMeterModels[index].expname} ${transMeterModels[index].date}',
                                                   textAlign: TextAlign.center,
                                                   maxLines: 1,
                                                   overflow:

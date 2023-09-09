@@ -137,6 +137,10 @@ class TransReBillModelRECM {
   String? all_sum_expser12;
   String? slip;
 
+  String? zonepri;
+  String? jon;
+  String? ren_pri;
+  String? total_expname;
   TransReBillModelRECM({
     this.ser,
     this.datex,
@@ -269,6 +273,10 @@ class TransReBillModelRECM {
     this.all_sum_expser11,
     this.all_sum_expser12,
     this.slip,
+    this.zonepri,
+    this.jon,
+    this.ren_pri,
+    this.total_expname,
   });
 
   TransReBillModelRECM.fromJson(Map<String, dynamic> json) {
@@ -406,6 +414,11 @@ class TransReBillModelRECM {
     all_sum_expser11 = json['all_sum_expser11'];
     all_sum_expser12 = json['all_sum_expser12'];
     slip = json['slip'];
+
+    zonepri = json['zonepri'];
+    jon = json['jon'];
+    ren_pri = json['ren_pri'];
+    total_expname = json['total_expname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -543,7 +556,12 @@ class TransReBillModelRECM {
     data['all_sum_expser10'] = this.all_sum_expser10;
     data['all_sum_expser11'] = this.all_sum_expser11;
     data['all_sum_expser12'] = this.all_sum_expser12;
+
     data['slip'] = this.slip;
+    data['zonepri'] = this.zonepri;
+    data['jon'] = this.jon;
+    data['ren_pri'] = this.ren_pri;
+    data['total_expname'] = this.total_expname;
 
     return data;
   }

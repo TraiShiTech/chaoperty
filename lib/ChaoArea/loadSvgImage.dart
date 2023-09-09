@@ -9,7 +9,6 @@ import 'package:xml/xml.dart' as xml;
 
 import '../Model/GetArea_Model.dart';
 
-///////////////////////////------------------------------->(ใช้ไฟล์จากURL)
 Future<List<AreaModel>> loadSvgImage(
     {required String svgImage, areaModels}) async {
   List<AreaModel> maps = [];
@@ -77,7 +76,7 @@ Future<List<AreaModel>> loadSvgImage(
   return maps;
 }
 
-////////////////////--------------------------------------->(ใช้ไฟล์จากโปรเจค)
+////////////////////--------------------------------------->
 // Future<List<AreaModel>> loadSvgImage(
 //     {required String svgImage, areaModels}) async {
 //   List<AreaModel> maps = [];

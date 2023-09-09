@@ -414,6 +414,46 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.1+1"
+  flutter_html_to_pdf:
+    dependency: "direct main"
+    description:
+      name: flutter_html_to_pdf
+      sha256: "4bec44685f62a404bac7c9e412da0fbcd389ea5eceb397c268d829ecfa148c34"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
+  flutter_image_compress:
+    dependency: "direct main"
+    description:
+      name: flutter_image_compress
+      sha256: "2725cce5c58fdeaf1db8f4203688228bb67e3523a66305ccaa6f99071beb6dc2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.4"
+  flutter_image_compress_common:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_common
+      sha256: "8e7299afe109dc4b97fda34bf0f4967cc1fc10bc8050c374d449cab262d095b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  flutter_image_compress_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_platform_interface
+      sha256: "3c7e86da7540b1adfa919b461885a41a018d4a26544d0fcbeaa769f6542e603d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.2"
+  flutter_image_compress_web:
+    dependency: transitive
+    description:
+      name: flutter_image_compress_web
+      sha256: e879189dc7f246dcf8f06c07ee849231341508bf51e8ed7d5dcbe778ddde0e81
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3+1"
   flutter_limited_checkbox:
     dependency: "direct main"
     description:
@@ -509,6 +549,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.15.4"
+  html_widget:
+    dependency: "direct main"
+    description:
+      name: html_widget
+      sha256: "28f24a210552047c887057381c04e4d065d973605052b9d46715ea24f21915de"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   http:
     dependency: "direct main"
     description:
@@ -542,7 +590,7 @@ packages:
     source: hosted
     version: "1.0.1+1"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       sha256: a72242c9a0ffb65d03de1b7113bc4e189686fc07c7147b8b41811d0dd0e0d9bf
@@ -1098,6 +1146,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "20.4.54"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: "0222ac9d8cb6c671f014effe9bd5c0aef35eadb16471355345ba87cc0ac007b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "20.4.54"
   syncfusion_flutter_core:
     dependency: transitive
     description:
@@ -1227,7 +1283,7 @@ packages:
     source: hosted
     version: "1.3.1"
   universal_html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: universal_html
       sha256: f2e0ff0c4af8e4bbda4d273ca4a11be4055414f478fad5c161609b74790ff696
@@ -1330,6 +1386,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.4"
+  web_image_downloader:
+    dependency: "direct main"
+    description:
+      name: web_image_downloader
+      sha256: ac4c7ba7b64a38d2205cb25d289f08784897c22536f699b27836d34be5df29e5
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   webview_flutter:
     dependency: transitive
     description:

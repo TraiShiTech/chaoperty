@@ -54,6 +54,8 @@ class TransPlayModel {
   String? expx_row;
   List<dynamic> play_amt = [];
   String? trans_date;
+  String? yon_amt;
+
 
   TransPlayModel({
     this.ser,
@@ -110,6 +112,7 @@ class TransPlayModel {
     this.expx_row,
     required this.play_amt,
     this.trans_date,
+    this.yon_amt,
   });
 
   TransPlayModel.fromJson(Map<String, dynamic> json) {
@@ -168,6 +171,7 @@ class TransPlayModel {
     expx_row = json['expx_row'];
     play_amt = json['play_amt'];
     trans_date = json['trans_date'];
+    yon_amt= json['yon_amt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -227,6 +231,8 @@ class TransPlayModel {
     data['expx_row'] = this.expx_row;
     data['play_amt'] = this.play_amt;
     data['trans_date'] = this.trans_date;
+    data['yon_amt'] = this.yon_amt;
+    
     return data;
   }
 }

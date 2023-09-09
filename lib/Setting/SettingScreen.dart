@@ -11,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_admin_scaffold/admin_scaffold.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +24,7 @@ import '../Manage/Manage_Screen.dart';
 import '../Model/Count_area_model.dart';
 import '../Model/GC_package_model.dart';
 import '../Model/GetArea_Model.dart';
+import '../Model/GetContract_Rownum_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Model/GetZone_Model.dart';
@@ -31,6 +33,7 @@ import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
 import 'Access_Rights.dart';
+import 'Advance_Setting.dart';
 import 'Bill_Document.dart';
 import 'Edit_web.dart';
 import 'OtherScreen.dart';
@@ -56,7 +59,8 @@ class _SettingScreenState extends State<SettingScreen> {
   //------------------------------------------------------>
   int Status_MenuZone = 1;
   String name_Zone = 'ทั้งหมด';
-  int Ser_Zone = 0;
+  int Ser_Zone = 0, row_num = 0;
+  int Advance_ser = 0;
   ///////---------------------------------------------------->
   String tappedIndex_ = '';
   final _formKey = GlobalKey<FormState>();
@@ -67,6 +71,8 @@ class _SettingScreenState extends State<SettingScreen> {
   List<AreaModel> _areaModels = <AreaModel>[];
   List<RenTalModel> renTalModels = [];
   List<PackageModel> packageModels = [];
+  List<ContractRownumModel> contractRownumModels = [];
+
   ///////---------------------------------------------------->
   List Status = [
     'พื้นที่',
@@ -75,6 +81,17 @@ class _SettingScreenState extends State<SettingScreen> {
     'การรับชำระ',
     'สิทธิการเข้าถึง',
     'ตั้งค่าหน้าเว็ปไซต์',
+    // 'ข้อมูลผู้ใช้งาน',
+    // '📍ติดต่อเรา',
+  ];
+  List Status_2 = [
+    'พื้นที่',
+    'การเช่า',
+    'เอกสาร',
+    'การรับชำระ',
+    'สิทธิการเข้าถึง',
+    'ตั้งค่าหน้าเว็ปไซต์',
+    'ตั้งค่าพิเศษ',
     // 'ข้อมูลผู้ใช้งาน',
     // '📍ติดต่อเรา',
   ];
@@ -116,7 +133,8 @@ class _SettingScreenState extends State<SettingScreen> {
       permission_user,
       tel_user,
       img_,
-      img_logo;
+      img_logo,
+      acc_2;
   @override
   void initState() {
     super.initState();
@@ -125,6 +143,7 @@ class _SettingScreenState extends State<SettingScreen> {
     read_GC_package();
     read_GC_zone();
     read_GC_area();
+    read_GC_rownum();
     read_GC_area_count();
   }
 
@@ -208,6 +227,7 @@ class _SettingScreenState extends State<SettingScreen> {
           var img = renTalModel.img;
           var imglogo = renTalModel.imglogo;
           setState(() {
+            acc_2 = renTalModel.acc2!;
             foder = foderx;
             rtname = rtnamex;
             type = typexs;
@@ -285,7 +305,9 @@ class _SettingScreenState extends State<SettingScreen> {
   Future<Null> read_GC_area() async {
     var start = DateTime.now();
     if (areaModels.length != 0) {
-      areaModels.clear();
+      setState(() {
+        areaModels.clear();
+      });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -316,6 +338,40 @@ class _SettingScreenState extends State<SettingScreen> {
         zone_ser = preferences.getString('zoneSer');
         zone_name = preferences.getString('zonesName');
       });
+    } catch (e) {}
+  }
+
+  Future<Null> read_GC_rownum() async {
+    if (contractRownumModels.length != 0) {
+      setState(() {
+        contractRownumModels.clear();
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+
+    String url = (name_Zone.toString().trim() == 'ทั้งหมด')
+        ? '${MyConstant().domain}/GC_areaAll_rownum.php?isAdd=true&ren=$ren&zone=0'
+        : '${MyConstant().domain}/GC_areaAll_rownum.php?isAdd=true&ren=$ren&zone=$ser_Zonex';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        if (areaModels.length != 0) {
+          areaModels.clear();
+        }
+        for (var map in result) {
+          ContractRownumModel contractRownumModel =
+              ContractRownumModel.fromJson(map);
+          setState(() {
+            contractRownumModels.add(contractRownumModel);
+          });
+        }
+      } else {}
     } catch (e) {}
   }
 
@@ -375,6 +431,7 @@ class _SettingScreenState extends State<SettingScreen> {
   final Add_name_area_ = TextEditingController();
   final Add_qty_area_text = TextEditingController();
   final Add_pri_area_text = TextEditingController();
+  final key_text = TextEditingController();
 
   List<dynamic> Start_number = [for (int i = 1; i <= 1000; i++) i++];
 
@@ -514,34 +571,73 @@ class _SettingScreenState extends State<SettingScreen> {
 
   Future<void> uploadFile_Imgmap(
       String Path_, String Zone_, String Ser_) async {
-    // InsertFile_SQL(fileName, MixPath_);
-    // Open the file picker and get the selected file
-    final input = html.FileUploadInputElement();
-    // input..accept = 'application/pdf';
-    input.accept = 'image/jpeg,image/png,image/jpg';
-    input.click();
-    // deletedFile_('IDcard_LE000001_25-02-2023.pdf');
-    await input.onChange.first;
+    final imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.getImage(source: ImageSource.gallery);
 
-    final file = input.files!.first;
-    final reader = html.FileReader();
-    reader.readAsArrayBuffer(file);
-    await reader.onLoadEnd.first;
-    String fileName_ = file.name;
-    String extension = fileName_.split('.').last;
-    print('File name: $fileName_');
-    print('Extension: $extension');
-    setState(() {
-      base64_Imgmap = base64Encode(reader.result as Uint8List);
-    });
-    // print(base64_Imgmap);
-    setState(() {
-      extension_ = extension;
-      file_ = file;
-    });
-    OKuploadFile_Imgmap(Path_, Zone_, Ser_);
-  }
+    if (pickedFile == null) {
+      print('User canceled image selection');
+      return;
+    } else {
+      // 2. Read the image as bytes
+      final imageBytes = await pickedFile.readAsBytes();
+      // Define the target width and height
+      final int targetWidth = 100;
+      final int targetHeight = 100;
 
+      // Resize the image to the target width and height
+      // final img.Image resizedImage = img.copyResize(
+      //   img.decodeImage(imageBytes)!,
+      //   width: targetWidth,
+      //   height: targetHeight,
+      // );
+      // 3. Encode the resized image as a base64 string
+      //  final base64Image = base64Encode(img.encodePng(resizedImage));
+
+      // 3. Encode the image as a base64 string
+      final base64Image = base64Encode(imageBytes);
+      setState(() {
+        base64_Imgmap = base64Image;
+      });
+      // print( base64_Imgmap );
+      setState(() {
+        extension_ = 'png';
+        // file_ = file;
+      });
+      print(extension_);
+      print(extension_);
+      OKuploadFile_Imgmap(Path_, Zone_, Ser_);
+    }
+  } //-----------File_upload_img_setting
+
+  // Future<void> uploadFile_Imgmap(
+  //     String Path_, String Zone_, String Ser_) async {
+  //   // InsertFile_SQL(fileName, MixPath_);
+  //   // Open the file picker and get the selected file
+  //   final input = html.FileUploadInputElement();
+  //   // input..accept = 'application/pdf';
+  //   input.accept = 'image/jpeg,image/png,image/jpg';
+  //   input.click();
+  //   // deletedFile_('IDcard_LE000001_25-02-2023.pdf');
+  //   await input.onChange.first;
+
+  //   final file = input.files!.first;
+  //   final reader = html.FileReader();
+  //   reader.readAsArrayBuffer(file);
+  //   await reader.onLoadEnd.first;
+  //   String fileName_ = file.name;
+  //   String extension = fileName_.split('.').last;
+  //   print('File name: $fileName_');
+  //   print('Extension: $extension');
+  //   setState(() {
+  //     base64_Imgmap = base64Encode(reader.result as Uint8List);
+  //   });
+  //   // print(base64_Imgmap);
+  //   setState(() {
+  //     extension_ = extension;
+  //     file_ = file;
+  //   });
+  //   OKuploadFile_Imgmap(Path_, Zone_, Ser_);
+  // }
   Future<void> OKuploadFile_Imgmap(
       String Path_, String Zone_, String Ser_) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -574,36 +670,96 @@ class _SettingScreenState extends State<SettingScreen> {
         });
         Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>เพิ่มรูป(โซน$Zone_)');
       }
-      // InsertFile_SQL(fileName, MixPath_, formattedTime1);
-      // Create a new FormData object and add the file to it
-      final formData = html.FormData();
-      formData.appendBlob('file', file_, fileName);
-      // Send the request
-      final request = html.HttpRequest();
-      request.open('POST',
-          '${MyConstant().domain}/File_uploadSlip.php?name=$fileName&Foder=$foder&Pathfoder=$Path_foder');
-      request.send(formData);
 
-      print(formData);
+      try {
+        final url =
+            '${MyConstant().domain}/File_upload_img_setting.php?name=$fileName&Foder=$foder&extension=$extension_&Path=$Path_foder';
 
-      // Handle the response
-      await request.onLoad.first;
+        final response = await http.post(
+          Uri.parse(url),
+          body: {
+            'image': base64_Imgmap,
+            'Foder': foder,
+            'name': fileName,
+            'ex': extension_.toString(),
+            'Path': Path_foder
+          },
+        );
 
-      if (request.status == 200) {
-        print('File uploaded successfully!');
-        UpImg(context, fileName, Path_, Ser_);
-        // try {
-        //   UpImg(context, fileName, Path_, Ser_);
-        // } catch (e) {
-        //   print(e);
-        // }
-      } else {
-        print('File upload failed with status code: ${request.status}');
+        if (response.statusCode == 200) {
+          print('Image uploaded successfully');
+          UpImg(context, fileName, Path_, Ser_);
+        } else {
+          print('Image upload failed');
+        }
+      } catch (e) {
+        print('Error during image processing: $e');
       }
-    } else {
-      print('ยังไม่ได้เลือกรูปภาพ');
     }
   }
+
+  // Future<void> OKuploadFile_Imgmap(
+  //     String Path_, String Zone_, String Ser_) async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var ren = preferences.getString('renTalSer');
+  //   if (base64_Imgmap != null) {
+  //     String Path_foder = Path_;
+  //     String dateTimeNow = DateTime.now().toString();
+  //     String date = DateFormat('ddMMyyyy')
+  //         .format(DateTime.parse('${dateTimeNow}'))
+  //         .toString();
+  //     final dateTimeNow2 = DateTime.now().toUtc().add(const Duration(hours: 7));
+  //     final formatter2 = DateFormat('HHmmss');
+  //     final formattedTime2 = formatter2.format(dateTimeNow2);
+  //     String Time_ = formattedTime2.toString();
+
+  //     String fileName = '';
+  //     if (Path_.toString() == 'contract') {
+  //       setState(() {
+  //         fileName = 'Map${ren}_${date}_$Time_.$extension_';
+  //       });
+  //       Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>เพิ่มรูป(แผนผัง)');
+  //     } else if (Path_.toString() == 'logo') {
+  //       setState(() {
+  //         fileName = 'logo${ren}_${date}_$Time_.$extension_';
+  //       });
+  //       Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>เพิ่มรูป(โลโก้)');
+  //     } else {
+  //       setState(() {
+  //         fileName = 'zone${Zone_}_${date}_$Time_.$extension_';
+  //       });
+  //       Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>เพิ่มรูป(โซน$Zone_)');
+  //     }
+  //     // InsertFile_SQL(fileName, MixPath_, formattedTime1);
+  //     // Create a new FormData object and add the file to it
+  //     final formData = html.FormData();
+  //     formData.appendBlob('file', file_, fileName);
+  //     // Send the request
+  //     final request = html.HttpRequest();
+  //     request.open('POST',
+  //         '${MyConstant().domain}/File_uploadSlip.php?name=$fileName&Foder=$foder&Pathfoder=$Path_foder');
+  //     request.send(formData);
+
+  //     print(formData);
+
+  //     // Handle the response
+  //     await request.onLoad.first;
+
+  //     if (request.status == 200) {
+  //       print('File uploaded successfully!');
+  //       UpImg(context, fileName, Path_, Ser_);
+  //       // try {
+  //       //   UpImg(context, fileName, Path_, Ser_);
+  //       // } catch (e) {
+  //       //   print(e);
+  //       // }
+  //     } else {
+  //       print('File upload failed with status code: ${request.status}');
+  //     }
+  //   } else {
+  //     print('ยังไม่ได้เลือกรูปภาพ');
+  //   }
+  // }
 
   double _scaleFactor = 1.0; // define the initial scale factor
 
@@ -778,8 +934,8 @@ class _SettingScreenState extends State<SettingScreen> {
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            AutoSizeText(
+                          children: [
+                            const AutoSizeText(
                               'ตั้งค่า',
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 8,
@@ -791,7 +947,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                 fontFamily: FontWeight_.Fonts_T,
                               ),
                             ),
-                            AutoSizeText(
+                            const AutoSizeText(
                               ' > >',
                               overflow: TextOverflow.ellipsis,
                               minFontSize: 8,
@@ -882,63 +1038,152 @@ class _SettingScreenState extends State<SettingScreen> {
                         }),
                         child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Row(children: [
-                              for (int i = 0; i < Status.length; i++)
-                                Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          Status_ = i + 1;
-                                        });
-                                        // setState(() {
-                                        //   if (i + 1 > 5) {
-                                        //     Status_ = i + 2;
-                                        //   } else {
-                                        //     Status_ = i + 1;
-                                        //   }
-                                        // });
-                                      },
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          color: (i + 1 == 1)
-                                              ? Colors.green
-                                              : (i + 1 == 2)
-                                                  ? Colors.blue
-                                                  : (i + 1 == 3)
-                                                      ? Colors.deepPurple[300]
-                                                      : (i + 1 == 4)
-                                                          ? Colors.red
-                                                          : (i + 1 == 5)
-                                                              ? Colors.orange
-                                                              : (i + 1 == 7)
-                                                                  ? Colors.green
-                                                                  : Colors.teal,
-                                          borderRadius: const BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                          border: (Status_ == i + 1)
-                                              ? Border.all(
-                                                  color: Colors.white, width: 1)
-                                              : null,
-                                        ),
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                          child: Text(
-                                            '${Status[i]}',
-                                            style: TextStyle(
-                                                color: (Status_ == i + 1)
-                                                    ? Colors.white
-                                                    : Colors.black,
-                                                fontFamily:
-                                                    FontWeight_.Fonts_T),
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                            ])),
+                            child: (acc_2! == '1')
+                                ? Row(children: [
+                                    for (int i = 0; i < Status_2.length; i++)
+                                      Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              print(i);
+                                              if (i == 6) {
+                                                setState(() {
+                                                  Status_ = 9;
+                                                });
+                                              } else {
+                                                setState(() {
+                                                  Status_ = i + 1;
+                                                });
+                                              }
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: (i + 1 == 1)
+                                                    ? Colors.green
+                                                    : (i + 1 == 2)
+                                                        ? Colors.blue
+                                                        : (i + 1 == 3)
+                                                            ? Colors
+                                                                .deepPurple[300]
+                                                            : (i + 1 == 4)
+                                                                ? Colors.red
+                                                                : (i + 1 == 5)
+                                                                    ? Colors
+                                                                        .orange
+                                                                    : (i + 1 ==
+                                                                            7)
+                                                                        ? Colors
+                                                                            .pink
+                                                                        : (i + 1 ==
+                                                                                8)
+                                                                            ? Colors.green
+                                                                            : Colors.teal,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                                border: (Status_ == i + 1)
+                                                    ? Border.all(
+                                                        color: Colors.white,
+                                                        width: 1)
+                                                    : null,
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  '${Status_2[i]}',
+                                                  style: TextStyle(
+                                                      color: (Status_ ==
+                                                                      i + 3 &&
+                                                                  i == 6 ||
+                                                              Status_ == i + 1)
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                  ])
+                                : Row(children: [
+                                    for (int i = 0; i < Status.length; i++)
+                                      Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                Status_ = i + 1;
+                                              });
+                                              // setState(() {
+                                              //   if (i + 1 > 5) {
+                                              //     Status_ = i + 2;
+                                              //   } else {
+                                              //     Status_ = i + 1;
+                                              //   }
+                                              // });
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: (i + 1 == 1)
+                                                    ? Colors.green
+                                                    : (i + 1 == 2)
+                                                        ? Colors.blue
+                                                        : (i + 1 == 3)
+                                                            ? Colors
+                                                                .deepPurple[300]
+                                                            : (i + 1 == 4)
+                                                                ? Colors.red
+                                                                : (i + 1 == 5)
+                                                                    ? Colors
+                                                                        .orange
+                                                                    : (i + 1 ==
+                                                                            7)
+                                                                        ? Colors
+                                                                            .green
+                                                                        : Colors
+                                                                            .teal,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(10),
+                                                        topRight:
+                                                            Radius.circular(10),
+                                                        bottomLeft:
+                                                            Radius.circular(10),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10)),
+                                                border: (Status_ == i + 1)
+                                                    ? Border.all(
+                                                        color: Colors.white,
+                                                        width: 1)
+                                                    : null,
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  '${Status[i]}',
+                                                  style: TextStyle(
+                                                      color: (Status_ == i + 1)
+                                                          ? Colors.white
+                                                          : Colors.black,
+                                                      fontFamily:
+                                                          FontWeight_.Fonts_T),
+                                                ),
+                                              ),
+                                            ),
+                                          )),
+                                  ])),
                       ),
                     ),
                   ),
@@ -1005,7 +1250,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ? Status6_Web()
                                 : (Status_ == 7)
                                     ? Status7_Web()
-                                    : Status8_Web()
+                                    : (Status_ == 8)
+                                        ? Status8_Web()
+                                        : AdvanceSetting()
       ],
     );
   }
@@ -1033,9 +1280,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     alignment: Alignment.center,
                     child: Container(
                       width: 300,
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Text('แผนผัง',
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -1265,7 +1512,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.brown[100],
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -1335,7 +1582,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                           decoration: BoxDecoration(
                                             color: Colors.brown[100],
                                             borderRadius: const BorderRadius
-                                                    .only(
+                                                .only(
                                                 topLeft: Radius.circular(10),
                                                 topRight: Radius.circular(10),
                                                 bottomLeft: Radius.circular(10),
@@ -1843,9 +2090,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             .Fonts_T),
                                                   )),
                                                   content:
-                                                      SingleChildScrollView(
+                                                      const SingleChildScrollView(
                                                     child: ListBody(
-                                                      children: const <Widget>[
+                                                      children: <Widget>[
                                                         Text(
                                                           'มีรูปโลโก้ หากต้องการอัพโหลดกรุณาลบรูปโลโก้ที่มีอยู่แล้วก่อน',
                                                           style: TextStyle(
@@ -1887,7 +2134,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               .red[
                                                                           600],
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               10),
                                                                           topRight: Radius.circular(
@@ -1932,7 +2179,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -1975,7 +2223,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2092,9 +2341,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                                             .Fonts_T),
                                                   )),
                                                   content:
-                                                      SingleChildScrollView(
+                                                      const SingleChildScrollView(
                                                     child: ListBody(
-                                                      children: const <Widget>[
+                                                      children: <Widget>[
                                                         Text(
                                                           'มีรูปแผนผัง หากต้องการอัพโหลดกรุณาลบรูปแผนผังที่มีอยู่แล้วก่อน',
                                                           style: TextStyle(
@@ -2136,7 +2385,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               .red[
                                                                           600],
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               10),
                                                                           topRight: Radius.circular(
@@ -2181,7 +2430,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2224,7 +2474,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2290,8 +2541,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                         Icons.check,
                                                         color: Colors.green,
                                                       ),
-                                                Expanded(
-                                                  child: const Text(
+                                                const Expanded(
+                                                  child: Text(
                                                     ' รูปแผนผัง',
                                                     style: TextStyle(
                                                         color:
@@ -2430,7 +2681,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               .red[
                                                                           600],
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               10),
                                                                           topRight: Radius.circular(
@@ -2473,7 +2724,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2516,7 +2768,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                   ),
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         InkWell(
@@ -2585,9 +2838,9 @@ class _SettingScreenState extends State<SettingScreen> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Container(
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                   // color: Colors.purple.shade600,
-                                  borderRadius: const BorderRadius.only(
+                                  borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(10),
                                       topRight: Radius.circular(10),
                                       bottomLeft: Radius.circular(10),
@@ -2607,1070 +2860,328 @@ class _SettingScreenState extends State<SettingScreen> {
                             ],
                           ),
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: InkWell(
-                        //     child: Container(
-                        //       width: 150,
-                        //       decoration: BoxDecoration(
-                        //         color: Colors.purple.shade600,
-                        //         borderRadius: const BorderRadius.only(
-                        //             topLeft: Radius.circular(10),
-                        //             topRight: Radius.circular(10),
-                        //             bottomLeft: Radius.circular(10),
-                        //             bottomRight: Radius.circular(10)),
-                        //       ),
-                        //       padding: const EdgeInsets.all(8.0),
-                        //       child: const Text('ซื้อ Package',
-                        //           maxLines: 3,
-                        //           overflow: TextOverflow.ellipsis,
-                        //           softWrap: false,
-                        //           textAlign: TextAlign.center,
-                        //           style: TextStyle(
-                        //               fontSize: 15,
-                        //               color: SettingScreen_Color.Colors_Text3_,
-                        //               fontFamily: Font_.Fonts_T)),
-                        //     ),
-                        //     onTap: () {
-                        //       showDialog<String>(
-                        //         barrierDismissible: false,
-                        //         context: context,
-                        //         builder: (BuildContext context) => AlertDialog(
-                        //           shape: const RoundedRectangleBorder(
-                        //               borderRadius: BorderRadius.all(
-                        //                   Radius.circular(20.0))),
-                        //           title: Row(
-                        //             children: [
-                        //               const Expanded(child: SizedBox()),
-                        //               const Expanded(
-                        //                 child: Center(
-                        //                     child: Text(
-                        //                   'Package',
-                        //                   style: TextStyle(
-                        //                     color: SettingScreen_Color
-                        //                         .Colors_Text1_,
-                        //                     fontFamily: FontWeight_.Fonts_T,
-                        //                     fontWeight: FontWeight.bold,
-                        //                   ),
-                        //                 )),
-                        //               ),
-                        //               Expanded(
-                        //                   child: Row(
-                        //                 mainAxisAlignment:
-                        //                     MainAxisAlignment.end,
-                        //                 children: [
-                        //                   InkWell(
-                        //                     onTap: () {
-                        //                       Navigator.pop(context);
-                        //                     },
-                        //                     child: const Center(
-                        //                       child: Padding(
-                        //                         padding: EdgeInsets.all(8.0),
-                        //                         child: Icon(Icons.highlight_off,
-                        //                             size: 35,
-                        //                             color: Colors.black),
-                        //                       ),
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               )),
-                        //             ],
-                        //           ),
-                        //           content: SingleChildScrollView(
-                        //             child: Container(
-                        //               // height: MediaQuery.of(context).size.height / 1.5,
-                        //               width: MediaQuery.of(context).size.width /
-                        //                   1.2,
-                        //               height:
-                        //                   MediaQuery.of(context).size.height *
-                        //                       2,
-                        //               decoration: const BoxDecoration(
-                        //                 // color: Colors.grey[300],
-                        //                 borderRadius: BorderRadius.only(
-                        //                     topLeft: Radius.circular(10),
-                        //                     topRight: Radius.circular(10),
-                        //                     bottomLeft: Radius.circular(10),
-                        //                     bottomRight: Radius.circular(10)),
-                        //                 // border: Border.all(color: Colors.white, width: 1),
-                        //               ),
-                        //               child: ScrollConfiguration(
-                        //                 behavior: AppScrollBehavior(),
-                        //                 child: GridView.builder(
-                        //                   gridDelegate:
-                        //                       const SliverGridDelegateWithFixedCrossAxisCount(
-                        //                     mainAxisSpacing: 2.0,
-                        //                     crossAxisSpacing: 2.0,
-                        //                     crossAxisCount: 1,
-                        //                     childAspectRatio: 2,
-                        //                   ),
-                        //                   physics: const BouncingScrollPhysics(
-                        //                       parent:
-                        //                           AlwaysScrollableScrollPhysics()),
-                        //                   shrinkWrap: true,
-                        //                   scrollDirection: Axis.horizontal,
-                        //                   itemCount: packageModels.length,
-                        //                   itemBuilder: (context, index) {
-                        //                     return Container(
-                        //                       width: 50,
-                        //                       decoration: const BoxDecoration(
-                        //                         color: Colors.white,
-                        //                         borderRadius: BorderRadius.only(
-                        //                             topLeft:
-                        //                                 Radius.circular(30),
-                        //                             topRight:
-                        //                                 Radius.circular(30),
-                        //                             bottomLeft:
-                        //                                 Radius.circular(20),
-                        //                             bottomRight:
-                        //                                 Radius.circular(20)),
-                        //                         // border: Border.all(color: Colors.white, width: 1),
-                        //                       ),
-                        //                       child: Card(
-                        //                         shape:
-                        //                             const RoundedRectangleBorder(
-                        //                           borderRadius:
-                        //                               BorderRadius.only(
-                        //                                   topLeft: Radius
-                        //                                       .circular(30),
-                        //                                   topRight:
-                        //                                       Radius.circular(
-                        //                                           30),
-                        //                                   bottomLeft:
-                        //                                       Radius.circular(
-                        //                                           20),
-                        //                                   bottomRight:
-                        //                                       Radius.circular(
-                        //                                           20)),
-                        //                         ),
-                        //                         child: SizedBox(
-                        //                           width: MediaQuery.of(context)
-                        //                                   .size
-                        //                                   .width *
-                        //                               0.5,
-                        //                           child: Column(
-                        //                             children: [
-                        //                               Container(
-                        //                                 // width: MediaQuery.of(
-                        //                                 //         context)
-                        //                                 //     .size
-                        //                                 //     .width,
-                        //                                 // height: MediaQuery.of(
-                        //                                 //             context)
-                        //                                 //         .size
-                        //                                 //         .width *
-                        //                                 //     0.05,
-                        //                                 decoration:
-                        //                                     BoxDecoration(
-                        //                                   color: Colors
-                        //                                       .lime.shade400,
-                        //                                   borderRadius: const BorderRadius
-                        //                                           .only(
-                        //                                       topLeft: Radius
-                        //                                           .circular(30),
-                        //                                       topRight: Radius
-                        //                                           .circular(30),
-                        //                                       bottomLeft: Radius
-                        //                                           .circular(0),
-                        //                                       bottomRight:
-                        //                                           Radius
-                        //                                               .circular(
-                        //                                                   0)),
-                        //                                   // border: Border.all(color: Colors.white, width: 1),
-                        //                                 ),
-                        //                                 child: Padding(
-                        //                                   padding:
-                        //                                       const EdgeInsets
-                        //                                           .all(8.0),
-                        //                                   child: Column(
-                        //                                     mainAxisAlignment:
-                        //                                         MainAxisAlignment
-                        //                                             .center,
-                        //                                     children: [
-                        //                                       Row(
-                        //                                         mainAxisAlignment:
-                        //                                             MainAxisAlignment
-                        //                                                 .center,
-                        //                                         children: [
-                        //                                           AutoSizeText(
-                        //                                             minFontSize:
-                        //                                                 20,
-                        //                                             maxFontSize:
-                        //                                                 30,
-                        //                                             'Package ${packageModels[index].pk}',
-                        //                                             style: const TextStyle(
-                        //                                                 color: PeopleChaoScreen_Color
-                        //                                                     .Colors_Text1_,
-                        //                                                 fontWeight:
-                        //                                                     FontWeight
-                        //                                                         .bold,
-                        //                                                 fontFamily:
-                        //                                                     FontWeight_.Fonts_T),
-                        //                                           ),
-                        //                                         ],
-                        //                                       ),
-                        //                                       const SizedBox(
-                        //                                         height: 5,
-                        //                                       ),
-                        //                                       Row(
-                        //                                         mainAxisAlignment:
-                        //                                             MainAxisAlignment
-                        //                                                 .center,
-                        //                                         children: [
-                        //                                           AutoSizeText(
-                        //                                             minFontSize:
-                        //                                                 10,
-                        //                                             maxFontSize:
-                        //                                                 12,
-                        //                                             'จัดการสูงสุด ${packageModels[index].qty} ล็อค/แผงเช่า',
-                        //                                             style: TextStyle(
-                        //                                                 color: Colors
-                        //                                                     .grey
-                        //                                                     .shade700,
-                        //                                                 fontFamily:
-                        //                                                     Font_.Fonts_T),
-                        //                                           ),
-                        //                                         ],
-                        //                                       ),
-                        //                                     ],
-                        //                                   ),
-                        //                                 ),
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 10,
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 10,
-                        //                                     maxFontSize: 12,
-                        //                                     'จากปกติ ราคาเดือนละ ${nFormat.format(double.parse(packageModels[index].rpri!))}.-',
-                        //                                     style: TextStyle(
-                        //                                         color: Colors
-                        //                                             .red
-                        //                                             .shade900,
-                        //                                         fontFamily: Font_
-                        //                                             .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 10,
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: const [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 10,
-                        //                                     maxFontSize: 12,
-                        //                                     'ราคาพิเศษ',
-                        //                                     style: TextStyle(
-                        //                                         color: Colors
-                        //                                             .black,
-                        //                                         fontFamily: Font_
-                        //                                             .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 30,
-                        //                                     maxFontSize: 50,
-                        //                                     '  ${nFormat.format(double.parse(packageModels[index].spri!))}.-',
-                        //                                     style: TextStyle(
-                        //                                         color: Colors
-                        //                                             .lime
-                        //                                             .shade700,
-                        //                                         fontFamily:
-                        //                                             FontWeight_
-                        //                                                 .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: const [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 10,
-                        //                                     maxFontSize: 12,
-                        //                                     'บาทต่อเดือน',
-                        //                                     style: TextStyle(
-                        //                                         color: Colors
-                        //                                             .black,
-                        //                                         fontFamily: Font_
-                        //                                             .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 10,
-                        //                                     maxFontSize: 12,
-                        //                                     '(ชำระรายปียอด ${nFormat.format(double.parse(packageModels[index].spri!) * 12)} บาท)',
-                        //                                     style: const TextStyle(
-                        //                                         color: Colors
-                        //                                             .black,
-                        //                                         fontFamily: Font_
-                        //                                             .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 10,
-                        //                               ),
-                        //                               Divider(
-                        //                                 height: 2,
-                        //                                 color: Colors
-                        //                                     .grey.shade600,
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 10,
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: const [
-                        //                                   AutoSizeText(
-                        //                                     minFontSize: 10,
-                        //                                     maxFontSize: 12,
-                        //                                     'รายละเอียด',
-                        //                                     style: TextStyle(
-                        //                                         color: Colors
-                        //                                             .black,
-                        //                                         fontFamily: Font_
-                        //                                             .Fonts_T),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 5,
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: [
-                        //                                     const Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     const SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       '${packageModels[index].user} สิทธิผู้ใช้งาน',
-                        //                                       style: const TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: [
-                        //                                     const Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     const SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'จัดการพื้นที่ได้มากสุด ${packageModels[index].qty} แผง',
-                        //                                       style: const TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ไม่จำกัดจำนวนทะเบียนลูกค้า',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ไม่จำกัดใบเสนอราคา',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ตั้งค่าพื้นที่',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ตั้งค่าประเภทค่าบริการ',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'เรียกดูพื้นที่ว่างแบบ real time',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ทำสัญญา',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ตั้งหนี้ล่วงหน้า',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'วางบิล',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'รับชำระ พร้อม ออกบิล',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ประวัติการรับชำระ',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'รายงานสรุป',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: const [
-                        //                                     Icon(
-                        //                                       Icons.check,
-                        //                                       size: 15,
-                        //                                       color:
-                        //                                           Colors.black,
-                        //                                     ),
-                        //                                     SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'online training',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .black,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: [
-                        //                                     Icon(
-                        //                                       Icons.close,
-                        //                                       size: 15,
-                        //                                       color: Colors.grey
-                        //                                           .shade700,
-                        //                                     ),
-                        //                                     const SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ค่า migrate ข้อมูล',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .grey
-                        //                                               .shade700,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: [
-                        //                                     Icon(
-                        //                                       Icons.close,
-                        //                                       size: 15,
-                        //                                       color: Colors.grey
-                        //                                           .shade700,
-                        //                                     ),
-                        //                                     const SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'customise ระบบ',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .grey
-                        //                                               .shade700,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               Padding(
-                        //                                 padding:
-                        //                                     const EdgeInsets
-                        //                                             .only(
-                        //                                         left: 8,
-                        //                                         right: 8),
-                        //                                 child: Row(
-                        //                                   mainAxisAlignment:
-                        //                                       MainAxisAlignment
-                        //                                           .start,
-                        //                                   children: [
-                        //                                     Icon(
-                        //                                       Icons.close,
-                        //                                       size: 15,
-                        //                                       color: Colors.grey
-                        //                                           .shade700,
-                        //                                     ),
-                        //                                     const SizedBox(
-                        //                                       width: 5,
-                        //                                     ),
-                        //                                     AutoSizeText(
-                        //                                       minFontSize: 10,
-                        //                                       maxFontSize: 12,
-                        //                                       'ค่า hardware & อุปกรณ์',
-                        //                                       style: TextStyle(
-                        //                                           color: Colors
-                        //                                               .grey
-                        //                                               .shade700,
-                        //                                           fontFamily: Font_
-                        //                                               .Fonts_T),
-                        //                                     ),
-                        //                                   ],
-                        //                                 ),
-                        //                               ),
-                        //                               const SizedBox(
-                        //                                 height: 5,
-                        //                               ),
-                        //                               const Divider(
-                        //                                 height: 2,
-                        //                               ),
-                        //                               Row(
-                        //                                 mainAxisAlignment:
-                        //                                     MainAxisAlignment
-                        //                                         .center,
-                        //                                 children: [
-                        //                                   Padding(
-                        //                                     padding:
-                        //                                         const EdgeInsets
-                        //                                             .all(8.0),
-                        //                                     child: Container(
-                        //                                       width: 150,
-                        //                                       decoration:
-                        //                                           BoxDecoration(
-                        //                                         color: int.parse(packageModels[index]
-                        //                                                     .qty!) <
-                        //                                                 countarae!
-                        //                                             ? Colors
-                        //                                                 .grey
-                        //                                                 .shade300
-                        //                                             : Colors
-                        //                                                 .purple
-                        //                                                 .shade600,
-                        //                                         borderRadius: const BorderRadius
-                        //                                                 .only(
-                        //                                             topLeft:
-                        //                                                 Radius.circular(
-                        //                                                     10),
-                        //                                             topRight: Radius
-                        //                                                 .circular(
-                        //                                                     10),
-                        //                                             bottomLeft:
-                        //                                                 Radius.circular(
-                        //                                                     10),
-                        //                                             bottomRight:
-                        //                                                 Radius.circular(
-                        //                                                     10)),
-                        //                                       ),
-                        //                                       padding:
-                        //                                           const EdgeInsets
-                        //                                               .all(8.0),
-                        //                                       child: TextButton(
-                        //                                         onPressed:
-                        //                                             () async {
-                        //                                           if (int.parse(
-                        //                                                   packageModels[index]
-                        //                                                       .qty!) <
-                        //                                               countarae!) {
-                        //                                           } else {
-                        //                                             SharedPreferences
-                        //                                                 preferences =
-                        //                                                 await SharedPreferences
-                        //                                                     .getInstance();
-                        //                                             String?
-                        //                                                 ren =
-                        //                                                 preferences
-                        //                                                     .getString('renTalSer');
-                        //                                             String?
-                        //                                                 ser_user =
-                        //                                                 preferences
-                        //                                                     .getString('ser');
-                        //                                             String?
-                        //                                                 ser_pk =
-                        //                                                 packageModels[index]
-                        //                                                     .ser;
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: InkWell(
+                            child: Container(
+                              width: 150,
+                              decoration: BoxDecoration(
+                                color: Colors.purple.shade600,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10)),
+                              ),
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text('Licensekey',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: SettingScreen_Color.Colors_Text3_,
+                                      fontFamily: Font_.Fonts_T)),
+                            ),
+                            onTap: () {
+                              showDialog<String>(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (BuildContext context) => AlertDialog(
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0))),
+                                  title: Row(
+                                    children: [
+                                      const Expanded(child: SizedBox()),
+                                      const Expanded(
+                                        child: Center(
+                                            child: Text(
+                                          'Licensekey',
+                                          style: TextStyle(
+                                            color: SettingScreen_Color
+                                                .Colors_Text1_,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        )),
+                                      ),
+                                      Expanded(
+                                          child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: const Center(
+                                              child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Icon(Icons.highlight_off,
+                                                    size: 35,
+                                                    color: Colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )),
+                                    ],
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: Container(
+                                      // height: MediaQuery.of(context).size.height / 1.5,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.1,
 
-                        //                                             String?
-                        //                                                 Package =
-                        //                                                 'Package ${packageModels[index].pk}';
+                                      decoration: const BoxDecoration(
+                                        // color: Colors.grey[300],
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        // border: Border.all(color: Colors.white, width: 1),
+                                      ),
+                                      child: ScrollConfiguration(
+                                        behavior: AppScrollBehavior(),
+                                        child: Form(
+                                          key: _formKey,
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: SizedBox(
+                                                  // width: 200,
+                                                  child: TextFormField(
+                                                    controller: key_text,
+                                                    validator: (value) {
+                                                      if (value == null ||
+                                                          value.isEmpty) {
+                                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                      }
+                                                      // if (int.parse(value.toString()) < 13) {
+                                                      //   return '< 13';
+                                                      // }
+                                                      return null;
+                                                    },
+                                                    // maxLength: 13,
+                                                    cursorColor: Colors.green,
+                                                    decoration: InputDecoration(
+                                                        fillColor: Colors.white
+                                                            .withOpacity(0.3),
+                                                        filled: true,
+                                                        // prefixIcon:
+                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                        focusedBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.black,
+                                                          ),
+                                                        ),
+                                                        enabledBorder:
+                                                            const OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    15),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    15),
+                                                          ),
+                                                          borderSide:
+                                                              BorderSide(
+                                                            width: 1,
+                                                            color: Colors.grey,
+                                                          ),
+                                                        ),
+                                                        labelText: 'Key',
+                                                        labelStyle:
+                                                            const TextStyle(
+                                                          color: Colors.black54,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                        )),
+                                                    // inputFormatters: <
+                                                    //     TextInputFormatter>[
+                                                    //   FilteringTextInputFormatter
+                                                    //       .deny(RegExp("[' ']")),
+                                                    //   // for below version 2 use this
+                                                    //   FilteringTextInputFormatter
+                                                    //       .allow(RegExp(
+                                                    //           r'[a-z A-Z 1-9]')),
+                                                    //   // for version 2 and greater youcan also use this
+                                                    //   // FilteringTextInputFormatter
+                                                    //   //     .digitsOnly
+                                                    // ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Container(
+                                                      width: 100,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.black,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: TextButton(
+                                                        onPressed: () async {
+                                                          if (_formKey
+                                                              .currentState!
+                                                              .validate()) {
+                                                            SharedPreferences
+                                                                preferences =
+                                                                await SharedPreferences
+                                                                    .getInstance();
+                                                            String? ren =
+                                                                preferences
+                                                                    .getString(
+                                                                        'renTalSer');
+                                                            String? ser_user =
+                                                                preferences
+                                                                    .getString(
+                                                                        'ser');
 
-                        //                                             String url =
-                        //                                                 '${MyConstant().domain}/UpC_rental_pk.php?isAdd=true&ren=$ren&ser_pk=$ser_pk&ser_user=$ser_user';
+                                                            var keyname =
+                                                                key_text.text;
 
-                        //                                             try {
-                        //                                               var response =
-                        //                                                   await http
-                        //                                                       .get(Uri.parse(url));
+                                                            String url =
+                                                                '${MyConstant().domain}/UDC_Rental.php?isAdd=true&ren=$ren&ser_user=$ser_user&keyname=$keyname';
 
-                        //                                               var result =
-                        //                                                   json.decode(
-                        //                                                       response.body);
-                        //                                               print(
-                        //                                                   result);
-                        //                                               if (result
-                        //                                                       .toString() ==
-                        //                                                   'true') {
-                        //                                                 Insert_log.Insert_logs(
-                        //                                                     'ตั้งค่า',
-                        //                                                     'พื้นที่>>ซื้อPackkage(${Package.toString()})');
-                        //                                                 setState(
-                        //                                                     () {
-                        //                                                   read_GC_rental();
-                        //                                                   read_GC_zone();
-                        //                                                   read_GC_area();
-                        //                                                 });
-                        //                                               } else {}
-                        //                                             } catch (e) {}
-                        //                                             setState(
-                        //                                                 () {
-                        //                                               read_GC_rental();
-                        //                                               read_GC_zone();
-                        //                                               read_GC_area();
-                        //                                             });
-                        //                                             Navigator.pop(
-                        //                                                 context);
-                        //                                           }
-                        //                                         },
-                        //                                         child:
-                        //                                             const Text(
-                        //                                           'เลือก',
-                        //                                           style:
-                        //                                               TextStyle(
-                        //                                             color: Colors
-                        //                                                 .white,
-                        //                                             fontFamily:
-                        //                                                 FontWeight_
-                        //                                                     .Fonts_T,
-                        //                                             fontWeight:
-                        //                                                 FontWeight
-                        //                                                     .bold,
-                        //                                           ),
-                        //                                         ),
-                        //                                       ),
-                        //                                     ),
-                        //                                   ),
-                        //                                 ],
-                        //                               ),
-                        //                             ],
-                        //                           ),
-                        //                         ),
-                        //                       ),
-                        //                     );
-                        //                   },
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
+                                                            try {
+                                                              var response =
+                                                                  await http.get(
+                                                                      Uri.parse(
+                                                                          url));
+
+                                                              var result =
+                                                                  json.decode(
+                                                                      response
+                                                                          .body);
+                                                              print(
+                                                                  '---------------อัปเดท KEY------------------');
+                                                              print(result);
+                                                              Insert_log
+                                                                  .Insert_logs(
+                                                                      'ตั้งค่า',
+                                                                      'พื้นที่>>อัปเดท KEY');
+                                                              if (result
+                                                                      .toString() ==
+                                                                  'true') {
+                                                                setState(() {
+                                                                  key_text
+                                                                      .clear();
+                                                                  read_GC_rental();
+                                                                  read_GC_zone();
+                                                                  read_GC_area();
+                                                                  read_GC_area_count();
+                                                                });
+
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'OK');
+                                                              } else {
+                                                                ScaffoldMessenger.of(
+                                                                        context)
+                                                                    .showSnackBar(
+                                                                  SnackBar(
+                                                                      content: Text(
+                                                                          'Key ถูกใช้งานแล้ว หรือ Key ไม่ถูกต้องกรุณาลองใหม่!',
+                                                                          style: TextStyle(
+                                                                              color: Colors.white,
+                                                                              fontFamily: Font_.Fonts_T))),
+                                                                );
+                                                                setState(() {
+                                                                  key_text
+                                                                      .clear();
+                                                                });
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'OK');
+                                                              }
+                                                            } catch (e) {
+                                                              print(e);
+                                                            }
+                                                          }
+                                                        },
+                                                        child: const Text(
+                                                          'Submit',
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                         InkWell(
                           child: Container(
                             width: 150,
@@ -3731,8 +3242,8 @@ class _SettingScreenState extends State<SettingScreen> {
                                       child: Column(
                                         // mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
-                                          Row(
-                                            children: const [
+                                          const Row(
+                                            children: [
                                               Padding(
                                                 padding: EdgeInsets.all(8.0),
                                                 child: Text(
@@ -4051,9 +3562,10 @@ class _SettingScreenState extends State<SettingScreen> {
                                         Ser_Zone = index;
                                         ser_Zonex =
                                             zoneModels[index].ser.toString();
+                                        read_GC_area();
+                                        read_GC_rownum();
                                       });
                                       print(index);
-                                      read_GC_area();
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
@@ -4114,6 +3626,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                 setState(() {
                                                   read_GC_zone();
                                                   read_GC_area();
+                                                  read_GC_rownum();
                                                   read_GC_area_count();
                                                   Ser_Zone = 0;
                                                   ser_Zonex = null;
@@ -4167,26 +3680,207 @@ class _SettingScreenState extends State<SettingScreen> {
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('โซน/ชั้น',
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: SettingScreen_Color.Colors_Text2_,
-                            fontFamily: Font_.Fonts_T
-                            // fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  Container(
-                    width: 100,
-                    decoration: (Form_Zone_text.text == 'null' ||
-                            Form_Zone_text == null ||
-                            name_Zone.toString() == 'ทั้งหมด')
-                        ? BoxDecoration(
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        onTap: () async {
+                          setState(() {
+                            if (row_num == 1) {
+                              row_num = 0;
+                            } else {
+                              row_num = 1;
+                            }
+                            read_GC_rownum();
+                            read_GC_area();
+                          });
+                        },
+                        child: Container(
+                          width: 150,
+                          decoration: BoxDecoration(
+                            color: Colors.blue,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                            // border: Border.all(color: Colors.black, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Text(
+                              'จัดลำดับ',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: FontWeight_.Fonts_T),
+                            ),
+                          ),
+                        ),
+                      )),
+                  row_num == 1
+                      ? SizedBox()
+                      : Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('โซน/ชั้น',
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: SettingScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T
+                                  // fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : Container(
+                          width: 100,
+                          decoration: (Form_Zone_text.text == 'null' ||
+                                  Form_Zone_text == null ||
+                                  name_Zone.toString() == 'ทั้งหมด')
+                              ? BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(5),
+                                      bottomLeft: Radius.circular(5),
+                                      bottomRight: Radius.circular(5)),
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1),
+                                )
+                              : null,
+                          padding: (Form_Zone_text.text == 'null' ||
+                                  Form_Zone_text == null ||
+                                  name_Zone.toString() == 'ทั้งหมด')
+                              ? const EdgeInsets.all(8.0)
+                              : null,
+                          child: (Form_Zone_text.text == 'null' ||
+                                  Form_Zone_text == null ||
+                                  name_Zone.toString() == 'ทั้งหมด')
+                              ? Text('${name_Zone}',
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      color: SettingScreen_Color.Colors_Text2_,
+                                      fontFamily: Font_.Fonts_T
+                                      // fontWeight: FontWeight.bold,
+                                      ))
+                              : TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  controller: Form_Zone_text,
+                                  readOnly: (Form_Zone_text.text == 'null' ||
+                                          Form_Zone_text == null ||
+                                          name_Zone.toString() == 'ทั้งหมด')
+                                      ? true
+                                      : false,
+                                  // validator: (value) {
+                                  //   if (value == null || value.isEmpty) {
+                                  //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                  //   }
+                                  //   // if (int.parse(value.toString()) < 13) {
+                                  //   //   return '< 13';
+                                  //   // }
+                                  //   return null;
+                                  // },
+                                  // maxLength: 13,
+                                  onFieldSubmitted: (value) async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String? ren =
+                                        preferences.getString('renTalSer');
+                                    String? ser_user =
+                                        preferences.getString('ser');
+
+                                    String url =
+                                        '${MyConstant().domain}/UpC_Zone_setting.php?isAdd=true&ren=$ren&zser=$ser_Zonex&value=$value&ser_user=$ser_user';
+
+                                    try {
+                                      var response =
+                                          await http.get(Uri.parse(url));
+
+                                      var result = json.decode(response.body);
+                                      print(result);
+                                      if (result.toString() == 'true') {
+                                        setState(() {
+                                          read_GC_rental();
+                                          checkPreferance();
+                                          read_GC_package();
+                                          read_GC_zone();
+                                          read_GC_area();
+                                          read_GC_area_count();
+                                        });
+                                      } else {}
+                                    } catch (e) {}
+                                  },
+                                  cursorColor: Colors.green,
+                                  decoration: InputDecoration(
+                                      fillColor: Colors.white.withOpacity(0.3),
+                                      filled: true,
+                                      // prefixIcon:
+                                      //     const Icon(Icons.person_pin, color: Colors.black),
+                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                        ),
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(15),
+                                          topLeft: Radius.circular(15),
+                                          bottomRight: Radius.circular(15),
+                                          bottomLeft: Radius.circular(15),
+                                        ),
+                                        borderSide: BorderSide(
+                                          width: 1,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      // labelText: '${Form_Zone_text.text}',
+                                      labelStyle: const TextStyle(
+                                          color:
+                                              SettingScreen_Color.Colors_Text2_,
+                                          fontFamily: Font_.Fonts_T)),
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.deny(
+                                        RegExp("[' ']")),
+                                    // for below version 2 use this
+                                    // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                    // for version 2 and greater youcan also use this
+                                    // FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                ),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('จำนวนพื้นที่ทั้งหมด ',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: SettingScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T
+                                  // fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : Container(
+                          decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: const BorderRadius.only(
                                 topLeft: Radius.circular(5),
@@ -4194,221 +3888,98 @@ class _SettingScreenState extends State<SettingScreen> {
                                 bottomLeft: Radius.circular(5),
                                 bottomRight: Radius.circular(5)),
                             border: Border.all(color: Colors.grey, width: 1),
-                          )
-                        : null,
-                    padding: (Form_Zone_text.text == 'null' ||
-                            Form_Zone_text == null ||
-                            name_Zone.toString() == 'ทั้งหมด')
-                        ? const EdgeInsets.all(8.0)
-                        : null,
-                    child: (Form_Zone_text.text == 'null' ||
-                            Form_Zone_text == null ||
-                            name_Zone.toString() == 'ทั้งหมด')
-                        ? Text('${name_Zone}',
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                fontSize: 15,
-                                color: SettingScreen_Color.Colors_Text2_,
-                                fontFamily: Font_.Fonts_T
-                                // fontWeight: FontWeight.bold,
-                                ))
-                        : TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: Form_Zone_text,
-                            readOnly: (Form_Zone_text.text == 'null' ||
-                                    Form_Zone_text == null ||
-                                    name_Zone.toString() == 'ทั้งหมด')
-                                ? true
-                                : false,
-                            // validator: (value) {
-                            //   if (value == null || value.isEmpty) {
-                            //     return 'ใส่ข้อมูลให้ครบถ้วน ';
-                            //   }
-                            //   // if (int.parse(value.toString()) < 13) {
-                            //   //   return '< 13';
-                            //   // }
-                            //   return null;
-                            // },
-                            // maxLength: 13,
-                            onFieldSubmitted: (value) async {
-                              SharedPreferences preferences =
-                                  await SharedPreferences.getInstance();
-                              String? ren = preferences.getString('renTalSer');
-                              String? ser_user = preferences.getString('ser');
-
-                              String url =
-                                  '${MyConstant().domain}/UpC_Zone_setting.php?isAdd=true&ren=$ren&zser=$ser_Zonex&value=$value&ser_user=$ser_user';
-
-                              try {
-                                var response = await http.get(Uri.parse(url));
-
-                                var result = json.decode(response.body);
-                                print(result);
-                                if (result.toString() == 'true') {
-                                  setState(() {
-                                    read_GC_rental();
-                                    checkPreferance();
-                                    read_GC_package();
-                                    read_GC_zone();
-                                    read_GC_area();
-                                    read_GC_area_count();
-                                  });
-                                } else {}
-                              } catch (e) {}
-                            },
-                            cursorColor: Colors.green,
-                            decoration: InputDecoration(
-                                fillColor: Colors.white.withOpacity(0.3),
-                                filled: true,
-                                // prefixIcon:
-                                //     const Icon(Icons.person_pin, color: Colors.black),
-                                // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                focusedBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(15),
-                                    topLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                enabledBorder: const OutlineInputBorder(
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(15),
-                                    topLeft: Radius.circular(15),
-                                    bottomRight: Radius.circular(15),
-                                    bottomLeft: Radius.circular(15),
-                                  ),
-                                  borderSide: BorderSide(
-                                    width: 1,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                // labelText: '${Form_Zone_text.text}',
-                                labelStyle: const TextStyle(
-                                    color: SettingScreen_Color.Colors_Text2_,
-                                    fontFamily: Font_.Fonts_T)),
-                            inputFormatters: <TextInputFormatter>[
-                              FilteringTextInputFormatter.deny(RegExp("[' ']")),
-                              // for below version 2 use this
-                              // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                              // for version 2 and greater youcan also use this
-                              // FilteringTextInputFormatter.digitsOnly
-                            ],
                           ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('จำนวนพื้นที่ทั้งหมด ',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: SettingScreen_Color.Colors_Text2_,
-                            fontFamily: Font_.Fonts_T
-                            // fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
-                          bottomLeft: Radius.circular(5),
-                          bottomRight: Radius.circular(5)),
-                      border: Border.all(color: Colors.grey, width: 1),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('${areaModels.length}',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 15,
-                            color: SettingScreen_Color.Colors_Text2_,
-                            fontFamily: Font_.Fonts_T
-                            // fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('จำนวนพื้นที่คงเหลือ',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        style: TextStyle(
-                            fontSize: 15,
-                            color: SettingScreen_Color.Colors_Text2_,
-                            fontFamily: Font_.Fonts_T
-                            // fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(5),
-                          topRight: Radius.circular(5),
-                          bottomLeft: Radius.circular(5),
-                          bottomRight: Radius.circular(5)),
-                      border: Border.all(color: Colors.grey, width: 1),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('${pkqty! - countarae!}',
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 15,
-                            color: SettingScreen_Color.Colors_Text2_,
-                            fontFamily: Font_.Fonts_T
-                            // fontWeight: FontWeight.bold,
-                            )),
-                  ),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  pkqty! - countarae! > 0
-                      ? Ser_Zone == 0
-                          ? const SizedBox()
-                          : Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  print('1111');
-                                  showDialog<String>(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (BuildContext context) => Form(
-                                      key: _formKey,
-                                      child: AlertDialog(
-                                        shape: const RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(20.0))),
-                                        title: const Center(
-                                            child: Text(
-                                          'เพิ่มพื้นที่',
-                                          style: TextStyle(
-                                            color: SettingScreen_Color
-                                                .Colors_Text1_,
-                                            fontFamily: FontWeight_.Fonts_T,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )),
-                                        content: Container(
-                                          // height: MediaQuery.of(context).size.height / 1.5,
-                                          width:
-                                              (!Responsive.isDesktop(context))
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${areaModels.length}',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: SettingScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T
+                                  // fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text('จำนวนพื้นที่คงเหลือ',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: SettingScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T
+                                  // fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5),
+                                bottomLeft: Radius.circular(5),
+                                bottomRight: Radius.circular(5)),
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${pkqty! - countarae!}',
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: false,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: SettingScreen_Color.Colors_Text2_,
+                                  fontFamily: Font_.Fonts_T
+                                  // fontWeight: FontWeight.bold,
+                                  )),
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : SizedBox(
+                          width: 10,
+                        ),
+                  row_num == 1
+                      ? SizedBox()
+                      : pkqty! - countarae! > 0
+                          ? Ser_Zone == 0
+                              ? const SizedBox()
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      print('1111');
+                                      showDialog<String>(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (BuildContext context) => Form(
+                                          key: _formKey,
+                                          child: AlertDialog(
+                                            shape: const RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(20.0))),
+                                            title: const Center(
+                                                child: Text(
+                                              'เพิ่มพื้นที่',
+                                              style: TextStyle(
+                                                color: SettingScreen_Color
+                                                    .Colors_Text1_,
+                                                fontFamily: FontWeight_.Fonts_T,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )),
+                                            content: Container(
+                                              // height: MediaQuery.of(context).size.height / 1.5,
+                                              width: (!Responsive.isDesktop(
+                                                      context))
                                                   ? MediaQuery.of(context)
                                                       .size
                                                       .width
@@ -4416,293 +3987,795 @@ class _SettingScreenState extends State<SettingScreen> {
                                                           .size
                                                           .width *
                                                       0.5,
-                                          decoration: const BoxDecoration(
-                                            // color: Colors.grey[300],
-                                            borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(10),
-                                                topRight: Radius.circular(10),
-                                                bottomLeft: Radius.circular(10),
-                                                bottomRight:
-                                                    Radius.circular(10)),
-                                            // border: Border.all(color: Colors.white, width: 1),
-                                          ),
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              // mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Row(
+                                              decoration: const BoxDecoration(
+                                                // color: Colors.grey[300],
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(10),
+                                                    topRight:
+                                                        Radius.circular(10),
+                                                    bottomLeft:
+                                                        Radius.circular(10),
+                                                    bottomRight:
+                                                        Radius.circular(10)),
+                                                // border: Border.all(color: Colors.white, width: 1),
+                                              ),
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  // mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-                                                    Expanded(
-                                                        flex: 6,
-                                                        child: Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Text(
-                                                                    'รหัสพื้นที่',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .left,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            flex: 6,
+                                                            child: Column(
+                                                              children: [
+                                                                const Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        'รหัสพื้นที่',
+                                                                        textAlign:
+                                                                            TextAlign.left,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              SettingScreen_Color.Colors_Text1_,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      SizedBox(
+                                                                    // width: 200,
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          area_ser_text,
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value ==
+                                                                                null ||
+                                                                            value.isEmpty) {
+                                                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                        }
+                                                                        // if (int.parse(value.toString()) < 13) {
+                                                                        //   return '< 13';
+                                                                        // }
+                                                                        return null;
+                                                                      },
+                                                                      // maxLength: 13,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      decoration: InputDecoration(
+                                                                          fillColor: Colors.white.withOpacity(0.3),
+                                                                          filled: true,
+                                                                          // prefixIcon:
+                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          focusedBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          labelText: 'รหัสพื้นที่',
+                                                                          labelStyle: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          )),
+                                                                      // inputFormatters: <
+                                                                      //     TextInputFormatter>[
+                                                                      //   FilteringTextInputFormatter
+                                                                      //       .deny(RegExp("[' ']")),
+                                                                      //   // for below version 2 use this
+                                                                      //   FilteringTextInputFormatter
+                                                                      //       .allow(RegExp(
+                                                                      //           r'[a-z A-Z 1-9]')),
+                                                                      //   // for version 2 and greater youcan also use this
+                                                                      //   // FilteringTextInputFormatter
+                                                                      //   //     .digitsOnly
+                                                                      // ],
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: SizedBox(
-                                                                // width: 200,
-                                                                child:
-                                                                    TextFormField(
-                                                                  controller:
-                                                                      area_ser_text,
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value ==
-                                                                            null ||
-                                                                        value
-                                                                            .isEmpty) {
-                                                                      return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                    }
-                                                                    // if (int.parse(value.toString()) < 13) {
-                                                                    //   return '< 13';
-                                                                    // }
-                                                                    return null;
-                                                                  },
-                                                                  // maxLength: 13,
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .green,
-                                                                  decoration: InputDecoration(
-                                                                      fillColor: Colors.white.withOpacity(0.3),
-                                                                      filled: true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      labelText: 'รหัสพื้นที่',
-                                                                      labelStyle: const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .black54,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                      )),
-                                                                  // inputFormatters: <
-                                                                  //     TextInputFormatter>[
-                                                                  //   FilteringTextInputFormatter
-                                                                  //       .deny(RegExp("[' ']")),
-                                                                  //   // for below version 2 use this
-                                                                  //   FilteringTextInputFormatter
-                                                                  //       .allow(RegExp(
-                                                                  //           r'[a-z A-Z 1-9]')),
-                                                                  //   // for version 2 and greater youcan also use this
-                                                                  //   // FilteringTextInputFormatter
-                                                                  //   //     .digitsOnly
-                                                                  // ],
                                                                 ),
+                                                              ],
+                                                            )),
+                                                        Expanded(
+                                                            flex: 6,
+                                                            child: Column(
+                                                              children: [
+                                                                const Padding(
+                                                                  padding:
+                                                                      EdgeInsets
+                                                                          .all(
+                                                                              8.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                        'ชื่อพื้นที่',
+                                                                        textAlign:
+                                                                            TextAlign.start,
+                                                                        style:
+                                                                            TextStyle(
+                                                                          color:
+                                                                              SettingScreen_Color.Colors_Text1_,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      SizedBox(
+                                                                    // width: 200,
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          area_name_text,
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value ==
+                                                                                null ||
+                                                                            value.isEmpty) {
+                                                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                        }
+                                                                        // if (int.parse(value.toString()) < 13) {
+                                                                        //   return '< 13';
+                                                                        // }
+                                                                        return null;
+                                                                      },
+                                                                      // maxLength: 13,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      decoration: InputDecoration(
+                                                                          fillColor: Colors.white.withOpacity(0.3),
+                                                                          filled: true,
+                                                                          // prefixIcon:
+                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          focusedBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          labelText: 'ชื่อพื้นที่',
+                                                                          labelStyle: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          )),
+                                                                      // inputFormatters: <
+                                                                      //     TextInputFormatter>[
+                                                                      //   FilteringTextInputFormatter
+                                                                      //       .deny(RegExp("[' ']")),
+                                                                      //   // for below version 2 use this
+                                                                      //   FilteringTextInputFormatter
+                                                                      //       .allow(RegExp(
+                                                                      //           r'[a-z A-Z 1-9]')),
+                                                                      //   // for version 2 and greater youcan also use this
+                                                                      //   // FilteringTextInputFormatter
+                                                                      //   //     .digitsOnly
+                                                                      // ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ],
+                                                    ),
+                                                    const Align(
+                                                      alignment:
+                                                          Alignment.topLeft,
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Row(
+                                                          children: [
+                                                            Text(
+                                                              'ขนาดพื้นที่-ค่าบริการหลัก',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                color: SettingScreen_Color
+                                                                    .Colors_Text1_,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
                                                               ),
                                                             ),
                                                           ],
-                                                        )),
-                                                    Expanded(
-                                                        flex: 6,
-                                                        child: Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: Row(
-                                                                children: const [
-                                                                  Text(
-                                                                    'ชื่อพื้นที่',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .start,
-                                                                    style:
-                                                                        TextStyle(
-                                                                      color: SettingScreen_Color
-                                                                          .Colors_Text1_,
-                                                                      fontFamily:
-                                                                          FontWeight_
-                                                                              .Fonts_T,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                            flex: 6,
+                                                            child: Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      SizedBox(
+                                                                    // width: 200,
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          area_qty_text,
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value ==
+                                                                                null ||
+                                                                            value.isEmpty) {
+                                                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                        }
+                                                                        // if (int.parse(value.toString()) < 13) {
+                                                                        //   return '< 13';
+                                                                        // }
+                                                                        return null;
+                                                                      },
+                                                                      // maxLength: 13,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      decoration: InputDecoration(
+                                                                          fillColor: Colors.white.withOpacity(0.3),
+                                                                          filled: true,
+                                                                          // prefixIcon:
+                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          focusedBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          labelText: 'ขนาดพื้นที่(ต.ร.ม.)',
+                                                                          labelStyle: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          )),
+                                                                      inputFormatters: <TextInputFormatter>[
+                                                                        FilteringTextInputFormatter.deny(
+                                                                            RegExp("[' ']")),
+                                                                        // for below version 2 use this
+                                                                        FilteringTextInputFormatter.allow(
+                                                                            RegExp(r'[0-9 .]')),
+                                                                        // for version 2 and greater youcan also use this
+                                                                        // FilteringTextInputFormatter
+                                                                        //     .digitsOnly
+                                                                      ],
                                                                     ),
                                                                   ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: SizedBox(
-                                                                // width: 200,
-                                                                child:
-                                                                    TextFormField(
-                                                                  controller:
-                                                                      area_name_text,
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value ==
-                                                                            null ||
-                                                                        value
-                                                                            .isEmpty) {
-                                                                      return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                    }
-                                                                    // if (int.parse(value.toString()) < 13) {
-                                                                    //   return '< 13';
-                                                                    // }
-                                                                    return null;
-                                                                  },
-                                                                  // maxLength: 13,
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .green,
-                                                                  decoration: InputDecoration(
-                                                                      fillColor: Colors.white.withOpacity(0.3),
-                                                                      filled: true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      labelText: 'ชื่อพื้นที่',
-                                                                      labelStyle: const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .black54,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                      )),
-                                                                  // inputFormatters: <
-                                                                  //     TextInputFormatter>[
-                                                                  //   FilteringTextInputFormatter
-                                                                  //       .deny(RegExp("[' ']")),
-                                                                  //   // for below version 2 use this
-                                                                  //   FilteringTextInputFormatter
-                                                                  //       .allow(RegExp(
-                                                                  //           r'[a-z A-Z 1-9]')),
-                                                                  //   // for version 2 and greater youcan also use this
-                                                                  //   // FilteringTextInputFormatter
-                                                                  //   //     .digitsOnly
-                                                                  // ],
                                                                 ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        )),
+                                                              ],
+                                                            )),
+                                                        Expanded(
+                                                            flex: 6,
+                                                            child: Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      SizedBox(
+                                                                    // width: 200,
+                                                                    child:
+                                                                        TextFormField(
+                                                                      controller:
+                                                                          area_pri_text,
+                                                                      validator:
+                                                                          (value) {
+                                                                        if (value ==
+                                                                                null ||
+                                                                            value.isEmpty) {
+                                                                          return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                        }
+                                                                        // if (int.parse(value.toString()) < 13) {
+                                                                        //   return '< 13';
+                                                                        // }
+                                                                        return null;
+                                                                      },
+                                                                      // maxLength: 13,
+                                                                      cursorColor:
+                                                                          Colors
+                                                                              .green,
+                                                                      decoration: InputDecoration(
+                                                                          fillColor: Colors.white.withOpacity(0.3),
+                                                                          filled: true,
+                                                                          // prefixIcon:
+                                                                          //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                          focusedBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.black,
+                                                                            ),
+                                                                          ),
+                                                                          enabledBorder: const OutlineInputBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.only(
+                                                                              topRight: Radius.circular(15),
+                                                                              topLeft: Radius.circular(15),
+                                                                              bottomRight: Radius.circular(15),
+                                                                              bottomLeft: Radius.circular(15),
+                                                                            ),
+                                                                            borderSide:
+                                                                                BorderSide(
+                                                                              width: 1,
+                                                                              color: Colors.grey,
+                                                                            ),
+                                                                          ),
+                                                                          labelText: 'ค่าบริการหลัก(ต่องวด)',
+                                                                          labelStyle: const TextStyle(
+                                                                            fontSize:
+                                                                                14,
+                                                                            color:
+                                                                                Colors.black54,
+                                                                            fontFamily:
+                                                                                FontWeight_.Fonts_T,
+                                                                          )),
+                                                                      inputFormatters: <TextInputFormatter>[
+                                                                        FilteringTextInputFormatter.deny(
+                                                                            RegExp("[' ']")),
+                                                                        // for below version 2 use this
+                                                                        FilteringTextInputFormatter.allow(
+                                                                            RegExp(r'[0-9 .]')),
+                                                                        // for version 2 and greater youcan also use this
+                                                                        // FilteringTextInputFormatter
+                                                                        //     .digitsOnly
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            )),
+                                                      ],
+                                                    ),
                                                   ],
                                                 ),
-                                                Align(
-                                                  alignment: Alignment.topLeft,
-                                                  child: Padding(
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              Column(
+                                                children: [
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  const Divider(
+                                                    color: Colors.grey,
+                                                    height: 4.0,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Padding(
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
                                                     child: Row(
-                                                      children: const [
-                                                        Text(
-                                                          'ขนาดพื้นที่-ค่าบริการหลัก',
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.green,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                if (_formKey
+                                                                    .currentState!
+                                                                    .validate()) {
+                                                                  SharedPreferences
+                                                                      preferences =
+                                                                      await SharedPreferences
+                                                                          .getInstance();
+                                                                  String? ren =
+                                                                      preferences
+                                                                          .getString(
+                                                                              'renTalSer');
+                                                                  String?
+                                                                      ser_user =
+                                                                      preferences
+                                                                          .getString(
+                                                                              'ser');
+
+                                                                  var zonename =
+                                                                      ser_Zonex;
+                                                                  var area_ser =
+                                                                      area_ser_text
+                                                                          .text;
+                                                                  var area_name =
+                                                                      area_name_text
+                                                                          .text;
+                                                                  var area_qty =
+                                                                      area_qty_text
+                                                                          .text;
+                                                                  var area_pri =
+                                                                      area_pri_text
+                                                                          .text;
+
+                                                                  String url =
+                                                                      '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
+
+                                                                  try {
+                                                                    var response =
+                                                                        await http
+                                                                            .get(Uri.parse(url));
+
+                                                                    var result =
+                                                                        json.decode(
+                                                                            response.body);
+                                                                    print(
+                                                                        result);
+                                                                    if (result
+                                                                            .toString() ==
+                                                                        'true') {
+                                                                      setState(
+                                                                          () {
+                                                                        read_GC_zone();
+                                                                        read_GC_area();
+                                                                        read_GC_area_count();
+                                                                        area_ser_text
+                                                                            .clear();
+                                                                        area_name_text
+                                                                            .clear();
+                                                                        area_qty_text
+                                                                            .clear();
+                                                                        area_pri_text
+                                                                            .clear();
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context,
+                                                                          'OK');
+                                                                    }
+                                                                  } catch (e) {
+                                                                    print(e);
+                                                                  }
+                                                                }
+                                                              },
+                                                              child: const Text(
+                                                                'บันทึก',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Container(
+                                                            width: 100,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.black,
+                                                              borderRadius: BorderRadius.only(
+                                                                  topLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          10)),
+                                                            ),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: TextButton(
+                                                              onPressed: () {
+                                                                setState(() {
+                                                                  area_ser_text
+                                                                      .clear();
+                                                                  area_name_text
+                                                                      .clear();
+                                                                  area_qty_text
+                                                                      .clear();
+                                                                  area_pri_text
+                                                                      .clear();
+                                                                });
+                                                                Navigator.pop(
+                                                                    context,
+                                                                    'OK');
+                                                              },
+                                                              child: const Text(
+                                                                'ยกเลิก',
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontFamily:
+                                                                      FontWeight_
+                                                                          .Fonts_T,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green.shade700,
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10),
+                                              bottomRight: Radius.circular(10)),
+                                          border: Border.all(
+                                              color: Colors.white, width: 1)),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: const Center(
+                                        child: Text(
+                                          'เพิ่ม',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: FontWeight_.Fonts_T),
+                                        ),
+                                      ),
+                                    ),
+                                  ))
+                          : const SizedBox(),
+                  row_num == 1
+                      ? SizedBox()
+                      : pkqty! - countarae! > 0
+                          ? Ser_Zone == 0
+                              ? const SizedBox()
+                              : InkWell(
+                                  child: Container(
+                                    width: 130,
+                                    decoration: BoxDecoration(
+                                        color: Colors.orange.shade700,
+                                        borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(10),
+                                            bottomRight: Radius.circular(10)),
+                                        border: Border.all(
+                                            color: Colors.white, width: 1)),
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: const Center(
+                                      child: Text(
+                                        'เพิ่มแบบAuto',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: FontWeight_.Fonts_T),
+                                      ),
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    setState(() {
+                                      Add_Number_area_.text = '1';
+                                      Add_name_area_.text = '1';
+                                    });
+
+                                    showDialog<String>(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (BuildContext context) => Form(
+                                        key: _formKey2,
+                                        child: AlertDialog(
+                                          shape: const RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(20.0))),
+                                          title: const Center(
+                                              child: Text(
+                                            'เพิ่มจำนวนพื้นที่แบบAuto',
+                                            style: TextStyle(
+                                              color: SettingScreen_Color
+                                                  .Colors_Text1_,
+                                              fontFamily: FontWeight_.Fonts_T,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          )),
+                                          content: Container(
+                                            // height: MediaQuery.of(context).size.height / 1.5,
+                                            width:
+                                                (!Responsive.isDesktop(context))
+                                                    ? MediaQuery.of(context)
+                                                        .size
+                                                        .width
+                                                    : MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.5,
+                                            decoration: const BoxDecoration(
+                                              // color: Colors.grey[300],
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              // border: Border.all(color: Colors.white, width: 1),
+                                            ),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                // mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      const Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Text(
+                                                          'จำนวนที่ต้องการเพิ่ม',
                                                           textAlign:
                                                               TextAlign.left,
                                                           style: TextStyle(
@@ -4715,2057 +4788,47 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                 FontWeight.bold,
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                        flex: 6,
-                                                        child: Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: SizedBox(
-                                                                // width: 200,
-                                                                child:
-                                                                    TextFormField(
-                                                                  controller:
-                                                                      area_qty_text,
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value ==
-                                                                            null ||
-                                                                        value
-                                                                            .isEmpty) {
-                                                                      return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                    }
-                                                                    // if (int.parse(value.toString()) < 13) {
-                                                                    //   return '< 13';
-                                                                    // }
-                                                                    return null;
-                                                                  },
-                                                                  // maxLength: 13,
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .green,
-                                                                  decoration: InputDecoration(
-                                                                      fillColor: Colors.white.withOpacity(0.3),
-                                                                      filled: true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      labelText: 'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                      labelStyle: const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .black54,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                      )),
-                                                                  inputFormatters: <TextInputFormatter>[
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                            "[' ']")),
-                                                                    // for below version 2 use this
-                                                                    FilteringTextInputFormatter
-                                                                        .allow(RegExp(
-                                                                            r'[0-9 .]')),
-                                                                    // for version 2 and greater youcan also use this
-                                                                    // FilteringTextInputFormatter
-                                                                    //     .digitsOnly
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        )),
-                                                    Expanded(
-                                                        flex: 6,
-                                                        child: Column(
-                                                          children: [
-                                                            Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                      .all(8.0),
-                                                              child: SizedBox(
-                                                                // width: 200,
-                                                                child:
-                                                                    TextFormField(
-                                                                  controller:
-                                                                      area_pri_text,
-                                                                  validator:
-                                                                      (value) {
-                                                                    if (value ==
-                                                                            null ||
-                                                                        value
-                                                                            .isEmpty) {
-                                                                      return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                    }
-                                                                    // if (int.parse(value.toString()) < 13) {
-                                                                    //   return '< 13';
-                                                                    // }
-                                                                    return null;
-                                                                  },
-                                                                  // maxLength: 13,
-                                                                  cursorColor:
-                                                                      Colors
-                                                                          .green,
-                                                                  decoration: InputDecoration(
-                                                                      fillColor: Colors.white.withOpacity(0.3),
-                                                                      filled: true,
-                                                                      // prefixIcon:
-                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                      // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                      focusedBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.black,
-                                                                        ),
-                                                                      ),
-                                                                      enabledBorder: const OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.only(
-                                                                          topRight:
-                                                                              Radius.circular(15),
-                                                                          topLeft:
-                                                                              Radius.circular(15),
-                                                                          bottomRight:
-                                                                              Radius.circular(15),
-                                                                          bottomLeft:
-                                                                              Radius.circular(15),
-                                                                        ),
-                                                                        borderSide:
-                                                                            BorderSide(
-                                                                          width:
-                                                                              1,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      ),
-                                                                      labelText: 'ค่าบริการหลัก(ต่องวด)',
-                                                                      labelStyle: const TextStyle(
-                                                                        fontSize:
-                                                                            14,
-                                                                        color: Colors
-                                                                            .black54,
-                                                                        fontFamily:
-                                                                            FontWeight_.Fonts_T,
-                                                                      )),
-                                                                  inputFormatters: <TextInputFormatter>[
-                                                                    FilteringTextInputFormatter
-                                                                        .deny(RegExp(
-                                                                            "[' ']")),
-                                                                    // for below version 2 use this
-                                                                    FilteringTextInputFormatter
-                                                                        .allow(RegExp(
-                                                                            r'[0-9 .]')),
-                                                                    // for version 2 and greater youcan also use this
-                                                                    // FilteringTextInputFormatter
-                                                                    //     .digitsOnly
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        )),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        actions: <Widget>[
-                                          Column(
-                                            children: [
-                                              const SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              const Divider(
-                                                color: Colors.grey,
-                                                height: 4.0,
-                                              ),
-                                              const SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.green,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: TextButton(
-                                                          onPressed: () async {
-                                                            if (_formKey
-                                                                .currentState!
-                                                                .validate()) {
-                                                              SharedPreferences
-                                                                  preferences =
-                                                                  await SharedPreferences
-                                                                      .getInstance();
-                                                              String? ren =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'renTalSer');
-                                                              String? ser_user =
-                                                                  preferences
-                                                                      .getString(
-                                                                          'ser');
-
-                                                              var zonename =
-                                                                  ser_Zonex;
-                                                              var area_ser =
-                                                                  area_ser_text
-                                                                      .text;
-                                                              var area_name =
-                                                                  area_name_text
-                                                                      .text;
-                                                              var area_qty =
-                                                                  area_qty_text
-                                                                      .text;
-                                                              var area_pri =
-                                                                  area_pri_text
-                                                                      .text;
-
-                                                              String url =
-                                                                  '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=$area_ser&area_name=$area_name&area_qty=$area_qty&area_pri=$area_pri';
-
-                                                              try {
-                                                                var response =
-                                                                    await http.get(
-                                                                        Uri.parse(
-                                                                            url));
-
-                                                                var result =
-                                                                    json.decode(
-                                                                        response
-                                                                            .body);
-                                                                print(result);
-                                                                if (result
-                                                                        .toString() ==
-                                                                    'true') {
-                                                                  setState(() {
-                                                                    read_GC_zone();
-                                                                    read_GC_area();
-                                                                    read_GC_area_count();
-                                                                    area_ser_text
-                                                                        .clear();
-                                                                    area_name_text
-                                                                        .clear();
-                                                                    area_qty_text
-                                                                        .clear();
-                                                                    area_pri_text
-                                                                        .clear();
-                                                                  });
-                                                                  Navigator.pop(
-                                                                      context,
-                                                                      'OK');
+                                                      ),
+                                                      Expanded(
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: SizedBox(
+                                                            // width: 200,
+                                                            child:
+                                                                TextFormField(
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .number,
+                                                              controller:
+                                                                  Add_totalnew_area_text,
+                                                              validator:
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return 'ใส่ข้อมูลให้ครบถ้วน ';
                                                                 }
-                                                              } catch (e) {
-                                                                print(e);
-                                                              }
-                                                            }
-                                                          },
-                                                          child: const Text(
-                                                            'บันทึก',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Container(
-                                                        width: 100,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                          color: Colors.black,
-                                                          borderRadius: BorderRadius.only(
-                                                              topLeft: Radius
-                                                                  .circular(10),
-                                                              topRight: Radius
-                                                                  .circular(10),
-                                                              bottomLeft: Radius
-                                                                  .circular(10),
-                                                              bottomRight:
-                                                                  Radius
-                                                                      .circular(
-                                                                          10)),
-                                                        ),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: TextButton(
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              area_ser_text
-                                                                  .clear();
-                                                              area_name_text
-                                                                  .clear();
-                                                              area_qty_text
-                                                                  .clear();
-                                                              area_pri_text
-                                                                  .clear();
-                                                            });
-                                                            Navigator.pop(
-                                                                context, 'OK');
-                                                          },
-                                                          child: const Text(
-                                                            'ยกเลิก',
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontFamily:
-                                                                  FontWeight_
-                                                                      .Fonts_T,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: 50,
-                                  decoration: BoxDecoration(
-                                      color: Colors.green.shade700,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          topRight: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10),
-                                          bottomRight: Radius.circular(10)),
-                                      border: Border.all(
-                                          color: Colors.white, width: 1)),
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Center(
-                                    child: Text(
-                                      'เพิ่ม',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: FontWeight_.Fonts_T),
-                                    ),
-                                  ),
-                                ),
-                              ))
-                      : const SizedBox(),
-                  pkqty! - countarae! > 0
-                      ? Ser_Zone == 0
-                          ? const SizedBox()
-                          : InkWell(
-                              child: Container(
-                                width: 130,
-                                decoration: BoxDecoration(
-                                    color: Colors.orange.shade700,
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
-                                        bottomLeft: Radius.circular(10),
-                                        bottomRight: Radius.circular(10)),
-                                    border: Border.all(
-                                        color: Colors.white, width: 1)),
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Center(
-                                  child: Text(
-                                    'เพิ่มแบบAuto',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontFamily: FontWeight_.Fonts_T),
-                                  ),
-                                ),
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  Add_Number_area_.text = '1';
-                                  Add_name_area_.text = '1';
-                                });
-
-                                showDialog<String>(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (BuildContext context) => Form(
-                                    key: _formKey2,
-                                    child: AlertDialog(
-                                      shape: const RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20.0))),
-                                      title: const Center(
-                                          child: Text(
-                                        'เพิ่มจำนวนพื้นที่แบบAuto',
-                                        style: TextStyle(
-                                          color:
-                                              SettingScreen_Color.Colors_Text1_,
-                                          fontFamily: FontWeight_.Fonts_T,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )),
-                                      content: Container(
-                                        // height: MediaQuery.of(context).size.height / 1.5,
-                                        width: (!Responsive.isDesktop(context))
-                                            ? MediaQuery.of(context).size.width
-                                            : MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.5,
-                                        decoration: const BoxDecoration(
-                                          // color: Colors.grey[300],
-                                          borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(10),
-                                              topRight: Radius.circular(10),
-                                              bottomLeft: Radius.circular(10),
-                                              bottomRight: Radius.circular(10)),
-                                          // border: Border.all(color: Colors.white, width: 1),
-                                        ),
-                                        child: SingleChildScrollView(
-                                          child: Column(
-                                            // mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      'จำนวนที่ต้องการเพิ่ม',
-                                                      textAlign: TextAlign.left,
-                                                      style: TextStyle(
-                                                        color:
-                                                            SettingScreen_Color
-                                                                .Colors_Text1_,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: SizedBox(
-                                                        // width: 200,
-                                                        child: TextFormField(
-                                                          keyboardType:
-                                                              TextInputType
-                                                                  .number,
-                                                          controller:
-                                                              Add_totalnew_area_text,
-                                                          validator: (value) {
-                                                            if (value == null ||
-                                                                value.isEmpty) {
-                                                              return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                            }
-                                                            // if (int.parse(value.toString()) < 13) {
-                                                            //   return '< 13';
-                                                            // }
-                                                            return null;
-                                                          },
-                                                          // maxLength: 13,
-                                                          cursorColor:
-                                                              Colors.green,
-                                                          decoration:
-                                                              InputDecoration(
-                                                                  fillColor: Colors
-                                                                      .white
-                                                                      .withOpacity(
-                                                                          0.3),
-                                                                  filled: true,
-                                                                  // prefixIcon:
-                                                                  //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                  // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                  focusedBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .black,
-                                                                    ),
-                                                                  ),
-                                                                  enabledBorder:
-                                                                      const OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .only(
-                                                                      topRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      topLeft: Radius
-                                                                          .circular(
-                                                                              15),
-                                                                      bottomRight:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                      bottomLeft:
-                                                                          Radius.circular(
-                                                                              15),
-                                                                    ),
-                                                                    borderSide:
-                                                                        BorderSide(
-                                                                      width: 1,
-                                                                      color: Colors
-                                                                          .grey,
-                                                                    ),
-                                                                  ),
-                                                                  labelText:
-                                                                      'จำนวน',
-                                                                  labelStyle:
-                                                                      const TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .black54,
-                                                                    fontFamily:
-                                                                        FontWeight_
-                                                                            .Fonts_T,
-                                                                  )),
-                                                          inputFormatters: [
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'\s')),
-                                                            FilteringTextInputFormatter
-                                                                .deny(RegExp(
-                                                                    r'^0')),
-                                                            FilteringTextInputFormatter
-                                                                .allow(RegExp(
-                                                                    r'[0-9 .]')),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    (areaModels.length == 0)
-                                                        ? 'รหัสพื้นที่ '
-                                                        : 'รหัสพื้นที่ (รหัสล่าสุดคือ : ${areaModels[areaModels.length - 1].ln})',
-                                                    textAlign: TextAlign.left,
-                                                    style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10, 4, 4, 4),
-                                                  child: Text(
-                                                    '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontSize: 12),
-                                                  ),
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_Number_area_text,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'ตัวอักษร',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\s')),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_Number_area_,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 4,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'เลขเรื่มต้น 1-xxx',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\s')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'^0')),
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                ],
-                                              ),
-                                              Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    (areaModels.length == 0)
-                                                        ? 'ชื่อพื้นที่เช่า '
-                                                        : 'ชื่อพื้นที่เช่า(ชื่อล่าสุดคือ : ${areaModels[areaModels.length - 1].lncode})',
-                                                    textAlign: TextAlign.left,
-                                                    style: const TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10, 4, 4, 4),
-                                                  child: Text(
-                                                    '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontFamily:
-                                                            FontWeight_.Fonts_T,
-                                                        fontSize: 12),
-                                                  ),
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_name_area_text,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'ตัวอักษร',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\s')),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_name_area_,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'เลขเรื่มต้น 1-xxx',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: [
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'\s')),
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          r'^0')),
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                ],
-                                              ),
-                                              const Align(
-                                                alignment: Alignment.topLeft,
-                                                child: Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10, 4, 4, 4),
-                                                  child: Text(
-                                                    'ขนาดพื้นที่ - ค่าบริการหลัก',
-                                                    textAlign: TextAlign.left,
-                                                    style: TextStyle(
-                                                      color: SettingScreen_Color
-                                                          .Colors_Text1_,
-                                                      fontFamily:
-                                                          FontWeight_.Fonts_T,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_qty_area_text,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'ขนาดพื้นที่(ต.ร.ม.)',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: <TextInputFormatter>[
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          "[' ']")),
-                                                                  // for below version 2 use this
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                  // for version 2 and greater youcan also use this
-                                                                  // FilteringTextInputFormatter
-                                                                  //     .digitsOnly
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                  Expanded(
-                                                      flex: 6,
-                                                      child: Column(
-                                                        children: [
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: SizedBox(
-                                                              // width: 200,
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Add_pri_area_text,
-                                                                validator:
-                                                                    (value) {
-                                                                  if (value ==
-                                                                          null ||
-                                                                      value
-                                                                          .isEmpty) {
-                                                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                                                  }
-                                                                  // if (int.parse(value.toString()) < 13) {
-                                                                  //   return '< 13';
-                                                                  // }
-                                                                  return null;
-                                                                },
-                                                                // maxLength: 13,
-                                                                cursorColor:
-                                                                    Colors
-                                                                        .green,
-                                                                decoration:
-                                                                    InputDecoration(
-                                                                        fillColor:
-                                                                            Colors.white.withOpacity(
-                                                                                0.3),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.black,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        labelText:
-                                                                            'ค่าบริการหลัก(ต่องวด)',
-                                                                        labelStyle:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        )),
-                                                                inputFormatters: <TextInputFormatter>[
-                                                                  FilteringTextInputFormatter
-                                                                      .deny(RegExp(
-                                                                          "[' ']")),
-                                                                  // for below version 2 use this
-                                                                  FilteringTextInputFormatter
-                                                                      .allow(RegExp(
-                                                                          r'[0-9 .]')),
-                                                                  // for version 2 and greater youcan also use this
-                                                                  // FilteringTextInputFormatter
-                                                                  //     .digitsOnly
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      )),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        Column(
-                                          children: [
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            const Divider(
-                                              color: Colors.grey,
-                                              height: 4.0,
-                                            ),
-                                            const SizedBox(
-                                              height: 5.0,
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.green,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: TextButton(
-                                                        onPressed: () async {
-                                                          if (_formKey2
-                                                              .currentState!
-                                                              .validate()) {
-                                                            Insert_log.Insert_logs(
-                                                                'ตั้งค่า',
-                                                                'พื้นที่>>เพิ่มพื้นที่แบบAuto>>จำนวน:${Add_totalnew_area_text.text}');
-                                                            SharedPreferences
-                                                                preferences =
-                                                                await SharedPreferences
-                                                                    .getInstance();
-                                                            String? ren =
-                                                                preferences
-                                                                    .getString(
-                                                                        'renTalSer');
-                                                            String? ser_user =
-                                                                preferences
-                                                                    .getString(
-                                                                        'ser');
-                                                            print(
-                                                                '*******  ${Add_totalnew_area_text.text}');
-
-                                                            var zonename =
-                                                                ser_Zonex;
-
-                                                            var area_qty =
-                                                                '${Add_qty_area_text.text}';
-                                                            var area_pri =
-                                                                '${Add_pri_area_text.text}';
-                                                            showDialog(
-                                                                barrierDismissible:
-                                                                    false,
-                                                                context:
-                                                                    context,
-                                                                builder: (_) {
-                                                                  // Future.delayed(
-                                                                  //     const Duration(
-                                                                  //         seconds:
-                                                                  //             1),
-                                                                  //     () {
-                                                                  //   Navigator.of(
-                                                                  //           context)
-                                                                  //       .pop();
-                                                                  // });
-                                                                  return Dialog(
-                                                                    child:
-                                                                        SizedBox(
-                                                                      height:
-                                                                          20,
-                                                                      width: 80,
-                                                                      child:
-                                                                          FittedBox(
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        child: Image
-                                                                            .asset(
-                                                                          "images/gif-LOGOchao.gif",
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                          height:
-                                                                              20,
-                                                                          width:
-                                                                              80,
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                });
-                                                            for (int index = 0;
-                                                                index <
-                                                                    int.parse(
-                                                                        '${Add_totalnew_area_text.text}');
-                                                                index++) {
-                                                              // var area_ser =
-                                                              //     'ADD_Auto${index + 1}';
-
-                                                              // var area_name =
-                                                              //     'ADD_AutoName${index + 1}';
-
-                                                              var Add_Number_area_New = (index ==
-                                                                      0)
-                                                                  ? int.parse(
-                                                                      '${Add_Number_area_.text}')
-                                                                  : int.parse(
-                                                                          '${Add_Number_area_.text}') +
-                                                                      (index);
-
-                                                              var Add_name_area__New = (index ==
-                                                                      0)
-                                                                  ? int.parse(
-                                                                      '${Add_name_area_.text}')
-                                                                  : int.parse(
-                                                                          '${Add_name_area_.text}') +
-                                                                      (index);
-
-                                                              String url =
-                                                                  '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=${Add_Number_area_text.text}${Add_Number_area_New}&area_name=${Add_name_area_text.text}${Add_name_area__New}&area_qty=$area_qty&area_pri=$area_pri';
-
-                                                              try {
-                                                                var response =
-                                                                    await http.get(
-                                                                        Uri.parse(
-                                                                            url));
-
-                                                                var result =
-                                                                    json.decode(
-                                                                        response
-                                                                            .body);
-                                                                // print(result);
-                                                                if (result
-                                                                        .toString() ==
-                                                                    'true') {
-                                                                  print(
-                                                                      '${Add_Number_area_New} // ${Add_name_area__New}');
-                                                                  if (index +
-                                                                          1 ==
-                                                                      int.parse(
-                                                                          Add_totalnew_area_text
-                                                                              .text)) {
-                                                                    setState(
-                                                                        () {
-                                                                      read_GC_zone();
-                                                                      read_GC_area();
-                                                                      read_GC_area_count();
-
-                                                                      Add_totalnew_area_text
-                                                                          .clear();
-
-                                                                      Add_Number_area_text
-                                                                          .clear();
-                                                                      Add_Number_area_
-                                                                          .clear();
-
-                                                                      Add_name_area_text
-                                                                          .clear();
-                                                                      Add_name_area_
-                                                                          .clear();
-
-                                                                      Add_qty_area_text
-                                                                          .clear();
-
-                                                                      Add_pri_area_text
-                                                                          .clear();
-                                                                    });
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        'OK');
-
-                                                                    Navigator.pop(
-                                                                        context,
-                                                                        'OK');
-                                                                  } else {
-                                                                    print(
-                                                                        'ADD_Auto${index + 1}');
-                                                                  }
-                                                                }
-                                                              } catch (e) {
-                                                                print(e);
-                                                              }
-                                                            }
-                                                          }
-                                                        },
-                                                        child: const Text(
-                                                          'บันทึก',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Container(
-                                                      width: 100,
-                                                      decoration:
-                                                          const BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomLeft: Radius
-                                                                    .circular(
-                                                                        10),
-                                                                bottomRight: Radius
-                                                                    .circular(
-                                                                        10)),
-                                                      ),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: TextButton(
-                                                        onPressed: () async {
-                                                          setState(() {
-                                                            Add_totalnew_area_text
-                                                                .clear();
-
-                                                            Add_Number_area_text
-                                                                .clear();
-                                                            Add_Number_area_
-                                                                .clear();
-
-                                                            Add_name_area_text
-                                                                .clear();
-                                                            Add_name_area_
-                                                                .clear();
-
-                                                            Add_qty_area_text
-                                                                .clear();
-
-                                                            Add_pri_area_text
-                                                                .clear();
-                                                          });
-                                                          Navigator.pop(
-                                                              context, 'OK');
-                                                        },
-                                                        child: const Text(
-                                                          'ยกเลิก',
-                                                          style: TextStyle(
-                                                            color: Colors.white,
-                                                            fontFamily:
-                                                                FontWeight_
-                                                                    .Fonts_T,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            )
-                      : const SizedBox()
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: Column(
-              children: [
-                ScrollConfiguration(
-                  behavior:
-                      ScrollConfiguration.of(context).copyWith(dragDevices: {
-                    PointerDeviceKind.touch,
-                    PointerDeviceKind.mouse,
-                  }),
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    dragStartBehavior: DragStartBehavior.start,
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: (!Responsive.isDesktop(context))
-                              ? 790
-                              : MediaQuery.of(context).size.width * 0.84,
-                          child: Column(
-                            children: [
-                              // Container(
-                              //   decoration: const BoxDecoration(
-                              //     color: AppbackgroundColor.TiTile_Colors,
-                              //     borderRadius: BorderRadius.only(
-                              //         topLeft: Radius.circular(10),
-                              //         topRight: Radius.circular(10),
-                              //         bottomLeft: Radius.circular(0),
-                              //         bottomRight: Radius.circular(0)),
-                              //   ),
-                              //   child: Row(
-                              //     children: [
-                              //       Padding(
-                              //         padding: EdgeInsets.all(8.0),
-                              //         child: Text(
-                              //           'ค้นหา:',
-                              //           textAlign: TextAlign.end,
-                              //           style: TextStyle(
-                              //               color: PeopleChaoScreen_Color
-                              //                   .Colors_Text1_,
-                              //               fontWeight: FontWeight.bold,
-                              //               fontFamily: FontWeight_.Fonts_T),
-                              //         ),
-                              //       ),
-                              //       Expanded(
-                              //         // flex: MediaQuery.of(context)
-                              //         //             .size
-                              //         //             .shortestSide <
-                              //         //         MediaQuery.of(context)
-                              //         //                 .size
-                              //         //                 .width *
-                              //         //             1
-                              //         //     ? 8
-                              //         //     : 6,
-                              //         child: Padding(
-                              //           padding: const EdgeInsets.all(8.0),
-                              //           child: Container(
-                              //             decoration: BoxDecoration(
-                              //               color: AppbackgroundColor
-                              //                   .Sub_Abg_Colors,
-                              //               borderRadius: const BorderRadius
-                              //                       .only(
-                              //                   topLeft: Radius.circular(10),
-                              //                   topRight: Radius.circular(10),
-                              //                   bottomLeft: Radius.circular(10),
-                              //                   bottomRight:
-                              //                       Radius.circular(10)),
-                              //               border: Border.all(
-                              //                   color: Colors.grey, width: 1),
-                              //             ),
-                              //             // width: 120,
-                              //             // height: 35,
-                              //             child: _searchBar(),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              Container(
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                  color: AppbackgroundColor.TiTile_Colors,
-                                  borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(10),
-                                      topRight: Radius.circular(10),
-                                      bottomLeft: Radius.circular(0),
-                                      bottomRight: Radius.circular(0)),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text('รหัสพื้นที่',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              // fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text('ชื่อพื้นที่เช่า',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              //fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text('ขนาดพื้นที่(ต.ร.ม.)',
-                                          textAlign: TextAlign.end,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              //fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text('ค่าบริการหลัก(ต่องวด)',
-                                          textAlign: TextAlign.end,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              // fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
-                                    ),
-                                    const Expanded(
-                                      flex: 1,
-                                      child: Text('ลบ',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          softWrap: false,
-                                          style: TextStyle(
-                                              //fontSize: 15,
-                                              color: SettingScreen_Color
-                                                  .Colors_Text1_,
-                                              fontFamily: FontWeight_.Fonts_T
-                                              // fontWeight: FontWeight.bold,
-                                              )),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              StreamBuilder(
-                                  stream: Stream.periodic(
-                                      const Duration(seconds: 0)),
-                                  builder: (context, snapshot) {
-                                    return Container(
-                                      height: 350,
-                                      decoration: const BoxDecoration(
-                                        color:
-                                            AppbackgroundColor.Sub_Abg_Colors,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(0),
-                                          topRight: Radius.circular(0),
-                                          bottomLeft: Radius.circular(0),
-                                          bottomRight: Radius.circular(0),
-                                        ),
-                                        // border: Border.all(
-                                        //     color: Colors.grey, width: 1),
-                                      ),
-                                      child: ListView.builder(
-                                        controller: _scrollController1,
-                                        // itemExtent: 50,
-                                        physics:
-                                            const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: areaModels.length,
-                                        itemBuilder:
-                                            (BuildContext context, int index) {
-                                          return areaModels.isEmpty
-                                              ? SizedBox(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      StreamBuilder(
-                                                        stream: Stream.periodic(
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    5),
-                                                            (i) => i),
-                                                        builder: (context,
-                                                            snapshot) {
-                                                          if (!snapshot.hasData)
-                                                            return const Text(
-                                                                '');
-                                                          double elapsed = double
-                                                                  .parse(snapshot
-                                                                      .data
-                                                                      .toString()) *
-                                                              0.05;
-                                                          return Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(8.0),
-                                                            child: (elapsed >
-                                                                    3.00)
-                                                                ? const Text(
-                                                                    'ไม่พบข้อมูล',
-                                                                    style: TextStyle(
-                                                                        color: PeopleChaoScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  )
-                                                                : Column(
-                                                                    children: const [
-                                                                      CircularProgressIndicator(),
-                                                                      // Text(
-                                                                      //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
-                                                                      //   style: const TextStyle(
-                                                                      //       color: PeopleChaoScreen_Color
-                                                                      //           .Colors_Text2_,
-                                                                      //       fontFamily:
-                                                                      //           Font_
-                                                                      //               .Fonts_T
-                                                                      //       //fontSize: 10.0
-                                                                      //       ),
-                                                                      // ),
-                                                                    ],
-                                                                  ),
-                                                          );
-                                                        },
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                              : areaModels[index].quantity ==
-                                                      null
-                                                  ? Material(
-                                                      color: tappedIndex_ ==
-                                                              index.toString()
-                                                          ? tappedIndex_Color
-                                                              .tappedIndex_Colors
-                                                          : AppbackgroundColor
-                                                              .Sub_Abg_Colors,
-                                                      child: Container(
-                                                        // color: tappedIndex_ ==
-                                                        //         index.toString()
-                                                        //     ? Colors.grey.shade300
-                                                        //     : null,
-                                                        child: ListTile(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                tappedIndex_ = index
-                                                                    .toString();
-                                                              });
-                                                            },
-                                                            title: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      TextFormField(
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    initialValue:
-                                                                        areaModels[index]
-                                                                            .ln,
-                                                                    onFieldSubmitted:
-                                                                        (value) async {
-                                                                      SharedPreferences
-                                                                          preferences =
-                                                                          await SharedPreferences
-                                                                              .getInstance();
-                                                                      String?
-                                                                          ren =
-                                                                          preferences
-                                                                              .getString('renTalSer');
-                                                                      String?
-                                                                          ser_user =
-                                                                          preferences
-                                                                              .getString('ser');
-                                                                      var vser =
-                                                                          areaModels[index]
-                                                                              .ser;
-                                                                      String
-                                                                          url =
-                                                                          '${MyConstant().domain}/UpC_area_ln.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                      try {
-                                                                        var response =
-                                                                            await http.get(Uri.parse(url));
-
-                                                                        var result =
-                                                                            json.decode(response.body);
-                                                                        print(
-                                                                            result);
-                                                                        if (result.toString() ==
-                                                                            'true') {
-                                                                          setState(
-                                                                              () {
-                                                                            read_GC_area();
-                                                                          });
-                                                                        } else {}
-                                                                      } catch (e) {}
-                                                                    },
-                                                                    // maxLength: 13,
-                                                                    cursorColor:
-                                                                        Colors
-                                                                            .green,
-                                                                    decoration:
-                                                                        InputDecoration(
+                                                                // if (int.parse(value.toString()) < 13) {
+                                                                //   return '< 13';
+                                                                // }
+                                                                return null;
+                                                              },
+                                                              // maxLength: 13,
+                                                              cursorColor:
+                                                                  Colors.green,
+                                                              decoration:
+                                                                  InputDecoration(
                                                                       fillColor: Colors
                                                                           .white
                                                                           .withOpacity(
-                                                                              0.05),
+                                                                              0.3),
                                                                       filled:
                                                                           true,
                                                                       // prefixIcon:
-                                                                      //     const Icon(Icons.key, color: Colors.black),
+                                                                      //     const Icon(Icons.person_pin, color: Colors.black),
                                                                       // suffixIcon: Icon(Icons.clear, color: Colors.black),
                                                                       focusedBorder:
                                                                           const OutlineInputBorder(
@@ -6785,7 +4848,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                           width:
                                                                               1,
                                                                           color:
-                                                                              Colors.grey,
+                                                                              Colors.black,
                                                                         ),
                                                                       ),
                                                                       enabledBorder:
@@ -6809,78 +4872,139 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                               Colors.grey,
                                                                         ),
                                                                       ),
-                                                                      // labelText: 'PASSWOED',
-                                                                      labelStyle: const TextStyle(
-                                                                          color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                          // fontWeight: FontWeight.bold,
-                                                                          fontFamily: Font_.Fonts_T),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
+                                                                      labelText:
+                                                                          'จำนวน',
+                                                                      labelStyle:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            12,
+                                                                        color: Colors
+                                                                            .black54,
+                                                                        fontFamily:
+                                                                            FontWeight_.Fonts_T,
+                                                                      )),
+                                                              inputFormatters: [
+                                                                FilteringTextInputFormatter
+                                                                    .deny(RegExp(
+                                                                        r'\s')),
+                                                                FilteringTextInputFormatter
+                                                                    .deny(RegExp(
+                                                                        r'^0')),
+                                                                FilteringTextInputFormatter
+                                                                    .allow(RegExp(
+                                                                        r'[0-9 .]')),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        (areaModels.length == 0)
+                                                            ? 'รหัสพื้นที่ '
+                                                            : 'รหัสพื้นที่ (รหัสล่าสุดคือ : ${areaModels[areaModels.length - 1].ln})',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 4, 4, 4),
+                                                      child: Text(
+                                                        '**เหตุ : หากต้องการเพิ่มรหัสพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
                                                                   child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.all(
-                                                                            8.0),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      initialValue:
-                                                                          areaModels[index]
-                                                                              .lncode,
-                                                                      onFieldSubmitted:
-                                                                          (value) async {
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-                                                                        var vser =
-                                                                            areaModels[index].ser;
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UpC_area_lncode.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_Number_area_text,
+                                                                    // validator:
+                                                                    //     (value) {
+                                                                    //   if (value ==
+                                                                    //           null ||
+                                                                    //       value
+                                                                    //           .isEmpty) {
+                                                                    //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                    //   }
 
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            setState(() {
-                                                                              read_GC_area();
-                                                                            });
-                                                                          } else {}
-                                                                        } catch (e) {}
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        fillColor: Colors
-                                                                            .white
-                                                                            .withOpacity(0.05),
-                                                                        filled:
-                                                                            true,
+                                                                    //   return null;
+                                                                    // },
+                                                                    // maxLength: 13,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
                                                                         // prefixIcon:
-                                                                        //     const Icon(Icons.key, color: Colors.black),
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
                                                                         // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
                                                                           borderRadius:
                                                                               BorderRadius.only(
                                                                             topRight:
@@ -6900,751 +5024,2310 @@ class _SettingScreenState extends State<SettingScreen> {
                                                                                 Colors.grey,
                                                                           ),
                                                                         ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        // labelText: 'PASSWOED',
+                                                                        labelText: 'ตัวอักษร',
                                                                         labelStyle: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.fromLTRB(
-                                                                            8,
-                                                                            8,
-                                                                            0,
-                                                                            8),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      initialValue:
-                                                                          areaModels[index]
-                                                                              .area,
-                                                                      onFieldSubmitted:
-                                                                          (value) async {
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-                                                                        var vser =
-                                                                            areaModels[index].ser;
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UpC_area_area.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            setState(() {
-                                                                              read_GC_area();
-                                                                            });
-                                                                          } else {}
-                                                                        } catch (e) {}
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        fillColor: Colors
-                                                                            .white
-                                                                            .withOpacity(0.05),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.key, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        // labelText: 'PASSWOED',
-                                                                        labelStyle: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                      inputFormatters: <TextInputFormatter>[
-                                                                        // for below version 2 use this
-                                                                        FilteringTextInputFormatter.allow(
-                                                                            RegExp(r'[0-9 .]')),
-                                                                        // for version 2 and greater youcan also use this
-                                                                        // FilteringTextInputFormatter
-                                                                        //     .digitsOnly
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child:
-                                                                      Padding(
-                                                                    padding:
-                                                                        const EdgeInsets.fromLTRB(
-                                                                            8,
-                                                                            8,
-                                                                            0,
-                                                                            8),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .end,
-                                                                      initialValue:
-                                                                          areaModels[index]
-                                                                              .rent,
-                                                                      onFieldSubmitted:
-                                                                          (value) async {
-                                                                        SharedPreferences
-                                                                            preferences =
-                                                                            await SharedPreferences.getInstance();
-                                                                        String?
-                                                                            ren =
-                                                                            preferences.getString('renTalSer');
-                                                                        String?
-                                                                            ser_user =
-                                                                            preferences.getString('ser');
-                                                                        var vser =
-                                                                            areaModels[index].ser;
-                                                                        String
-                                                                            url =
-                                                                            '${MyConstant().domain}/UpC_area_rent.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
-
-                                                                        try {
-                                                                          var response =
-                                                                              await http.get(Uri.parse(url));
-
-                                                                          var result =
-                                                                              json.decode(response.body);
-                                                                          print(
-                                                                              result);
-                                                                          if (result.toString() ==
-                                                                              'true') {
-                                                                            setState(() {
-                                                                              read_GC_area();
-                                                                            });
-                                                                          } else {}
-                                                                        } catch (e) {}
-                                                                      },
-                                                                      // maxLength: 13,
-                                                                      cursorColor:
-                                                                          Colors
-                                                                              .green,
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        fillColor: Colors
-                                                                            .white
-                                                                            .withOpacity(0.05),
-                                                                        filled:
-                                                                            true,
-                                                                        // prefixIcon:
-                                                                        //     const Icon(Icons.key, color: Colors.black),
-                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                                                        focusedBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderRadius:
-                                                                              BorderRadius.only(
-                                                                            topRight:
-                                                                                Radius.circular(15),
-                                                                            topLeft:
-                                                                                Radius.circular(15),
-                                                                            bottomRight:
-                                                                                Radius.circular(15),
-                                                                            bottomLeft:
-                                                                                Radius.circular(15),
-                                                                          ),
-                                                                          borderSide:
-                                                                              BorderSide(
-                                                                            width:
-                                                                                1,
-                                                                            color:
-                                                                                Colors.grey,
-                                                                          ),
-                                                                        ),
-                                                                        // labelText: 'PASSWOED',
-                                                                        labelStyle: const TextStyle(
-                                                                            color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                            // fontWeight: FontWeight.bold,
-                                                                            fontFamily: Font_.Fonts_T),
-                                                                      ),
-                                                                      inputFormatters: <TextInputFormatter>[
-                                                                        // for below version 2 use this
-                                                                        FilteringTextInputFormatter.allow(
-                                                                            RegExp(r'[0-9 .]')),
-                                                                        // for version 2 and greater youcan also use this
-                                                                        // FilteringTextInputFormatter
-                                                                        //     .digitsOnly
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child:
-                                                                        InkWell(
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            100,
-                                                                        decoration:
-                                                                            BoxDecoration(
+                                                                          fontSize:
+                                                                              12,
                                                                           color:
-                                                                              Colors.red[700],
-                                                                          borderRadius:
-                                                                              const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
-                                                                            topRight:
-                                                                                Radius.circular(10),
-                                                                            bottomLeft:
-                                                                                Radius.circular(10),
-                                                                            bottomRight:
-                                                                                Radius.circular(10),
-                                                                          ),
-                                                                          // border: Border.all(
-                                                                          //     color: Colors.grey, width: 1),
-                                                                        ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            const Text(
-                                                                          'X',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                              color: Colors.black,
-                                                                              fontFamily: Font_.Fonts_T),
-                                                                        ),
-                                                                      ),
-                                                                      onTap:
-                                                                          () {
-                                                                        print(
-                                                                            'ลบ ${areaModels[index].ln}');
-                                                                        showDialog(
-                                                                            context:
-                                                                                context,
-                                                                            builder: (context) =>
-                                                                                StatefulBuilder(
-                                                                                  builder: (context, setState) => AlertDialog(
-                                                                                    shape: RoundedRectangleBorder(
-                                                                                      borderRadius: BorderRadius.circular(20),
-                                                                                    ),
-                                                                                    title: Column(
-                                                                                      children: [
-                                                                                        Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          children: [
-                                                                                            Container(
-                                                                                                alignment: Alignment.center,
-                                                                                                width: MediaQuery.of(context).size.width * 0.2,
-                                                                                                child: const Text(
-                                                                                                  'ลบพื้นที่',
-                                                                                                  style: TextStyle(
-                                                                                                    fontSize: 20.0,
-                                                                                                    fontWeight: FontWeight.bold,
-                                                                                                    color: Colors.red,
-                                                                                                  ),
-                                                                                                )),
-                                                                                          ],
-                                                                                        ),
-                                                                                        const SizedBox(
-                                                                                          height: 10,
-                                                                                        ),
-                                                                                        Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                                                          children: [
-                                                                                            Container(
-                                                                                                alignment: Alignment.center,
-                                                                                                width: MediaQuery.of(context).size.width * 0.2,
-                                                                                                child: Text(
-                                                                                                  'รหัสพื้นที่ ${areaModels[index].lncode} : ชื่อพื้นที่ ${areaModels[index].ln}',
-                                                                                                  style: const TextStyle(
-                                                                                                    fontSize: 16.0,
-                                                                                                    fontWeight: FontWeight.bold,
-                                                                                                    color: Colors.black,
-                                                                                                  ),
-                                                                                                )),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ],
-                                                                                    ), //AppBarColors2.Colors(),
-                                                                                    content: Column(
-                                                                                      mainAxisSize: MainAxisSize.min,
-                                                                                      children: [
-                                                                                        Row(
-                                                                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                                                                          children: [
-                                                                                            Container(
-                                                                                              width: 130,
-                                                                                              height: 40,
-                                                                                              // ignore: deprecated_member_use
-                                                                                              child: ElevatedButton(
-                                                                                                style: ElevatedButton.styleFrom(
-                                                                                                  backgroundColor: Colors.green,
-                                                                                                ),
-                                                                                                onPressed: () async {
-                                                                                                  SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                  String? ren = preferences.getString('renTalSer');
-                                                                                                  String? ser_user = preferences.getString('ser');
-                                                                                                  var vser = areaModels[index].ser;
-                                                                                                  String url = '${MyConstant().domain}/DeC_area.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
-
-                                                                                                  try {
-                                                                                                    var response = await http.get(Uri.parse(url));
-
-                                                                                                    var result = json.decode(response.body);
-                                                                                                    print(result);
-                                                                                                    if (result.toString() == 'true') {
-                                                                                                      Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>ลบ(${areaModels[index].lncode} : ${areaModels[index].ln})');
-                                                                                                      setState(() {
-                                                                                                        Navigator.pop(context);
-                                                                                                        read_GC_area();
-                                                                                                        read_GC_zone();
-                                                                                                        read_GC_area();
-                                                                                                        read_GC_area_count();
-                                                                                                      });
-                                                                                                    } else {}
-                                                                                                  } catch (e) {}
-                                                                                                },
-                                                                                                child: const Text(
-                                                                                                  'ยันยัน',
-                                                                                                  style: TextStyle(
-                                                                                                    // fontSize: 20.0,
-                                                                                                    // fontWeight: FontWeight.bold,
-                                                                                                    color: Colors.white,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                // color: Colors.orange[900],
-                                                                                              ),
-                                                                                            ),
-                                                                                            Container(
-                                                                                              width: 150,
-                                                                                              height: 40,
-                                                                                              // ignore: deprecated_member_use
-                                                                                              child: ElevatedButton(
-                                                                                                style: ElevatedButton.styleFrom(
-                                                                                                  backgroundColor: Colors.black,
-                                                                                                ),
-                                                                                                onPressed: () => Navigator.pop(context),
-                                                                                                child: const Text(
-                                                                                                  'ยกเลิก',
-                                                                                                  style: TextStyle(
-                                                                                                    // fontSize: 20.0,
-                                                                                                    // fontWeight: FontWeight.bold,
-                                                                                                    color: Colors.white,
-                                                                                                  ),
-                                                                                                ),
-                                                                                                // color: Colors.black,
-                                                                                              ),
-                                                                                            ),
-                                                                                          ],
-                                                                                        )
-                                                                                      ],
-                                                                                    ),
-                                                                                  ),
-                                                                                ));
-                                                                      },
-                                                                    ),
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: [
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'\s')),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            )),
-                                                      ),
-                                                    )
-                                                  : Material(
-                                                      color: tappedIndex_ ==
-                                                              index.toString()
-                                                          ? tappedIndex_Color
-                                                              .tappedIndex_Colors
-                                                          : AppbackgroundColor
-                                                              .Sub_Abg_Colors,
-                                                      child: Container(
-                                                        // color: tappedIndex_ ==
-                                                        //         index.toString()
-                                                        //     ? Colors.grey.shade300
-                                                        //     : null,
-                                                        child: ListTile(
-                                                            onTap: () {
-                                                              setState(() {
-                                                                tappedIndex_ = index
-                                                                    .toString();
-                                                              });
-                                                            },
-                                                            title: Row(
-                                                              children: [
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Text(
-                                                                    '${areaModels[index].ln}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Text(
-                                                                    '${areaModels[index].lncode}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .center,
-                                                                    style: const TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Text(
-                                                                    '${nFormat.format(double.parse(areaModels[index].area!))}',
-                                                                    // '${areaModels[index].area}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: const TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Text(
-                                                                    '${nFormat.format(double.parse(areaModels[index].rent!))}',
-                                                                    // '${areaModels[index].rent}',
-                                                                    textAlign:
-                                                                        TextAlign
-                                                                            .end,
-                                                                    style: const TextStyle(
-                                                                        color: SettingScreen_Color
-                                                                            .Colors_Text2_,
-                                                                        fontFamily:
-                                                                            Font_.Fonts_T
-
-                                                                        //fontSize: 10.0
-                                                                        ),
-                                                                  ),
-                                                                ),
-                                                                Expanded(
-                                                                  flex: 1,
-                                                                  child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .center,
-                                                                    child:
-                                                                        InkWell(
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            100,
-                                                                        decoration:
-                                                                            const BoxDecoration(
-                                                                          // color: Colors
-                                                                          //     .red[700],
+                                                              ),
+                                                            ],
+                                                          )),
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
+                                                                  child:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_Number_area_,
+                                                                    validator:
+                                                                        (value) {
+                                                                      if (value ==
+                                                                              null ||
+                                                                          value
+                                                                              .isEmpty) {
+                                                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                      }
+                                                                      // if (int.parse(value.toString()) < 13) {
+                                                                      //   return '< 13';
+                                                                      // }
+                                                                      return null;
+                                                                    },
+                                                                    // maxLength: 4,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
                                                                           borderRadius:
                                                                               BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(10),
                                                                             topRight:
-                                                                                Radius.circular(10),
-                                                                            bottomLeft:
-                                                                                Radius.circular(10),
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
                                                                             bottomRight:
-                                                                                Radius.circular(10),
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
                                                                           ),
-                                                                          // border: Border.all(
-                                                                          //     color: Colors.grey, width: 1),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
                                                                         ),
-                                                                        padding:
-                                                                            const EdgeInsets.all(8.0),
-                                                                        child:
-                                                                            const Text(
-                                                                          '',
-                                                                          textAlign:
-                                                                              TextAlign.center,
-                                                                          maxLines:
-                                                                              1,
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                              color: SettingScreen_Color.Colors_Text2_,
-                                                                              fontFamily: Font_.Fonts_T),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                      onTap:
-                                                                          () {
-                                                                        print(
-                                                                            'ลบ ${areaModels[index].ln}');
-                                                                      },
-                                                                    ),
+                                                                        labelText: 'เลขเรื่มต้น 1-xxx',
+                                                                        labelStyle: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: [
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'\s')),
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'^0')),
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp(r'[0-9 .]')),
+                                                                    ],
                                                                   ),
                                                                 ),
-                                                              ],
-                                                            )),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: Text(
+                                                        (areaModels.length == 0)
+                                                            ? 'ชื่อพื้นที่เช่า '
+                                                            : 'ชื่อพื้นที่เช่า(ชื่อล่าสุดคือ : ${areaModels[areaModels.length - 1].lncode})',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: const TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                       ),
-                                                    );
-                                        },
+                                                    ),
+                                                  ),
+                                                  const Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 4, 4, 4),
+                                                      child: Text(
+                                                        '**เหตุ : หากต้องการเพิ่มชื่อพื้นที่ คือ A1 ให้ใส่ที่ช่องตัวอักษร เท่ากับ A และให้ใส่ที่ช่องตัวเลข เท่ากับ 1',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                            color: Colors.red,
+                                                            fontFamily:
+                                                                FontWeight_
+                                                                    .Fonts_T,
+                                                            fontSize: 12),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
+                                                                  child:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_name_area_text,
+                                                                    // validator:
+                                                                    //     (value) {
+                                                                    //   if (value ==
+                                                                    //           null ||
+                                                                    //       value
+                                                                    //           .isEmpty) {
+                                                                    //     return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                    //   }
+                                                                    //   // if (int.parse(value.toString()) < 13) {
+                                                                    //   //   return '< 13';
+                                                                    //   // }
+                                                                    //   return null;
+                                                                    // },
+                                                                    // maxLength: 13,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText: 'ตัวอักษร',
+                                                                        labelStyle: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: [
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'\s')),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
+                                                                  child:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_name_area_,
+                                                                    validator:
+                                                                        (value) {
+                                                                      if (value ==
+                                                                              null ||
+                                                                          value
+                                                                              .isEmpty) {
+                                                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                      }
+                                                                      // if (int.parse(value.toString()) < 13) {
+                                                                      //   return '< 13';
+                                                                      // }
+                                                                      return null;
+                                                                    },
+                                                                    // maxLength: 13,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText: 'เลขเรื่มต้น 1-xxx',
+                                                                        labelStyle: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: [
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'\s')),
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp(r'^0')),
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp(r'[0-9 .]')),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                    ],
+                                                  ),
+                                                  const Align(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.fromLTRB(
+                                                              10, 4, 4, 4),
+                                                      child: Text(
+                                                        'ขนาดพื้นที่ - ค่าบริการหลัก',
+                                                        textAlign:
+                                                            TextAlign.left,
+                                                        style: TextStyle(
+                                                          color:
+                                                              SettingScreen_Color
+                                                                  .Colors_Text1_,
+                                                          fontFamily:
+                                                              FontWeight_
+                                                                  .Fonts_T,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
+                                                                  child:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_qty_area_text,
+                                                                    validator:
+                                                                        (value) {
+                                                                      if (value ==
+                                                                              null ||
+                                                                          value
+                                                                              .isEmpty) {
+                                                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                      }
+                                                                      // if (int.parse(value.toString()) < 13) {
+                                                                      //   return '< 13';
+                                                                      // }
+                                                                      return null;
+                                                                    },
+                                                                    // maxLength: 13,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText: 'ขนาดพื้นที่(ต.ร.ม.)',
+                                                                        labelStyle: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: <TextInputFormatter>[
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp("[' ']")),
+                                                                      // for below version 2 use this
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp(r'[0-9 .]')),
+                                                                      // for version 2 and greater youcan also use this
+                                                                      // FilteringTextInputFormatter
+                                                                      //     .digitsOnly
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                      Expanded(
+                                                          flex: 6,
+                                                          child: Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        8.0),
+                                                                child: SizedBox(
+                                                                  // width: 200,
+                                                                  child:
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Add_pri_area_text,
+                                                                    validator:
+                                                                        (value) {
+                                                                      if (value ==
+                                                                              null ||
+                                                                          value
+                                                                              .isEmpty) {
+                                                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                                                      }
+                                                                      // if (int.parse(value.toString()) < 13) {
+                                                                      //   return '< 13';
+                                                                      // }
+                                                                      return null;
+                                                                    },
+                                                                    // maxLength: 13,
+                                                                    cursorColor:
+                                                                        Colors
+                                                                            .green,
+                                                                    decoration: InputDecoration(
+                                                                        fillColor: Colors.white.withOpacity(0.3),
+                                                                        filled: true,
+                                                                        // prefixIcon:
+                                                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                        focusedBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.black,
+                                                                          ),
+                                                                        ),
+                                                                        enabledBorder: const OutlineInputBorder(
+                                                                          borderRadius:
+                                                                              BorderRadius.only(
+                                                                            topRight:
+                                                                                Radius.circular(15),
+                                                                            topLeft:
+                                                                                Radius.circular(15),
+                                                                            bottomRight:
+                                                                                Radius.circular(15),
+                                                                            bottomLeft:
+                                                                                Radius.circular(15),
+                                                                          ),
+                                                                          borderSide:
+                                                                              BorderSide(
+                                                                            width:
+                                                                                1,
+                                                                            color:
+                                                                                Colors.grey,
+                                                                          ),
+                                                                        ),
+                                                                        labelText: 'ค่าบริการหลัก(ต่องวด)',
+                                                                        labelStyle: const TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          color:
+                                                                              Colors.black54,
+                                                                          fontFamily:
+                                                                              FontWeight_.Fonts_T,
+                                                                        )),
+                                                                    inputFormatters: <TextInputFormatter>[
+                                                                      FilteringTextInputFormatter
+                                                                          .deny(
+                                                                              RegExp("[' ']")),
+                                                                      // for below version 2 use this
+                                                                      FilteringTextInputFormatter
+                                                                          .allow(
+                                                                              RegExp(r'[0-9 .]')),
+                                                                      // for version 2 and greater youcan also use this
+                                                                      // FilteringTextInputFormatter
+                                                                      //     .digitsOnly
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          )),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          actions: <Widget>[
+                                            Column(
+                                              children: [
+                                                const SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                const Divider(
+                                                  color: Colors.grey,
+                                                  height: 4.0,
+                                                ),
+                                                const SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.green,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              if (_formKey2
+                                                                  .currentState!
+                                                                  .validate()) {
+                                                                Insert_log.Insert_logs(
+                                                                    'ตั้งค่า',
+                                                                    'พื้นที่>>เพิ่มพื้นที่แบบAuto>>จำนวน:${Add_totalnew_area_text.text}');
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                String? ren =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'renTalSer');
+                                                                String?
+                                                                    ser_user =
+                                                                    preferences
+                                                                        .getString(
+                                                                            'ser');
+                                                                print(
+                                                                    '*******  ${Add_totalnew_area_text.text}');
+
+                                                                var zonename =
+                                                                    ser_Zonex;
+
+                                                                var area_qty =
+                                                                    '${Add_qty_area_text.text}';
+                                                                var area_pri =
+                                                                    '${Add_pri_area_text.text}';
+                                                                showDialog(
+                                                                    barrierDismissible:
+                                                                        false,
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (_) {
+                                                                      // Future.delayed(
+                                                                      //     const Duration(
+                                                                      //         seconds:
+                                                                      //             1),
+                                                                      //     () {
+                                                                      //   Navigator.of(
+                                                                      //           context)
+                                                                      //       .pop();
+                                                                      // });
+                                                                      return Dialog(
+                                                                        child:
+                                                                            SizedBox(
+                                                                          height:
+                                                                              20,
+                                                                          width:
+                                                                              80,
+                                                                          child:
+                                                                              FittedBox(
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                            child:
+                                                                                Image.asset(
+                                                                              "images/gif-LOGOchao.gif",
+                                                                              fit: BoxFit.cover,
+                                                                              height: 20,
+                                                                              width: 80,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    });
+                                                                for (int index =
+                                                                        0;
+                                                                    index <
+                                                                        int.parse(
+                                                                            '${Add_totalnew_area_text.text}');
+                                                                    index++) {
+                                                                  // var area_ser =
+                                                                  //     'ADD_Auto${index + 1}';
+
+                                                                  // var area_name =
+                                                                  //     'ADD_AutoName${index + 1}';
+
+                                                                  var Add_Number_area_New = (index ==
+                                                                          0)
+                                                                      ? int.parse(
+                                                                          '${Add_Number_area_.text}')
+                                                                      : int.parse(
+                                                                              '${Add_Number_area_.text}') +
+                                                                          (index);
+
+                                                                  var Add_name_area__New = (index ==
+                                                                          0)
+                                                                      ? int.parse(
+                                                                          '${Add_name_area_.text}')
+                                                                      : int.parse(
+                                                                              '${Add_name_area_.text}') +
+                                                                          (index);
+
+                                                                  String url =
+                                                                      '${MyConstant().domain}/InC_area_setring.php?isAdd=true&ren=$ren&ser_user=$ser_user&zonename=$zonename&area_ser=${Add_Number_area_text.text}${Add_Number_area_New}&area_name=${Add_name_area_text.text}${Add_name_area__New}&area_qty=$area_qty&area_pri=$area_pri';
+
+                                                                  try {
+                                                                    var response =
+                                                                        await http
+                                                                            .get(Uri.parse(url));
+
+                                                                    var result =
+                                                                        json.decode(
+                                                                            response.body);
+                                                                    // print(result);
+                                                                    if (result
+                                                                            .toString() ==
+                                                                        'true') {
+                                                                      print(
+                                                                          '${Add_Number_area_New} // ${Add_name_area__New}');
+                                                                      if (index +
+                                                                              1 ==
+                                                                          int.parse(
+                                                                              Add_totalnew_area_text.text)) {
+                                                                        setState(
+                                                                            () {
+                                                                          read_GC_zone();
+                                                                          read_GC_area();
+                                                                          read_GC_area_count();
+
+                                                                          Add_totalnew_area_text
+                                                                              .clear();
+
+                                                                          Add_Number_area_text
+                                                                              .clear();
+                                                                          Add_Number_area_
+                                                                              .clear();
+
+                                                                          Add_name_area_text
+                                                                              .clear();
+                                                                          Add_name_area_
+                                                                              .clear();
+
+                                                                          Add_qty_area_text
+                                                                              .clear();
+
+                                                                          Add_pri_area_text
+                                                                              .clear();
+                                                                        });
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            'OK');
+
+                                                                        Navigator.pop(
+                                                                            context,
+                                                                            'OK');
+                                                                      } else {
+                                                                        print(
+                                                                            'ADD_Auto${index + 1}');
+                                                                      }
+                                                                    }
+                                                                  } catch (e) {
+                                                                    print(e);
+                                                                  }
+                                                                }
+                                                              }
+                                                            },
+                                                            child: const Text(
+                                                              'บันทึก',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: Container(
+                                                          width: 100,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            color: Colors.black,
+                                                            borderRadius: BorderRadius.only(
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        10),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        10)),
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: TextButton(
+                                                            onPressed:
+                                                                () async {
+                                                              setState(() {
+                                                                Add_totalnew_area_text
+                                                                    .clear();
+
+                                                                Add_Number_area_text
+                                                                    .clear();
+                                                                Add_Number_area_
+                                                                    .clear();
+
+                                                                Add_name_area_text
+                                                                    .clear();
+                                                                Add_name_area_
+                                                                    .clear();
+
+                                                                Add_qty_area_text
+                                                                    .clear();
+
+                                                                Add_pri_area_text
+                                                                    .clear();
+                                                              });
+                                                              Navigator.pop(
+                                                                  context,
+                                                                  'OK');
+                                                            },
+                                                            child: const Text(
+                                                              'ยกเลิก',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontFamily:
+                                                                    FontWeight_
+                                                                        .Fonts_T,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
-                                  }),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Container(
-                    width: (!Responsive.isDesktop(context))
-                        ? MediaQuery.of(context).size.width
-                        : MediaQuery.of(context).size.width * 0.84,
-                    decoration: const BoxDecoration(
-                      color: AppbackgroundColor.Sub_Abg_Colors,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(0),
-                          topRight: Radius.circular(0),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
+                                  },
+                                )
+                          : const SizedBox(),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: row_num == 0
+                ? Column(
+                    children: [
+                      ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          dragStartBehavior: DragStartBehavior.start,
                           child: Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                      decoration: BoxDecoration(
-                                        // color: AppbackgroundColor
-                                        //     .TiTile_Colors,
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(6),
-                                            topRight: Radius.circular(6),
-                                            bottomLeft: Radius.circular(6),
-                                            bottomRight: Radius.circular(8)),
-                                        border: Border.all(
-                                            color: Colors.grey, width: 1),
+                              SizedBox(
+                                width: (!Responsive.isDesktop(context))
+                                    ? 790
+                                    : MediaQuery.of(context).size.width * 0.84,
+                                child: Column(
+                                  children: [
+                                    // Container(
+                                    //   decoration: const BoxDecoration(
+                                    //     color: AppbackgroundColor.TiTile_Colors,
+                                    //     borderRadius: BorderRadius.only(
+                                    //         topLeft: Radius.circular(10),
+                                    //         topRight: Radius.circular(10),
+                                    //         bottomLeft: Radius.circular(0),
+                                    //         bottomRight: Radius.circular(0)),
+                                    //   ),
+                                    //   child: Row(
+                                    //     children: [
+                                    //       Padding(
+                                    //         padding: EdgeInsets.all(8.0),
+                                    //         child: Text(
+                                    //           'ค้นหา:',
+                                    //           textAlign: TextAlign.end,
+                                    //           style: TextStyle(
+                                    //               color: PeopleChaoScreen_Color
+                                    //                   .Colors_Text1_,
+                                    //               fontWeight: FontWeight.bold,
+                                    //               fontFamily: FontWeight_.Fonts_T),
+                                    //         ),
+                                    //       ),
+                                    //       Expanded(
+                                    //         // flex: MediaQuery.of(context)
+                                    //         //             .size
+                                    //         //             .shortestSide <
+                                    //         //         MediaQuery.of(context)
+                                    //         //                 .size
+                                    //         //                 .width *
+                                    //         //             1
+                                    //         //     ? 8
+                                    //         //     : 6,
+                                    //         child: Padding(
+                                    //           padding: const EdgeInsets.all(8.0),
+                                    //           child: Container(
+                                    //             decoration: BoxDecoration(
+                                    //               color: AppbackgroundColor
+                                    //                   .Sub_Abg_Colors,
+                                    //               borderRadius: const BorderRadius
+                                    //                       .only(
+                                    //                   topLeft: Radius.circular(10),
+                                    //                   topRight: Radius.circular(10),
+                                    //                   bottomLeft: Radius.circular(10),
+                                    //                   bottomRight:
+                                    //                       Radius.circular(10)),
+                                    //               border: Border.all(
+                                    //                   color: Colors.grey, width: 1),
+                                    //             ),
+                                    //             // width: 120,
+                                    //             // height: 35,
+                                    //             child: _searchBar(),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                    Container(
+                                      height: 50,
+                                      decoration: const BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0)),
                                       ),
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: const Text(
-                                        'Top',
-                                        style: TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 10.0,
-                                            fontFamily: Font_.Fonts_T),
-                                      )),
+                                      child: const Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text('รหัสพื้นที่',
+                                                textAlign: TextAlign.center,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    // fontSize: 15,
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    // fontWeight: FontWeight.bold,
+                                                    )),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text('ชื่อพื้นที่เช่า',
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    //fontSize: 15,
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    // fontWeight: FontWeight.bold,
+                                                    )),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text('ขนาดพื้นที่(ต.ร.ม.)',
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    //fontSize: 15,
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    // fontWeight: FontWeight.bold,
+                                                    )),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text('ค่าบริการหลัก(ต่องวด)',
+                                                textAlign: TextAlign.end,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    // fontSize: 15,
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    // fontWeight: FontWeight.bold,
+                                                    )),
+                                          ),
+                                          Expanded(
+                                            flex: 1,
+                                            child: Text('ลบ',
+                                                textAlign: TextAlign.center,
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                softWrap: false,
+                                                style: TextStyle(
+                                                    //fontSize: 15,
+                                                    color: SettingScreen_Color
+                                                        .Colors_Text1_,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    // fontWeight: FontWeight.bold,
+                                                    )),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                        stream: Stream.periodic(
+                                            const Duration(seconds: 0)),
+                                        builder: (context, snapshot) {
+                                          return Container(
+                                            height: 350,
+                                            decoration: const BoxDecoration(
+                                              color: AppbackgroundColor
+                                                  .Sub_Abg_Colors,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(0),
+                                                topRight: Radius.circular(0),
+                                                bottomLeft: Radius.circular(0),
+                                                bottomRight: Radius.circular(0),
+                                              ),
+                                              // border: Border.all(
+                                              //     color: Colors.grey, width: 1),
+                                            ),
+                                            child: ListView.builder(
+                                              controller: _scrollController1,
+                                              // itemExtent: 50,
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
+                                              shrinkWrap: true,
+                                              itemCount: areaModels.length,
+                                              itemBuilder:
+                                                  (BuildContext context,
+                                                      int index) {
+                                                return areaModels.isEmpty
+                                                    ? SizedBox(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            StreamBuilder(
+                                                              stream: Stream.periodic(
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          5),
+                                                                  (i) => i),
+                                                              builder: (context,
+                                                                  snapshot) {
+                                                                if (!snapshot
+                                                                    .hasData)
+                                                                  return const Text(
+                                                                      '');
+                                                                double elapsed =
+                                                                    double.parse(snapshot
+                                                                            .data
+                                                                            .toString()) *
+                                                                        0.05;
+                                                                return Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
+                                                                  child: (elapsed >
+                                                                          3.00)
+                                                                      ? const Text(
+                                                                          'ไม่พบข้อมูล',
+                                                                          style: TextStyle(
+                                                                              color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        )
+                                                                      : const Column(
+                                                                          children: [
+                                                                            CircularProgressIndicator(),
+                                                                            // Text(
+                                                                            //   'Time : ${elapsed.toStringAsFixed(2)} seconds',
+                                                                            //   style: const TextStyle(
+                                                                            //       color: PeopleChaoScreen_Color
+                                                                            //           .Colors_Text2_,
+                                                                            //       fontFamily:
+                                                                            //           Font_
+                                                                            //               .Fonts_T
+                                                                            //       //fontSize: 10.0
+                                                                            //       ),
+                                                                            // ),
+                                                                          ],
+                                                                        ),
+                                                                );
+                                                              },
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : areaModels[index]
+                                                                .quantity ==
+                                                            null
+                                                        ? Material(
+                                                            color: tappedIndex_ ==
+                                                                    index
+                                                                        .toString()
+                                                                ? tappedIndex_Color
+                                                                    .tappedIndex_Colors
+                                                                : AppbackgroundColor
+                                                                    .Sub_Abg_Colors,
+                                                            child: Container(
+                                                              // color: tappedIndex_ ==
+                                                              //         index.toString()
+                                                              //     ? Colors.grey.shade300
+                                                              //     : null,
+                                                              child: ListTile(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      tappedIndex_ =
+                                                                          index
+                                                                              .toString();
+                                                                    });
+                                                                  },
+                                                                  title: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            TextFormField(
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          initialValue:
+                                                                              areaModels[index].ln,
+                                                                          onFieldSubmitted:
+                                                                              (value) async {
+                                                                            SharedPreferences
+                                                                                preferences =
+                                                                                await SharedPreferences.getInstance();
+                                                                            String?
+                                                                                ren =
+                                                                                preferences.getString('renTalSer');
+                                                                            String?
+                                                                                ser_user =
+                                                                                preferences.getString('ser');
+                                                                            var vser =
+                                                                                areaModels[index].ser;
+                                                                            String
+                                                                                url =
+                                                                                '${MyConstant().domain}/UpC_area_ln.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                            try {
+                                                                              var response = await http.get(Uri.parse(url));
+
+                                                                              var result = json.decode(response.body);
+                                                                              print(result);
+                                                                              if (result.toString() == 'true') {
+                                                                                setState(() {
+                                                                                  read_GC_area();
+                                                                                });
+                                                                              } else {}
+                                                                            } catch (e) {}
+                                                                          },
+                                                                          // maxLength: 13,
+                                                                          cursorColor:
+                                                                              Colors.green,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            fillColor:
+                                                                                Colors.white.withOpacity(0.05),
+                                                                            filled:
+                                                                                true,
+                                                                            // prefixIcon:
+                                                                            //     const Icon(Icons.key, color: Colors.black),
+                                                                            // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                            focusedBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                            enabledBorder:
+                                                                                const OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(15),
+                                                                                topLeft: Radius.circular(15),
+                                                                                bottomRight: Radius.circular(15),
+                                                                                bottomLeft: Radius.circular(15),
+                                                                              ),
+                                                                              borderSide: BorderSide(
+                                                                                width: 1,
+                                                                                color: Colors.grey,
+                                                                              ),
+                                                                            ),
+                                                                            // labelText: 'PASSWOED',
+                                                                            labelStyle: const TextStyle(
+                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                // fontWeight: FontWeight.bold,
+                                                                                fontFamily: Font_.Fonts_T),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            initialValue:
+                                                                                areaModels[index].lncode,
+                                                                            onFieldSubmitted:
+                                                                                (value) async {
+                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                              String? ren = preferences.getString('renTalSer');
+                                                                              String? ser_user = preferences.getString('ser');
+                                                                              var vser = areaModels[index].ser;
+                                                                              String url = '${MyConstant().domain}/UpC_area_lncode.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
+
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                if (result.toString() == 'true') {
+                                                                                  setState(() {
+                                                                                    read_GC_area();
+                                                                                  });
+                                                                                } else {}
+                                                                              } catch (e) {}
+                                                                            },
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              fillColor: Colors.white.withOpacity(0.05),
+                                                                              filled: true,
+                                                                              // prefixIcon:
+                                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              // labelText: 'PASSWOED',
+                                                                              labelStyle: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .fromLTRB(
+                                                                              8,
+                                                                              8,
+                                                                              0,
+                                                                              8),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            initialValue:
+                                                                                areaModels[index].area,
+                                                                            onFieldSubmitted:
+                                                                                (value) async {
+                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                              String? ren = preferences.getString('renTalSer');
+                                                                              String? ser_user = preferences.getString('ser');
+                                                                              var vser = areaModels[index].ser;
+                                                                              String url = '${MyConstant().domain}/UpC_area_area.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
+
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                if (result.toString() == 'true') {
+                                                                                  setState(() {
+                                                                                    read_GC_area();
+                                                                                  });
+                                                                                } else {}
+                                                                              } catch (e) {}
+                                                                            },
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              fillColor: Colors.white.withOpacity(0.05),
+                                                                              filled: true,
+                                                                              // prefixIcon:
+                                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              // labelText: 'PASSWOED',
+                                                                              labelStyle: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                            inputFormatters: <TextInputFormatter>[
+                                                                              // for below version 2 use this
+                                                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                              // for version 2 and greater youcan also use this
+                                                                              // FilteringTextInputFormatter
+                                                                              //     .digitsOnly
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Padding(
+                                                                          padding: const EdgeInsets
+                                                                              .fromLTRB(
+                                                                              8,
+                                                                              8,
+                                                                              0,
+                                                                              8),
+                                                                          child:
+                                                                              TextFormField(
+                                                                            textAlign:
+                                                                                TextAlign.end,
+                                                                            initialValue:
+                                                                                areaModels[index].rent,
+                                                                            onFieldSubmitted:
+                                                                                (value) async {
+                                                                              SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                              String? ren = preferences.getString('renTalSer');
+                                                                              String? ser_user = preferences.getString('ser');
+                                                                              var vser = areaModels[index].ser;
+                                                                              String url = '${MyConstant().domain}/UpC_area_rent.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                                              try {
+                                                                                var response = await http.get(Uri.parse(url));
+
+                                                                                var result = json.decode(response.body);
+                                                                                print(result);
+                                                                                if (result.toString() == 'true') {
+                                                                                  setState(() {
+                                                                                    read_GC_area();
+                                                                                  });
+                                                                                } else {}
+                                                                              } catch (e) {}
+                                                                            },
+                                                                            // maxLength: 13,
+                                                                            cursorColor:
+                                                                                Colors.green,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              fillColor: Colors.white.withOpacity(0.05),
+                                                                              filled: true,
+                                                                              // prefixIcon:
+                                                                              //     const Icon(Icons.key, color: Colors.black),
+                                                                              // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                                              focusedBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              enabledBorder: const OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topRight: Radius.circular(15),
+                                                                                  topLeft: Radius.circular(15),
+                                                                                  bottomRight: Radius.circular(15),
+                                                                                  bottomLeft: Radius.circular(15),
+                                                                                ),
+                                                                                borderSide: BorderSide(
+                                                                                  width: 1,
+                                                                                  color: Colors.grey,
+                                                                                ),
+                                                                              ),
+                                                                              // labelText: 'PASSWOED',
+                                                                              labelStyle: const TextStyle(
+                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                  // fontWeight: FontWeight.bold,
+                                                                                  fontFamily: Font_.Fonts_T),
+                                                                            ),
+                                                                            inputFormatters: <TextInputFormatter>[
+                                                                              // for below version 2 use this
+                                                                              FilteringTextInputFormatter.allow(RegExp(r'[0-9 .]')),
+                                                                              // for version 2 and greater youcan also use this
+                                                                              // FilteringTextInputFormatter
+                                                                              //     .digitsOnly
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child:
+                                                                              InkWell(
+                                                                            child:
+                                                                                Container(
+                                                                              width: 100,
+                                                                              decoration: BoxDecoration(
+                                                                                color: Colors.red[700],
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(10),
+                                                                                  topRight: Radius.circular(10),
+                                                                                  bottomLeft: Radius.circular(10),
+                                                                                  bottomRight: Radius.circular(10),
+                                                                                ),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                'X',
+                                                                                textAlign: TextAlign.center,
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(color: Colors.black, fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                            onTap:
+                                                                                () {
+                                                                              print('ลบ ${areaModels[index].ln}');
+                                                                              showDialog(
+                                                                                  context: context,
+                                                                                  builder: (context) => StatefulBuilder(
+                                                                                        builder: (context, setState) => AlertDialog(
+                                                                                          shape: RoundedRectangleBorder(
+                                                                                            borderRadius: BorderRadius.circular(20),
+                                                                                          ),
+                                                                                          title: Column(
+                                                                                            children: [
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                      alignment: Alignment.center,
+                                                                                                      width: MediaQuery.of(context).size.width * 0.2,
+                                                                                                      child: const Text(
+                                                                                                        'ลบพื้นที่',
+                                                                                                        style: TextStyle(
+                                                                                                          fontSize: 20.0,
+                                                                                                          fontWeight: FontWeight.bold,
+                                                                                                          color: Colors.red,
+                                                                                                        ),
+                                                                                                      )),
+                                                                                                ],
+                                                                                              ),
+                                                                                              const SizedBox(
+                                                                                                height: 10,
+                                                                                              ),
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                      alignment: Alignment.center,
+                                                                                                      width: MediaQuery.of(context).size.width * 0.2,
+                                                                                                      child: Text(
+                                                                                                        'รหัสพื้นที่ ${areaModels[index].lncode} : ชื่อพื้นที่ ${areaModels[index].ln}',
+                                                                                                        style: const TextStyle(
+                                                                                                          fontSize: 16.0,
+                                                                                                          fontWeight: FontWeight.bold,
+                                                                                                          color: Colors.black,
+                                                                                                        ),
+                                                                                                      )),
+                                                                                                ],
+                                                                                              ),
+                                                                                            ],
+                                                                                          ), //AppBarColors2.Colors(),
+                                                                                          content: Column(
+                                                                                            mainAxisSize: MainAxisSize.min,
+                                                                                            children: [
+                                                                                              Row(
+                                                                                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                                                                                children: [
+                                                                                                  Container(
+                                                                                                    width: 130,
+                                                                                                    height: 40,
+                                                                                                    // ignore: deprecated_member_use
+                                                                                                    child: ElevatedButton(
+                                                                                                      style: ElevatedButton.styleFrom(
+                                                                                                        backgroundColor: Colors.green,
+                                                                                                      ),
+                                                                                                      onPressed: () async {
+                                                                                                        SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                                        String? ren = preferences.getString('renTalSer');
+                                                                                                        String? ser_user = preferences.getString('ser');
+                                                                                                        var vser = areaModels[index].ser;
+                                                                                                        String url = '${MyConstant().domain}/DeC_area.php?isAdd=true&ren=$ren&vser=$vser&ser_user=$ser_user';
+
+                                                                                                        try {
+                                                                                                          var response = await http.get(Uri.parse(url));
+
+                                                                                                          var result = json.decode(response.body);
+                                                                                                          print(result);
+                                                                                                          if (result.toString() == 'true') {
+                                                                                                            Insert_log.Insert_logs('ตั้งค่า', 'พื้นที่>>ลบ(${areaModels[index].lncode} : ${areaModels[index].ln})');
+                                                                                                            setState(() {
+                                                                                                              Navigator.pop(context);
+                                                                                                              read_GC_area();
+                                                                                                              read_GC_zone();
+                                                                                                              read_GC_area();
+                                                                                                              read_GC_area_count();
+                                                                                                            });
+                                                                                                          } else {}
+                                                                                                        } catch (e) {}
+                                                                                                      },
+                                                                                                      child: const Text(
+                                                                                                        'ยันยัน',
+                                                                                                        style: TextStyle(
+                                                                                                          // fontSize: 20.0,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          color: Colors.white,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      // color: Colors.orange[900],
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                  Container(
+                                                                                                    width: 150,
+                                                                                                    height: 40,
+                                                                                                    // ignore: deprecated_member_use
+                                                                                                    child: ElevatedButton(
+                                                                                                      style: ElevatedButton.styleFrom(
+                                                                                                        backgroundColor: Colors.black,
+                                                                                                      ),
+                                                                                                      onPressed: () => Navigator.pop(context),
+                                                                                                      child: const Text(
+                                                                                                        'ยกเลิก',
+                                                                                                        style: TextStyle(
+                                                                                                          // fontSize: 20.0,
+                                                                                                          // fontWeight: FontWeight.bold,
+                                                                                                          color: Colors.white,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                      // color: Colors.black,
+                                                                                                    ),
+                                                                                                  ),
+                                                                                                ],
+                                                                                              )
+                                                                                            ],
+                                                                                          ),
+                                                                                        ),
+                                                                                      ));
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )),
+                                                            ),
+                                                          )
+                                                        : Material(
+                                                            color: tappedIndex_ ==
+                                                                    index
+                                                                        .toString()
+                                                                ? tappedIndex_Color
+                                                                    .tappedIndex_Colors
+                                                                : AppbackgroundColor
+                                                                    .Sub_Abg_Colors,
+                                                            child: Container(
+                                                              // color: tappedIndex_ ==
+                                                              //         index.toString()
+                                                              //     ? Colors.grey.shade300
+                                                              //     : null,
+                                                              child: ListTile(
+                                                                  onTap: () {
+                                                                    setState(
+                                                                        () {
+                                                                      tappedIndex_ =
+                                                                          index
+                                                                              .toString();
+                                                                    });
+                                                                  },
+                                                                  title: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          '${areaModels[index].ln}',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          '${areaModels[index].lncode}',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          style: const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          '${nFormat.format(double.parse(areaModels[index].area!))}',
+                                                                          // '${areaModels[index].area}',
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          style: const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Text(
+                                                                          '${nFormat.format(double.parse(areaModels[index].rent!))}',
+                                                                          // '${areaModels[index].rent}',
+                                                                          textAlign:
+                                                                              TextAlign.end,
+                                                                          style: const TextStyle(
+                                                                              color: SettingScreen_Color.Colors_Text2_,
+                                                                              fontFamily: Font_.Fonts_T
+
+                                                                              //fontSize: 10.0
+                                                                              ),
+                                                                        ),
+                                                                      ),
+                                                                      Expanded(
+                                                                        flex: 1,
+                                                                        child:
+                                                                            Align(
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child:
+                                                                              InkWell(
+                                                                            child:
+                                                                                Container(
+                                                                              width: 100,
+                                                                              decoration: const BoxDecoration(
+                                                                                // color: Colors
+                                                                                //     .red[700],
+                                                                                borderRadius: BorderRadius.only(
+                                                                                  topLeft: Radius.circular(10),
+                                                                                  topRight: Radius.circular(10),
+                                                                                  bottomLeft: Radius.circular(10),
+                                                                                  bottomRight: Radius.circular(10),
+                                                                                ),
+                                                                                // border: Border.all(
+                                                                                //     color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              padding: const EdgeInsets.all(8.0),
+                                                                              child: const Text(
+                                                                                '',
+                                                                                textAlign: TextAlign.center,
+                                                                                maxLines: 1,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(color: SettingScreen_Color.Colors_Text2_, fontFamily: Font_.Fonts_T),
+                                                                              ),
+                                                                            ),
+                                                                            onTap:
+                                                                                () {
+                                                                              print('ลบ ${areaModels[index].ln}');
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  )),
+                                                            ),
+                                                          );
+                                              },
+                                            ),
+                                          );
+                                        }),
+                                  ],
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                    decoration: BoxDecoration(
-                                      // color: AppbackgroundColor
-                                      //     .TiTile_Colors,
-                                      borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(6),
-                                          topRight: Radius.circular(6),
-                                          bottomLeft: Radius.circular(6),
-                                          bottomRight: Radius.circular(6)),
-                                      border: Border.all(
-                                          color: Colors.grey, width: 1),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                          width: (!Responsive.isDesktop(context))
+                              ? MediaQuery.of(context).size.width
+                              : MediaQuery.of(context).size.width * 0.84,
+                          decoration: const BoxDecoration(
+                            color: AppbackgroundColor.Sub_Abg_Colors,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(0),
+                                topRight: Radius.circular(0),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                              // color: AppbackgroundColor
+                                              //     .TiTile_Colors,
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(6),
+                                                      topRight:
+                                                          Radius.circular(6),
+                                                      bottomLeft:
+                                                          Radius.circular(6),
+                                                      bottomRight:
+                                                          Radius.circular(8)),
+                                              border: Border.all(
+                                                  color: Colors.grey, width: 1),
+                                            ),
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: const Text(
+                                              'Top',
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontSize: 10.0,
+                                                  fontFamily: Font_.Fonts_T),
+                                            )),
+                                      ),
                                     ),
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: const Text(
-                                      'Down',
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 10.0,
-                                          fontFamily: Font_.Fonts_T),
-                                    )),
+                                    InkWell(
+                                      onTap: () {},
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                            // color: AppbackgroundColor
+                                            //     .TiTile_Colors,
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    topLeft: Radius.circular(6),
+                                                    topRight:
+                                                        Radius.circular(6),
+                                                    bottomLeft:
+                                                        Radius.circular(6),
+                                                    bottomRight:
+                                                        Radius.circular(6)),
+                                            border: Border.all(
+                                                color: Colors.grey, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(3.0),
+                                          child: const Text(
+                                            'Down',
+                                            style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 10.0,
+                                                fontFamily: Font_.Fonts_T),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: _moveUp1,
+                                      child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Icon(
+                                              Icons.arrow_upward,
+                                              color: Colors.grey,
+                                            ),
+                                          )),
+                                    ),
+                                    Container(
+                                        decoration: BoxDecoration(
+                                          // color: AppbackgroundColor
+                                          //     .TiTile_Colors,
+                                          borderRadius: const BorderRadius.only(
+                                              topLeft: Radius.circular(6),
+                                              topRight: Radius.circular(6),
+                                              bottomLeft: Radius.circular(6),
+                                              bottomRight: Radius.circular(6)),
+                                          border: Border.all(
+                                              color: Colors.grey, width: 1),
+                                        ),
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: const Text(
+                                          'Scroll',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 10.0,
+                                              fontFamily: Font_.Fonts_T),
+                                        )),
+                                    InkWell(
+                                      onTap: _moveDown1,
+                                      child: const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Align(
+                                            alignment: Alignment.centerRight,
+                                            child: Icon(
+                                              Icons.arrow_downward,
+                                              color: Colors.grey,
+                                            ),
+                                          )),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          )),
+                    ],
+                  )
+                : Column(
+                    children: [
+                      ScrollConfiguration(
+                        behavior: ScrollConfiguration.of(context)
+                            .copyWith(dragDevices: {
+                          PointerDeviceKind.touch,
+                          PointerDeviceKind.mouse,
+                        }),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          dragStartBehavior: DragStartBehavior.start,
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: (!Responsive.isDesktop(context))
+                                    ? 790
+                                    : MediaQuery.of(context).size.width * 0.84,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: 50,
+                                      decoration: const BoxDecoration(
+                                        color: AppbackgroundColor.TiTile_Colors,
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(10),
+                                            topRight: Radius.circular(10),
+                                            bottomLeft: Radius.circular(0),
+                                            bottomRight: Radius.circular(0)),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              'ลำดับ',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 4,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              'รหัสพื้นที่',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            flex: 4,
+                                            child: AutoSizeText(
+                                              minFontSize: 10,
+                                              maxFontSize: 25,
+                                              maxLines: 1,
+                                              'ชื่อผู้เช่า',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                      stream: Stream.periodic(
+                                          const Duration(seconds: 0)),
+                                      builder: (context, snapshot) {
+                                        return Container(
+                                          height: 500,
+                                          decoration: const BoxDecoration(
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(0),
+                                              topRight: Radius.circular(0),
+                                              bottomLeft: Radius.circular(0),
+                                              bottomRight: Radius.circular(0),
+                                            ),
+                                            // border: Border.all(
+                                            //     color: Colors.grey, width: 1),
+                                          ),
+                                          child: ListView.builder(
+                                            // controller: _scrollController1,
+                                            // itemExtent: 50,
+                                            physics:
+                                                const AlwaysScrollableScrollPhysics(), //const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            itemCount:
+                                                contractRownumModels.length,
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              return Row(
+                                                children: [
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 8, 0, 8),
+                                                      child: TextFormField(
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                        initialValue:
+                                                            contractRownumModels[
+                                                                    index]
+                                                                .sw,
+                                                        onChanged:
+                                                            (value) async {
+                                                          SharedPreferences
+                                                              preferences =
+                                                              await SharedPreferences
+                                                                  .getInstance();
+                                                          String? ren = preferences
+                                                              .getString(
+                                                                  'renTalSer');
+                                                          String? ser_user =
+                                                              preferences
+                                                                  .getString(
+                                                                      'ser');
+                                                          var vser =
+                                                              contractRownumModels[
+                                                                      index]
+                                                                  .ser;
+                                                          String url =
+                                                              '${MyConstant().domain}/UpC_rownum.php?isAdd=true&ren=$ren&vser=$vser&value=$value&ser_user=$ser_user';
+
+                                                          try {
+                                                            var response =
+                                                                await http.get(
+                                                                    Uri.parse(
+                                                                        url));
+
+                                                            var result = json
+                                                                .decode(response
+                                                                    .body);
+                                                            print(result);
+                                                            if (result
+                                                                    .toString() ==
+                                                                'true') {
+                                                              // setState(() {
+                                                              //   read_GC_rownum();
+                                                              // });
+                                                            } else {}
+                                                          } catch (e) {}
+                                                        },
+                                                        onFieldSubmitted:
+                                                            (value) async {
+                                                          setState(() {
+                                                            read_GC_rownum();
+                                                            read_GC_area();
+                                                          });
+                                                        },
+                                                        // maxLength: 13,
+                                                        cursorColor:
+                                                            Colors.green,
+                                                        decoration:
+                                                            InputDecoration(
+                                                          fillColor: Colors
+                                                              .white
+                                                              .withOpacity(
+                                                                  0.05),
+                                                          filled: true,
+                                                          // prefixIcon:
+                                                          //     const Icon(Icons.key, color: Colors.black),
+                                                          // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                                          focusedBorder:
+                                                              const OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topRight: Radius
+                                                                  .circular(15),
+                                                              topLeft: Radius
+                                                                  .circular(15),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          15),
+                                                              bottomLeft: Radius
+                                                                  .circular(15),
+                                                            ),
+                                                            borderSide:
+                                                                BorderSide(
+                                                              width: 1,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                          enabledBorder:
+                                                              const OutlineInputBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .only(
+                                                              topRight: Radius
+                                                                  .circular(15),
+                                                              topLeft: Radius
+                                                                  .circular(15),
+                                                              bottomRight:
+                                                                  Radius
+                                                                      .circular(
+                                                                          15),
+                                                              bottomLeft: Radius
+                                                                  .circular(15),
+                                                            ),
+                                                            borderSide:
+                                                                BorderSide(
+                                                              width: 1,
+                                                              color:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                          // labelText: 'PASSWOED',
+                                                          labelStyle:
+                                                              const TextStyle(
+                                                                  color: PeopleChaoScreen_Color
+                                                                      .Colors_Text2_,
+                                                                  // fontWeight: FontWeight.bold,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T),
+                                                        ),
+                                                        inputFormatters: <TextInputFormatter>[
+                                                          // for below version 2 use this
+                                                          FilteringTextInputFormatter
+                                                              .allow(RegExp(
+                                                                  r'[0-9]')),
+                                                          // for version 2 and greater youcan also use this
+                                                          // FilteringTextInputFormatter
+                                                          //     .digitsOnly
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    // AutoSizeText(
+                                                    //   minFontSize: 10,
+                                                    //   maxFontSize: 25,
+                                                    //   maxLines: 1,
+                                                    //   '${contractRownumModels[index].sw}',
+                                                    //   textAlign:
+                                                    //       TextAlign.center,
+                                                    //   style: TextStyle(
+                                                    //       color:
+                                                    //           PeopleChaoScreen_Color
+                                                    //               .Colors_Text2_,
+                                                    //       fontFamily:
+                                                    //           FontWeight_
+                                                    //               .Fonts_T),
+                                                    // ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 4,
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 8, 0, 8),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${contractRownumModels[index].ln}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 4,
+                                                    child: Container(
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(8, 8, 0, 8),
+                                                      child: AutoSizeText(
+                                                        minFontSize: 10,
+                                                        maxFontSize: 25,
+                                                        maxLines: 1,
+                                                        '${contractRownumModels[index].sname}',
+                                                        textAlign:
+                                                            TextAlign.start,
+                                                        style: TextStyle(
+                                                            color: PeopleChaoScreen_Color
+                                                                .Colors_Text2_,
+                                                            fontFamily:
+                                                                Font_.Fonts_T),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            children: [
-                              InkWell(
-                                onTap: _moveUp1,
-                                child: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Icon(
-                                        Icons.arrow_upward,
-                                        color: Colors.grey,
-                                      ),
-                                    )),
-                              ),
-                              Container(
-                                  decoration: BoxDecoration(
-                                    // color: AppbackgroundColor
-                                    //     .TiTile_Colors,
-                                    borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(6),
-                                        topRight: Radius.circular(6),
-                                        bottomLeft: Radius.circular(6),
-                                        bottomRight: Radius.circular(6)),
-                                    border: Border.all(
-                                        color: Colors.grey, width: 1),
-                                  ),
-                                  padding: const EdgeInsets.all(3.0),
-                                  child: const Text(
-                                    'Scroll',
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontSize: 10.0,
-                                        fontFamily: Font_.Fonts_T),
-                                  )),
-                              InkWell(
-                                onTap: _moveDown1,
-                                child: const Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: Icon(
-                                        Icons.arrow_downward,
-                                        color: Colors.grey,
-                                      ),
-                                    )),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    )),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
           ),
           const SizedBox(
             height: 20,
@@ -7684,6 +7367,11 @@ class _SettingScreenState extends State<SettingScreen> {
     // return const OtherScreen();
   }
 
+  Widget Status9_Web() {
+    return const AdvanceSetting();
+    // return const OtherScreen();
+  }
+
   Widget BodyHome_mobile() {
     return Column(
       children: [
@@ -7701,7 +7389,9 @@ class _SettingScreenState extends State<SettingScreen> {
                                 ? const EditwebScreen()
                                 : (Status_ == 7)
                                     ? const USerInformation()
-                                    : const WebViewXPage()
+                                    : (Status_ == 7)
+                                        ? const WebViewXPage()
+                                        : AdvanceSetting()
       ],
     );
   }

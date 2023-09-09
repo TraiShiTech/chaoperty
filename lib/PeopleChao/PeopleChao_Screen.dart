@@ -25,13 +25,16 @@ import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'package:intl/intl.dart';
 import '../AdminScaffold/AdminScaffold.dart';
 import '../Constant/Myconstant.dart';
+import '../Model/GetContract_Photo_Model.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetTeNant_Model.dart';
 import '../Model/GetZone_Model.dart';
+import '../Report/Excel_PeopleCho_Report.dart';
 import '../Responsive/responsive.dart';
 import 'package:http/http.dart' as http;
 
 import '../Style/colors.dart';
+import '../Style/downloadImage.dart';
 import 'PeopleChao_Screen2.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'PeopleChao_Screen3.dart';
@@ -45,7 +48,18 @@ import 'QR_PDF.dart';
 import 'QR_PDF2.dart';
 
 class PeopleChaoScreen extends StatefulWidget {
-  const PeopleChaoScreen({super.key});
+  final Get_NameShop_index;
+  final Get_cid;
+  final Get_status;
+  final Get_ReturnBody;
+
+  const PeopleChaoScreen({
+    super.key,
+    this.Get_NameShop_index,
+    this.Get_cid,
+    this.Get_status,
+    this.Get_ReturnBody,
+  });
 
   @override
   State<PeopleChaoScreen> createState() => _PeopleChaoScreenState();
@@ -65,10 +79,43 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
   // List<List<TeNantModel>> teNantModels_Save = [];
   List<TeNantModel> _teNantModels = <TeNantModel>[];
   List<List<dynamic>> teNantModels_Save = [];
-
+  List<ContractPhotoModel> contractPhotoModels = [];
   String? renTal_user, renTal_name, zone_ser, zone_name, Value_cid, fname_;
-  String? rtname, type, typex, renname, pkname, ser_Zonex, Value_stasus;
+  String? rtname,
+      type,
+      typex,
+      renname,
+      pkname,
+      ser_Zonex,
+      Value_stasus,
+      Status_pe;
   int? pkqty, pkuser, countarae;
+
+  Color cardColor = Colors.green[300]!;
+  int indexcardColor = 0;
+  List<dynamic> colorList = [
+    Colors.green[300],
+    Colors.red[300],
+    Colors.blue[300],
+    Colors.yellow[300],
+    Colors.orange[300],
+    Colors.purple[300],
+    Colors.teal[300],
+    Colors.pink[300],
+    Colors.indigo[300],
+    Colors.cyan[300],
+    Colors.brown[300],
+    Colors.black,
+    Colors.grey[300],
+  ];
+
+  void changeCardColor(namecolor) {
+    setState(() {
+      // Change the color to a different one
+      cardColor = namecolor; // You can replace this with any color you want
+    });
+  }
+
   List<RenTalModel> renTalModels = [];
   String? ser_user,
       foder,
@@ -96,7 +143,8 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
   final FormNameFile_text = TextEditingController();
   late List<GlobalKey> qrImageKey;
   List<Uint8List> netImage = [];
-  late List<ScreenshotController> controller;
+
+  late List<GlobalKey> controller;
   Uint8List? bytes;
   ///////---------------------------------------------------->
   @override
@@ -186,6 +234,10 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
       renTal_name = preferences.getString('renTalName');
       fname_ = preferences.getString('fname');
       teNantModels_Save = List.generate(300, (_) => []);
+      Value_NameShop_index = widget.Get_NameShop_index;
+      Value_cid = widget.Get_cid;
+      Value_stasus = widget.Get_status;
+      ReturnBodyPeople = widget.Get_ReturnBody;
     });
   }
 
@@ -267,6 +319,13 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
             teNantModels.add(teNantModel);
             teNantModels_Save[teNantModels_Save_index].add(teNantModel);
           });
+          read_GC_photo(
+              teNantModel.docno == null
+                  ? teNantModel.cid == null
+                      ? ''
+                      : '${teNantModel.cid}'
+                  : '${teNantModel.docno}',
+              teNantModel.quantity);
         }
       } else {
         setState(() {
@@ -284,8 +343,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
         qrImageKey = List.generate(teNantModels.length, (_) => GlobalKey());
         teNantModels_Save =
             List.generate((teNantModels.length ~/ 24) + 1, (_) => []);
-        controller =
-            List.generate(teNantModels.length, (_) => ScreenshotController());
+        controller = List.generate(teNantModels.length, (_) => GlobalKey());
         zone_ser = preferences.getString('zonePSer');
         zone_name = preferences.getString('zonesPName');
       });
@@ -313,6 +371,44 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
       }
     } catch (e) {}
   }
+////////////////////------------------------------------------------>
+
+  Future<Null> read_GC_photo(ciddoc_, qutser_) async {
+    ////////////////------------------------------------------------------>
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    ////////////////------------------------------------------------------>
+    var ren = preferences.getString('renTalSer');
+
+    String url =
+        '${MyConstant().domain}/GC_photo_cont.php?isAdd=true&ren=$ren&ciddoc=$ciddoc_&qutser=$qutser_';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'null') {
+        for (var map in result) {
+          ContractPhotoModel contractPhotoModel =
+              ContractPhotoModel.fromJson(map);
+
+          var pic_tenantx = contractPhotoModel.pic_tenant!.trim();
+          var pic_shopx = contractPhotoModel.pic_shop!.trim();
+          var pic_planx = contractPhotoModel.pic_plan!.trim();
+          setState(() {
+            // pic_tenant = pic_tenantx;
+            // pic_shop = pic_shopx;
+            // pic_plan = pic_planx;
+            contractPhotoModels.add(contractPhotoModel);
+          });
+          print('pic_tenantx');
+          print(pic_tenantx);
+        }
+      }
+    } catch (e) {}
+  }
+
+/////////////////////----------------------------------------->
 
   Future<Null> read_GC_areaSelect(int select) async {
     if (teNantModels.isNotEmpty) {
@@ -892,8 +988,16 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
           );
           Navigator.of(context).pop();
         } else {
-          _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
-          Navigator.of(context).pop();
+          Excgen_PeopleChoReport.exportExcel_PeopleChoReport(
+              context,
+              NameFile_,
+              _verticalGroupValue_NameFile,
+              zone_name,
+              (Status_pe == null) ? 'ปัจจุบัน' : Status_pe,
+              teNantModels,
+              contractPhotoModels);
+          // _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
+          // Navigator.of(context).pop();
         }
       }
     } else {
@@ -921,8 +1025,16 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
         );
         Navigator.of(context).pop();
       } else {
-        _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
-        Navigator.of(context).pop();
+        Excgen_PeopleChoReport.exportExcel_PeopleChoReport(
+            context,
+            NameFile_,
+            _verticalGroupValue_NameFile,
+            zone_name,
+            (Status_pe == null) ? 'ปัจจุบัน' : Status_pe,
+            teNantModels,
+            contractPhotoModels);
+        // _exportExcel_(NameFile_, _verticalGroupValue_NameFile, Value_Report);
+        // Navigator.of(context).pop();
       }
     }
   }
@@ -2201,6 +2313,9 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                         tappedIndex_ = '';
                                                       });
                                                       setState(() {
+                                                        Status_pe = Status[i]!;
+                                                      });
+                                                      setState(() {
                                                         Status_ = i + 1;
                                                       });
                                                       read_GC_areaSelect(
@@ -2455,20 +2570,82 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                     title:
                                                                         Column(
                                                                       children: [
-                                                                        Center(
-                                                                            child:
-                                                                                Text(
-                                                                          'Gen QR Code',
-                                                                          style:
-                                                                              TextStyle(
-                                                                            color:
-                                                                                Colors.black,
-                                                                            fontWeight:
-                                                                                FontWeight.bold,
-                                                                            fontFamily:
-                                                                                FontWeight_.Fonts_T,
-                                                                          ),
-                                                                        )),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.center,
+                                                                          children: [
+                                                                            Center(
+                                                                              child: Text(
+                                                                                'Gen QR Code',
+                                                                                style: TextStyle(
+                                                                                  color: Colors.black,
+                                                                                  fontWeight: FontWeight.bold,
+                                                                                  fontFamily: FontWeight_.Fonts_T,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                            // if (serPositioned !=
+                                                                            //     null)
+                                                                            //   SizedBox(
+                                                                            //     height: 20,
+                                                                            //     width: 20,
+                                                                            //     child: CircularProgressIndicator(),
+                                                                            //   )
+                                                                          ],
+                                                                        ),
+                                                                        Row(
+                                                                          mainAxisAlignment:
+                                                                              MainAxisAlignment.end,
+                                                                          children: [
+                                                                            Text('สี : '),
+                                                                            Container(
+                                                                              decoration: BoxDecoration(
+                                                                                color: AppbackgroundColor.Sub_Abg_Colors,
+                                                                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                border: Border.all(color: Colors.grey, width: 1),
+                                                                              ),
+                                                                              width: 70,
+                                                                              child: DropdownButtonFormField2(
+                                                                                decoration: InputDecoration(
+                                                                                  isDense: true,
+                                                                                  contentPadding: EdgeInsets.zero,
+                                                                                  border: OutlineInputBorder(
+                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  ),
+                                                                                ),
+                                                                                isExpanded: true,
+                                                                                hint: Icon(Icons.circle_rounded, color: cardColor, size: 16),
+                                                                                icon: const Icon(
+                                                                                  Icons.arrow_drop_down,
+                                                                                  color: TextHome_Color.TextHome_Colors,
+                                                                                ),
+                                                                                style: const TextStyle(color: Colors.green, fontFamily: Font_.Fonts_T),
+                                                                                iconSize: 20,
+                                                                                buttonHeight: 30,
+                                                                                // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                                                                dropdownDecoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                ),
+                                                                                items: colorList
+                                                                                    .map((item) => DropdownMenuItem<dynamic>(
+                                                                                          value: item,
+                                                                                          child: Icon(Icons.circle_rounded, color: item, size: 16),
+                                                                                        ))
+                                                                                    .toList(),
+
+                                                                                onChanged: (value) async {
+                                                                                  final selectedColor = value;
+                                                                                  final index = colorList.indexWhere((color) => color.value == selectedColor.value);
+                                                                                  setState(() {
+                                                                                    indexcardColor = index;
+                                                                                  });
+
+                                                                                  changeCardColor(colorList[index]);
+                                                                                },
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
                                                                         Row(
                                                                           mainAxisAlignment:
                                                                               MainAxisAlignment.spaceBetween,
@@ -2583,8 +2760,8 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                     height: MediaQuery.of(context).size.height,
                                                                                     child: ResponsiveGridList(horizontalGridMargin: 8, verticalGridMargin: 8, minItemWidth: 300, minItemsPerRow: 1, children: [
                                                                                       for (int index = 0; index < teNantModels_Save[index_type].length; index++)
-                                                                                        Screenshot(
-                                                                                          controller: controller[index],
+                                                                                        RepaintBoundary(
+                                                                                          key: controller[index],
                                                                                           child: Row(
                                                                                             mainAxisAlignment: MainAxisAlignment.center,
                                                                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -2645,18 +2822,39 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                           child: Container(
                                                                                                             color: Colors.white,
                                                                                                             child: Column(
-                                                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                                                                               children: [
                                                                                                                 Center(
                                                                                                                     child: Container(
-                                                                                                                  height: 100,
-                                                                                                                  width: 100,
+                                                                                                                  height: 84,
+                                                                                                                  width: 84,
                                                                                                                   child: SfBarcodeGenerator(
                                                                                                                     value: '${teNantModels_Save[index_type][index].cid}',
                                                                                                                     symbology: QRCode(),
                                                                                                                     showValue: false,
                                                                                                                   ),
                                                                                                                 )),
+                                                                                                                Padding(
+                                                                                                                  padding: EdgeInsets.fromLTRB(0, 4, 0, 0),
+                                                                                                                  child: Container(
+                                                                                                                    decoration: BoxDecoration(
+                                                                                                                      color: Colors.grey[100],
+                                                                                                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                                      // border: Border.all(color: Colors.grey, width: 1),
+                                                                                                                    ),
+                                                                                                                    padding: EdgeInsets.fromLTRB(2, 2, 2, 0),
+                                                                                                                    child: Text(
+                                                                                                                      'ลงชื่อ.....................................',
+                                                                                                                      maxLines: 1,
+                                                                                                                      style: TextStyle(
+                                                                                                                        fontSize: 7.0,
+                                                                                                                        color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                                                        fontWeight: FontWeight.bold,
+                                                                                                                        fontFamily: Font_.Fonts_T,
+                                                                                                                      ),
+                                                                                                                    ),
+                                                                                                                  ),
+                                                                                                                ),
 
                                                                                                                 // Center(
                                                                                                                 //   child: PrettyQr(
@@ -2664,7 +2862,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                                 //     image: const AssetImage(
                                                                                                                 //       "images/Icon-chao.png",
                                                                                                                 //     ),
-                                                                                                                //     size: 110,
+                                                                                                                //     size: 90,
                                                                                                                 //     data: '${teNantModels[index].cid}',
                                                                                                                 //     errorCorrectLevel: QrErrorCorrectLevel.M,
                                                                                                                 //     roundEdges: true,
@@ -2690,7 +2888,7 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                         Stack(
                                                                                                           children: [
                                                                                                             Padding(
-                                                                                                              padding: const EdgeInsets.fromLTRB(4, 8, 0, 8),
+                                                                                                              padding: const EdgeInsets.fromLTRB(4, 4, 0, 8),
                                                                                                               child: Container(
                                                                                                                 // decoration:
                                                                                                                 //     BoxDecoration(
@@ -2797,146 +2995,163 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                               ),
                                                                                                             ),
                                                                                                             // if (serPositioned == null)
-                                                                                                            //   // ?
-                                                                                                            Positioned(
-                                                                                                              bottom: 5,
-                                                                                                              right: 5,
-                                                                                                              child: InkWell(
-                                                                                                                child: Container(
-                                                                                                                  width: 30.0,
-                                                                                                                  height: 30.0,
-                                                                                                                  decoration: BoxDecoration(
-                                                                                                                    color: Colors.black.withOpacity(0.5),
-                                                                                                                    shape: BoxShape.circle,
+                                                                                                            //   Positioned(
+                                                                                                            //     top: 0,
+                                                                                                            //     right: 5,
+                                                                                                            //     child: InkWell(
+                                                                                                            //         child: Container(
+                                                                                                            //           width: 30.0,
+                                                                                                            //           height: 30.0,
+                                                                                                            //           decoration: BoxDecoration(
+                                                                                                            //             color: Colors.black.withOpacity(0.5),
+                                                                                                            //             shape: BoxShape.circle,
+                                                                                                            //           ),
+                                                                                                            //           child: Center(
+                                                                                                            //               child: Text(
+                                                                                                            //             '${index_type + index + 1}',
+                                                                                                            //             style: TextStyle(
+                                                                                                            //               fontSize: 12,
+                                                                                                            //               color: Colors.white,
+                                                                                                            //             ),
+                                                                                                            //           )),
+                                                                                                            //         ),
+                                                                                                            //         onTap: () async {}),
+                                                                                                            //   ),
+                                                                                                            if (serPositioned == null)
+                                                                                                              Positioned(
+                                                                                                                bottom: 5,
+                                                                                                                right: 5,
+                                                                                                                child: InkWell(
+                                                                                                                  child: Container(
+                                                                                                                    width: 30.0,
+                                                                                                                    height: 30.0,
+                                                                                                                    decoration: BoxDecoration(
+                                                                                                                      color: Colors.black.withOpacity(0.5),
+                                                                                                                      shape: BoxShape.circle,
+                                                                                                                    ),
+                                                                                                                    child: const Center(
+                                                                                                                        child: Icon(
+                                                                                                                      Icons.download,
+                                                                                                                      color: Colors.white,
+                                                                                                                    )),
                                                                                                                   ),
-                                                                                                                  child: const Center(
-                                                                                                                      child: Icon(
-                                                                                                                    Icons.print,
-                                                                                                                    color: Colors.white,
-                                                                                                                  )),
-                                                                                                                ),
-                                                                                                                onTap: () async {
-                                                                                                                  showDialog(
-                                                                                                                      barrierDismissible: false,
-                                                                                                                      context: context,
-                                                                                                                      builder: (_) {
-                                                                                                                        // Future.delayed(
-                                                                                                                        //     const Duration(
-                                                                                                                        //         seconds:
-                                                                                                                        //             1),
-                                                                                                                        //     () {
-                                                                                                                        //   Navigator.of(
-                                                                                                                        //           context)
-                                                                                                                        //       .pop();
-                                                                                                                        // });
+                                                                                                                  onTap: () async {
+                                                                                                                    // showDialog(
+                                                                                                                    //     barrierDismissible: false,
+                                                                                                                    //     context: context,
+                                                                                                                    //     builder: (_) {
+                                                                                                                    //       // Future.delayed(
+                                                                                                                    //       //     const Duration(
+                                                                                                                    //       //         seconds:
+                                                                                                                    //       //             1),
+                                                                                                                    //       //     () {
+                                                                                                                    //       //   Navigator.of(
+                                                                                                                    //       //           context)
+                                                                                                                    //       //       .pop();
+                                                                                                                    //       // });
 
-                                                                                                                        return Dialog(
-                                                                                                                          child: StreamBuilder(
-                                                                                                                              stream: Stream.periodic(const Duration(seconds: 1)),
-                                                                                                                              builder: (context, snapshot) {
-                                                                                                                                return const SizedBox(
-                                                                                                                                    // height: 20,
-                                                                                                                                    width: 350,
-                                                                                                                                    child: Padding(
-                                                                                                                                      padding: EdgeInsets.all(20.0),
-                                                                                                                                      child: Row(
-                                                                                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                                                        children: [
-                                                                                                                                          Padding(
-                                                                                                                                            padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
-                                                                                                                                            child: SizedBox(height: 30, child: CircularProgressIndicator()),
-                                                                                                                                          ),
-                                                                                                                                          Text(
-                                                                                                                                            'กำลัง Download และแปลงไฟล์ PDF...  ',
-                                                                                                                                            style: TextStyle(
-                                                                                                                                              color: PeopleChaoScreen_Color.Colors_Text1_,
-                                                                                                                                              fontWeight: FontWeight.bold,
-                                                                                                                                              fontFamily: FontWeight_.Fonts_T,
-                                                                                                                                            ),
-                                                                                                                                          ),
-                                                                                                                                        ],
-                                                                                                                                      ),
-                                                                                                                                    ));
-                                                                                                                              }),
-                                                                                                                        );
+                                                                                                                    //       return Dialog(
+                                                                                                                    //         child: StreamBuilder(
+                                                                                                                    //             stream: Stream.periodic(const Duration(seconds: 1)),
+                                                                                                                    //             builder: (context, snapshot) {
+                                                                                                                    //               return const SizedBox(
+                                                                                                                    //                   // height: 20,
+                                                                                                                    //                   width: 350,
+                                                                                                                    //                   child: Padding(
+                                                                                                                    //                     padding: EdgeInsets.all(20.0),
+                                                                                                                    //                     child: Row(
+                                                                                                                    //                       mainAxisAlignment: MainAxisAlignment.center,
+                                                                                                                    //                       children: [
+                                                                                                                    //                         Padding(
+                                                                                                                    //                           padding: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                                                                                                                    //                           child: SizedBox(height: 30, child: CircularProgressIndicator()),
+                                                                                                                    //                         ),
+                                                                                                                    //                         Text(
+                                                                                                                    //                           'กำลัง Download และแปลงไฟล์ PDF...  ',
+                                                                                                                    //                           style: TextStyle(
+                                                                                                                    //                             color: PeopleChaoScreen_Color.Colors_Text1_,
+                                                                                                                    //                             fontWeight: FontWeight.bold,
+                                                                                                                    //                             fontFamily: FontWeight_.Fonts_T,
+                                                                                                                    //                           ),
+                                                                                                                    //                         ),
+                                                                                                                    //                       ],
+                                                                                                                    //                     ),
+                                                                                                                    //                   ));
+                                                                                                                    //             }),
+                                                                                                                    //       );
+                                                                                                                    //     });
+                                                                                                                    // Pdfgen_QR_2.displayPdf_QR2(
+                                                                                                                    //   context,
+                                                                                                                    //   renTal_name,
+                                                                                                                    //   teNantModels[index].cid,
+                                                                                                                    //   teNantModels[index].cname,
+                                                                                                                    //   '${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
+                                                                                                                    //   '${teNantModels[index].sname}',
+
+                                                                                                                    //   teNantModels[index].ln_c == null
+                                                                                                                    //       ? teNantModels[index].ln_q == null
+                                                                                                                    //           ? ''
+                                                                                                                    //           : 'พื้นที่ :${teNantModels[index].ln_q}( ${teNantModels[index].zn} )'
+                                                                                                                    //       : 'พื้นที่ :${teNantModels[index].ln_c}( ${teNantModels[index].zn} )',
+
+                                                                                                                    // );
+
+                                                                                                                    setState(() {
+                                                                                                                      serPositioned = '0';
+                                                                                                                    });
+                                                                                                                    Future.delayed(const Duration(milliseconds: 300), () async {
+                                                                                                                      captureAndConvertToBase64(controller[index], 'QR_${teNantModels[index].cid}');
+                                                                                                                      setState(() {
+                                                                                                                        serPositioned = null;
                                                                                                                       });
-                                                                                                                  Pdfgen_QR_2.displayPdf_QR2(
-                                                                                                                    context,
-                                                                                                                    renTal_name,
-                                                                                                                    teNantModels[index].cid,
-                                                                                                                    teNantModels[index].cname,
-                                                                                                                    '${teNantModels[index].sdate} ถึง ${teNantModels[index].ldate}',
-                                                                                                                    '${teNantModels[index].sname}',
+                                                                                                                    });
 
-                                                                                                                    teNantModels[index].ln_c == null
-                                                                                                                        ? teNantModels[index].ln_q == null
-                                                                                                                            ? ''
-                                                                                                                            : 'พื้นที่ :${teNantModels[index].ln_q}( ${teNantModels[index].zn} )'
-                                                                                                                        : 'พื้นที่ :${teNantModels[index].ln_c}( ${teNantModels[index].zn} )',
+                                                                                                                    // Future.delayed(const Duration(milliseconds: 100), () async {
+                                                                                                                    //   try {
+                                                                                                                    //     final bytes = await controller[index].capture();
+                                                                                                                    //     final blob = html.Blob([bytes]);
+                                                                                                                    //     final url = html.Url.createObjectUrlFromBlob(blob);
+                                                                                                                    //     final anchor = html.document.createElement('a') as html.AnchorElement
+                                                                                                                    //       ..href = url
+                                                                                                                    //       ..download = '${teNantModels[index].cid}.png';
+                                                                                                                    //     html.document.body?.append(anchor);
+                                                                                                                    //     anchor.click();
+                                                                                                                    //     html.Url.revokeObjectUrl(url);
+                                                                                                                    //     print('Image saved to: ${teNantModels[index].cid}.png');
+                                                                                                                    //     setState(() {
+                                                                                                                    //       serPositioned = null;
+                                                                                                                    //     });
+                                                                                                                    //   } catch (e) {
+                                                                                                                    //     print('Error saving image: $e');
+                                                                                                                    //   }
+                                                                                                                    // });
 
-                                                                                                                    // '${teNantModels[index].ln} ( ${teNantModels[index].zn} )'
-                                                                                                                  );
-                                                                                                                  // setState(() {
-                                                                                                                  //   serPositioned = '0';
-                                                                                                                  // });
+                                                                                                                    // Future.delayed(const Duration(milliseconds: 100), () async {
+                                                                                                                    //   final bytes = await controller[index].capture();
 
-                                                                                                                  // Future.delayed(const Duration(milliseconds: 100), () async {
-                                                                                                                  //   try {
-                                                                                                                  //     final bytes = await controller[index].capture();
-                                                                                                                  //     final blob = html.Blob([bytes]);
-                                                                                                                  //     final url = html.Url.createObjectUrlFromBlob(blob);
-                                                                                                                  //     final anchor = html.document.createElement('a') as html.AnchorElement
-                                                                                                                  //       ..href = url
-                                                                                                                  //       ..download = '${teNantModels[index].cid}.png';
-                                                                                                                  //     html.document.body?.append(anchor);
-                                                                                                                  //     anchor.click();
-                                                                                                                  //     html.Url.revokeObjectUrl(url);
-                                                                                                                  //     print('Image saved to: ${teNantModels[index].cid}.png');
-                                                                                                                  //     setState(() {
-                                                                                                                  //       serPositioned = null;
-                                                                                                                  //     });
-                                                                                                                  //   } catch (e) {
-                                                                                                                  //     print('Error saving image: $e');
-                                                                                                                  //   }
-                                                                                                                  // });
+                                                                                                                    //   try {
+                                                                                                                    //     // final tempDir = await getTemporaryDirectory();
+                                                                                                                    //     final filename = '${teNantModels[index].cid}/image.png';
 
-                                                                                                                  // Future.delayed(const Duration(milliseconds: 100), () async {
-                                                                                                                  //   final bytes = await controller[index].capture();
+                                                                                                                    //     final type = MimeType.PNG;
 
-                                                                                                                  //   try {
-                                                                                                                  //     // final tempDir = await getTemporaryDirectory();
-                                                                                                                  //     final filename = '${teNantModels[index].cid}/image.png';
+                                                                                                                    //     final dir = await FileSaver.instance.saveFile("${NameFile_}", bytes!, "pdf", mimeType: type);
 
-                                                                                                                  //     final type = MimeType.PNG;
-
-                                                                                                                  //     final dir = await FileSaver.instance.saveFile("${NameFile_}", bytes!, "pdf", mimeType: type);
-
-                                                                                                                  //     print('Image saved to: $filename');
-                                                                                                                  //     setState(() {
-                                                                                                                  //       serPositioned = null;
-                                                                                                                  //     });
-                                                                                                                  //   } catch (e) {
-                                                                                                                  //     print('Error saving image: $e');
-                                                                                                                  //   }
-                                                                                                                  // });
-                                                                                                                },
-                                                                                                              ),
-                                                                                                            )
+                                                                                                                    //     print('Image saved to: $filename');
+                                                                                                                    //     setState(() {
+                                                                                                                    //       serPositioned = null;
+                                                                                                                    //     });
+                                                                                                                    //   } catch (e) {
+                                                                                                                    //     print('Error saving image: $e');
+                                                                                                                    //   }
+                                                                                                                    // });
+                                                                                                                  },
+                                                                                                                ),
+                                                                                                              )
                                                                                                             // :
                                                                                                             // Positioned(bottom: 5, right: 5, child: Container(padding: const EdgeInsets.all(4.0), child: const CircularProgressIndicator())),
                                                                                                           ],
                                                                                                         ),
-
-                                                                                                        // ElevatedButton(
-                                                                                                        //     style: ElevatedButton.styleFrom(
-                                                                                                        //         primary: Colors
-                                                                                                        //             .blueGrey.shade900),
-                                                                                                        //     onPressed:
-                                                                                                        //         () {
-                                                                                                        //       //  saveData(index);
-                                                                                                        //     },
-                                                                                                        //     child: const Text(
-                                                                                                        //         'Add to Cart')),
                                                                                                       ],
                                                                                                     ),
                                                                                                   ],
@@ -2946,7 +3161,8 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                 height: 136,
                                                                                                 width: 15,
                                                                                                 decoration: BoxDecoration(
-                                                                                                  color: Colors.green[300],
+                                                                                                  color: cardColor,
+                                                                                                  // Colors.green[300],
                                                                                                   borderRadius: const BorderRadius.only(topLeft: Radius.circular(0), topRight: Radius.circular(10), bottomLeft: Radius.circular(0), bottomRight: Radius.circular(10)),
                                                                                                 ),
                                                                                                 // child: Column(
@@ -3167,15 +3383,15 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                 // });
 
                                                                                                 if ((index_type + 1) == teNantModels_Save.length) {
-                                                                                                  Pdfgen_QR_.displayPdf_QR(context, renTal_name, zone_name, teNantModels_Save[index_type], '$zone_name (${index_type * 24 + 1} -  ${((index_type + 1) * 24) - (((index_type + 1) * 24) - teNantModels.length)})');
+                                                                                                  Pdfgen_QR_.displayPdf_QR(context, renTal_name, zone_name, teNantModels_Save[index_type], '$zone_name (${index_type * 24 + 1} -  ${((index_type + 1) * 24) - (((index_type + 1) * 24) - teNantModels.length)})', indexcardColor);
                                                                                                 } else {
-                                                                                                  Pdfgen_QR_.displayPdf_QR(context, renTal_name, zone_name, teNantModels_Save[index_type], '$zone_name (${index_type * 24 + 1} - ${(index_type + 1) * 24})');
+                                                                                                  Pdfgen_QR_.displayPdf_QR(context, renTal_name, zone_name, teNantModels_Save[index_type], '$zone_name (${index_type * 24 + 1} - ${(index_type + 1) * 24})', indexcardColor);
                                                                                                 }
                                                                                               },
                                                                                               child: Column(
                                                                                                 children: [
                                                                                                   Text(
-                                                                                                    'พิมพ์',
+                                                                                                    'พิมพ์ PDF',
                                                                                                     style: TextStyle(
                                                                                                       color: Colors.white,
                                                                                                       fontWeight: FontWeight.bold,
@@ -3183,14 +3399,14 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
                                                                                                       fontFamily: FontWeight_.Fonts_T,
                                                                                                     ),
                                                                                                   ),
-                                                                                                  Text(
-                                                                                                    '(${index_type * 24 + 1} - ${(index_type + 1) * 24})',
-                                                                                                    style: TextStyle(
-                                                                                                      color: Colors.white,
-                                                                                                      fontSize: 10,
-                                                                                                      fontFamily: FontWeight_.Fonts_T,
-                                                                                                    ),
-                                                                                                  ),
+                                                                                                  // Text(
+                                                                                                  //   '(${index_type * 24 + 1} - ${(index_type + 1) * 24})',
+                                                                                                  //   style: TextStyle(
+                                                                                                  //     color: Colors.white,
+                                                                                                  //     fontSize: 10,
+                                                                                                  //     fontFamily: FontWeight_.Fonts_T,
+                                                                                                  //   ),
+                                                                                                  // ),
                                                                                                 ],
                                                                                               ),
                                                                                             ),
@@ -5289,351 +5505,319 @@ class _PeopleChaoScreenState extends State<PeopleChaoScreen> {
   }
 
   //////////////////////////////////------------------------->(รายงานผู้เช่า)
-  void _exportExcel_(
-      NameFile_, _verticalGroupValue_NameFile, Value_Report) async {
-    String day_ =
-        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+//   void _exportExcel_(
+//       NameFile_, _verticalGroupValue_NameFile, Value_Report) async {
+//     String day_ =
+//         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
-    String Tim_ =
-        '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
-    final x.Workbook workbook = x.Workbook();
+//     String Tim_ =
+//         '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
+//     final x.Workbook workbook = x.Workbook();
 
-    final x.Worksheet sheet = workbook.worksheets[0];
-    sheet.pageSetup.topMargin = 1;
-    sheet.pageSetup.bottomMargin = 1;
-    sheet.pageSetup.leftMargin = 1;
-    sheet.pageSetup.rightMargin = 1;
+//     final x.Worksheet sheet = workbook.worksheets[0];
+//     sheet.pageSetup.topMargin = 1;
+//     sheet.pageSetup.bottomMargin = 1;
+//     sheet.pageSetup.leftMargin = 1;
+//     sheet.pageSetup.rightMargin = 1;
 
-    //Adding a picture
-    final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
-    final Uint8List image = bytes_image.buffer
-        .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
-    DateTime date = DateTime.now();
-    var formatter = new DateFormat.MMMMd('th_TH');
-    String thaiDate = formatter.format(date);
-// Adding an image.
-    // sheet.pictures.addStream(1, 1, image);
-    // final x.Picture picture = sheet.pictures[0];
+//     //Adding a picture
+//     final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
+//     final Uint8List image = bytes_image.buffer
+//         .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
+//     DateTime date = DateTime.now();
+//     var formatter = new DateFormat.MMMMd('th_TH');
+//     String thaiDate = formatter.format(date);
 
-// Re-size an image
-    // picture.height = 30;
-    // picture.width = 50;
+//     x.Style globalStyle = workbook.styles.add('style');
+//     globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
+//     globalStyle.fontName = 'Angsana New';
+//     globalStyle.numberFormat = '_(\$* #,##0_)';
+//     globalStyle.fontSize = 14;
+//     globalStyle.hAlign = x.HAlignType.center;
+// ///////////////////////////////----------------------->
 
-// // rotate an image.
-//     picture.rotation = 100;
+//     x.Style globalStyle2 = workbook.styles.add('style2');
+//     globalStyle2.backColorRgb = const Color.fromARGB(255, 141, 185, 90);
+//     globalStyle2.fontName = 'Angsana New';
+//     globalStyle2.fontSize = 14;
 
-// // Flip an image.
-//     picture.horizontalFlip = true;
-//  _displayPdf(
-//             '$renTal_name',
-//             ' ${renTalModels[0].bill_addr}',
-//             ' ${renTalModels[0].bill_email}',
-//             ' ${renTalModels[0].bill_tel}',
-//             ' ${renTalModels[0].bill_tax}',
-//             ' ${renTalModels[0].bill_name}',
-//             newValuePDFimg,
+//     x.Style globalStyle22 = workbook.styles.add('style22');
+//     globalStyle22.backColorRgb = Color(0xC7F5F7FA);
+//     globalStyle22.numberFormat = '_(\* #,##0.00_)';
+//     globalStyle22.fontSize = 12;
+//     globalStyle22.numberFormat;
+//     globalStyle22.hAlign = x.HAlignType.center;
+
+//     x.Style globalStyle222 = workbook.styles.add('style222');
+//     globalStyle222.backColorRgb = Color(0xC7E1E2E6);
+//     globalStyle222.numberFormat = '_(\* #,##0.00_)';
+//     // globalStyle222.numberFormat;
+//     globalStyle222.fontSize = 12;
+//     globalStyle222.hAlign = x.HAlignType.center;
+// ///////////////////////////////----------------------->
+//     x.Style globalStyle3 = workbook.styles.add('style3');
+//     globalStyle3.backColorRgb =
+//         const Color.fromRGBO(232, 232, 232, 1.000); //    Color(0xFFD9D9B7);
+
+//     globalStyle3.fontName = 'Angsana New';
+//     globalStyle3.fontSize = 14;
+//     globalStyle3.hAlign = x.HAlignType.center;
+
+// ///////////////////////////////----------------------->
+//     sheet.getRangeByName('A1').cellStyle = globalStyle;
+//     sheet.getRangeByName('B1').cellStyle = globalStyle;
+//     sheet.getRangeByName('C1').cellStyle = globalStyle;
+//     sheet.getRangeByName('D1').cellStyle = globalStyle;
+//     sheet.getRangeByName('E1').cellStyle = globalStyle;
+//     sheet.getRangeByName('F1').cellStyle = globalStyle;
+//     sheet.getRangeByName('G1').cellStyle = globalStyle;
+//     sheet.getRangeByName('H1').cellStyle = globalStyle;
+//     sheet.getRangeByName('I1').cellStyle = globalStyle;
+//     sheet.getRangeByName('J1').cellStyle = globalStyle;
+//     sheet.getRangeByName('L1').cellStyle = globalStyle;
+//     sheet.getRangeByName('M1').cellStyle = globalStyle;
+//     sheet.getRangeByName('N1').cellStyle = globalStyle;
+
+//     sheet.getRangeByName('A2').setText('ผู้เช่า : ${Status[Status_ - 1]}');
+//     sheet.getRangeByName('E1').setText('ข้อมูลผู้เช่า');
+//     sheet
+//         .getRangeByName('J1')
+//         .setText((zone_name == null) ? 'โซน : ทั้งหมด' : 'โซน : $zone_name');
+//     // sheet
+//     //     .getRangeByName('J1')
+//     //     .setText('โทรศัพท์ : ${renTalModels[0].bill_tel}');
+
+// // ExcelSheetProtectionOption
+//     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
+//     options.all = true;
+
+// // Protecting the Worksheet by using a Password
+
+//     sheet.getRangeByName('A2').cellStyle = globalStyle;
+//     sheet.getRangeByName('B2').cellStyle = globalStyle;
+//     sheet.getRangeByName('C2').cellStyle = globalStyle;
+//     sheet.getRangeByName('D2').cellStyle = globalStyle;
+//     sheet.getRangeByName('E2').cellStyle = globalStyle;
+//     sheet.getRangeByName('F2').cellStyle = globalStyle;
+//     sheet.getRangeByName('G2').cellStyle = globalStyle;
+//     sheet.getRangeByName('H2').cellStyle = globalStyle;
+//     sheet.getRangeByName('I2').cellStyle = globalStyle;
+//     sheet.getRangeByName('J2').cellStyle = globalStyle;
+//     sheet.getRangeByName('L2').cellStyle = globalStyle;
+//     sheet.getRangeByName('M2').cellStyle = globalStyle;
+//     sheet.getRangeByName('N2').cellStyle = globalStyle;
+//     // sheet.getRangeByName('A2').setText('${renTalModels[0].bill_addr}');
+//     // sheet.getRangeByName('J2').setText('อีเมล : ${renTalModels[0].bill_email}');
+
+//     sheet.getRangeByName('A3').cellStyle = globalStyle;
+//     sheet.getRangeByName('B3').cellStyle = globalStyle;
+//     sheet.getRangeByName('C3').cellStyle = globalStyle;
+//     sheet.getRangeByName('D3').cellStyle = globalStyle;
+//     sheet.getRangeByName('E3').cellStyle = globalStyle;
+//     sheet.getRangeByName('F3').cellStyle = globalStyle;
+//     sheet.getRangeByName('G3').cellStyle = globalStyle;
+//     sheet.getRangeByName('H3').cellStyle = globalStyle;
+//     sheet.getRangeByName('I3').cellStyle = globalStyle;
+//     sheet.getRangeByName('J3').cellStyle = globalStyle;
+//     sheet.getRangeByName('L3').cellStyle = globalStyle;
+//     sheet.getRangeByName('M3').cellStyle = globalStyle;
+//     sheet.getRangeByName('N3').cellStyle = globalStyle;
+
+//     sheet
+//         .getRangeByName('J2')
+//         .setText('ณ วันที่ : $thaiDate ${DateTime.now().year + 543}');
+
+//     globalStyle2.hAlign = x.HAlignType.center;
+//     sheet.getRangeByName('A4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('B4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('C4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('D4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('E4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('F4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('G4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('H4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('I4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('J4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('k4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('L4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('M4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('N4').cellStyle = globalStyle2;
+
+//     sheet.getRangeByName('A4').columnWidth = 18;
+//     sheet.getRangeByName('B4').columnWidth = 18;
+//     sheet.getRangeByName('C4').columnWidth = 18;
+//     sheet.getRangeByName('D4').columnWidth = 18;
+//     sheet.getRangeByName('E4').columnWidth = 18;
+//     sheet.getRangeByName('F4').columnWidth = 18;
+//     sheet.getRangeByName('G4').columnWidth = 18;
+//     sheet.getRangeByName('H4').columnWidth = 18;
+//     sheet.getRangeByName('I4').columnWidth = 18;
+//     sheet.getRangeByName('J4').columnWidth = 28;
+//     sheet.getRangeByName('L4').columnWidth = 40;
+//     sheet.getRangeByName('M4').columnWidth = 40;
+//     sheet.getRangeByName('N4').columnWidth = 40;
+
+//     sheet.getRangeByName('A4').setText('ลำดับ');
+//     sheet.getRangeByName('B4').setText('เลขที่สัญญา/เสนอราคา');
+//     sheet.getRangeByName('C4').setText('ชื่อผู้ติดต่อ');
+//     sheet.getRangeByName('D4').setText('ชื่อร้านค้า');
+//     sheet.getRangeByName('E4').setText('โซนพื้นที่');
+//     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
+//     sheet.getRangeByName('G4').setText('ขนาดพื้นที่(ต.ร.ม.)');
+//     sheet.getRangeByName('H4').setText('ระยะเวลาการเช่า');
+//     sheet.getRangeByName('I4').setText('วันเริ่มสัญญา');
+//     sheet.getRangeByName('J4').setText('วันสิ้นสุดสัญญา');
+//     sheet.getRangeByName('K4').setText('สถานะ');
+//     sheet.getRangeByName('L4').setText('รูปผู้เช่า');
+//     sheet.getRangeByName('M4').setText('รูปร้านค้า');
+//     sheet.getRangeByName('N4').setText('รูปแผนผัง');
+//     int indextotol = 0;
+//     int indextotol_ = 0;
+//     for (int i = 0; i < teNantModels.length; i++) {
+//       var index = indextotol;
+//       dynamic numberColor = i % 2 == 0 ? globalStyle22 : globalStyle222;
+
+//       indextotol = indextotol + 1;
+
+//       ///---------------------------------------------------------->contractPhotoModels
+//       sheet.getRangeByName('A${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('B${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('C${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('D${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('E${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('F${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('G${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('H${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('I${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('J${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('K${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('L${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('M${i + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('N${i + 5}').cellStyle = numberColor;
+
+//       sheet.getRangeByName('A${i + 5}').setText(
+//             '${i + 1}',
 //           );
-    x.Style globalStyle = workbook.styles.add('style');
-    globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
-    globalStyle.fontName = 'Angsana New';
-    globalStyle.numberFormat = '_(\$* #,##0_)';
-    globalStyle.fontSize = 14;
-    globalStyle.hAlign = x.HAlignType.center;
-///////////////////////////////----------------------->
+//       sheet.getRangeByName('B${i + 5}').setText(
+//             teNantModels[i].docno == null
+//                 ? teNantModels[i].cid == null
+//                     ? ''
+//                     : '${teNantModels[i].cid}'
+//                 : '${teNantModels[i].docno}',
+//           );
+//       sheet.getRangeByName('C${i + 5}').setText(
+//             teNantModels[i].cname == null
+//                 ? teNantModels[i].cname_q == null
+//                     ? ''
+//                     : '${teNantModels[i].cname_q}'
+//                 : '${teNantModels[i].cname}',
+//           );
+//       sheet.getRangeByName('D${i + 5}').setText(
+//             teNantModels[i].sname == null
+//                 ? teNantModels[i].sname_q == null
+//                     ? ''
+//                     : '${teNantModels[i].sname_q}'
+//                 : '${teNantModels[i].sname}',
+//           );
+//       sheet.getRangeByName('E${i + 5}').setText(
+//             '${teNantModels[index].zn}',
+//           );
+//       sheet.getRangeByName('F${i + 5}').setText(
+//             teNantModels[i].ln_c == null
+//                 ? teNantModels[i].ln_q == null
+//                     ? ''
+//                     : '${teNantModels[i].ln_q}'
+//                 : '${teNantModels[i].ln_c}',
+//           );
+//       sheet.getRangeByName('G${i + 5}').setText(
+//             teNantModels[i].area_c == null
+//                 ? teNantModels[i].area_q == null
+//                     ? ''
+//                     : '${teNantModels[i].area_q}'
+//                 : '${teNantModels[i].area_c}',
+//           );
+//       sheet.getRangeByName('H${i + 5}').setText(
+//             teNantModels[i].period == null
+//                 ? teNantModels[i].period_q == null
+//                     ? ''
+//                     : '${teNantModels[i].period_q}  ${teNantModels[i].rtname_q!.substring(3)}'
+//                 : '${teNantModels[i].period}  ${teNantModels[i].rtname!.substring(3)}',
+//           );
+//       sheet.getRangeByName('I${i + 5}').setText(
+//             teNantModels[i].sdate_q == null
+//                 ? teNantModels[i].sdate == null
+//                     ? ''
+//                     : DateFormat('dd-MM-yyyy')
+//                         .format(
+//                             DateTime.parse('${teNantModels[i].sdate} 00:00:00'))
+//                         .toString()
+//                 : DateFormat('dd-MM-yyyy')
+//                     .format(
+//                         DateTime.parse('${teNantModels[i].sdate_q} 00:00:00'))
+//                     .toString(),
+//           );
+//       sheet.getRangeByName('J${i + 5}').setText(
+//             teNantModels[i].ldate_q == null
+//                 ? teNantModels[i].ldate == null
+//                     ? ''
+//                     : DateFormat('dd-MM-yyyy')
+//                         .format(
+//                             DateTime.parse('${teNantModels[i].ldate} 00:00:00'))
+//                         .toString()
+//                 : DateFormat('dd-MM-yyyy')
+//                     .format(
+//                         DateTime.parse('${teNantModels[i].ldate_q} 00:00:00'))
+//                     .toString(),
+//           );
+//       sheet.getRangeByName('K${i + 5}').setText(
+//             teNantModels[i].quantity == '1'
+//                 ? datex.isAfter(DateTime.parse(
+//                                 '${teNantModels[i].ldate} 00:00:00.000')
+//                             .subtract(const Duration(days: 0))) ==
+//                         true
+//                     ? 'หมดสัญญา'
+//                     : datex.isAfter(DateTime.parse(
+//                                     '${teNantModels[i].ldate} 00:00:00.000')
+//                                 .subtract(const Duration(days: 30))) ==
+//                             true
+//                         ? 'ใกล้หมดสัญญา'
+//                         : 'เช่าอยู่'
+//                 : teNantModels[i].quantity == '2'
+//                     ? 'เสนอราคา'
+//                     : teNantModels[i].quantity == '3'
+//                         ? 'เสนอราคา(มัดจำ)'
+//                         : 'ว่าง',
+//           );
 
-    x.Style globalStyle2 = workbook.styles.add('style2');
-    globalStyle2.backColorRgb = const Color.fromARGB(255, 141, 185, 90);
-    globalStyle2.fontName = 'Angsana New';
-    globalStyle2.fontSize = 14;
+//       sheet
+//           .getRangeByName('L${i + 5}')
+//           .setText('${contractPhotoModels[i].pic_tenant}');
+//       sheet
+//           .getRangeByName('M${i + 5}')
+//           .setText('${contractPhotoModels[i].pic_shop}');
+//       sheet
+//           .getRangeByName('N${i + 5}')
+//           .setText('${contractPhotoModels[i].pic_plan}');
+//     }
 
-///////////////////////////////----------------------->
-    x.Style globalStyle3 = workbook.styles.add('style3');
-    globalStyle3.backColorRgb =
-        const Color.fromRGBO(232, 232, 232, 1.000); //    Color(0xFFD9D9B7);
+//     final List<int> bytes = workbook.saveAsStream();
+//     workbook.dispose();
+//     Uint8List data = Uint8List.fromList(bytes);
+//     MimeType type = MimeType.MICROSOFTEXCEL;
 
-    globalStyle3.fontName = 'Angsana New';
-    globalStyle3.fontSize = 14;
-    globalStyle3.hAlign = x.HAlignType.center;
-
-///////////////////////////////----------------------->
-    sheet.getRangeByName('A1').cellStyle = globalStyle;
-    sheet.getRangeByName('B1').cellStyle = globalStyle;
-    sheet.getRangeByName('C1').cellStyle = globalStyle;
-    sheet.getRangeByName('D1').cellStyle = globalStyle;
-    sheet.getRangeByName('E1').cellStyle = globalStyle;
-    sheet.getRangeByName('F1').cellStyle = globalStyle;
-    sheet.getRangeByName('G1').cellStyle = globalStyle;
-    sheet.getRangeByName('H1').cellStyle = globalStyle;
-    sheet.getRangeByName('I1').cellStyle = globalStyle;
-    sheet.getRangeByName('J1').cellStyle = globalStyle;
-    sheet.getRangeByName('A1').setText('${renTal_name}');
-    sheet
-        .getRangeByName('J1')
-        .setText('โทรศัพท์ : ${renTalModels[0].bill_tel}');
-
-// ExcelSheetProtectionOption
-    final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
-    options.all = true;
-
-// Protecting the Worksheet by using a Password
-
-    sheet.getRangeByName('A2').cellStyle = globalStyle;
-    sheet.getRangeByName('B2').cellStyle = globalStyle;
-    sheet.getRangeByName('C2').cellStyle = globalStyle;
-    sheet.getRangeByName('D2').cellStyle = globalStyle;
-    sheet.getRangeByName('E2').cellStyle = globalStyle;
-    sheet.getRangeByName('F2').cellStyle = globalStyle;
-    sheet.getRangeByName('G2').cellStyle = globalStyle;
-    sheet.getRangeByName('H2').cellStyle = globalStyle;
-    sheet.getRangeByName('I2').cellStyle = globalStyle;
-    sheet.getRangeByName('J2').cellStyle = globalStyle;
-    sheet.getRangeByName('A2').setText('${renTalModels[0].bill_addr}');
-    sheet.getRangeByName('J2').setText('อีเมล : ${renTalModels[0].bill_email}');
-
-    sheet.getRangeByName('A3').cellStyle = globalStyle;
-    sheet.getRangeByName('B3').cellStyle = globalStyle;
-    sheet.getRangeByName('C3').cellStyle = globalStyle;
-    sheet.getRangeByName('D3').cellStyle = globalStyle;
-    sheet.getRangeByName('E3').cellStyle = globalStyle;
-    sheet.getRangeByName('F3').cellStyle = globalStyle;
-    sheet.getRangeByName('G3').cellStyle = globalStyle;
-    sheet.getRangeByName('H3').cellStyle = globalStyle;
-    sheet.getRangeByName('I3').cellStyle = globalStyle;
-    sheet.getRangeByName('J3').cellStyle = globalStyle;
-    sheet
-        .getRangeByName('J3')
-        .setText('เลขประจำตัวผู้เสียภาษี : ${renTalModels[0].bill_tax}');
-
-    sheet.getRangeByName('A4').cellStyle = globalStyle;
-    sheet.getRangeByName('B4').cellStyle = globalStyle;
-    sheet.getRangeByName('C4').cellStyle = globalStyle;
-    sheet.getRangeByName('D4').cellStyle = globalStyle;
-    sheet.getRangeByName('E4').cellStyle = globalStyle;
-    sheet.getRangeByName('F4').cellStyle = globalStyle;
-    sheet.getRangeByName('G4').cellStyle = globalStyle;
-    sheet.getRangeByName('H4').cellStyle = globalStyle;
-    sheet.getRangeByName('I4').cellStyle = globalStyle;
-    sheet.getRangeByName('J4').cellStyle = globalStyle;
-    sheet
-        .getRangeByName('J4')
-        .setText('ณ วันที่ : $thaiDate ${DateTime.now().year + 543}');
-
-    sheet.getRangeByName('A5').cellStyle = globalStyle;
-    sheet.getRangeByName('B5').cellStyle = globalStyle;
-    sheet.getRangeByName('C5').cellStyle = globalStyle;
-    sheet.getRangeByName('D5').cellStyle = globalStyle;
-    sheet.getRangeByName('E5').cellStyle = globalStyle;
-    sheet.getRangeByName('F5').cellStyle = globalStyle;
-    sheet.getRangeByName('G5').cellStyle = globalStyle;
-    sheet.getRangeByName('H5').cellStyle = globalStyle;
-    sheet.getRangeByName('I5').cellStyle = globalStyle;
-    sheet.getRangeByName('J5').cellStyle = globalStyle;
-
-    sheet.getRangeByName('A6').cellStyle = globalStyle;
-    sheet.getRangeByName('B6').cellStyle = globalStyle;
-    sheet.getRangeByName('C6').cellStyle = globalStyle;
-    sheet.getRangeByName('D6').cellStyle = globalStyle;
-    sheet.getRangeByName('E6').cellStyle = globalStyle;
-    sheet.getRangeByName('F6').cellStyle = globalStyle;
-    sheet.getRangeByName('G6').cellStyle = globalStyle;
-    sheet.getRangeByName('H6').cellStyle = globalStyle;
-    sheet.getRangeByName('I6').cellStyle = globalStyle;
-    sheet.getRangeByName('J6').cellStyle = globalStyle;
-    sheet.getRangeByName('A6').setText('ผู้เช่า : ${Status[Status_ - 1]}');
-    sheet.getRangeByName('E6').setText('ข้อมูลผู้เช่า');
-    sheet
-        .getRangeByName('J6')
-        .setText((zone_name == null) ? 'โซน : ทั้งหมด' : 'โซน : $zone_name');
-
-    sheet.getRangeByName('A7').cellStyle = globalStyle;
-    sheet.getRangeByName('B7').cellStyle = globalStyle;
-    sheet.getRangeByName('C7').cellStyle = globalStyle;
-    sheet.getRangeByName('D7').cellStyle = globalStyle;
-    sheet.getRangeByName('E7').cellStyle = globalStyle;
-    sheet.getRangeByName('F7').cellStyle = globalStyle;
-    sheet.getRangeByName('G7').cellStyle = globalStyle;
-    sheet.getRangeByName('H7').cellStyle = globalStyle;
-    sheet.getRangeByName('I7').cellStyle = globalStyle;
-    sheet.getRangeByName('J7').cellStyle = globalStyle;
-
-    // sheet.getRangeByName('J2').setText('เวลา: ${Tim_}');
-    globalStyle2.hAlign = x.HAlignType.center;
-    sheet.getRangeByName('A8').cellStyle = globalStyle2;
-    sheet.getRangeByName('B8').cellStyle = globalStyle2;
-    sheet.getRangeByName('C8').cellStyle = globalStyle2;
-    sheet.getRangeByName('D8').cellStyle = globalStyle2;
-    sheet.getRangeByName('E8').cellStyle = globalStyle2;
-    sheet.getRangeByName('F8').cellStyle = globalStyle2;
-    sheet.getRangeByName('G8').cellStyle = globalStyle2;
-    sheet.getRangeByName('H8').cellStyle = globalStyle2;
-    sheet.getRangeByName('I8').cellStyle = globalStyle2;
-    sheet.getRangeByName('J8').cellStyle = globalStyle2;
-    sheet.getRangeByName('A8').columnWidth = 18;
-    sheet.getRangeByName('B8').columnWidth = 18;
-    sheet.getRangeByName('C8').columnWidth = 18;
-    sheet.getRangeByName('D8').columnWidth = 18;
-    sheet.getRangeByName('E8').columnWidth = 18;
-    sheet.getRangeByName('F8').columnWidth = 18;
-    sheet.getRangeByName('G8').columnWidth = 18;
-    sheet.getRangeByName('H8').columnWidth = 18;
-    sheet.getRangeByName('I8').columnWidth = 18;
-    sheet.getRangeByName('J8').columnWidth = 28;
-
-    sheet.getRangeByName('A8').setText('เลขที่สัญญา/เสนอราคา');
-    sheet.getRangeByName('B8').setText('ชื่อผู้ติดต่อ');
-    sheet.getRangeByName('C8').setText('ชื่อร้านค้า');
-    sheet.getRangeByName('D8').setText('โซนพื้นที่');
-    sheet.getRangeByName('E8').setText('รหัสพื้นที่');
-    sheet.getRangeByName('F8').setText('ขนาดพื้นที่(ต.ร.ม.)');
-    sheet.getRangeByName('G8').setText('ระยะเวลาการเช่า');
-    sheet.getRangeByName('H8').setText('วันเริ่มสัญญา');
-    sheet.getRangeByName('I8').setText('วันสิ้นสุดสัญญา');
-    sheet.getRangeByName('J8').setText('สถานะ');
-
-    for (int i = 0; i < teNantModels.length; i++) {
-      sheet.getRangeByName('A${i + 9}').cellStyle = globalStyle;
-      sheet.getRangeByName('B${i + 9}').cellStyle = globalStyle3;
-      sheet.getRangeByName('C${i + 9}').cellStyle = globalStyle;
-      sheet.getRangeByName('D${i + 9}').cellStyle = globalStyle3;
-      sheet.getRangeByName('E${i + 9}').cellStyle = globalStyle;
-      sheet.getRangeByName('F${i + 9}').cellStyle = globalStyle3;
-      sheet.getRangeByName('G${i + 9}').cellStyle = globalStyle;
-      sheet.getRangeByName('H${i + 9}').cellStyle = globalStyle3;
-      sheet.getRangeByName('I${i + 9}').cellStyle = globalStyle;
-      sheet.getRangeByName('J${i + 9}').cellStyle = globalStyle3;
-
-      if (i == (teNantModels.length - 1)) {
-        sheet.getRangeByName('A${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('B${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('C${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('D${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('E${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('F${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('G${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('H${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('I${i + 9 + 1}').cellStyle = globalStyle;
-        sheet.getRangeByName('J${i + 9 + 1}').cellStyle = globalStyle;
-
-        sheet.getRangeByName('A${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('B${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('C${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('D${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('E${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('F${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('G${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('H${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('I${i + 9 + 2}').cellStyle = globalStyle;
-        sheet.getRangeByName('J${i + 9 + 2}').cellStyle = globalStyle;
-      } else {}
-
-      sheet.getRangeByName('A${i + 9}').setText(
-            teNantModels[i].docno == null
-                ? teNantModels[i].cid == null
-                    ? ''
-                    : '${teNantModels[i].cid}'
-                : '${teNantModels[i].docno}',
-          );
-      sheet.getRangeByName('B${i + 9}').setText(
-            teNantModels[i].cname == null
-                ? teNantModels[i].cname_q == null
-                    ? ''
-                    : '${teNantModels[i].cname_q}'
-                : '${teNantModels[i].cname}',
-          );
-      sheet.getRangeByName('C${i + 9}').setText(
-            teNantModels[i].sname == null
-                ? teNantModels[i].sname_q == null
-                    ? ''
-                    : '${teNantModels[i].sname_q}'
-                : '${teNantModels[i].sname}',
-          );
-      sheet.getRangeByName('D${i + 9}').setText(
-            '${teNantModels[i].ln}',
-          );
-      sheet.getRangeByName('E${i + 9}').setText(
-            teNantModels[i].ln_c == null
-                ? teNantModels[i].ln_q == null
-                    ? ''
-                    : '${teNantModels[i].ln_q}'
-                : '${teNantModels[i].ln_c}',
-          );
-      sheet.getRangeByName('F${i + 9}').setText(
-            teNantModels[i].area_c == null
-                ? teNantModels[i].area_q == null
-                    ? ''
-                    : '${teNantModels[i].area_q}'
-                : '${teNantModels[i].area_c}',
-          );
-      sheet.getRangeByName('G${i + 9}').setText(
-            teNantModels[i].period == null
-                ? teNantModels[i].period_q == null
-                    ? ''
-                    : '${teNantModels[i].period_q}  ${teNantModels[i].rtname_q!.substring(3)}'
-                : '${teNantModels[i].period}  ${teNantModels[i].rtname!.substring(3)}',
-          );
-      sheet.getRangeByName('H${i + 9}').setText(
-            teNantModels[i].sdate_q == null
-                ? teNantModels[i].sdate == null
-                    ? ''
-                    : DateFormat('dd-MM-yyyy')
-                        .format(
-                            DateTime.parse('${teNantModels[i].sdate} 00:00:00'))
-                        .toString()
-                : DateFormat('dd-MM-yyyy')
-                    .format(
-                        DateTime.parse('${teNantModels[i].sdate_q} 00:00:00'))
-                    .toString(),
-          );
-      sheet.getRangeByName('I${i + 9}').setText(
-            teNantModels[i].ldate_q == null
-                ? teNantModels[i].ldate == null
-                    ? ''
-                    : DateFormat('dd-MM-yyyy')
-                        .format(
-                            DateTime.parse('${teNantModels[i].ldate} 00:00:00'))
-                        .toString()
-                : DateFormat('dd-MM-yyyy')
-                    .format(
-                        DateTime.parse('${teNantModels[i].ldate_q} 00:00:00'))
-                    .toString(),
-          );
-      sheet.getRangeByName('J${i + 9}').setText(
-            teNantModels[i].quantity == '1'
-                ? datex.isAfter(DateTime.parse(
-                                '${teNantModels[i].ldate} 00:00:00.000')
-                            .subtract(const Duration(days: 0))) ==
-                        true
-                    ? 'หมดสัญญา'
-                    : datex.isAfter(DateTime.parse(
-                                    '${teNantModels[i].ldate} 00:00:00.000')
-                                .subtract(const Duration(days: 30))) ==
-                            true
-                        ? 'ใกล้หมดสัญญา'
-                        : 'เช่าอยู่'
-                : teNantModels[i].quantity == '2'
-                    ? 'เสนอราคา'
-                    : teNantModels[i].quantity == '3'
-                        ? 'เสนอราคา(มัดจำ)'
-                        : 'ว่าง',
-          );
-    }
-
-    final List<int> bytes = workbook.saveAsStream();
-    workbook.dispose();
-    Uint8List data = Uint8List.fromList(bytes);
-    MimeType type = MimeType.MICROSOFTEXCEL;
-
-    if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-      String path = await FileSaver.instance.saveFile(
-          "ผู้เช่า(${Status[Status_ - 1]})(ณ วันที่${day_})", data, "xlsx",
-          mimeType: type);
-      log(path);
-    } else {
-      String path = await FileSaver.instance
-          .saveFile("$NameFile_", data, "xlsx", mimeType: type);
-      log(path);
-    }
-  }
+//     if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
+//       String path = await FileSaver.instance.saveFile(
+//           "ผู้เช่า(${Status[Status_ - 1]}โซน$zone_name)(ณ วันที่${day_})",
+//           data,
+//           "xlsx",
+//           mimeType: type);
+//       log(path);
+//     } else {
+//       String path = await FileSaver.instance
+//           .saveFile("$NameFile_", data, "xlsx", mimeType: type);
+//       log(path);
+//     }
+//   }
 //////////----------------------------------------------------------------->
 
   void _displayPdf(renTal_name, bill_addr, bill_email, bill_tel, bill_tax,

@@ -67,7 +67,8 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       permission_user,
       renTal_user,
       renTal_name,
-      renTal_Email;
+      renTal_Email,
+      passcode;
   int? perMissioncount;
   List<RenTalModel> renTalModels = [];
   List<PerMissionModel> perMissionModels = [];
@@ -78,7 +79,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   Timer? timer;
   bool isActive = false;
   String? rtname, type, typex, renname, pkname, ser_Zonex;
-  int? pkqty, pkuser, countarae;
+  int? pkqty, pkuser, countarae, renTal_lavel = 0;
   String? base64_Imgmap, foder;
   String? tel_user, img_, img_logo;
   String singleDeviceName = "Unknown";
@@ -98,6 +99,272 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
     read_GC_rental();
     read_GC_areak();
     initPlugin();
+  }
+
+  String? system_datex_;
+  String? showst_update_;
+
+  Future<Null> System_User() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var email_ = preferences.getString('email');
+    String url = '${MyConstant().domain}/GC_user.php?isAdd=true&email=$email_';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result != null) {
+        for (var map in result) {
+          UserModel userModel = UserModel.fromJson(map);
+
+          setState(() {
+            system_datex_ = userModel.system_datex!;
+            showst_update_ = userModel.showst_update!;
+          });
+        }
+      } else {}
+    } catch (e) {}
+    print('userModel  --------- >${system_datex_}');
+    print('userModel  --------- >${showst_update_}');
+    if (showst_update_ == '0') {
+      System_New_Update();
+    }
+  }
+
+  Future<Null> System_New_Update() async {
+    String accept_ = showst_update_!;
+    showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Text(
+          '📢 ${system_datex_}',
+          textAlign: TextAlign.end,
+          style: TextStyle(
+            fontSize: 12,
+            color: Colors.black,
+            fontFamily: Font_.Fonts_T,
+          ),
+        ),
+        content: Container(
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage("images/pngegg.png"),
+              // fit: BoxFit.cover,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Container(
+                  height: 150,
+                  width: 150,
+                  child: Image.asset(
+                    'images/update.png',
+                    // fit: BoxFit.contain,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'ขออภัย ขณะนี้ระบบได้มีการอัพเดต ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    'คำแนะนำโปรดออกจากระบบ และทำการรีเฟรช',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          StreamBuilder(
+              stream: Stream.periodic(const Duration(seconds: 1)),
+              builder: (context, snapshot) {
+                return Column(
+                  children: [
+                    const Divider(
+                      color: Colors.grey,
+                      height: 4.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    accept_ = '0';
+                                  });
+                                },
+                                child: Icon(
+                                  (accept_ == '0')
+                                      ? Icons.check_box
+                                      : Icons.check_box_outline_blank,
+                                  color: (accept_ == '0')
+                                      ? Colors.red
+                                      : Colors.black,
+                                )),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'แสดงทุกครั้ง',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  accept_ = '1';
+                                });
+                              },
+                              child: Icon(
+                                  (accept_ == '0')
+                                      ? Icons.check_box_outline_blank
+                                      : Icons.check_box,
+                                  color: (accept_ == '0')
+                                      ? Colors.black
+                                      : Colors.red),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                'แสดงอีกครั้งเมื่อมีการอัพเดต',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black,
+                                  fontFamily: Font_.Fonts_T,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    const Divider(
+                      color: Colors.grey,
+                      height: 4.0,
+                    ),
+                    const SizedBox(
+                      height: 5.0,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 100,
+                            decoration: const BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10)),
+                            ),
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextButton(
+                              onPressed: () async {
+                                SharedPreferences preferences =
+                                    await SharedPreferences.getInstance();
+                                var email_ = preferences.getString('email');
+                                print(accept_);
+                                if (accept_ == '1') {
+                                  String url =
+                                      '${MyConstant().domain}/UP_Show_System.php?isAdd=true&email=$email_';
+
+                                  try {
+                                    var response =
+                                        await http.get(Uri.parse(url));
+
+                                    var result = json.decode(response.body);
+
+                                    if (result.toString() == 'true') {
+                                      Navigator.pop(context, 'OK');
+                                    } else {
+                                      Navigator.pop(context, 'OK');
+                                    }
+                                  } catch (e) {}
+                                } else {
+                                  Navigator.pop(context, 'OK');
+                                }
+                              },
+                              child: const Text(
+                                'รับทราบ',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontWeight_.Fonts_T),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              })
+        ],
+      ),
+    );
+  }
+
+  Future<Null> passcode_in() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+
+    String url =
+        '${MyConstant().domain}/Inc_passcode.php?isAdd=true&ren=$ren&user=$user';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() != 'false') {
+        print('Inc_passcode>>>>true');
+        setState(() {
+          passcode = result.toString();
+        });
+      } else {
+        print('Inc_passcode>>>>false $result');
+      }
+    } catch (e) {
+      // print('rrrrrrrrrrrrrr $e');
+    }
   }
 
   Future<Null> deall_Trans_select() async {
@@ -124,7 +391,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         );
       }
     } catch (e) {
-      print('rrrrrrrrrrrrrr $e');
+      // print('rrrrrrrrrrrrrr $e');
     }
   }
 
@@ -146,12 +413,38 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   String? connected_Minutes;
   void startTimer() {
     Check_connected();
-    connected_User();
+    upConnected();
+
     // Create a timer that runs the read_connected function every 1 minute
-    Timer.periodic(Duration(minutes: 1), (timer) {
-      connected_User();
+    Timer.periodic(Duration(seconds: 50), (timer) {
       Check_connected();
+      upConnected();
     });
+  }
+
+  Future<void> upConnected() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    DateTime currentTime = DateTime.now();
+    String formattedDateTime =
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
+    print('$ren-----$user ----- ${formattedDateTime}');
+    String url =
+        '${MyConstant().domain}/UP_Connected_User.php?isAdd=true&seruser=$user&value=$formattedDateTime';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      // if (response.statusCode == 200) {
+      //   // Check if the response status code is OK (200)
+      //   print('Success: ${response.body}');
+      // } else {
+      //   // Handle other response status codes if needed
+      //   print('HTTP Error: ${response.statusCode}');
+      // }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 
   Future<Null> Check_connected() async {
@@ -167,7 +460,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           UserModel userModel = UserModel.fromJson(map);
@@ -189,30 +482,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
-  }
-
-  Future<void> connected_User() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var ren = preferences.getString('renTalSer');
-
-    DateTime currentTime = DateTime.now();
-    var formattedTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
-    String url =
-        '${MyConstant().domain}/UP_Connected_User.php?isAdd=true&ren=$ren&email=$email_user&seruser=$ser_user&value=$formattedTime';
-
-    try {
-      var response = await http.get(Uri.parse(url));
-
-      try {
-        var result = json.decode(response.body);
-        print(result);
-      } catch (e) {
-        print('Invalid JSON response: ${response.body}');
-      }
-    } catch (e) {
-      print(e);
-    }
+    // print('name>>>>>  $renname');
   }
 
   Future<Null> read_GC_areak() async {
@@ -227,7 +497,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           AreakModel areakModel = AreakModel.fromJson(map);
@@ -238,7 +508,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
   Future<Null> read_GC_rental() async {
@@ -254,7 +524,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           RenTalModel renTalModel = RenTalModel.fromJson(map);
@@ -288,7 +558,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
         }
       } else {}
     } catch (e) {}
-    print('name>>>>>  $renname');
+    // print('name>>>>>  $renname');
   }
 
   Future<Null> readTime() async {
@@ -302,7 +572,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       });
       if (reached) {
         // normalDialog(context, 'Time Out');
-        print('Time Outttt $Value_Route $reached');
+        // print('Time Outttt $Value_Route $reached');
       } else {
         // print('${reached.toString()}');
 
@@ -336,7 +606,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                 if (eventTime != DateTime.now()) {
                   timeDiff = timeDiff - 1;
                 } else {
-                  print('Times up!');
+                  // print('Times up!');
                   //Do something
                 }
               });
@@ -445,7 +715,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       perMissioncount = perMissionModels.length;
     });
 
-    print('perMissionModels  == > ${perMissionModels.length}');
+    // print('perMissionModels  == > ${perMissionModels.length}');
   }
 
   Future<Null> checkPreferance() async {
@@ -455,17 +725,23 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
       setState(() {
         renTal_user = preferences.getString('renTalSer');
         renTal_name = preferences.getString('renTalName');
+        renTal_lavel = int.parse(preferences.getString('lavel').toString());
       });
     } else {
       setState(() {
         preferences.setString('renTalSer', rser.toString());
         renTal_user = preferences.getString('renTalSer');
+        renTal_lavel = int.parse(preferences.getString('lavel').toString());
       });
     }
-    // setState(() {
-    //   renTal_user = preferences.getString('renTalSer');
-    //   renTal_name = preferences.getString('renTalName');
-    // });
+    print('renTal_lavel>>> $renTal_lavel');
+    setState(() {
+      passcode_in();
+
+      //   renTal_user = preferences.getString('renTalSer');
+      //   renTal_name = preferences.getString('renTalName');
+    });
+    System_User();
   }
 
   // List MenuList_ = [
@@ -615,11 +891,15 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
   @override
   Widget build(BuildContext context) {
     if (Responsive.isDesktop(context))
-      print(
-          '$position_user, $fname_user, $lname_user,$email_user, $utype_user, $permission_user');
-    setState(() {
-      serBody_modile_wiget = 0;
-    });
+      // print(
+      //     '$position_user, $fname_user, $lname_user,$email_user, $utype_user, $permission_user');
+      setState(() {
+        if (passcode == null) {
+          passcode_in();
+        }
+
+        serBody_modile_wiget = 0;
+      });
     if (perMissionModels.length < perMissioncount!) {
       return Center(
         child: const CircularProgressIndicator(),
@@ -821,7 +1101,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: const [
@@ -1140,7 +1420,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(
@@ -1635,22 +1915,47 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                   bottomLeft: Radius.circular(0),
                   bottomRight: Radius.circular(0)),
             ),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AdminScafScreen_Color.Colors_Text2_,
-                      // fontWeight: FontWeight.bold,
-                      fontFamily: Font_.Fonts_T,
-                      fontSize: 10.0),
+            child: Column(
+              children: [
+                renTal_lavel! <= 1
+                    ? SizedBox()
+                    : passcode == null
+                        ? SizedBox()
+                        : Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                '$passcode',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.orange.shade900,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                    fontSize: 20.0),
+                              ),
+                            ),
+                          ),
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: AdminScafScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                          fontSize: 10.0),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -1875,7 +2180,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                   ),
                                                                   padding:
                                                                       const EdgeInsets
-                                                                          .all(
+                                                                              .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     children: const [
@@ -2194,7 +2499,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                                                                 ),
                                                                 padding:
                                                                     const EdgeInsets
-                                                                        .all(
+                                                                            .all(
                                                                         8.0),
                                                                 child:
                                                                     TextButton(
@@ -2514,7 +2819,7 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
               }
             }
           }
-          print(Value_Route);
+          // print(Value_Route);
         },
         header: Container(
           color: AppBarColors.ABar_Colors,
@@ -2585,22 +2890,47 @@ class _AdminScafScreenState extends State<AdminScafScreen> {
                   bottomLeft: Radius.circular(0),
                   bottomRight: Radius.circular(0)),
             ),
-            child: const Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  softWrap: false,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: AdminScafScreen_Color.Colors_Text2_,
-                      // fontWeight: FontWeight.bold,
-                      fontFamily: Font_.Fonts_T,
-                      fontSize: 10.0),
+            child: Column(
+              children: [
+                renTal_lavel! <= 1
+                    ? SizedBox()
+                    : passcode == null
+                        ? SizedBox()
+                        : Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                '$passcode',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.orange.shade900,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: Font_.Fonts_T,
+                                    fontSize: 20.0),
+                              ),
+                            ),
+                          ),
+                const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      '© 2023  Dzentric Co.,Ltd. All Rights Reserved',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: AdminScafScreen_Color.Colors_Text2_,
+                          // fontWeight: FontWeight.bold,
+                          fontFamily: Font_.Fonts_T,
+                          fontSize: 10.0),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
         ),

@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -10,6 +13,7 @@ import '../AdminScaffold/AdminScaffold.dart';
 import '../Constant/Myconstant.dart';
 import '../INSERT_Log/Insert_log.dart';
 import '../Model/GC_package_model.dart';
+import '../Model/GetLicensekey_Modely.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetUser_Model.dart';
 import '../Responsive/responsive.dart';
@@ -25,6 +29,8 @@ class SignUnAdmin extends StatefulWidget {
 class _SignUnAdminState extends State<SignUnAdmin> {
   List<RenTalModel> renTalModels = [];
   List<PackageModel> packageModels = [];
+  List<LicensekeyModel> licensekeyModels = [];
+
   String? packSelext;
   int? packint;
   @override
@@ -33,7 +39,17 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     super.initState();
     read_GC_rental();
     read_GC_package();
+    read_GC_packageGen();
   }
+
+  // String _chars =
+  //     'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+
+  String _chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+  Random _rnd = Random();
+
+  String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
+      length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
   Future<Null> read_GC_rental() async {
     String url = '${MyConstant().domain}/GC_rental_admin.php?isAdd=true';
@@ -42,7 +58,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print('read_GC_rental///// $result');
+      // print('read_GC_rental///// $result');
       for (var map in result) {
         RenTalModel renTalModel = RenTalModel.fromJson(map);
 
@@ -53,9 +69,34 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     } catch (e) {}
   }
 
+  Future<Null> read_GC_packageGen() async {
+    if (licensekeyModels.isNotEmpty) {
+      setState(() {
+        licensekeyModels.clear();
+      });
+    }
+    String url = '${MyConstant().domain}/GC_package_Gen.php?isAdd=true';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print('read_GC_rental///// $result');
+      for (var map in result) {
+        LicensekeyModel licensekeyModel = LicensekeyModel.fromJson(map);
+
+        setState(() {
+          licensekeyModels.add(licensekeyModel);
+        });
+      }
+    } catch (e) {}
+  }
+
   Future<Null> read_GC_package() async {
     if (packageModels.isNotEmpty) {
-      packageModels.clear();
+      setState(() {
+        packageModels.clear();
+      });
     }
 
     String url = '${MyConstant().domain}/GC_package.php?isAdd=true';
@@ -64,7 +105,7 @@ class _SignUnAdminState extends State<SignUnAdmin> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           PackageModel packageModel = PackageModel.fromJson(map);
@@ -170,11 +211,22 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                               AutoSizeText(
                                                 minFontSize: 10,
                                                 maxFontSize: 15,
-                                                maxLines: 3,
+                                                maxLines: 2,
                                                 '${renTalModels[i].bill_name}',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     color: Colors.grey,
+                                                    //fontWeight: FontWeight.bold,
+                                                    fontFamily: Font_.Fonts_T),
+                                              ),
+                                              AutoSizeText(
+                                                minFontSize: 10,
+                                                maxFontSize: 15,
+                                                maxLines: 1,
+                                                '( ${renTalModels[i].pkldate} )',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    color: Colors.black,
                                                     //fontWeight: FontWeight.bold,
                                                     fontFamily: Font_.Fonts_T),
                                               ),
@@ -451,7 +503,36 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                             color: Colors.white, width: 1),
                                       ),
                                       child: InkWell(
-                                        onTap: () async {},
+                                        onTap: () async {
+                                          // packint = i;
+                                          //           packSelext =
+                                          //               packageModels[i].ser;
+
+                                          if (packSelext != null) {
+                                            var vv = getRandomString(16);
+                                            String url =
+                                                '${MyConstant().domain}/In_Package.php?isAdd=true&serpk=$packSelext&lisen=$vv';
+
+                                            try {
+                                              var response = await http
+                                                  .get(Uri.parse(url));
+
+                                              var result =
+                                                  json.decode(response.body);
+                                              print(result);
+                                              if (result.toString() == 'true') {
+                                                setState(() {
+                                                  read_GC_packageGen();
+                                                });
+                                                print(
+                                                    '$vv  $packSelext  $packint');
+                                              }
+                                            } catch (e) {}
+                                            setState(() {
+                                              read_GC_packageGen();
+                                            });
+                                          }
+                                        },
                                         child: Center(
                                           child: Text(
                                             'Generator',
@@ -469,13 +550,182 @@ class _SignUnAdminState extends State<SignUnAdmin> {
                                   ))
                             ],
                           ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'Package',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'Unit/User',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Text(
+                                        'KEY',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      flex: 1,
+                                      child: Text(
+                                        'Status',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.35,
+                                child: ListView.builder(
+                                    itemCount: licensekeyModels.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    'Package ${licensekeyModels[index].pk}',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    '${licensekeyModels[index].qty}/${licensekeyModels[index].user}',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  flex: 4,
+                                                  child: licensekeyModels[index]
+                                                              .use ==
+                                                          '0'
+                                                      ? SelectableText(
+                                                          '${licensekeyModels[index].key}',
+                                                          maxLines: 1,
+                                                          // ignore: deprecated_member_use
+                                                          toolbarOptions:
+                                                              ToolbarOptions(
+                                                                  copy: true,
+                                                                  selectAll:
+                                                                      true,
+                                                                  cut: false,
+                                                                  paste: false),
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          '${licensekeyModels[index].key}',
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: Colors.black,
+                                                            // fontWeight: FontWeight.bold,
+                                                            fontFamily:
+                                                                Font_.Fonts_T,
+                                                          ),
+                                                        ),
+                                                ),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text(
+                                                    licensekeyModels[index]
+                                                                .use ==
+                                                            '0'
+                                                        ? 'ใช้งานได้'
+                                                        : 'ไม่สามารถใช้งานได้',
+                                                    maxLines: 1,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: licensekeyModels[
+                                                                      index]
+                                                                  .use ==
+                                                              '0'
+                                                          ? Colors.green
+                                                          : Colors.red,
+                                                      // fontWeight: FontWeight.bold,
+                                                      fontFamily: Font_.Fonts_T,
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                              ),
+                            ],
+                          )
                         ],
                       ),
                     ),
                   ],
                 )),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -519,7 +769,9 @@ class _SignUnAdminState extends State<SignUnAdmin> {
     preferences.setString('verify', userModel.verify.toString());
     preferences.setString('permission', userModel.permission.toString());
     preferences.setString('rser', serren.toString());
+    preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
+    preferences.setString('pakanPay', 0.toString());
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,

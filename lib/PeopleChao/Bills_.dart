@@ -835,7 +835,7 @@ class _BillsState extends State<Bills> {
                                             child: Tooltip(
                                               richMessage: TextSpan(
                                                 text:
-                                                    '${_TransBillModels[index].expname}',
+                                                    '${_TransBillModels[index].expname} ${_TransBillModels[index].meter}',
                                                 style: const TextStyle(
                                                   color: PeopleChaoScreen_Color
                                                       .Colors_Text1_,
@@ -858,7 +858,7 @@ class _BillsState extends State<Bills> {
                                                 maxLines: 1,
                                                 _TransBillModels[index].dtype ==
                                                         'KU'
-                                                    ? '${_TransBillModels[index].expname} ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransBillModels[index].date} 00:00:00')))}'
+                                                    ? '${_TransBillModels[index].expname} ${DateFormat.MMM('th_TH').format((DateTime.parse('${_TransBillModels[index].date} 00:00:00')))}(${_TransBillModels[index].meter})'
                                                     : '${_TransBillModels[index].expname}',
                                                 textAlign: TextAlign.start,
                                                 overflow: TextOverflow.ellipsis,
@@ -2295,7 +2295,15 @@ class _BillsState extends State<Bills> {
         );
         print('rrrrrrrrrrrrrr');
       }
-    } catch (e) {}
+    } catch (e) {}  
+     Future.delayed(const Duration(milliseconds: 200), () async {
+      setState(() {
+        red_Trans_bill();
+        red_Trans_select();
+        sum_disamt.text = '0.00';
+        sum_disp.clear();
+      });
+    });
   }
 
   Future<Null> in_Trans_invoice2(tableData003, newValuePDFimg) async {

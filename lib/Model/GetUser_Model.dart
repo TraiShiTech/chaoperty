@@ -17,7 +17,9 @@ class UserModel {
   String? modeclor;
   String? data_update;
   String? connected;
-   String? onoff;
+  String? onoff;
+  String? showst_update;
+  String? system_datex;
 
   UserModel(
       {this.ser,
@@ -38,6 +40,8 @@ class UserModel {
       this.modeclor,
       this.connected,
       this.data_update,
+      this.showst_update,
+      this.system_datex,
       this.onoff});
 
   UserModel.fromJson(Map<String, dynamic> json) {
@@ -59,8 +63,10 @@ class UserModel {
     modeclor = json['modeclor'];
     connected = json['connected'];
     data_update = json['data_update'];
-    onoff= json['onoff'];
-  } 
+    onoff = json['onoff'];
+    showst_update = json['showst_update'];
+    system_datex = json['system_datex'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -83,6 +89,8 @@ class UserModel {
     data['data_update'] = this.data_update;
     data['connected'] = this.connected;
     data['onoff'] = this.onoff;
+    data['showst_update'] = this.showst_update;
+    data['system_datex'] = this.system_datex;
     return data;
   }
 }

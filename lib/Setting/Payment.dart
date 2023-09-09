@@ -316,7 +316,7 @@ class _PaymentState extends State<Payment> {
                                   ),
                                   padding: const EdgeInsets.all(8.0),
                                   child: Text(
-                                    'รูปแบบการรับชำระ',
+                                    'รูปแบบ',
                                     maxLines: 2,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -325,6 +325,25 @@ class _PaymentState extends State<Payment> {
                                       fontWeight: FontWeight.bold,
                                       //fontSize: 10.0
                                     ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 2,
+                              child: Container(
+                                height: 50,
+                                color: AppbackgroundColor.TiTile_Colors,
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  'เปิดรับชำระผ่านเว็บ"',
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: SettingScreen_Color.Colors_Text1_,
+                                    fontFamily: FontWeight_.Fonts_T,
+                                    fontWeight: FontWeight.bold,
+                                    //fontSize: 10.0
                                   ),
                                 ),
                               ),
@@ -1639,6 +1658,125 @@ class _PaymentState extends State<Payment> {
                                                         //fontSize: 10.0
                                                         ),
                                                   ),
+                                                ),
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      child: (payMentModels[
+                                                                          index]
+                                                                      .co
+                                                                      .toString()
+                                                                      .trim() ==
+                                                                  'AC' ||
+                                                              payMentModels[
+                                                                          index]
+                                                                      .co
+                                                                      .toString()
+                                                                      .trim() ==
+                                                                  'OP')
+                                                          ? InkWell(
+                                                              child: Container(
+                                                                  decoration:
+                                                                      const BoxDecoration(
+                                                                    // color: Colors.grey.shade300,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .only(
+                                                                      topLeft: Radius
+                                                                          .circular(
+                                                                              10),
+                                                                      topRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomLeft:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                      bottomRight:
+                                                                          Radius.circular(
+                                                                              10),
+                                                                    ),
+                                                                    // border: Border.all(
+                                                                    //     color: Colors.grey, width: 1),
+                                                                  ),
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: payMentModels[index]
+                                                                              .ser_payweb ==
+                                                                          '1'
+                                                                      ? const Icon(
+                                                                          Icons
+                                                                              .toggle_on,
+                                                                          color:
+                                                                              Colors.green,
+                                                                          size:
+                                                                              50,
+                                                                        )
+                                                                      : const Icon(
+                                                                          Icons
+                                                                              .toggle_off,
+                                                                          size:
+                                                                              50,
+                                                                        )),
+                                                              onTap: () async {
+                                                                var serx =
+                                                                    payMentModels[
+                                                                            index]
+                                                                        .ser;
+                                                                var serpayweb_ =
+                                                                    payMentModels[index].ser_payweb ==
+                                                                            '1'
+                                                                        ? '0'
+                                                                        : '1';
+
+                                                                SharedPreferences
+                                                                    preferences =
+                                                                    await SharedPreferences
+                                                                        .getInstance();
+                                                                var ren = preferences
+                                                                    .getString(
+                                                                        'renTalSer');
+                                                                var user = preferences
+                                                                    .getString(
+                                                                        'ser');
+
+                                                                String url =
+                                                                    '${MyConstant().domain}/Up_Payment_ser_payweb.php?isAdd=true&ren=$ren&serx=$serx&serpayweb=$serpayweb_&user=$user';
+                                                                try {
+                                                                  var response =
+                                                                      await http.get(
+                                                                          Uri.parse(
+                                                                              url));
+
+                                                                  var result =
+                                                                      json.decode(
+                                                                          response
+                                                                              .body);
+                                                                  // print(result);
+                                                                  if (result
+                                                                          .toString() ==
+                                                                      'true') {
+                                                                    Insert_log.Insert_logs(
+                                                                        'ตั้งค่า',
+                                                                        (serpayweb_ ==
+                                                                                '0')
+                                                                            ? 'การรับชำระ>>ปรับการรับชำระผ่านหน้าเว็ป(ปิด ${payMentModels[index].ptname})'
+                                                                            : 'การรับชำระ>>ปรับการรับชำระผ่านหน้าเว็ป(เปิด ${payMentModels[index].ptname})');
+                                                                    setState(
+                                                                        () {
+                                                                      read_GC_PayMentModel();
+                                                                    });
+                                                                    print(
+                                                                        'rrrrrrrrrrrrrr');
+                                                                  }
+                                                                } catch (e) {}
+                                                              },
+                                                            )
+                                                          : Text('')),
                                                 ),
                                                 Expanded(
                                                   flex: 2,

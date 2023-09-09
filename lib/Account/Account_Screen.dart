@@ -53,6 +53,7 @@ import '../PDF/pdf_Receipt.dart';
 import '../PeopleChao/Pays_.dart';
 import '../PeopleChao/PeopleChao_Screen.dart';
 import '../PeopleChao/PeopleChao_Screen2.dart';
+import '../Report/Excel_Historybills_Report.dart';
 import '../Report/Report_Screen.dart';
 import '../Responsive/responsive.dart';
 import '../Setting/SettingScreen.dart';
@@ -1352,45 +1353,53 @@ class _AccountScreenState extends State<AccountScreen> {
                                 ),
                               ),
                             ),
-                      if (Status_ != 4)
-                        InkWell(
-                          onTap: () {
-                            _exportExcel_();
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6)),
-                                border:
-                                    Border.all(color: Colors.grey, width: 1),
-                              ),
-                              child: const Row(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Icon(Icons.file_open,
-                                        color: Colors.white),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'export file',
-                                      style: TextStyle(
-                                          color:
-                                              AccountScreen_Color.Colors_Text2_,
-                                          // fontWeight:
-                                          //     FontWeight.bold,
-                                          fontFamily: Font_.Fonts_T,
-                                          fontSize: 10.0),
-                                    ),
-                                  ),
-                                ],
-                              )),
-                        ),
+                      // if (Status_ != 4)
+                      //   InkWell(
+                      //     onTap: () {
+                      //       // Excgen_HistorybillsReport
+                      //       //     .exportExcel_HistorybillsReport(
+                      //       //         context,
+                      //       //         '',
+                      //       //         'จากระบบ',
+                      //       //         renTal_name,
+                      //       //         _TransReBillModels,
+                      //       //         Value_selectDate_Historybills,
+                      //       //         Value_Chang_Zone_People);
+                      //     },
+                      //     child: Container(
+                      //         decoration: BoxDecoration(
+                      //           color: Colors.green,
+                      //           borderRadius: const BorderRadius.only(
+                      //               topLeft: Radius.circular(6),
+                      //               topRight: Radius.circular(6),
+                      //               bottomLeft: Radius.circular(6),
+                      //               bottomRight: Radius.circular(6)),
+                      //           border:
+                      //               Border.all(color: Colors.grey, width: 1),
+                      //         ),
+                      //         child: const Row(
+                      //           children: [
+                      //             Padding(
+                      //               padding: EdgeInsets.all(8.0),
+                      //               child: Icon(Icons.file_open,
+                      //                   color: Colors.white),
+                      //             ),
+                      //             Padding(
+                      //               padding: EdgeInsets.all(8.0),
+                      //               child: Text(
+                      //                 'export file',
+                      //                 style: TextStyle(
+                      //                     color:
+                      //                         AccountScreen_Color.Colors_Text2_,
+                      //                     // fontWeight:
+                      //                     //     FontWeight.bold,
+                      //                     fontFamily: Font_.Fonts_T,
+                      //                     fontSize: 10.0),
+                      //               ),
+                      //             ),
+                      //           ],
+                      //         )),
+                      //   ),
                       // Expanded(
                       //   flex: 1,
                       //   child: Container(
@@ -12915,209 +12924,209 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   //////////////////////////////////------------------------->(รายงานประวัติบิล)
-  void _exportExcel_() async {
-    String day_ =
-        '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+//   void _exportExcel_() async {
+//     String day_ =
+//         '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
 
-    String Tim_ =
-        '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
-    final x.Workbook workbook = x.Workbook();
+//     String Tim_ =
+//         '${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}';
+//     final x.Workbook workbook = x.Workbook();
 
-    final x.Worksheet sheet = workbook.worksheets[0];
-    sheet.pageSetup.topMargin = 1;
-    sheet.pageSetup.bottomMargin = 1;
-    sheet.pageSetup.leftMargin = 1;
-    sheet.pageSetup.rightMargin = 1;
+//     final x.Worksheet sheet = workbook.worksheets[0];
+//     sheet.pageSetup.topMargin = 1;
+//     sheet.pageSetup.bottomMargin = 1;
+//     sheet.pageSetup.leftMargin = 1;
+//     sheet.pageSetup.rightMargin = 1;
 
-    //Adding a picture
-    // final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
-    // final Uint8List image = bytes_image.buffer
-    //     .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
-// Adding an image.
-    // sheet.pictures.addStream(1, 1, image);
-    // final x.Picture picture = sheet.pictures[0];
+//     //Adding a picture
+//     // final ByteData bytes_image = await rootBundle.load('images/LOGO.png');
+//     // final Uint8List image = bytes_image.buffer
+//     //     .asUint8List(bytes_image.offsetInBytes, bytes_image.lengthInBytes);
+// // Adding an image.
+//     // sheet.pictures.addStream(1, 1, image);
+//     // final x.Picture picture = sheet.pictures[0];
 
-// Re-size an image
-    // picture.height = 30;
-    // picture.width = 50;
+// // Re-size an image
+//     // picture.height = 30;
+//     // picture.width = 50;
 
-// // rotate an image.
-//     picture.rotation = 100;
+// // // rotate an image.
+// //     picture.rotation = 100;
 
-// // Flip an image.
-//     picture.horizontalFlip = true;
-    x.Style globalStyle = workbook.styles.add('style');
-    globalStyle.fontName = 'Angsana New';
-    globalStyle.numberFormat = '_(\$* #,##0_)';
-    globalStyle.fontSize = 16;
+// // // Flip an image.
+// //     picture.horizontalFlip = true;
+//     x.Style globalStyle = workbook.styles.add('style');
+//     globalStyle.fontName = 'Angsana New';
+//     globalStyle.numberFormat = '_(\$* #,##0_)';
+//     globalStyle.fontSize = 16;
 
-    globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
-    x.Style globalStyle2 = workbook.styles.add('style1');
-    globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
-    globalStyle2.fontSize = 15;
-    globalStyle2.fontName = 'Angsana New';
-    sheet.getRangeByName('A1').cellStyle = globalStyle;
-    sheet.getRangeByName('B1').cellStyle = globalStyle;
-    sheet.getRangeByName('C1').cellStyle = globalStyle;
-    sheet.getRangeByName('D1').cellStyle = globalStyle;
-    sheet.getRangeByName('E1').cellStyle = globalStyle;
-    sheet.getRangeByName('F1').cellStyle = globalStyle;
-    sheet.getRangeByName('G1').cellStyle = globalStyle;
-    sheet.getRangeByName('H1').cellStyle = globalStyle;
-    sheet.getRangeByName('I1').cellStyle = globalStyle;
+//     globalStyle.backColorRgb = const Color.fromARGB(255, 252, 255, 251);
+//     x.Style globalStyle2 = workbook.styles.add('style1');
+//     globalStyle2.backColorRgb = const Color.fromARGB(255, 147, 223, 124);
+//     globalStyle2.fontSize = 15;
+//     globalStyle2.fontName = 'Angsana New';
+//     sheet.getRangeByName('A1').cellStyle = globalStyle;
+//     sheet.getRangeByName('B1').cellStyle = globalStyle;
+//     sheet.getRangeByName('C1').cellStyle = globalStyle;
+//     sheet.getRangeByName('D1').cellStyle = globalStyle;
+//     sheet.getRangeByName('E1').cellStyle = globalStyle;
+//     sheet.getRangeByName('F1').cellStyle = globalStyle;
+//     sheet.getRangeByName('G1').cellStyle = globalStyle;
+//     sheet.getRangeByName('H1').cellStyle = globalStyle;
+//     sheet.getRangeByName('I1').cellStyle = globalStyle;
 
-    sheet.getRangeByName('J1').cellStyle = globalStyle;
-    x.Style globalStyle22 = workbook.styles.add('style22');
-    globalStyle22.backColorRgb = const Color(0xC7F5F7FA);
-    globalStyle22.numberFormat = '_(\$* #,##0_)';
-    globalStyle22.fontName = 'Angsana New';
-    globalStyle22.fontSize = 14;
-    globalStyle22.hAlign = x.HAlignType.center;
+//     sheet.getRangeByName('J1').cellStyle = globalStyle;
+//     x.Style globalStyle22 = workbook.styles.add('style22');
+//     globalStyle22.backColorRgb = const Color(0xC7F5F7FA);
+//     globalStyle22.numberFormat = '_(\$* #,##0_)';
+//     globalStyle22.fontName = 'Angsana New';
+//     globalStyle22.fontSize = 14;
+//     globalStyle22.hAlign = x.HAlignType.center;
 
-    x.Style globalStyle222 = workbook.styles.add('style222');
-    globalStyle222.backColorRgb = const Color(0xC7E1E2E6);
-    globalStyle222.numberFormat = '_(\$* #,##0_)';
-    globalStyle222.fontName = 'Angsana New';
-    globalStyle222.fontSize = 14;
-    globalStyle222.hAlign = x.HAlignType.center;
-    final x.Range range = sheet.getRangeByName('E2');
-    range.setText('ประวัติบิล($day_)');
-// ExcelSheetProtectionOption
-    final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
-    options.all = true;
+//     x.Style globalStyle222 = workbook.styles.add('style222');
+//     globalStyle222.backColorRgb = const Color(0xC7E1E2E6);
+//     globalStyle222.numberFormat = '_(\$* #,##0_)';
+//     globalStyle222.fontName = 'Angsana New';
+//     globalStyle222.fontSize = 14;
+//     globalStyle222.hAlign = x.HAlignType.center;
+//     final x.Range range = sheet.getRangeByName('E2');
+//     range.setText('ประวัติบิล($day_)');
+// // ExcelSheetProtectionOption
+//     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
+//     options.all = true;
 
-// Protecting the Worksheet by using a Password
+// // Protecting the Worksheet by using a Password
 
-    sheet.getRangeByName('A2').cellStyle = globalStyle;
-    sheet.getRangeByName('B2').cellStyle = globalStyle;
-    sheet.getRangeByName('C2').cellStyle = globalStyle;
-    sheet.getRangeByName('D2').cellStyle = globalStyle;
-    sheet.getRangeByName('E2').cellStyle = globalStyle;
-    sheet.getRangeByName('F2').cellStyle = globalStyle;
-    sheet.getRangeByName('G2').cellStyle = globalStyle;
-    sheet.getRangeByName('H2').cellStyle = globalStyle;
-    sheet.getRangeByName('I2').cellStyle = globalStyle;
-    sheet.getRangeByName('J2').cellStyle = globalStyle;
-    sheet.getRangeByName('A2').setText('${renTal_name}');
-    sheet.getRangeByName('J1').setText('ออก ณ วันที่: ${day_}');
+//     sheet.getRangeByName('A2').cellStyle = globalStyle;
+//     sheet.getRangeByName('B2').cellStyle = globalStyle;
+//     sheet.getRangeByName('C2').cellStyle = globalStyle;
+//     sheet.getRangeByName('D2').cellStyle = globalStyle;
+//     sheet.getRangeByName('E2').cellStyle = globalStyle;
+//     sheet.getRangeByName('F2').cellStyle = globalStyle;
+//     sheet.getRangeByName('G2').cellStyle = globalStyle;
+//     sheet.getRangeByName('H2').cellStyle = globalStyle;
+//     sheet.getRangeByName('I2').cellStyle = globalStyle;
+//     sheet.getRangeByName('J2').cellStyle = globalStyle;
+//     sheet.getRangeByName('A2').setText('${renTal_name}');
+//     sheet.getRangeByName('J1').setText('ออก ณ วันที่: ${day_}');
 
-    sheet.getRangeByName('A3').cellStyle = globalStyle;
-    sheet.getRangeByName('B3').cellStyle = globalStyle;
-    sheet.getRangeByName('C3').cellStyle = globalStyle;
-    sheet.getRangeByName('D3').cellStyle = globalStyle;
-    sheet.getRangeByName('E3').cellStyle = globalStyle;
-    sheet.getRangeByName('F3').cellStyle = globalStyle;
-    sheet.getRangeByName('G3').cellStyle = globalStyle;
-    sheet.getRangeByName('H3').cellStyle = globalStyle;
-    sheet.getRangeByName('I3').cellStyle = globalStyle;
-    sheet.getRangeByName('J3').cellStyle = globalStyle;
-    sheet.getRangeByName('J2').setText('เวลา: ${Tim_}');
-    globalStyle2.hAlign = x.HAlignType.center;
-    sheet.getRangeByName('A4').cellStyle = globalStyle2;
-    sheet.getRangeByName('B4').cellStyle = globalStyle2;
-    sheet.getRangeByName('C4').cellStyle = globalStyle2;
-    sheet.getRangeByName('D4').cellStyle = globalStyle2;
-    sheet.getRangeByName('E4').cellStyle = globalStyle2;
-    sheet.getRangeByName('F4').cellStyle = globalStyle2;
-    sheet.getRangeByName('G4').cellStyle = globalStyle2;
-    sheet.getRangeByName('H4').cellStyle = globalStyle2;
-    sheet.getRangeByName('I4').cellStyle = globalStyle2;
-    sheet.getRangeByName('J4').cellStyle = globalStyle2;
-    sheet.getRangeByName('A4').columnWidth = 10;
-    sheet.getRangeByName('B4').columnWidth = 18;
-    sheet.getRangeByName('C4').columnWidth = 18;
-    sheet.getRangeByName('D4').columnWidth = 18;
-    sheet.getRangeByName('E4').columnWidth = 18;
-    sheet.getRangeByName('F4').columnWidth = 18;
-    sheet.getRangeByName('G4').columnWidth = 18;
-    sheet.getRangeByName('H4').columnWidth = 18;
-    sheet.getRangeByName('I4').columnWidth = 18;
-    sheet.getRangeByName('J4').columnWidth = 18;
+//     sheet.getRangeByName('A3').cellStyle = globalStyle;
+//     sheet.getRangeByName('B3').cellStyle = globalStyle;
+//     sheet.getRangeByName('C3').cellStyle = globalStyle;
+//     sheet.getRangeByName('D3').cellStyle = globalStyle;
+//     sheet.getRangeByName('E3').cellStyle = globalStyle;
+//     sheet.getRangeByName('F3').cellStyle = globalStyle;
+//     sheet.getRangeByName('G3').cellStyle = globalStyle;
+//     sheet.getRangeByName('H3').cellStyle = globalStyle;
+//     sheet.getRangeByName('I3').cellStyle = globalStyle;
+//     sheet.getRangeByName('J3').cellStyle = globalStyle;
+//     sheet.getRangeByName('J2').setText('เวลา: ${Tim_}');
+//     globalStyle2.hAlign = x.HAlignType.center;
+//     sheet.getRangeByName('A4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('B4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('C4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('D4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('E4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('F4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('G4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('H4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('I4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('J4').cellStyle = globalStyle2;
+//     sheet.getRangeByName('A4').columnWidth = 10;
+//     sheet.getRangeByName('B4').columnWidth = 18;
+//     sheet.getRangeByName('C4').columnWidth = 18;
+//     sheet.getRangeByName('D4').columnWidth = 18;
+//     sheet.getRangeByName('E4').columnWidth = 18;
+//     sheet.getRangeByName('F4').columnWidth = 18;
+//     sheet.getRangeByName('G4').columnWidth = 18;
+//     sheet.getRangeByName('H4').columnWidth = 18;
+//     sheet.getRangeByName('I4').columnWidth = 18;
+//     sheet.getRangeByName('J4').columnWidth = 18;
 
-    sheet.getRangeByName('A4').setText('เลขที่สัญญา');
-    sheet.getRangeByName('B4').setText('วันที้ทำรายการ');
-    sheet.getRangeByName('C4').setText('วันที่รับชำระ');
-    sheet.getRangeByName('D4').setText('เลขที่ใบเสร็จ');
-    sheet.getRangeByName('E4').setText('เลขที่ใบวางบิล');
-    sheet.getRangeByName('F4').setText('รหัสพื้นที่');
-    sheet.getRangeByName('G4').setText('ชื่อร้านค้า');
-    sheet.getRangeByName('H4').setText('จำนวนเงิน');
-    sheet.getRangeByName('I4').setText('กำหนดชำระ');
-    sheet.getRangeByName('J4').setText('สถานะ');
-    int index1 = 0;
-    for (int index = 0; index < _TransReBillModels.length; index++) {
-      dynamic numberColor = (0 * _TransReBillModels.length + index) % 2 == 0
-          ? globalStyle22
-          : globalStyle222;
-      sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('B${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('C${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('D${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('E${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('F${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('G${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('H${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('I${index + 5}').cellStyle = numberColor;
-      sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
+//     sheet.getRangeByName('A4').setText('เลขที่สัญญา');
+//     sheet.getRangeByName('B4').setText('วันที้ทำรายการ');
+//     sheet.getRangeByName('C4').setText('วันที่รับชำระ');
+//     sheet.getRangeByName('D4').setText('เลขที่ใบเสร็จ');
+//     sheet.getRangeByName('E4').setText('เลขที่ใบวางบิล');
+//     sheet.getRangeByName('F4').setText('รหัสพื้นที่');
+//     sheet.getRangeByName('G4').setText('ชื่อร้านค้า');
+//     sheet.getRangeByName('H4').setText('จำนวนเงิน');
+//     sheet.getRangeByName('I4').setText('กำหนดชำระ');
+//     sheet.getRangeByName('J4').setText('สถานะ');
+//     int index1 = 0;
+//     for (int index = 0; index < _TransReBillModels.length; index++) {
+//       dynamic numberColor = (0 * _TransReBillModels.length + index) % 2 == 0
+//           ? globalStyle22
+//           : globalStyle222;
+//       sheet.getRangeByName('A${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('B${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('C${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('D${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('E${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('F${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('G${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('H${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('I${index + 5}').cellStyle = numberColor;
+//       sheet.getRangeByName('J${index + 5}').cellStyle = numberColor;
 
-      sheet.getRangeByName('A${index + 5}').setText(
-            '${_TransReBillModels[index].cid}',
-          );
-      sheet.getRangeByName('B${index + 5}').setText(
-            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
-          );
-      sheet.getRangeByName('C${index + 5}').setText(
-            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00').year + 543}',
-          );
-      sheet.getRangeByName('D${index + 5}').setText(
-            _TransReBillModels[index].doctax == ''
-                ? '${_TransReBillModels[index].docno}'
-                : '${_TransReBillModels[index].doctax}',
-          );
-      sheet.getRangeByName('E${index + 5}').setText(
-            '${_TransReBillModels[index].inv}',
-          );
-      sheet.getRangeByName('F${index + 5}').setText(
-            _TransReBillModels[index].ln == null
-                ? '${_TransReBillModels[index].room_number}'
-                : '${_TransReBillModels[index].ln}',
-          );
-      sheet.getRangeByName('G${index + 5}').setText(
-            _TransReBillModels[index].sname == null
-                ? '${_TransReBillModels[index].remark}'
-                : '${_TransReBillModels[index].sname}',
-          );
-      sheet.getRangeByName('H${index + 5}').setText(
-            _TransReBillModels[index].total_dis == null
-                ? '${_TransReBillModels[index].total_bill}'
-                : '${_TransReBillModels[index].total_dis}',
-          );
-      sheet.getRangeByName('I${index + 5}').setText(
-            '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
-          );
-      sheet.getRangeByName('J${index + 5}').setText(
-            _TransReBillModels[index].doctax == '' ? ' ' : 'ใบกำกับภาษี',
-          );
-    }
+//       sheet.getRangeByName('A${index + 5}').setText(
+//             '${_TransReBillModels[index].cid}',
+//           );
+//       sheet.getRangeByName('B${index + 5}').setText(
+//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].daterec} 00:00:00').year + 543}',
+//           );
+//       sheet.getRangeByName('C${index + 5}').setText(
+//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].dateacc} 00:00:00').year + 543}',
+//           );
+//       sheet.getRangeByName('D${index + 5}').setText(
+//             _TransReBillModels[index].doctax == ''
+//                 ? '${_TransReBillModels[index].docno}'
+//                 : '${_TransReBillModels[index].doctax}',
+//           );
+//       sheet.getRangeByName('E${index + 5}').setText(
+//             '${_TransReBillModels[index].inv}',
+//           );
+//       sheet.getRangeByName('F${index + 5}').setText(
+//             _TransReBillModels[index].ln == null
+//                 ? '${_TransReBillModels[index].room_number}'
+//                 : '${_TransReBillModels[index].ln}',
+//           );
+//       sheet.getRangeByName('G${index + 5}').setText(
+//             _TransReBillModels[index].sname == null
+//                 ? '${_TransReBillModels[index].remark}'
+//                 : '${_TransReBillModels[index].sname}',
+//           );
+//       sheet.getRangeByName('H${index + 5}').setText(
+//             _TransReBillModels[index].total_dis == null
+//                 ? '${_TransReBillModels[index].total_bill}'
+//                 : '${_TransReBillModels[index].total_dis}',
+//           );
+//       sheet.getRangeByName('I${index + 5}').setText(
+//             '${DateFormat('dd-MM').format(DateTime.parse('${_TransReBillModels[index].date} 00:00:00'))}-${DateTime.parse('${_TransReBillModels[index].date} 00:00:00').year + 543}',
+//           );
+//       sheet.getRangeByName('J${index + 5}').setText(
+//             _TransReBillModels[index].doctax == '' ? ' ' : 'ใบกำกับภาษี',
+//           );
+//     }
 
-    final List<int> bytes = workbook.saveAsStream();
-    workbook.dispose();
-    Uint8List data = Uint8List.fromList(bytes);
-    MimeType type = MimeType.MICROSOFTEXCEL;
-    String path = await FileSaver.instance
-        .saveFile("ประวัติบิล($day_)", data, "xlsx", mimeType: type);
-    log(path);
-    // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
-    //   String path = await FileSaver.instance.saveFile(
-    //       "ผู้เช่า(${Status[Status_ - 1]})(ณ วันที่${day_})", data, "xlsx",
-    //       mimeType: type);
-    //   log(path);
-    // } else {
-    //   String path = await FileSaver.instance
-    //       .saveFile("$NameFile_", data, "xlsx", mimeType: type);
-    //   log(path);
-    // }
-  }
+//     final List<int> bytes = workbook.saveAsStream();
+//     workbook.dispose();
+//     Uint8List data = Uint8List.fromList(bytes);
+//     MimeType type = MimeType.MICROSOFTEXCEL;
+//     String path = await FileSaver.instance
+//         .saveFile("ประวัติบิล($day_)", data, "xlsx", mimeType: type);
+//     log(path);
+//     // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {
+//     //   String path = await FileSaver.instance.saveFile(
+//     //       "ผู้เช่า(${Status[Status_ - 1]})(ณ วันที่${day_})", data, "xlsx",
+//     //       mimeType: type);
+//     //   log(path);
+//     // } else {
+//     //   String path = await FileSaver.instance
+//     //       .saveFile("$NameFile_", data, "xlsx", mimeType: type);
+//     //   log(path);
+//     // }
+//   }
 
 //////////----------------------------------------------------------------->
 //////////////////-------------------------------------------------->
@@ -13469,9 +13478,9 @@ class _AccountScreenState extends State<AccountScreen> {
                                       Container(
                                           height: MediaQuery.of(context)
                                                   .size
-                                                  .height /
+                                                  .width /
                                               1.7,
-                                          width: (Responsive.isDesktop(context))
+                                          width: Responsive.isDesktop(context)
                                               ? MediaQuery.of(context)
                                                       .size
                                                       .width *
@@ -14991,7 +15000,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                   ],
                                 ),
                                 Container(
-                                  height: 220,
+                                  height:
+                                      MediaQuery.of(context).size.height / 4.8,
                                   decoration: const BoxDecoration(
                                     color: AppbackgroundColor.Sub_Abg_Colors,
                                     borderRadius: BorderRadius.only(

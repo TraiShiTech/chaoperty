@@ -18,8 +18,8 @@ import 'Rental_Information.dart';
 
 class Pdfgen_QR_ {
   /////////////////////////////////////-------------------->(QR)
-  static void displayPdf_QR(
-      context, renTal_name, zone_name, teNantModels, name) async {
+  static void displayPdf_QR(context, renTal_name, zone_name, teNantModels, name,
+      indexcardColor) async {
     //final font = await rootBundle.load("fonts/Saysettha-OT.ttf");
     // final font = await rootBundle.load("fonts/Sarabun-Medium.ttf");
     final font = await rootBundle.load("fonts/LINESeedSansTH_Rg.ttf");
@@ -28,6 +28,21 @@ class Pdfgen_QR_ {
     final doc = pw.Document();
     final iconImage =
         (await rootBundle.load('images/pngegg2.png')).buffer.asUint8List();
+    List<dynamic> colorList = [
+      PdfColors.green,
+      PdfColors.red,
+      PdfColors.blue,
+      PdfColors.yellow,
+      PdfColors.orange,
+      PdfColors.purple,
+      PdfColors.teal,
+      PdfColors.pink,
+      PdfColors.indigo,
+      PdfColors.cyan,
+      PdfColors.brown,
+      PdfColors.black,
+      PdfColors.grey,
+    ];
     doc.addPage(
       pw.MultiPage(
         pageFormat:
@@ -127,7 +142,7 @@ class Pdfgen_QR_ {
                               children: [
                                 pw.Container(
                                     height: 110,
-                                    width: 193,
+                                    width: 200,
                                     // height: 135,
                                     decoration: pw.BoxDecoration(
                                       borderRadius: pw.BorderRadius.only(
@@ -198,7 +213,8 @@ class Pdfgen_QR_ {
                                                 color: PdfColors.white,
                                                 child: pw.Column(
                                                   mainAxisAlignment: pw
-                                                      .MainAxisAlignment.center,
+                                                      .MainAxisAlignment
+                                                      .spaceBetween,
                                                   children: [
                                                     pw.Align(
                                                       alignment:
@@ -210,7 +226,7 @@ class Pdfgen_QR_ {
                                                             barcode: pw.Barcode
                                                                 .qrCode(),
                                                             width: 65,
-                                                            height: 70),
+                                                            height: 65),
 
                                                         //  pw.PrettyQr(
                                                         //   // typeNumber: 3,
@@ -222,6 +238,22 @@ class Pdfgen_QR_ {
                                                         //   errorCorrectLevel: QrErrorCorrectLevel.M,
                                                         //   roundEdges: true,
                                                         // ),
+                                                      ),
+                                                    ),
+                                                    pw.Container(
+                                                      padding: const pw
+                                                              .EdgeInsets.fromLTRB(
+                                                          0, 4, 0, 0),
+                                                      child: pw.Text(
+                                                        'ลงชื่อ................................',
+                                                        style: pw.TextStyle(
+                                                          fontSize: 7.0,
+                                                          color:
+                                                              PdfColors.black,
+                                                          fontWeight: pw
+                                                              .FontWeight.bold,
+                                                          font: ttf,
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -363,9 +395,9 @@ class Pdfgen_QR_ {
                                     )),
                                 pw.Container(
                                   height: 110,
-                                  width: 23.5,
-                                  decoration: const pw.BoxDecoration(
-                                    color: PdfColors.green300,
+                                  width: 15,
+                                  decoration: pw.BoxDecoration(
+                                    color: colorList[indexcardColor],
                                     borderRadius: pw.BorderRadius.only(
                                       topLeft: pw.Radius.circular(0),
                                       topRight: pw.Radius.circular(10),
@@ -432,8 +464,11 @@ class Pdfgen_QR_ {
     final Uint8List data = Uint8List.fromList(bytes);
     MimeType type = MimeType.PDF;
     ////////////---------------------------------------------->
-    // final dir = await FileSaver.instance
-    //     .saveFile("Generator QR $name", data, "pdf", mimeType: type);
+    // final dir = await FileSaver.instance.saveFile(
+    //     "QRRRRR(ณ วันที่${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day})",
+    //     data,
+    //     "pdf",
+    //     mimeType: type);
     ////////////---------------------------------------------->
     Navigator.push(
         context,

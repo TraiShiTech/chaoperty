@@ -66,6 +66,7 @@ class _HistoryBillsState extends State<HistoryBills> {
       sum_amt = 0.00,
       sum_dis = 0.00,
       sum_disamt = 0.00,
+      total_amt = 0.00,
       sum_disp = 0;
   int select_page = 0,
       pamentpage = 0; // = 0 _TransModels : = 1 _InvoiceHistoryModels
@@ -485,6 +486,7 @@ class _HistoryBillsState extends State<HistoryBills> {
         sum_vat = 0;
         sum_wht = 0;
         sum_amt = 0;
+        total_amt = 0.00;
         // sum_disamt = 0;
         // sum_disp = 0;
       });
@@ -507,25 +509,51 @@ class _HistoryBillsState extends State<HistoryBills> {
         for (var map in result) {
           TransReBillHistoryModel _TransReBillHistoryModel =
               TransReBillHistoryModel.fromJson(map);
+          var dtypeinvoiceent = _TransReBillHistoryModel.dtype;
+          var sum_pvatx = dtypeinvoiceent == 'KP' || dtypeinvoiceent == '!Z'
+              ? double.parse(_TransReBillHistoryModel.pvat!)
+              : 0.0;
+          var sum_vatx = dtypeinvoiceent == 'KP' || dtypeinvoiceent == '!Z'
+              ? double.parse(_TransReBillHistoryModel.vat!)
+              : 0.0;
+          var sum_whtx = dtypeinvoiceent == 'KP' || dtypeinvoiceent == '!Z'
+              ? double.parse(_TransReBillHistoryModel.wht!)
+              : 0.0;
+          var sum_amtx = dtypeinvoiceent == 'KP' || dtypeinvoiceent == '!Z'
+              ? double.parse(_TransReBillHistoryModel.total!)
+              : 0.0;
 
-          var sum_pvatx = double.parse(_TransReBillHistoryModel.pvat!);
-          var sum_vatx = double.parse(_TransReBillHistoryModel.vat!);
-          var sum_whtx = double.parse(_TransReBillHistoryModel.wht!);
-          var sum_amtx = double.parse(_TransReBillHistoryModel.total!);
+          var total_amtx = dtypeinvoiceent != 'KP' || dtypeinvoiceent != '!Z'
+              ? double.parse(_TransReBillHistoryModel.total!)
+              : 0.0;
           // var sum_disamtx = double.parse(_InvoiceHistoryModel.disendbill!);
           // var sum_dispx = double.parse(_InvoiceHistoryModel.disendbillper!);
           var numinvoiceent = _TransReBillHistoryModel.docno;
 
           setState(() {
-            sum_pvat = sum_pvat + sum_pvatx;
-            sum_vat = sum_vat + sum_vatx;
-            sum_wht = sum_wht + sum_whtx;
-            sum_amt = sum_amt + sum_amtx;
-            // sum_disamt = sum_disamtx;
-            // sum_disp = sum_dispx;
-            numinvoice = _TransReBillHistoryModel.docno;
-            numdoctax = _TransReBillHistoryModel.doctax;
-            _TransReBillHistoryModels.add(_TransReBillHistoryModel);
+            if (dtypeinvoiceent == 'KP') {
+              sum_pvat = sum_pvat + sum_pvatx;
+              sum_vat = sum_vat + sum_vatx;
+              sum_wht = sum_wht + sum_whtx;
+              sum_amt = sum_amt + sum_amtx;
+              // sum_disamt = sum_disamtx;
+              // sum_disp = sum_dispx;
+              numinvoice = _TransReBillHistoryModel.docno;
+              numdoctax = _TransReBillHistoryModel.doctax;
+              _TransReBillHistoryModels.add(_TransReBillHistoryModel);
+            } else if (dtypeinvoiceent == '!Z') {
+              sum_pvat = sum_pvat + sum_pvatx;
+              sum_vat = sum_vat + sum_vatx;
+              sum_wht = sum_wht + sum_whtx;
+              sum_amt = sum_amt + sum_amtx;
+              // sum_disamt = sum_disamtx;
+              // sum_disp = sum_dispx;
+              numinvoice = _TransReBillHistoryModel.docno;
+              numdoctax = _TransReBillHistoryModel.doctax;
+              _TransReBillHistoryModels.add(_TransReBillHistoryModel);
+            } else {
+              total_amt = total_amt + total_amtx;
+            }
           });
         }
       }
@@ -624,6 +652,7 @@ class _HistoryBillsState extends State<HistoryBills> {
   final Set<int> _pressedIndices = Set();
 
   ///----------------->
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -1924,6 +1953,41 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                       ),
                                                     ],
                                                   ),
+                                                  total_amt == 0.00
+                                                      ? SizedBox()
+                                                      : Row(
+                                                          children: [
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 15,
+                                                                'หักชำระ',
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 15,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .end,
+                                                                '${nFormat.format(total_amt)}',
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                   Row(
                                                     children: [
                                                       Expanded(
@@ -1947,7 +2011,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                           maxFontSize: 15,
                                                           textAlign:
                                                               TextAlign.end,
-                                                          '${nFormat.format(sum_amt - sum_disamt)}',
+                                                          '${nFormat.format(sum_amt - sum_disamt - total_amt)}',
                                                           style: TextStyle(
                                                               color: PeopleChaoScreen_Color
                                                                   .Colors_Text2_,
@@ -2222,7 +2286,8 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                 children: [
                                                                   Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child:
                                                                         Container(
@@ -2239,9 +2304,9 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                                             bottomLeft: Radius.circular(10),
                                                                             bottomRight: Radius.circular(10)),
                                                                       ),
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              8.0),
+                                                                      padding: const EdgeInsets
+                                                                          .all(
+                                                                          8.0),
                                                                       child:
                                                                           TextButton(
                                                                         onPressed: () => Navigator.pop(
@@ -2615,6 +2680,75 @@ class _HistoryBillsState extends State<HistoryBills> {
                                   ),
                                 ],
                               ),
+                              total_amt == 0.00
+                                  ? SizedBox()
+                                  : Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: Container(
+                                            height: 40,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'หักชำระ',
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 4,
+                                          child: Container(
+                                            height: 40,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              '${nFormat.format(total_amt)}',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            height: 40,
+                                            color: AppbackgroundColor
+                                                .Sub_Abg_Colors,
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Text(
+                                              'บาท',
+                                              textAlign: TextAlign.end,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text1_,
+                                                  // fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T
+                                                  //fontSize: 10.0
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                               Row(
                                 children: [
                                   Expanded(
@@ -2644,7 +2778,7 @@ class _HistoryBillsState extends State<HistoryBills> {
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text(
                                         // '${nFormat.format(sum_amt - sum_disamt)}',
-                                        '${nFormat.format(sum_amt - sum_disamt)}',
+                                        '${nFormat.format(sum_amt - sum_disamt - total_amt)}',
                                         textAlign: TextAlign.end,
                                         style: TextStyle(
                                             color: PeopleChaoScreen_Color
@@ -2755,22 +2889,32 @@ class _HistoryBillsState extends State<HistoryBills> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             8.0),
-                                                    child: AutoSizeText(
-                                                      minFontSize: 10,
-                                                      maxFontSize: 15,
-                                                      finnancetransModels[i]
-                                                                  .type ==
-                                                              'CASH'
-                                                          ? '${finnancetransModels[i].type} (เงินสด)'
-                                                          : '${finnancetransModels[i].type} (เงินโอน)',
-                                                      style: TextStyle(
-                                                          color:
-                                                              PeopleChaoScreen_Color
-                                                                  .Colors_Text2_,
-                                                          //fontWeight: FontWeight.bold,
-                                                          fontFamily:
-                                                              Font_.Fonts_T),
-                                                    ),
+                                                    child:
+                                                        finnancetransModels[i]
+                                                                    .dtype ==
+                                                                'KP'
+                                                            ? AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 15,
+                                                                finnancetransModels[i]
+                                                                            .type ==
+                                                                        'CASH'
+                                                                    ? '${finnancetransModels[i].type} (เงินสด)'
+                                                                    : '${finnancetransModels[i].type} (เงินโอน)',
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              )
+                                                            : AutoSizeText(
+                                                                minFontSize: 10,
+                                                                maxFontSize: 15,
+                                                                '${finnancetransModels[i].remark}',
+                                                                style: TextStyle(
+                                                                    color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                    //fontWeight: FontWeight.bold,
+                                                                    fontFamily: Font_.Fonts_T),
+                                                              ),
                                                   ),
                                                 ),
                                               ],
@@ -3386,6 +3530,7 @@ class _HistoryBillsState extends State<HistoryBills> {
           sum_amt = 0.00;
           sum_dis = 0.00;
           sum_disamt = 0.00;
+          total_amt = 0.00;
           sum_disp = 0;
           select_page = 0;
           red_Trans_bill();

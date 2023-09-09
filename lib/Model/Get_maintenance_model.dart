@@ -16,6 +16,7 @@ class MaintenanceModel {
   String? rdate;
   String? rdescr;
   String? st;
+  String? zn;
   String? dateUpdate;
 
   MaintenanceModel(
@@ -35,6 +36,7 @@ class MaintenanceModel {
       this.mst,
       this.rdate,
       this.st,
+      this.zn,
       this.dateUpdate});
 
   MaintenanceModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +57,7 @@ class MaintenanceModel {
     rdate = json['rdate'];
     rdescr = json['rdescr'];
     st = json['st'];
+    zn = json['zn'];
     dateUpdate = json['date_update'];
   }
 
@@ -77,6 +80,7 @@ class MaintenanceModel {
     data['rdate'] = this.rdate;
     data['rdescr'] = this.rdescr;
     data['st'] = this.st;
+    data['zn'] = this.zn;
     data['date_update'] = this.dateUpdate;
     return data;
   }

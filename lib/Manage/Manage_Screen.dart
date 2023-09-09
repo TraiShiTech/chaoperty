@@ -1811,9 +1811,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.lightGreen[300],
-                                        child: const Center(
+                                        child: Center(
                                           child: Text(
-                                            'เลขมิเตอร์เดือนก่อน',
+                                            'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(DateTime.parse('${DateFormat('yyyy').format(datex)}-${(datex.month - 1).toString().padLeft(2, '0')}-${DateFormat('dd').format(datex)} 00:00:00'))}',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: ManageScreen_Color
@@ -1830,9 +1830,9 @@ class _ManageScreenState extends State<ManageScreen> {
                                       child: Container(
                                         height: 50,
                                         color: Colors.orange[300],
-                                        child: const Center(
+                                        child: Center(
                                           child: Text(
-                                            'เลขมิเตอร์เดือนนี้',
+                                            'เลขมิเตอร์เดือน ${DateFormat.MMM('th_TH').format(datex)}',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: ManageScreen_Color
@@ -2280,8 +2280,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                           fontFamily:
                                                               Font_.Fonts_T,
                                                         )),
-                                                    inputFormatters: <
-                                                        TextInputFormatter>[
+                                                    inputFormatters: <TextInputFormatter>[
                                                       // for below version 2 use this
                                                       FilteringTextInputFormatter
                                                           .allow(
@@ -3305,8 +3304,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                               content:
                                                                   SingleChildScrollView(
                                                                 child: ListBody(
-                                                                  children: <
-                                                                      Widget>[
+                                                                  children: <Widget>[
                                                                     Center(
                                                                       child:
                                                                           Padding(
@@ -3436,8 +3434,7 @@ class _ManageScreenState extends State<ManageScreen> {
                                                               content:
                                                                   SingleChildScrollView(
                                                                 child: ListBody(
-                                                                  children: <
-                                                                      Widget>[
+                                                                  children: <Widget>[
                                                                     Row(
                                                                       children: [
                                                                         //_select_Date

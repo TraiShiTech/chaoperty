@@ -43,6 +43,7 @@ class CustomerModel {
   String? rtname;
   String? user_name;
   String? passw;
+  String? sname;
 
   CustomerModel(
       {this.ser,
@@ -88,6 +89,7 @@ class CustomerModel {
       this.rtser,
       this.rtname,
       this.user_name,
+      this.sname,
       this.passw});
 
   CustomerModel.fromJson(Map<String, dynamic> json) {
@@ -135,6 +137,7 @@ class CustomerModel {
     rtname = json['rtname'];
     user_name = json['user_name'];
     passw = json['passw'];
+    sname = json['sname'];
   }
 
   Map<String, dynamic> toJson() {
@@ -183,6 +186,7 @@ class CustomerModel {
     data['rtname'] = this.rtname;
     data['user_name'] = this.user_name;
     data['passw'] = this.passw;
+    data['sname'] = this.sname;
     return data;
   }
 }

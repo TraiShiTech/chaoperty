@@ -102,6 +102,7 @@ class TransModel {
   String? qty_con;
   String? amt_con;
   String? img;
+  String? ucost;
 
   TransModel(
       {this.ser,
@@ -203,7 +204,8 @@ class TransModel {
       this.unit_con,
       this.qty_con,
       this.img,
-      this.amt_con});
+      this.amt_con,
+      this.ucost});
 
   TransModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -307,6 +309,7 @@ class TransModel {
     qty_con = json['qty_con'];
     amt_con = json['amt_con'];
     img = json['img'];
+    ucost= json['ucost'];
   }
 
   Map<String, dynamic> toJson() {
@@ -412,6 +415,7 @@ class TransModel {
     data['qty_con'] = this.qty_con;
     data['amt_con'] = this.amt_con;
     data['img'] = this.img;
+       data['ucost'] = this.ucost;
     return data;
   }
 }

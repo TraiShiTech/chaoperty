@@ -72,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen> {
       String? utype = preferences.getString('utype');
       String? verify = preferences.getString('verify');
 
-      print('$utype');
+      // print('$utype');
 
       if (utype != null && utype.isNotEmpty) {
         if (verify != '0') {
@@ -1236,7 +1236,9 @@ class _SignInScreenState extends State<SignInScreen> {
     preferences.setString('verify', userModel.verify.toString());
     preferences.setString('permission', userModel.permission.toString());
     preferences.setString('rser', userModel.rser.toString());
+    preferences.setString('lavel', userModel.user_id.toString());
     preferences.setString('route', 'หน้าหลัก');
+    preferences.setString('pakanPay', 0.toString());
     Insert_log.Insert_logs('ล็อคอิน', 'เข้าสู่ระบบ');
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => myWidget,

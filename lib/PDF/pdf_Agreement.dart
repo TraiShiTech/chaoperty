@@ -69,7 +69,7 @@ class Pdfgen_Agreement {
         (await rootBundle.load('images/LOGO.png')).buffer.asUint8List();
     List netImage = [];
     SharedPreferences preferences = await SharedPreferences.getInstance();
-
+    int pageCount = 1; // Initialize the page count
     String? base64Image_1 = preferences.getString('base64Image1');
     // String? base64Image_2 = preferences.getString('base64Image2');
     // String? base64Image_3 = preferences.getString('base64Image3');

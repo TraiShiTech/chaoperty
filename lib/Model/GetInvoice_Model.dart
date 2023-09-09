@@ -33,6 +33,7 @@ class InvoiceModel {
   String? amt;
   String? remark;
   String? note;
+  String? meter;
 
   InvoiceModel(
       {this.ser,
@@ -68,7 +69,7 @@ class InvoiceModel {
       this.cn,
       this.amt,
       this.remark,
-      this.note});
+      this.note,this.meter});
 
   InvoiceModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -105,6 +106,7 @@ class InvoiceModel {
     amt = json['amt'];
     remark = json['remark'];
     note = json['note'];
+    meter = json['meter'];
   }
 
   Map<String, dynamic> toJson() {
@@ -143,6 +145,7 @@ class InvoiceModel {
     data['amt'] = this.amt;
     data['remark'] = this.remark;
     data['note'] = this.note;
+    data['meter'] = this.meter;
     return data;
   }
 }

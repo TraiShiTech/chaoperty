@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           TeNantTwoModel teNantModel = TeNantTwoModel.fromJson(map);
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 var date2 = DateTime.now();
                 var difference = daysBetween(birthday, date2);
 
-                print('difference == $difference');
+                // print('difference == $difference');
 
                 var daterx_now = DateTime.now();
 
@@ -151,8 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 final now = DateTime.now();
                 final earlier = daterx_ldate.subtract(const Duration(days: 0));
                 var daterx_A = now.isAfter(earlier);
-                print(now.isAfter(earlier)); // true
-                print(now.isBefore(earlier)); // true
+                // print(now.isAfter(earlier)); // true
+                // print(now.isBefore(earlier)); // true
 
                 if (daterx_A != true) {
                   setState(() {
@@ -200,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
 
-        print('result ${_TransReBillModels.length}');
+        // print('result ${_TransReBillModels.length}');
       }
     } catch (e) {}
   }
@@ -221,7 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           TeNantModel teNantModel = TeNantModel.fromJson(map);
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             var date2 = DateTime.now();
             var difference = daysBetween(birthday, date2);
 
-            print('difference == $difference');
+            // print('difference == $difference');
 
             var daterx_now = DateTime.now();
 
@@ -250,8 +250,8 @@ class _HomeScreenState extends State<HomeScreen> {
             final now = DateTime.now();
             final earlier = daterx_ldate.subtract(const Duration(days: 30));
             var daterx_A = now.isAfter(earlier);
-            print(now.isAfter(earlier)); // true
-            print(now.isBefore(earlier)); // true
+            // print(now.isAfter(earlier)); // true
+            // print(now.isBefore(earlier)); // true
             if (difference <= 30 && difference > 0) {
               setState(() {
                 if (teNantModel.quantity == '1') {
@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${teNantModels.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${teNantModels.length}');
       } else {}
     } catch (e) {}
   }
@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result != null) {
         for (var map in result) {
           NoteModel noteModel = NoteModel.fromJson(map);
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
 
-        print('00000000>>>>>>>>>>>>>>>>> ${teNantModels.length}');
+        // print('00000000>>>>>>>>>>>>>>>>> ${teNantModels.length}');
       } else {}
     } catch (e) {}
   }
@@ -313,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? ren = preferences.getString('renTalSer');
     String? serzone = preferences.getString('zoneSer');
-    print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>>>>>>>>>>>>>>>>>>>>>>>>> $serzone');
+    // print('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz>>>>>>>>>>>>>>>>>>>>>>>>> $serzone');
     String url =
         '${MyConstant().domain}/GC_custo_home.php?isAdd=true&ren=$ren&ser_zone$serzone';
 
@@ -321,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       if (result.toString() != 'null') {
         for (var map in result) {
           CustomerModel customerModel = CustomerModel.fromJson(map);
@@ -330,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       }
-      print(customerModels.map((e) => e.scname));
+      // print(customerModels.map((e) => e.scname));
     } catch (e) {}
   }
 
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     var seruser = preferences.getString('ser');
     var utype = preferences.getString('utype');
-   var renTal = preferences.getString('renTalSer');
+    var renTal = preferences.getString('renTalSer');
     String url =
         '${MyConstant().domain}/GC_rental.php?isAdd=true&ser=$seruser&type=$utype&ren=$renTal';
 
@@ -355,7 +355,7 @@ class _HomeScreenState extends State<HomeScreen> {
       var response = await http.get(Uri.parse(url));
 
       var result = json.decode(response.body);
-      print(result);
+      // print(result);
       for (var map in result) {
         RenTalModel renTalModel = RenTalModel.fromJson(map);
         setState(() {
@@ -780,7 +780,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           Colors.green.shade200,
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(50),
                                                               topRight: Radius
@@ -1338,7 +1338,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             // color: AppbackgroundColor
                                                             //     .TiTile_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         6),
@@ -1422,7 +1422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -1837,8 +1837,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -2014,8 +2015,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 2,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -2093,7 +2095,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -2111,7 +2113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2156,38 +2159,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        // color: AppbackgroundColor
-                                                                        //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(3.0),
-                                                                      child: const Text(
-                                                                        'Down',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              10.0,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        ),
-                                                                      )),
+                                                                  child:
+                                                                      Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            // color: AppbackgroundColor
+                                                                            //     .TiTile_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              3.0),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Down',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.grey,
+                                                                              fontSize: 10.0,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          )),
                                                                 ),
                                                               ],
                                                             ),
@@ -2220,7 +2222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -2236,7 +2238,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -2302,7 +2305,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -2802,8 +2805,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                                 bottomLeft: Radius.circular(10),
                                                                                 bottomRight: Radius.circular(10)),
                                                                           ),
-                                                                          padding:
-                                                                              const EdgeInsets.all(4.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              4.0),
                                                                           child:
                                                                               Center(
                                                                             child:
@@ -2871,7 +2875,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -2889,7 +2893,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -2934,38 +2939,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        // color: AppbackgroundColor
-                                                                        //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(3.0),
-                                                                      child: const Text(
-                                                                        'Down',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              10.0,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        ),
-                                                                      )),
+                                                                  child:
+                                                                      Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            // color: AppbackgroundColor
+                                                                            //     .TiTile_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              3.0),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Down',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.grey,
+                                                                              fontSize: 10.0,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          )),
                                                                 ),
                                                               ],
                                                             ),
@@ -2998,7 +3002,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -3014,7 +3018,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -3083,7 +3088,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -3458,8 +3463,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 1,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -3607,8 +3613,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 2,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               AutoSizeText(
                                                                             minFontSize:
@@ -3678,7 +3685,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -3696,7 +3703,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -3741,38 +3749,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        // color: AppbackgroundColor
-                                                                        //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(3.0),
-                                                                      child: const Text(
-                                                                        'Down',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              10.0,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        ),
-                                                                      )),
+                                                                  child:
+                                                                      Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            // color: AppbackgroundColor
+                                                                            //     .TiTile_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              3.0),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Down',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.grey,
+                                                                              fontSize: 10.0,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          )),
                                                                 ),
                                                               ],
                                                             ),
@@ -3805,7 +3812,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -3821,7 +3828,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -3887,7 +3895,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               AppbackgroundColor
                                                                   .Sub_Abg_Colors,
                                                           borderRadius: const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(10),
                                                               topRight: Radius
@@ -4357,8 +4365,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 2,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Text(
                                                                             '${DateFormat('dd-MM').format(DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00'))}-${DateTime.parse('${teNantTwoModels[index].sdate} 00:00:00').year + 543}',
@@ -4382,8 +4391,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         flex: 2,
                                                                         child:
                                                                             Padding(
-                                                                          padding:
-                                                                              const EdgeInsets.all(8.0),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              8.0),
                                                                           child:
                                                                               Text(
                                                                             '${teNantTwoModels[index].count_bill} รายการ',
@@ -4446,7 +4456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child:
                                                                       InkWell(
@@ -4464,7 +4474,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                         decoration: BoxDecoration(
                                                                           // color: AppbackgroundColor
                                                                           //     .TiTile_Colors,
-                                                                          borderRadius: const BorderRadius.only(
+                                                                          borderRadius: const BorderRadius
+                                                                              .only(
                                                                               topLeft: Radius.circular(6),
                                                                               topRight: Radius.circular(6),
                                                                               bottomLeft: Radius.circular(6),
@@ -4509,38 +4520,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       );
                                                                     }
                                                                   },
-                                                                  child: Container(
-                                                                      decoration: BoxDecoration(
-                                                                        // color: AppbackgroundColor
-                                                                        //     .TiTile_Colors,
-                                                                        borderRadius: const BorderRadius.only(
-                                                                            topLeft:
-                                                                                Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6)),
-                                                                        border: Border.all(
-                                                                            color:
-                                                                                Colors.grey,
-                                                                            width: 1),
-                                                                      ),
-                                                                      padding: const EdgeInsets.all(3.0),
-                                                                      child: const Text(
-                                                                        'Down',
-                                                                        maxLines:
-                                                                            1,
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              10.0,
-                                                                          fontFamily:
-                                                                              FontWeight_.Fonts_T,
-                                                                        ),
-                                                                      )),
+                                                                  child:
+                                                                      Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            // color: AppbackgroundColor
+                                                                            //     .TiTile_Colors,
+                                                                            borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6)),
+                                                                            border:
+                                                                                Border.all(color: Colors.grey, width: 1),
+                                                                          ),
+                                                                          padding: const EdgeInsets
+                                                                              .all(
+                                                                              3.0),
+                                                                          child:
+                                                                              const Text(
+                                                                            'Down',
+                                                                            maxLines:
+                                                                                1,
+                                                                            overflow:
+                                                                                TextOverflow.ellipsis,
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: Colors.grey,
+                                                                              fontSize: 10.0,
+                                                                              fontFamily: FontWeight_.Fonts_T,
+                                                                            ),
+                                                                          )),
                                                                 ),
                                                               ],
                                                             ),
@@ -4573,7 +4583,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       // color: AppbackgroundColor
                                                                       //     .TiTile_Colors,
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               6),
                                                                           topRight: Radius.circular(
@@ -4589,7 +4599,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                               1),
                                                                     ),
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             3.0),
                                                                     child:
                                                                         const Text(
@@ -5445,7 +5456,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     color: AppbackgroundColor
                                                                         .Sub_Abg_Colors,
                                                                     borderRadius: const BorderRadius
-                                                                            .only(
+                                                                        .only(
                                                                         topLeft:
                                                                             Radius.circular(
                                                                                 50),
@@ -5590,7 +5601,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           .green
                                                                           .shade200,
                                                                       borderRadius: const BorderRadius
-                                                                              .only(
+                                                                          .only(
                                                                           topLeft: Radius.circular(
                                                                               50),
                                                                           topRight: Radius.circular(
@@ -5870,7 +5881,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -5945,7 +5956,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6045,7 +6056,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6064,7 +6075,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6092,7 +6103,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${customerModels.length} รายการ',
@@ -6198,7 +6210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6217,7 +6229,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6245,7 +6257,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${maintenanceModels.length} รายการ',
@@ -6328,7 +6341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6400,7 +6413,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             color: AppbackgroundColor
                                                                 .Sub_Abg_Colors,
                                                             borderRadius: const BorderRadius
-                                                                    .only(
+                                                                .only(
                                                                 topLeft: Radius
                                                                     .circular(
                                                                         10),
@@ -6500,7 +6513,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6519,7 +6532,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6547,7 +6560,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${teNantModels.length} รายการ',
@@ -6654,7 +6668,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6673,7 +6687,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                 Padding(
                                                                   padding:
                                                                       const EdgeInsets
-                                                                              .all(
+                                                                          .all(
                                                                           8.0),
                                                                   child: Row(
                                                                     mainAxisAlignment:
@@ -6701,7 +6715,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   child:
                                                                       Padding(
                                                                     padding:
-                                                                        const EdgeInsets.all(
+                                                                        const EdgeInsets
+                                                                            .all(
                                                                             8.0),
                                                                     child: Text(
                                                                       'ทั้งหมด ${teNantTwoModels.length} รายการ',
@@ -7103,7 +7118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       //     .TiTile_Colors,
                                                       borderRadius:
                                                           const BorderRadius
-                                                                  .only(
+                                                              .only(
                                                               topLeft: Radius
                                                                   .circular(6),
                                                               topRight: Radius

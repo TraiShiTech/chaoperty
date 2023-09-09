@@ -25,8 +25,10 @@ import '../Model/GetTrans_Model.dart';
 import '../Model/GetZone_Model.dart';
 import '../Model/Get_Trans_play.dart';
 import '../Model/Get_Trans_playList.dart';
+import '../Model/Get_Trans_play_pay.dart';
 import '../Model/Get_trans_playListx.dart';
 import '../Model/Get_trans_playx.dart';
+import '../Model/Get_trans_playx_pay.dart';
 import '../PDF/pdf_Receipt.dart';
 import '../Responsive/responsive.dart';
 import '../Style/colors.dart';
@@ -41,12 +43,16 @@ class PlayColumn extends StatefulWidget {
 }
 
 class _PlayColumnState extends State<PlayColumn> {
-  var nFormat = NumberFormat("#,##0.00", "en_US");
+  var nFormat = NumberFormat("#,##0", "en_US");
   // var formatter = DateFormat.yMMMMEEEEd();
 
   List<ExpModel> expModels = [];
   List<TransPlayModel> transPlayModels = [];
   List<TransPlayxModel> transPlayxModels = [];
+
+  List<TransPlayPayModel> transPlayPayModels = [];
+  List<TransPlayxPayModel> transPlayxPayModels = [];
+
   List<TransPlayListModel> transPlayListModels = [];
   List<TransPlayListxModel> transPlayListxModels = [];
   List<TransModel> _TransModels = [];
@@ -76,7 +82,9 @@ class _PlayColumnState extends State<PlayColumn> {
       sum_amt = 0.00,
       sum_dis = 0.00,
       sum_disamt = 0.00,
-      sum_disp = 0;
+      sum_disp = 0,
+      sumarea = 0,
+      sumarea_pay = 0;
   var renTal_name;
   int select_page = 0, pamentpage = 0, insexselect = 0, menulist = 0;
   String? refnoselect, nameselect, areaselect;
@@ -185,12 +193,16 @@ class _PlayColumnState extends State<PlayColumn> {
       }
     } catch (e) {}
 
-    if (zoneSer != '0' || zoneSer != null) {
-      setState(() {
-        zoneSelext = zoneSer;
-        read_GC_Exp();
-        read_GC_Playcolumn();
-      });
+    print('zoneSerzoneSer>>>> $zoneSer');
+
+    if (zoneSer != '0') {
+      if (zoneSer != null) {
+        setState(() {
+          zoneSelext = zoneSer;
+          read_GC_Exp();
+          read_GC_Playcolumn();
+        });
+      }
     }
   }
 
@@ -412,10 +424,89 @@ class _PlayColumnState extends State<PlayColumn> {
     } catch (e) {}
   }
 
+  Future<Null> read_GC_Playcolumn_pay() async {
+    if (transPlayPayModels.isNotEmpty) {
+      setState(() {
+        transPlayPayModels.clear();
+        transPlayxPayModels.clear();
+        sumarea_pay = 0;
+      });
+    }
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    var ren = preferences.getString('renTalSer');
+    var zone = preferences.getString('zoneSer'); //widget.Get_Value_zone_ser;
+
+    String url =
+        '${MyConstant().domain}/GC_Playcolumn_pay.php?isAdd=true&ren=$ren&zone=$zone';
+
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+
+      // print(result);
+
+      print(
+          '----------------------------------------------------3345653----------------------------------------------------------');
+      if (result != null) {
+        sumarea_pay = 0;
+        transPlayPayModels.clear();
+        transPlayxPayModels.clear();
+        for (var map in result) {
+          TransPlayPayModel transPlayPayModel = TransPlayPayModel.fromJson(map);
+          var vv = transPlayPayModel.cid;
+          List<dynamic> successList = transPlayPayModel.play_amt;
+          var ara = double.parse(transPlayPayModel.area!);
+          // List<dynamic> successList = result[][transPlayModel.play_amt];
+          print('vv>>>>>cid  $vv >>>>araaraara $ara');
+          setState(() {
+            sumarea_pay = sumarea_pay + ara;
+            transPlayPayModels.add(transPlayPayModel);
+            transPlayxPayModels.clear();
+          });
+
+          for (int i = 0; i < successList.length; i++) {
+            // print('${successList[i]}');
+            //     var znx = transPlayModels[v].play_amt[i];
+            for (int ii = 0; ii < expModels.length; ii++) {
+              var result = successList[i][expModels[ii].ser];
+              if (result != null) {
+                var encodedString = jsonEncode(result);
+                Map<String, dynamic> valueMap = json.decode(encodedString);
+                TransPlayxPayModel transPlayxPayModel =
+                    TransPlayxPayModel.fromJson(valueMap);
+                // print(
+                //     '----------ccccc $vv  --------${transPlayxModel.refno_trans}----->');
+                // if (vv != transPlayxPayModel.refno_trans) {
+                // if (expModels[ii].ser == transPlayxModel.expx_row) {
+                setState(() {
+                  transPlayxPayModels.add(transPlayxPayModel);
+                });
+                // }
+                // }
+
+                // break;
+              }
+              // break;
+            }
+          }
+        }
+      } else {}
+
+      print('transPlayxPayModels -------------> ${transPlayxPayModels.length}');
+    } catch (e) {
+      print('e -------------> $e');
+    }
+  }
+
   Future<Null> read_GC_Playcolumn() async {
     if (transPlayModels.isNotEmpty) {
-      transPlayModels.clear();
-      transPlayxModels.clear();
+      setState(() {
+        transPlayModels.clear();
+        transPlayxModels.clear();
+        sumarea = 0;
+      });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -435,14 +526,20 @@ class _PlayColumnState extends State<PlayColumn> {
       print(
           '----------------------------------------------------333----------------------------------------------------------');
       if (result != null) {
+        sumarea = 0;
+        transPlayModels.clear();
+        transPlayxModels.clear();
         for (var map in result) {
           TransPlayModel transPlayModel = TransPlayModel.fromJson(map);
           var vv = transPlayModel.cid;
           List<dynamic> successList = transPlayModel.play_amt;
+          var ara = double.parse(transPlayModel.area.toString());
           // List<dynamic> successList = result[][transPlayModel.play_amt];
-
+          print('>>>>>>araara>>>>>>>$ara');
           setState(() {
+            sumarea = sumarea + ara;
             transPlayModels.add(transPlayModel);
+            read_GC_Playcolumn_pay();
           });
 
           for (int i = 0; i < successList.length; i++) {
@@ -736,64 +833,158 @@ class _PlayColumnState extends State<PlayColumn> {
                   children: [
                     Container(
                       color: Colors.grey.shade200,
-                      height: MediaQuery.of(context).size.width * 0.06,
+                      height: MediaQuery.of(context).size.width * 0.07,
                       child: Row(
                         children: <Widget>[
                           Expanded(
                             flex: 1,
-                            child: Text(
-                              'พื้นที่',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'พื้นที่',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                  Text(
+                                    sumarea_pay == 0
+                                        ? '( ${nFormat.format(sumarea)} )'
+                                        : '( ${nFormat.format(sumarea_pay + sumarea)} )',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${nFormat.format(sumarea_pay)}',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.green,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ),
+                                  Text(
+                                    '${nFormat.format(sumarea)}',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontFamily: Font_.Fonts_T,
+                                    ),
+                                  ), //sumarea_pay
+                                ],
                               ),
                             ),
                           ),
                           Expanded(
                             flex: 2,
-                            child: Text(
-                              'ชื่อ - สกุล',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'ชื่อ - สกุล',
+                                    maxLines: 1,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: ReportScreen_Color.Colors_Text1_,
+                                      fontFamily: FontWeight_.Fonts_T,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                           for (int i = 0; i < expModels.length; i++)
                             Expanded(
                               flex: 1,
-                              child: Text(
-                                '${expModels[i].expname}',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: ReportScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      '${expModels[i].expname}',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text1_,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                      ),
+                                    ),
+                                    Text(
+                                      transPlayxPayModels.length == 0
+                                          ? transPlayxModels.length == 0
+                                              ? '0'
+                                              : '( ${(transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )'
+                                          : transPlayxModels.length == 0
+                                              ? '( ${(transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )'
+                                              : '( ${(transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)) + (transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: ReportScreen_Color.Colors_Text1_,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                      ),
+                                    ),
+                                    Text(
+                                      transPlayxPayModels.length == 0
+                                          ? '0'
+                                          : '${transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)}',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: Colors.green,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                    Text(
+                                      transPlayxModels.length == 0
+                                          ? '0'
+                                          : '${transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)}',
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontFamily: Font_.Fonts_T,
+                                      ),
+                                    ),
+                                    // transPlayModels
+                                  ],
                                 ),
                               ),
                             ),
                           Expanded(
                             flex: 1,
                             child: refnoselect == null
-                                ? Text(
-                                    '',
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: ReportScreen_Color.Colors_Text1_,
-                                      fontFamily: FontWeight_.Fonts_T,
-                                    ),
+                                ? Column(
+                                    children: [
+                                      Text(
+                                        '',
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ],
                                   )
-                                : InkWell(
+                                : GestureDetector(
                                     onTap: () {
                                       addPlaySelect();
                                     },
                                     child: Container(
                                       decoration: BoxDecoration(
+                                        color: Colors.blue.shade300,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             topRight: Radius.circular(10),
@@ -829,6 +1020,10 @@ class _PlayColumnState extends State<PlayColumn> {
                               return Container(
                                 child: ExpansionPanelList(
                                   animationDuration: Duration(milliseconds: 1),
+                                  expandIconColor:
+                                      transPlayModels[index].yon_amt == '1'
+                                          ? Colors.red
+                                          : Colors.white,
                                   // dividerColor: Colors.red,
                                   elevation: 1,
                                   children: [
@@ -845,6 +1040,7 @@ class _PlayColumnState extends State<PlayColumn> {
                                                 children: <Widget>[],
                                               ),
                                             ),
+
                                             headerBuilder:
                                                 (BuildContext context,
                                                     bool isExpanded) {
@@ -926,11 +1122,23 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                     child: SizedBox(
                                                                                       child: InkWell(
                                                                                           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                          onDoubleTap: () {
+                                                                                            print('onDoubleTap');
+
+                                                                                            de_item(v);
+                                                                                          },
+                                                                                          onLongPress: () {
+                                                                                            print('onLongPress');
+                                                                                            de_item(v);
+                                                                                          },
                                                                                           onTap: () async {
                                                                                             in_Trans_select(v, i);
                                                                                             var ciddoc = transPlayModels[index].cid;
                                                                                             setState(() {
                                                                                               red_listdate(ciddoc);
+                                                                                              if (transPlayModels[index].yon_amt == '0') {
+                                                                                                _customTileExpanded = false;
+                                                                                              }
                                                                                             });
                                                                                             setState(() {
                                                                                               insexselect = v;
@@ -1050,11 +1258,51 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                         child: SizedBox(
                                                                                           child: InkWell(
                                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                              onDoubleTap: () {
+                                                                                                print('onDoubleTap');
+                                                                                                in_Trans_select(v, i);
+                                                                                                var ciddoc = transPlayModels[index].cid;
+
+                                                                                                setState(() {
+                                                                                                  red_listdate(ciddoc);
+                                                                                                  if (transPlayModels[index].yon_amt == '0') {
+                                                                                                    _customTileExpanded = false;
+                                                                                                  }
+                                                                                                });
+                                                                                                setState(() {
+                                                                                                  insexselect = v;
+                                                                                                  areaselect = transPlayModels[index].ln;
+                                                                                                  nameselect = transPlayModels[index].sname;
+                                                                                                });
+                                                                                                de_item(v);
+                                                                                              },
+                                                                                              onLongPress: () {
+                                                                                                print('onLongPress');
+                                                                                                in_Trans_select(v, i);
+                                                                                                var ciddoc = transPlayModels[index].cid;
+
+                                                                                                setState(() {
+                                                                                                  red_listdate(ciddoc);
+                                                                                                  if (transPlayModels[index].yon_amt == '0') {
+                                                                                                    _customTileExpanded = false;
+                                                                                                  }
+                                                                                                });
+                                                                                                setState(() {
+                                                                                                  insexselect = v;
+                                                                                                  areaselect = transPlayModels[index].ln;
+                                                                                                  nameselect = transPlayModels[index].sname;
+                                                                                                });
+                                                                                                de_item(v);
+                                                                                              },
                                                                                               onTap: () async {
                                                                                                 in_Trans_select(v, i);
                                                                                                 var ciddoc = transPlayModels[index].cid;
+
                                                                                                 setState(() {
                                                                                                   red_listdate(ciddoc);
+                                                                                                  if (transPlayModels[index].yon_amt == '0') {
+                                                                                                    _customTileExpanded = false;
+                                                                                                  }
                                                                                                 });
                                                                                                 setState(() {
                                                                                                   insexselect = v;
@@ -1194,8 +1442,14 @@ class _PlayColumnState extends State<PlayColumn> {
                                               )
                                   ],
                                   expansionCallback: (int item, bool expanded) {
-                                    setState(
-                                        () => _customTileExpanded = !expanded);
+                                    setState(() {
+                                      if (transPlayModels[index].yon_amt ==
+                                          '1') {
+                                        _customTileExpanded = !expanded;
+                                      } else {
+                                        _customTileExpanded = false;
+                                      }
+                                    });
                                   },
                                 ),
                               );
@@ -3429,6 +3683,232 @@ class _PlayColumnState extends State<PlayColumn> {
         ));
   }
 
+  Future<String?> de_item(int index) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  'ยกเลิกรับชำระ ${transPlayxModels[index].name_trans} : ${double.parse(transPlayxModels[index].pvat_trans!).toStringAsFixed(0)}', // Navigator.pop(context, 'OK');
+                  style: TextStyle(
+                      color: AdminScafScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close, color: Colors.black)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 150,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        onPressed: () async {
+                          de_Trans_item(index);
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Submit',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<String?> de_item_his(int index) {
+    return showDialog<String>(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+        title: Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  'ยกเลิกรับชำระ ${transPlayListxModels[index].name_trans} : ${double.parse(transPlayListxModels[index].pvat_trans!).toStringAsFixed(0)}', // Navigator.pop(context, 'OK');
+                  style: TextStyle(
+                      color: AdminScafScreen_Color.Colors_Text1_,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: FontWeight_.Fonts_T),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close, color: Colors.black)),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 150,
+                      decoration: const BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextButton(
+                        onPressed: () async {
+                          de_Trans_item_his(index);
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Submit',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontWeight_.Fonts_T),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<Null> de_Trans_item(index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    // var ciddoc = transPlayModels[index].cid;
+    // var qutser = transPlayModels[index].sname;
+
+    // var tser = transPlayxModels[indexx].ser_trans;
+    // var tdocno = transPlayxModels[indexx].docno_trans;
+    var ciddoc = transPlayxModels[index].refno_trans;
+    var qutser = '1';
+
+    var tser = transPlayxModels[index].ser_trans;
+    var tdocno = transPlayxModels[index].docno_trans;
+
+    var poslok = 'ยกเลิกรับชำระ';
+
+    print('tser >>.> $tser');
+
+    String url =
+        '${MyConstant().domain}/De_tran_item_colum.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&tser=$tser&tdocno=$tdocno&user=$user&poslok=$poslok';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() == 'true') {
+        setState(() {
+          //  red_Trans_select22();
+          // text_add.clear();
+          // price_add.clear();
+          read_GC_Playcolumn();
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
+  }
+
+  Future<Null> de_Trans_item_his(index) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var ren = preferences.getString('renTalSer');
+    var user = preferences.getString('ser');
+    // var ciddoc = transPlayModels[index].cid;
+    // var qutser = transPlayModels[index].sname;
+
+    // var tser = transPlayxModels[indexx].ser_trans;
+    // var tdocno = transPlayxModels[indexx].docno_trans;
+    var ciddoc = transPlayListxModels[index].refno_trans;
+    var qutser = '1';
+
+    var tser = transPlayListxModels[index].ser_trans;
+    var tdocno = transPlayListxModels[index].docno_trans;
+
+    var poslok = 'ยกเลิกรับชำระ';
+
+    print('tser >>.> $tser');
+
+    String url =
+        '${MyConstant().domain}/De_tran_item_colum.php?isAdd=true&ren=$ren&ciddoc=$ciddoc&qutser=$qutser&tser=$tser&tdocno=$tdocno&user=$user&poslok=$poslok';
+    try {
+      var response = await http.get(Uri.parse(url));
+
+      var result = json.decode(response.body);
+      // print(result);
+      if (result.toString() == 'true') {
+        setState(() {
+          // read_GC_Playcolumn();
+          red_listdate(ciddoc);
+        });
+        print('rrrrrrrrrrrrrr');
+      }
+    } catch (e) {}
+  }
+
   Future<void> addPlaySelect() {
     return showDialog<void>(
         context: context,
@@ -3844,212 +4324,228 @@ class _PlayColumnState extends State<PlayColumn> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
+                    flex: 6,
                     child: Column(
-                  children: [
-                    Container(
-                      color: Colors.grey.shade200,
-                      height: MediaQuery.of(context).size.width * 0.06,
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              'พื้นที่',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: Text(
-                              'ชื่อ - สกุล',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
-                              ),
-                            ),
-                          ),
-                          for (int i = 0; i < expModels.length; i++)
-                            Expanded(
-                              flex: 1,
-                              child: Text(
-                                '${expModels[i].expname}',
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: ReportScreen_Color.Colors_Text1_,
-                                  fontFamily: FontWeight_.Fonts_T,
+                      children: [
+                        Container(
+                          color: Colors.grey.shade200,
+                          height: MediaQuery.of(context).size.width * 0.15,
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'พื้นที่',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                      Text(
+                                        sumarea_pay == 0
+                                            ? '( ${nFormat.format(sumarea)} )'
+                                            : '( ${nFormat.format(sumarea_pay + sumarea)} )',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${nFormat.format(sumarea_pay)}',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.green,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ),
+                                      Text(
+                                        '${nFormat.format(sumarea)}',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.red,
+                                          fontFamily: Font_.Fonts_T,
+                                        ),
+                                      ), //sumarea_pay
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              '',
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: ReportScreen_Color.Colors_Text1_,
-                                fontFamily: FontWeight_.Fonts_T,
+                              Expanded(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'ชื่อ - สกุล',
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color:
+                                              ReportScreen_Color.Colors_Text1_,
+                                          fontFamily: FontWeight_.Fonts_T,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                        height: MediaQuery.of(context).size.width * 0.4,
-                        child: ListView.builder(
-                            itemCount: transPlayModels.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                child: ExpansionPanelList(
-                                  animationDuration: Duration(milliseconds: 1),
-                                  // dividerColor: Colors.red,
-                                  elevation: 1,
-                                  children: [
-                                    refnoselect == null
-                                        ? ExpansionPanel(
-                                            body: Container(
-                                              padding: EdgeInsets.all(10),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[],
-                                              ),
+                              for (int i = 0; i < expModels.length; i++)
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '${expModels[i].expname}',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: ReportScreen_Color
+                                                .Colors_Text1_,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          ),
+                                        ),
+                                        Text(
+                                          transPlayxPayModels.length == 0
+                                              ? transPlayxModels.length == 0
+                                                  ? '0'
+                                                  : '( ${(transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )'
+                                              : transPlayxModels.length == 0
+                                                  ? '( ${(transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )'
+                                                  : '( ${(transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)) + (transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b))} )',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: ReportScreen_Color
+                                                .Colors_Text1_,
+                                            fontFamily: FontWeight_.Fonts_T,
+                                          ),
+                                        ),
+                                        Text(
+                                          transPlayxPayModels.length == 0
+                                              ? '0'
+                                              : '${transPlayxPayModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)}',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                        Text(
+                                          transPlayxModels.length == 0
+                                              ? '0'
+                                              : '${transPlayxModels.map((e) => double.parse(e.expx_row == expModels[i].ser ? e.pvat_trans == null ? 0.toString() : e.pvat_trans.toString() : 0.toString())).reduce((a, b) => a + b)}',
+                                          textAlign: TextAlign.center,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            color: Colors.red,
+                                            fontFamily: Font_.Fonts_T,
+                                          ),
+                                        ),
+                                        // transPlayModels
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              Expanded(
+                                flex: 1,
+                                child: refnoselect == null
+                                    ? Column(
+                                        children: [
+                                          Text(
+                                            '',
+                                            textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                              color: ReportScreen_Color
+                                                  .Colors_Text1_,
+                                              fontFamily: FontWeight_.Fonts_T,
                                             ),
-                                            headerBuilder:
-                                                (BuildContext context,
-                                                    bool isExpanded) {
-                                              return Container(
-                                                padding: EdgeInsets.all(10),
-                                                child: Row(
-                                                  children: <Widget>[
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: Text(
-                                                        '${transPlayModels[index].ln}',
-                                                        maxLines: 1,
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      flex: 2,
-                                                      child: Text(
-                                                        '${transPlayModels[index].sname}',
-                                                        maxLines: 1,
-                                                        textAlign:
-                                                            TextAlign.start,
-                                                        style: TextStyle(
-                                                          color:
-                                                              ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                          fontFamily:
-                                                              Font_.Fonts_T,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    for (int v = 0;
-                                                        v <
-                                                            transPlayxModels
-                                                                .length;
-                                                        v++)
-                                                      if (transPlayModels[index]
-                                                              .cid ==
-                                                          transPlayxModels[v]
-                                                              .refno_trans)
-                                                        Expanded(
-                                                          child: Row(
-                                                            children: [
-                                                              for (int i = 0;
-                                                                  i <
-                                                                      expModels
-                                                                          .length;
-                                                                  i++)
-                                                                (transPlayxModels[v]
-                                                                            .expx_row ==
-                                                                        expModels[i]
-                                                                            .ser)
-                                                                    ? transPlayxModels[v].pvat_trans ==
-                                                                            null
-                                                                        ? Expanded(
-                                                                            child:
-                                                                                Text(
-                                                                            '0',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                          ))
-                                                                        : Expanded(
-                                                                            child: transPlayxModels[v].invoice_row != null
-                                                                                ? Text(
-                                                                                    '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                    textAlign: TextAlign.center,
-                                                                                    style: TextStyle(color: Colors.orange.shade900),
-                                                                                  )
-                                                                                : Card(
-                                                                                    color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.green.shade700 : Colors.white,
-                                                                                    child: SizedBox(
-                                                                                      child: InkWell(
-                                                                                          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                          onTap: () async {
-                                                                                            in_Trans_select(v, i);
-                                                                                            var ciddoc = transPlayModels[index].cid;
-                                                                                            setState(() {
-                                                                                              red_listdate(ciddoc);
-                                                                                            });
-                                                                                            setState(() {
-                                                                                              insexselect = v;
-                                                                                              areaselect = transPlayModels[index].ln;
-                                                                                              nameselect = transPlayModels[index].sname;
-                                                                                            });
-                                                                                          },
-                                                                                          child: Padding(
-                                                                                            padding: const EdgeInsets.all(8.0),
-                                                                                            child: Center(
-                                                                                              child: Text(
-                                                                                                '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                                style: TextStyle(
-                                                                                                  color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.white : Colors.black,
-                                                                                                ),
-                                                                                              ),
-                                                                                            ),
-                                                                                          )),
-                                                                                    ),
-                                                                                  ),
-                                                                          )
-                                                                    : SizedBox(),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                  ],
-                                                ),
-                                              );
-                                            },
-                                            // isExpanded: _customTileExpanded,
-                                          )
-                                        : refnoselect ==
-                                                transPlayModels[index].cid
+                                          ),
+                                        ],
+                                      )
+                                    : GestureDetector(
+                                        onTap: () {
+                                          addPlaySelect();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue.shade300,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                                bottomLeft: Radius.circular(10),
+                                                bottomRight:
+                                                    Radius.circular(10)),
+                                            // border: Border.all(color: Colors.white, width: 1),
+                                          ),
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: const Center(
+                                            child: AutoSizeText(
+                                              minFontSize: 8,
+                                              maxFontSize: 15,
+                                              'เพิ่มรายการ',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: PeopleChaoScreen_Color
+                                                      .Colors_Text2_,
+                                                  //fontWeight: FontWeight.bold,
+                                                  fontFamily:
+                                                      FontWeight_.Fonts_T),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                            height: MediaQuery.of(context).size.width * 0.5,
+                            child: ListView.builder(
+                                itemCount: transPlayModels.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Container(
+                                    child: ExpansionPanelList(
+                                      animationDuration:
+                                          Duration(milliseconds: 1),
+                                      expandIconColor:
+                                          transPlayModels[index].yon_amt == '1'
+                                              ? Colors.red
+                                              : Colors.white,
+                                      // dividerColor: Colors.red,
+                                      elevation: 1,
+                                      children: [
+                                        refnoselect == null
                                             ? ExpansionPanel(
                                                 body: Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    child: playList()),
+                                                  padding: EdgeInsets.all(10),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: <Widget>[],
+                                                  ),
+                                                ),
+
                                                 headerBuilder:
                                                     (BuildContext context,
                                                         bool isExpanded) {
@@ -4129,11 +4625,23 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                         child: SizedBox(
                                                                                           child: InkWell(
                                                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                              onDoubleTap: () {
+                                                                                                print('onDoubleTap');
+
+                                                                                                de_item(v);
+                                                                                              },
+                                                                                              onLongPress: () {
+                                                                                                print('onLongPress');
+                                                                                                de_item(v);
+                                                                                              },
                                                                                               onTap: () async {
                                                                                                 in_Trans_select(v, i);
                                                                                                 var ciddoc = transPlayModels[index].cid;
                                                                                                 setState(() {
                                                                                                   red_listdate(ciddoc);
+                                                                                                  if (transPlayModels[index].yon_amt == '0') {
+                                                                                                    _customTileExpanded = false;
+                                                                                                  }
                                                                                                 });
                                                                                                 setState(() {
                                                                                                   insexselect = v;
@@ -4156,112 +4664,9 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                                       ),
                                                                               )
                                                                         : SizedBox(),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                isExpanded: _customTileExpanded,
-                                              )
-                                            : ExpansionPanel(
-                                                backgroundColor:
-                                                    AppbackgroundColor
-                                                        .Abg_Colors,
-                                                body: Container(
-                                                  padding: EdgeInsets.all(10),
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: <Widget>[],
-                                                  ),
-                                                ),
-                                                headerBuilder:
-                                                    (BuildContext context,
-                                                        bool isExpanded) {
-                                                  return Container(
-                                                    padding: EdgeInsets.all(10),
-                                                    child: Row(
-                                                      children: <Widget>[
-                                                        Expanded(
-                                                          flex: 1,
-                                                          child: Text(
-                                                            '${transPlayModels[index].ln}',
-                                                            maxLines: 1,
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        Expanded(
-                                                          flex: 2,
-                                                          child: Text(
-                                                            '${transPlayModels[index].sname}',
-                                                            maxLines: 1,
-                                                            textAlign:
-                                                                TextAlign.start,
-                                                            style: TextStyle(
-                                                              color: ReportScreen_Color
-                                                                  .Colors_Text1_,
-                                                              fontFamily:
-                                                                  Font_.Fonts_T,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        for (int v = 0;
-                                                            v <
-                                                                transPlayxModels
-                                                                    .length;
-                                                            v++)
-                                                          if (transPlayModels[
-                                                                      index]
-                                                                  .cid ==
-                                                              transPlayxModels[
-                                                                      v]
-                                                                  .refno_trans)
-                                                            Expanded(
-                                                              child: Row(
-                                                                children: [
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          expModels
-                                                                              .length;
-                                                                      i++)
-                                                                    (transPlayxModels[v].expx_row ==
-                                                                            expModels[i]
-                                                                                .ser)
-                                                                        ? transPlayxModels[v].pvat_trans ==
-                                                                                null
-                                                                            ? Expanded(
-                                                                                child: Text(
-                                                                                '0',
-                                                                                textAlign: TextAlign.center,
-                                                                              ))
-                                                                            : Expanded(
-                                                                                child: transPlayxModels[v].invoice_row != null
-                                                                                    ? Text(
-                                                                                        '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                        textAlign: TextAlign.center,
-                                                                                        style: TextStyle(color: Colors.orange.shade900),
-                                                                                      )
-                                                                                    : Text(
-                                                                                        '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
-                                                                                        textAlign: TextAlign.center,
-                                                                                        style: TextStyle(color: Colors.black),
-                                                                                      ),
-                                                                              )
-                                                                        : SizedBox(),
+                                                                  // Expanded(
+                                                                  //     child: Text(
+                                                                  //         '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}')),
                                                                 ],
                                                               ),
                                                             ),
@@ -4271,16 +4676,292 @@ class _PlayColumnState extends State<PlayColumn> {
                                                 },
                                                 // isExpanded: _customTileExpanded,
                                               )
-                                  ],
-                                  expansionCallback: (int item, bool expanded) {
-                                    setState(
-                                        () => _customTileExpanded = !expanded);
-                                  },
-                                ),
-                              );
-                            })),
-                  ],
-                )),
+                                            : refnoselect ==
+                                                    transPlayModels[index].cid
+                                                ? ExpansionPanel(
+                                                    body: Container(
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        child: playList()),
+                                                    headerBuilder:
+                                                        (BuildContext context,
+                                                            bool isExpanded) {
+                                                      return Container(
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                '${transPlayModels[index].ln}',
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Text(
+                                                                '${transPlayModels[index].sname}',
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            for (int v = 0;
+                                                                v <
+                                                                    transPlayxModels
+                                                                        .length;
+                                                                v++)
+                                                              if (transPlayModels[
+                                                                          index]
+                                                                      .cid ==
+                                                                  transPlayxModels[
+                                                                          v]
+                                                                      .refno_trans)
+                                                                Expanded(
+                                                                  child: Row(
+                                                                    children: [
+                                                                      for (int i =
+                                                                              0;
+                                                                          i < expModels.length;
+                                                                          i++)
+                                                                        (transPlayxModels[v].expx_row == expModels[i].ser)
+                                                                            ? transPlayxModels[v].pvat_trans == null
+                                                                                ? Expanded(
+                                                                                    child: Text(
+                                                                                    '0',
+                                                                                    textAlign: TextAlign.center,
+                                                                                  ))
+                                                                                : Expanded(
+                                                                                    child: transPlayxModels[v].invoice_row != null
+                                                                                        ? Text(
+                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(color: Colors.orange.shade900),
+                                                                                          )
+                                                                                        : Card(
+                                                                                            color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.green.shade700 : Colors.white,
+                                                                                            child: SizedBox(
+                                                                                              child: InkWell(
+                                                                                                  borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                                  onDoubleTap: () {
+                                                                                                    print('onDoubleTap');
+                                                                                                    in_Trans_select(v, i);
+                                                                                                    var ciddoc = transPlayModels[index].cid;
+
+                                                                                                    setState(() {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                      if (transPlayModels[index].yon_amt == '0') {
+                                                                                                        _customTileExpanded = false;
+                                                                                                      }
+                                                                                                    });
+                                                                                                    setState(() {
+                                                                                                      insexselect = v;
+                                                                                                      areaselect = transPlayModels[index].ln;
+                                                                                                      nameselect = transPlayModels[index].sname;
+                                                                                                    });
+                                                                                                    de_item(v);
+                                                                                                  },
+                                                                                                  onLongPress: () {
+                                                                                                    print('onLongPress');
+                                                                                                    in_Trans_select(v, i);
+                                                                                                    var ciddoc = transPlayModels[index].cid;
+
+                                                                                                    setState(() {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                      if (transPlayModels[index].yon_amt == '0') {
+                                                                                                        _customTileExpanded = false;
+                                                                                                      }
+                                                                                                    });
+                                                                                                    setState(() {
+                                                                                                      insexselect = v;
+                                                                                                      areaselect = transPlayModels[index].ln;
+                                                                                                      nameselect = transPlayModels[index].sname;
+                                                                                                    });
+                                                                                                    de_item(v);
+                                                                                                  },
+                                                                                                  onTap: () async {
+                                                                                                    in_Trans_select(v, i);
+                                                                                                    var ciddoc = transPlayModels[index].cid;
+                                                                                                    setState(() {
+                                                                                                      red_listdate(ciddoc);
+                                                                                                      if (transPlayModels[index].yon_amt == '0') {
+                                                                                                        _customTileExpanded = false;
+                                                                                                      }
+                                                                                                    });
+                                                                                                    setState(() {
+                                                                                                      insexselect = v;
+                                                                                                      areaselect = transPlayModels[index].ln;
+                                                                                                      nameselect = transPlayModels[index].sname;
+                                                                                                    });
+                                                                                                  },
+                                                                                                  child: Padding(
+                                                                                                    padding: const EdgeInsets.all(8.0),
+                                                                                                    child: Center(
+                                                                                                      child: Text(
+                                                                                                        '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                                        style: TextStyle(
+                                                                                                          color: listcolor[i] == transPlayxModels[v].docno_trans ? Colors.white : Colors.black,
+                                                                                                        ),
+                                                                                                      ),
+                                                                                                    ),
+                                                                                                  )),
+                                                                                            ),
+                                                                                          ),
+                                                                                  )
+                                                                            : SizedBox(),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    isExpanded:
+                                                        _customTileExpanded,
+                                                  )
+                                                : ExpansionPanel(
+                                                    backgroundColor:
+                                                        AppbackgroundColor
+                                                            .Abg_Colors,
+                                                    body: Container(
+                                                      padding:
+                                                          EdgeInsets.all(10),
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: <Widget>[],
+                                                      ),
+                                                    ),
+                                                    headerBuilder:
+                                                        (BuildContext context,
+                                                            bool isExpanded) {
+                                                      return Container(
+                                                        padding:
+                                                            EdgeInsets.all(10),
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Expanded(
+                                                              flex: 1,
+                                                              child: Text(
+                                                                '${transPlayModels[index].ln}',
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: Text(
+                                                                '${transPlayModels[index].sname}',
+                                                                maxLines: 1,
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .start,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: ReportScreen_Color
+                                                                      .Colors_Text1_,
+                                                                  fontFamily: Font_
+                                                                      .Fonts_T,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            for (int v = 0;
+                                                                v <
+                                                                    transPlayxModels
+                                                                        .length;
+                                                                v++)
+                                                              if (transPlayModels[
+                                                                          index]
+                                                                      .cid ==
+                                                                  transPlayxModels[
+                                                                          v]
+                                                                      .refno_trans)
+                                                                Expanded(
+                                                                  child: Row(
+                                                                    children: [
+                                                                      for (int i =
+                                                                              0;
+                                                                          i < expModels.length;
+                                                                          i++)
+                                                                        (transPlayxModels[v].expx_row == expModels[i].ser)
+                                                                            ? transPlayxModels[v].pvat_trans == null
+                                                                                ? Expanded(
+                                                                                    child: Text(
+                                                                                    '0',
+                                                                                    textAlign: TextAlign.center,
+                                                                                  ))
+                                                                                : Expanded(
+                                                                                    child: transPlayxModels[v].invoice_row != null
+                                                                                        ? Text(
+                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(color: Colors.orange.shade900),
+                                                                                          )
+                                                                                        : Text(
+                                                                                            '${nFormat.format(double.parse(transPlayxModels[v].pvat_trans!))}',
+                                                                                            textAlign: TextAlign.center,
+                                                                                            style: TextStyle(color: Colors.black),
+                                                                                          ),
+                                                                                  )
+                                                                            : SizedBox(),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                          ],
+                                                        ),
+                                                      );
+                                                    },
+                                                    // isExpanded: _customTileExpanded,
+                                                  )
+                                      ],
+                                      expansionCallback:
+                                          (int item, bool expanded) {
+                                        setState(() {
+                                          if (transPlayModels[index].yon_amt ==
+                                              '1') {
+                                            _customTileExpanded = !expanded;
+                                          } else {
+                                            _customTileExpanded = false;
+                                          }
+                                        });
+                                      },
+                                    ),
+                                  );
+                                })),
+                      ],
+                    )),
               ],
             ),
             Row(
@@ -4427,6 +5108,21 @@ class _PlayColumnState extends State<PlayColumn> {
                                                     //fontSize: 10.0
                                                     ),
                                               )),
+                                          Expanded(
+                                              flex: 1,
+                                              child: Text(
+                                                '',
+                                                textAlign: TextAlign.end,
+                                                style: TextStyle(
+                                                    color:
+                                                        PeopleChaoScreen_Color
+                                                            .Colors_Text1_,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        FontWeight_.Fonts_T
+                                                    //fontSize: 10.0
+                                                    ),
+                                              ))
                                         ]),
                                         Container(
                                           height: MediaQuery.of(context)
@@ -4507,7 +5203,38 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                 Font_.Fonts_T
                                                             //fontSize: 10.0
                                                             ),
-                                                      ))
+                                                      )),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: _TransModels[index].docno.toString().substring(
+                                                                _TransModels[
+                                                                            index]
+                                                                        .docno
+                                                                        .toString()
+                                                                        .indexOf(
+                                                                            '-') +
+                                                                    1,
+                                                                _TransModels[
+                                                                        index]
+                                                                    .docno
+                                                                    .toString()
+                                                                    .indexOf(
+                                                                        '/')) ==
+                                                            'O'
+                                                        ? IconButton(
+                                                            onPressed: () {
+                                                              deall_Trans_select(
+                                                                  index);
+                                                            },
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .remove_circle_outline,
+                                                              color: Colors.red,
+                                                            ))
+                                                        : Text(
+                                                            '',
+                                                          ),
+                                                  )
                                                 ]);
                                               }),
                                         ),
@@ -6615,6 +7342,29 @@ class _PlayColumnState extends State<PlayColumn> {
                                                                   Radius
                                                                       .circular(
                                                                           10)),
+                                                      onDoubleTap: () {
+                                                        print('onDoubleTap');
+                                                        if (listcolorplay[v] ==
+                                                            transPlayListxModels[
+                                                                    v]
+                                                                .docno_trans) {
+                                                          in_TransList_select(
+                                                              v, i);
+                                                        }
+
+                                                        de_item_his(v);
+                                                      },
+                                                      onLongPress: () {
+                                                        print('onLongPress');
+                                                        if (listcolorplay[v] ==
+                                                            transPlayListxModels[
+                                                                    v]
+                                                                .docno_trans) {
+                                                          in_TransList_select(
+                                                              v, i);
+                                                        }
+                                                        de_item_his(v);
+                                                      },
                                                       onTap: () async {
                                                         in_TransList_select(
                                                             v, i);
@@ -7302,41 +8052,41 @@ class _PlayColumnState extends State<PlayColumn> {
             (Slip_status.toString() == '1')
                 ? 'รับชำระ:$numinvoice '
                 : 'รับชำระ:$cFinn ');
-        PdfgenReceipt.exportPDF_Receipt(
-            tableData00,
-            context,
-            Slip_status,
-            _TransModels,
-            '${refnoselect}',
-            '${nameselect}',
-            '${sum_pvat}',
-            '${sum_vat}',
-            '${sum_wht}',
-            '${sum_amt}',
-            (discount_ == null) ? '0' : '${discount_} ',
-            '${nFormat.format(sum_disamt)}',
-            '${sum_amt - sum_disamt}',
-            // '${nFormat.format(sum_amt - sum_disamt)}',
-            '${renTal_name.toString()}',
-            '${Form_bussshop}',
-            '${Form_address}',
-            '${Form_tel}',
-            '${Form_email}',
-            '${Form_tax}',
-            '${Form_nameshop}',
-            '${renTalModels[0].bill_addr}',
-            '${renTalModels[0].bill_email}',
-            '${renTalModels[0].bill_tel}',
-            '${renTalModels[0].bill_tax}',
-            '${renTalModels[0].bill_name}',
-            newValuePDFimg,
-            pamentpage,
-            paymentName1,
-            paymentName2,
-            Form_payment1.text,
-            Form_payment2.text,
-            cFinn,
-            Value_newDateD);
+        // PdfgenReceipt.exportPDF_Receipt(
+        //     tableData00,
+        //     context,
+        //     Slip_status,
+        //     _TransModels,
+        //     '${refnoselect}',
+        //     '${nameselect}',
+        //     '${sum_pvat}',
+        //     '${sum_vat}',
+        //     '${sum_wht}',
+        //     '${sum_amt}',
+        //     (discount_ == null) ? '0' : '${discount_} ',
+        //     '${nFormat.format(sum_disamt)}',
+        //     '${sum_amt - sum_disamt}',
+        //     // '${nFormat.format(sum_amt - sum_disamt)}',
+        //     '${renTal_name.toString()}',
+        //     '${Form_bussshop}',
+        //     '${Form_address}',
+        //     '${Form_tel}',
+        //     '${Form_email}',
+        //     '${Form_tax}',
+        //     '${Form_nameshop}',
+        //     '${renTalModels[0].bill_addr}',
+        //     '${renTalModels[0].bill_email}',
+        //     '${renTalModels[0].bill_tel}',
+        //     '${renTalModels[0].bill_tax}',
+        //     '${renTalModels[0].bill_name}',
+        //     newValuePDFimg,
+        //     pamentpage,
+        //     paymentName1,
+        //     paymentName2,
+        //     Form_payment1.text,
+        //     Form_payment2.text,
+        //     cFinn,
+        //     Value_newDateD);
         setState(() async {
           Form_payment1.text = '0.00';
           Form_payment2.clear();

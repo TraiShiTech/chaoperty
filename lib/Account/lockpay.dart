@@ -10902,6 +10902,7 @@ class _LockpayScreenState extends State<LockpayScreen> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var ren = preferences.getString('renTalSer');
     var user = preferences.getString('ser');
+    var zoneser = preferences.getString('zoneSer');
     var ciddoc = No_Area_ == 'ไม่ระบุพื้นที่'
         ? 'L$day$timex-${Status5Form_NoArea_.text}'
         : 'L$day$timex-${_selecteSerbool.map((e) => e).toString().substring(1, _selecteSerbool.map((e) => e).toString().length - 1).trim()}';
@@ -10952,20 +10953,24 @@ class _LockpayScreenState extends State<LockpayScreen> {
       'tel': Status4Form_tel.text.toString(),
       'tax': Status4Form_tax.text.toString(),
       'email': Status4Form_email.text.toString(),
-      'Serbool': _selecteSerbool
-          .map((e) => e)
-          .toString()
-          .substring(1, _selecteSerbool.map((e) => e).toString().length - 1)
-          .trim()
-          .toString(),
+      'Serbool': _selecteSerbool.length == 0
+          ? ''
+          : _selecteSerbool
+              .map((e) => e)
+              .toString()
+              .substring(1, _selecteSerbool.map((e) => e).toString().length - 1)
+              .trim()
+              .toString(),
       'area_rent_sum': _area_rent_sum.toString(),
       'comment': comment.toString(),
-      'zser': _selecteZnSer
-          .map((e) => e)
-          .toString()
-          .substring(1, _selecteZnSer.map((e) => e).toString().length - 1)
-          .trim()
-          .toString(),
+      'zser': _selecteZnSer.length == 0
+          ? zoneser
+          : _selecteZnSer
+              .map((e) => e)
+              .toString()
+              .substring(1, _selecteZnSer.map((e) => e).toString().length - 1)
+              .trim()
+              .toString(),
     }).then((value) async {
       print('$value');
       var result = json.decode(value.body);

@@ -17,7 +17,7 @@ import 'Report_Screen.dart';
 
 class Excgen_CustReport {
   static void exportExcel_CustReport(
-      context, renTal_name, customerModels) async {
+      context, renTal_name, customerModels, Status_Type_cus) async {
     final x.Workbook workbook = x.Workbook();
 
     final x.Worksheet sheet = workbook.worksheets[0];
@@ -143,7 +143,7 @@ class Excgen_CustReport {
     // sheet.getRangeByName('N1').cellStyle = globalStyle22;
     // sheet.getRangeByName('O1').cellStyle = globalStyle22;
     final x.Range range = sheet.getRangeByName('E1');
-    range.setText('รายงานทะเบียนลูกค้า');
+    range.setText('รายงานทะเบียนลูกค้า (ประเภท$Status_Type_cus)');
 // ExcelSheetProtectionOption
     final x.ExcelSheetProtectionOption options = x.ExcelSheetProtectionOption();
     options.all = true;
@@ -342,9 +342,7 @@ class Excgen_CustReport {
     Uint8List data = Uint8List.fromList(bytes);
     MimeType type = MimeType.MICROSOFTEXCEL;
     String path = await FileSaver.instance.saveFile(
-        "รายงานทะเบียนลูกค้า(ณ วันที่${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day})",
-        data,
-        "xlsx",
+        "รายงานทะเบียนลูกค้า(ประเภท$Status_Type_cus)", data, "xlsx",
         mimeType: type);
     log(path);
     // if (_verticalGroupValue_NameFile.toString() == 'จากระบบ') {

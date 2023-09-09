@@ -15,6 +15,7 @@ import 'package:slide_switcher/slide_switcher.dart';
 import '../Constant/Myconstant.dart';
 
 import '../Model/GetArea_Model.dart';
+import '../Model/GetArea_quot.dart';
 import '../Model/GetRenTal_Model.dart';
 import '../Model/GetZone_Model.dart';
 
@@ -50,6 +51,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
   List<ZoneModel> zoneModels = [];
   List<AreaModel> areaModels = [];
+  List<AreaQuotModel> areaQuotModels = [];
   List<AreaModel> areaFloorplanModels = [];
   List<AreaModel> _areaModels = <AreaModel>[];
   List<RenTalModel> renTalModels = [];
@@ -229,7 +231,10 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
   Future<Null> read_GC_area() async {
     if (areaModels.length != 0) {
-      areaModels.clear();
+      setState(() {
+        areaQuotModels.clear();
+        areaModels.clear();
+      });
     }
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -255,51 +260,32 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
 
           setState(() {
             areaModels.add(areaModel);
-
-            // areaFloorplanModels.add(AreaModel(
-            //   ser: areaModel.ser!,
-            //   rser: areaModel.rser!,
-            //   zser: areaModel.zser!,
-            //   lncode: areaModel.lncode!,
-            //   ln: areaModel.ln!,
-            //   area: areaModel.area!,
-            //   rent: areaModel.rent!,
-            //   st: areaModel.st!,
-            //   img: areaModel.img!,
-            //   data_update: areaModel.data_update!,
-            //   quantity: areaModel.quantity!,
-            //   ldate: areaModel.ldate!,
-            //   cid: areaModel.cid!,
-            //   total: areaModel.total!,
-            //   ln_c: areaModel.ln_c!,
-            //   area_c: areaModel.area_c!,
-            //   docno: areaModel.docno!,
-            //   ln_q: areaModel.ln_q!,
-            //   ldate_q: areaModel.ldate_q!,
-            //   area_q: areaModel.area_q!,
-            //   total_q: areaModel.total_q!,
-            //   sname: areaModel.sname!,
-            //   sname_q: areaModel.sname_q!,
-            //   cname: areaModel.cname!,
-            //   cname_q: areaModel.cname_q!,
-            //   custno: areaModel.custno!,
-            //   zn: areaModel.zn!,
-
-            //   datex: areaModel.datex!,
-            //   timex: areaModel.timex!,
-            //   cser: areaModel.cser!,
-            //   aser: areaModel.aser!,
-            //   aserQout: areaModel.aserQout!,
-            //   type: areaModel.type!,
-            //   sdate: areaModel.sdate!,
-            //   dataUpdate: areaModel.dataUpdate!,
-            //   // id  : '',
-            //   // path  : '',
-            //   // color  : '',
-            //   // name  : '',
-            // ));
           });
+
+          if (areaModel.quantity == '2') {
+            var qin = areaModel.ln_q;
+            var qinser = areaModel.ser;
+            String url =
+                '${MyConstant().domain}/GC_area_quot.php?isAdd=true&ren=$ren&qin=$qin&qinser=$qinser';
+
+            try {
+              var response = await http.get(Uri.parse(url));
+
+              var result = json.decode(response.body);
+              print(result);
+              if (result != null) {
+                for (var map in result) {
+                  AreaQuotModel areaQuotModel = AreaQuotModel.fromJson(map);
+                  setState(() {
+                    areaQuotModels.add(areaQuotModel);
+                  });
+                }
+              }
+            } catch (e) {}
+          }
         }
+        print(
+            'areaQuotModels.length>>>>>>>> ${areaQuotModels.length} ${areaQuotModels.map((e) => '152' == e.ser ? e.docno : '0').toString()}');
         setState(() {
           loadSvg();
         });
@@ -1765,7 +1751,13 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                   )),
             ),
           (Ser_Body == 0)
-              ? SizedBox(child: BodyHome_Web(context))
+              ? SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Column(
+                    children: [
+                      BodyHome_Web(context),
+                    ],
+                  ))
               : (Ser_Body == 1)
                   ? Body_bid(context)
                   : (Ser_Body == 2)
@@ -2906,7 +2898,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                         child: Text(
                                           zone_ser == null
                                               ? 'โซน ทั้งหมด'
-                                              : 'โซน $zone_ser ($zone_name)',
+                                              : 'โซน ($zone_name)',
                                           style: const TextStyle(
                                               color: PeopleChaoScreen_Color
                                                   .Colors_Text2_,
@@ -3193,7 +3185,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                                     true,
                                                                 boundaryMargin:
                                                                     const EdgeInsets
-                                                                            .all(
+                                                                        .all(
                                                                         double
                                                                             .infinity),
                                                                 child: Stack(
@@ -3749,7 +3741,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                         color:
                                                             Colors.orange[600],
                                                         borderRadius: const BorderRadius
-                                                                .only(
+                                                            .only(
                                                             topLeft: Radius
                                                                 .circular(10),
                                                             topRight:
@@ -3828,8 +3820,7 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                                                           constrained: true,
                                                           boundaryMargin:
                                                               const EdgeInsets
-                                                                      .all(
-                                                                  double
+                                                                  .all(double
                                                                       .infinity),
                                                           child: Stack(
                                                             children: [
@@ -4385,562 +4376,990 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                       ],
                     ),
                   )
-                : Column(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                          height: MediaQuery.of(context).size.height / 1.2,
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Stack(
+                      children: [
+                        Container(
                           width: MediaQuery.of(context).size.width,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                            // border: Border.all(color: Colors.grey, width: 1),
-                          ),
-                          padding: const EdgeInsets.all(20),
-                          // color: Colors.white,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                // for (int index = 0;
-                                //     index < areaFloorplanModels.length;
-                                //     index++)
-                                //   Text(
-                                //       ' ${areaFloorplanModels[index].id}  /// ${areaFloorplanModels[index].name}'),
-                                // for (int index = 0;
-                                //     index < areaModels.length;
-                                //     index++)
-                                //   Text(
-                                //       '**${areaModels[index].ser}//${areaModels[index].ln}')
-
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    color: Colors.grey[200],
-                                    height: 500,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      children: [
-                                        Expanded(
-                                            child: Row(
+                          height: 510,
+                          color: Colors.white,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: ScrollConfiguration(
+                              behavior: ScrollConfiguration.of(context)
+                                  .copyWith(dragDevices: {
+                                PointerDeviceKind.touch,
+                                PointerDeviceKind.mouse,
+                              }),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Stack(
                                           children: [
-                                            // Expanded(
-                                            //   flex: 2,
-                                            //   child: Padding(
-                                            //     padding: const EdgeInsets.all(8.0),
-                                            //     child: Container(
-                                            //       decoration: const BoxDecoration(
-                                            //         color: Colors.white,
-                                            //         borderRadius: BorderRadius.only(
-                                            //           topLeft: Radius.circular(10),
-                                            //           topRight: Radius.circular(10),
-                                            //           bottomLeft: Radius.circular(10),
-                                            //           bottomRight: Radius.circular(10),
-                                            //         ),
-                                            //       ),
-                                            //       child: InkWell(
-                                            //         child: Container(
-                                            //           height: 500, width: 800,
-                                            //           child:
-                                            //               //  (Img_rental_ == null)
-                                            //               //     ? Center(
-                                            //               //         child: Icon(Icons
-                                            //               //             .image_not_supported))
-                                            //               //     :
-                                            //               (sre_zone == 0)
-                                            //                   ? Image.network(
-                                            //                       // '${MyConstant().domain}/files/kad_taii/logo/${Img_logo_}',
-                                            //                       'https://dzentric.com/chao_perty/chao_api/files/${DBN_}/contract/${Img_rental_}',
-                                            //                       fit: BoxFit.fill,
-                                            //                     )
-                                            //                   : Image.network(
-                                            //                       //'${MyConstant().domainIMG}/files/${DBN_}/contract/${Img_rental_}',
-                                            //                       '${Img_Zone}',
-                                            //                       fit: BoxFit.fill,
-                                            //                     ),
-                                            //           //Img_rental_
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            // SizedBox(
-                                            //   width: 10,
-                                            // ),
-                                            Expanded(
-                                                flex: 2,
+                                            InteractiveViewer(
+                                              alignment: Alignment.center,
+                                              scaleEnabled: false,
+                                              trackpadScrollCausesScale: false,
+                                              transformationController:
+                                                  _controller,
+                                              minScale: 0.8,
+                                              maxScale: 2.0,
+                                              constrained: true,
+                                              boundaryMargin:
+                                                  const EdgeInsets.all(
+                                                      double.infinity),
+                                              child: Container(
+                                                height: 520,
+                                                width: 850,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  image: DecorationImage(
+                                                    image: NetworkImage(
+                                                        "$Img_Zone"),
+                                                    // fit: BoxFit.cover,
+                                                  ),
+                                                ),
                                                 child: Align(
-                                                  // alignment: Alignment.center,
-                                                  child: Container(
-                                                    color: Colors.white,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Stack(
-                                                          children: [
-                                                            InteractiveViewer(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .center,
-                                                              scaleEnabled:
-                                                                  false,
-                                                              trackpadScrollCausesScale:
-                                                                  false,
-                                                              transformationController:
-                                                                  _controller,
-                                                              minScale: 0.8,
-                                                              maxScale: 2.0,
-                                                              constrained: true,
-                                                              boundaryMargin:
-                                                                  const EdgeInsets
-                                                                          .all(
-                                                                      double
-                                                                          .infinity),
-                                                              child: Container(
-                                                                height: 500,
-                                                                width: 850,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    image: NetworkImage(
-                                                                        "$Img_Zone"),
-                                                                    // fit: BoxFit.cover,
-                                                                  ),
+                                                  alignment: Alignment.center,
+                                                  child: KeyedSubtree(
+                                                      key: _countriesKey,
+                                                      child: Container(
+                                                        child: Stack(children: [
+                                                          for (var areaModels
+                                                              in areaFloorplanModels)
+                                                            Center(
+                                                              child: ClipPath(
+                                                                clipper:
+                                                                    Clipper(
+                                                                  svgPath:
+                                                                      areaModels
+                                                                          .path!,
+                                                                  height: 15.0,
+                                                                  width: 23.2,
                                                                 ),
-                                                                child: Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  child: KeyedSubtree(
-                                                                      key: _countriesKey,
-                                                                      child: Stack(children: [
-                                                                        for (var areaModels
-                                                                            in areaFloorplanModels)
-                                                                          Center(
-                                                                            child:
-                                                                                ClipPath(
-                                                                              clipper: Clipper(
-                                                                                svgPath: areaModels.path!,
-                                                                                height: 15.0,
-                                                                                width: 23.2,
-                                                                              ),
-                                                                              child: InkWell(
-                                                                                onTap: () async {
-                                                                                  onCountrySelected.call(areaModels);
-                                                                                  print('${areaModels.id}  ');
-                                                                                  setState(() {
-                                                                                    Ln_name = '${areaModels.lncode} (${areaModels.ln})';
-                                                                                    // Ln_name = '${country.}//${areaModels.length}';
-                                                                                  });
-                                                                                  showDialog<String>(
-                                                                                    context: context,
-                                                                                    builder: (BuildContext context) => AlertDialog(
-                                                                                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                                                                                      title: Center(
-                                                                                          child: Column(
-                                                                                        children: [
-                                                                                          Text(
-                                                                                            '$Ln_name',
-                                                                                            style: const TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                          ),
-                                                                                          const SizedBox(
-                                                                                            height: 5.0,
-                                                                                          ),
-                                                                                          Divider(
-                                                                                            color: Colors.grey[100],
-                                                                                            height: 4.0,
-                                                                                          ),
-                                                                                          const SizedBox(
-                                                                                            height: 5.0,
-                                                                                          ),
-                                                                                        ],
-                                                                                      )),
-                                                                                      content: SingleChildScrollView(
-                                                                                        child: Column(
-                                                                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                                                                          children: <Widget>[
-                                                                                            if (areaModels.quantity != '1')
-                                                                                              ListTile(
-                                                                                                  onTap: () async {
-                                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                    preferences.setString('zoneSer', areaModels.zser.toString());
-                                                                                                    preferences.setString('zonesName', areaModels.zn.toString());
-                                                                                                    setState(() {
-                                                                                                      Ser_Body = 1;
-                                                                                                      a_ln = areaModels.lncode;
-                                                                                                      a_ser = areaModels.ser;
-                                                                                                      a_area = areaModels.area;
-                                                                                                      a_rent = areaModels.rent;
-                                                                                                      a_page = '1';
-                                                                                                    });
+                                                                child: InkWell(
+                                                                  onTap:
+                                                                      () async {
+                                                                    onCountrySelected
+                                                                        .call(
+                                                                            areaModels);
+                                                                    print(
+                                                                        '${areaModels.id}  ');
+                                                                    setState(
+                                                                        () {
+                                                                      Ln_name =
+                                                                          '${areaModels.lncode} (${areaModels.ln})';
+                                                                      // Ln_name = '${country.}//${areaModels.length}';
+                                                                    });
+                                                                    showDialog<
+                                                                        String>(
+                                                                      context:
+                                                                          context,
+                                                                      builder: (BuildContext
+                                                                              context) =>
+                                                                          AlertDialog(
+                                                                        shape: const RoundedRectangleBorder(
+                                                                            borderRadius:
+                                                                                BorderRadius.all(Radius.circular(20.0))),
+                                                                        title: Center(
+                                                                            child: Column(
+                                                                          children: [
+                                                                            Text(
+                                                                              '$Ln_name',
+                                                                              style: const TextStyle(color: AdminScafScreen_Color.Colors_Text1_, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              height: 5.0,
+                                                                            ),
+                                                                            Divider(
+                                                                              color: Colors.grey[100],
+                                                                              height: 4.0,
+                                                                            ),
+                                                                            const SizedBox(
+                                                                              height: 5.0,
+                                                                            ),
+                                                                          ],
+                                                                        )),
+                                                                        content:
+                                                                            SingleChildScrollView(
+                                                                          child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.center,
+                                                                            children: <Widget>[
+                                                                              if (areaModels.quantity != '1')
+                                                                                ListTile(
+                                                                                    onTap: () async {
+                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                      preferences.setString('zoneSer', areaModels.zser.toString());
+                                                                                      preferences.setString('zonesName', areaModels.zn.toString());
+                                                                                      setState(() {
+                                                                                        Ser_Body = 1;
+                                                                                        a_ln = areaModels.lncode;
+                                                                                        a_ser = areaModels.ser;
+                                                                                        a_area = areaModels.area;
+                                                                                        a_rent = areaModels.rent;
+                                                                                        a_page = '1';
+                                                                                      });
 
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  title: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.grey[100],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(10),
-                                                                                                      // width: MediaQuery.of(context).size.width,
-                                                                                                      child: Row(
-                                                                                                        children: [
-                                                                                                          Expanded(
-                                                                                                              child: Text(
-                                                                                                            'เสนอราคา: ${areaModels.lncode} (${areaModels.ln})',
-                                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                                            style: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                //fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                                          ))
-                                                                                                        ],
-                                                                                                      ))),
-                                                                                            if (areaModels.quantity != '1')
-                                                                                              ListTile(
-                                                                                                  onTap: () async {
-                                                                                                    SharedPreferences preferences = await SharedPreferences.getInstance();
-                                                                                                    preferences.setString('zoneSer', areaModels.zser.toString());
-                                                                                                    preferences.setString('zonesName', areaModels.zn.toString());
-
-                                                                                                    setState(() {
-                                                                                                      Ser_Body = 2;
-                                                                                                      a_ln = areaModels.lncode;
-                                                                                                      a_ser = areaModels.ser;
-                                                                                                      a_area = areaModels.area;
-                                                                                                      a_rent = areaModels.rent;
-                                                                                                      a_page = '1';
-                                                                                                    });
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  title: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.grey[100],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(10),
-                                                                                                      // width: MediaQuery.of(context).size.width,
-                                                                                                      child: Row(
-                                                                                                        children: [
-                                                                                                          Expanded(
-                                                                                                              child: Text(
-                                                                                                            'ทำสัญญา: ${areaModels.lncode} (${areaModels.ln})',
-                                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                                            style: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                //fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                                          ))
-                                                                                                        ],
-                                                                                                      ))),
-                                                                                            if (areaModels.quantity == '1')
-                                                                                              ListTile(
-                                                                                                  onTap: () async {
-                                                                                                    setState(() {
-                                                                                                      Ser_Body = 3;
-                                                                                                      Value_cid = areaModels.cid;
-                                                                                                      ser_cidtan = '1';
-                                                                                                    });
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  title: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.grey[100],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(10),
-                                                                                                      // width: MediaQuery.of(context).size.width,
-                                                                                                      child: Row(
-                                                                                                        children: [
-                                                                                                          Expanded(
-                                                                                                              child: Text(
-                                                                                                            'เช่าอยู่: ${areaModels.cid}',
-                                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                                            style: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                //fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                                          ))
-                                                                                                        ],
-                                                                                                      ))),
-                                                                                            if (areaModels.quantity == '1')
-                                                                                              ListTile(
-                                                                                                  onTap: () async {
-                                                                                                    setState(() {
-                                                                                                      Ser_Body = 4;
-                                                                                                      Value_cid = areaModels.cid;
-                                                                                                      ser_cidtan = '1';
-                                                                                                    });
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  title: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.grey[100],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(10),
-                                                                                                      // width: MediaQuery.of(context).size.width,
-                                                                                                      child: Row(
-                                                                                                        children: [
-                                                                                                          Expanded(
-                                                                                                              child: Text(
-                                                                                                            'รับชำระ: ${areaModels.cid}',
-                                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                                            style: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                //fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                                          ))
-                                                                                                        ],
-                                                                                                      ))),
-                                                                                            if (areaModels.quantity == '2')
-                                                                                              ListTile(
-                                                                                                  onTap: () async {
-                                                                                                    setState(() {
-                                                                                                      Ser_Body = 3;
-                                                                                                      Value_cid = areaModels.docno;
-                                                                                                      ser_cidtan = '2';
-                                                                                                    });
-                                                                                                    Navigator.pop(context);
-                                                                                                  },
-                                                                                                  title: Container(
-                                                                                                      decoration: BoxDecoration(
-                                                                                                        color: Colors.grey[100],
-                                                                                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                      ),
-                                                                                                      padding: const EdgeInsets.all(10),
-                                                                                                      // width: MediaQuery.of(context).size.width,
-                                                                                                      child: Row(
-                                                                                                        children: [
-                                                                                                          Expanded(
-                                                                                                              child: Text(
-                                                                                                            'เสนอราคา: ${areaModels.docno}',
-                                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                                            style: const TextStyle(
-                                                                                                                color: PeopleChaoScreen_Color.Colors_Text2_,
-                                                                                                                //fontWeight: FontWeight.bold,
-                                                                                                                fontFamily: Font_.Fonts_T),
-                                                                                                          ))
-                                                                                                        ],
-                                                                                                      ))),
-                                                                                          ],
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    title: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.grey[100],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                         ),
-                                                                                      ),
-                                                                                      actions: <Widget>[
-                                                                                        Column(
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        // width: MediaQuery.of(context).size.width,
+                                                                                        child: Row(
                                                                                           children: [
-                                                                                            const SizedBox(
-                                                                                              height: 2.0,
+                                                                                            Expanded(
+                                                                                                child: Text(
+                                                                                              'เสนอราคา: ${areaModels.lncode} (${areaModels.ln})',
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                              style: const TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  //fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ))
+                                                                                          ],
+                                                                                        ))),
+                                                                              if (areaModels.quantity != '1')
+                                                                                ListTile(
+                                                                                    onTap: () async {
+                                                                                      SharedPreferences preferences = await SharedPreferences.getInstance();
+                                                                                      preferences.setString('zoneSer', areaModels.zser.toString());
+                                                                                      preferences.setString('zonesName', areaModels.zn.toString());
+
+                                                                                      setState(() {
+                                                                                        Ser_Body = 2;
+                                                                                        a_ln = areaModels.lncode;
+                                                                                        a_ser = areaModels.ser;
+                                                                                        a_area = areaModels.area;
+                                                                                        a_rent = areaModels.rent;
+                                                                                        a_page = '1';
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    title: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.grey[100],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        // width: MediaQuery.of(context).size.width,
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                                child: Text(
+                                                                                              'ทำสัญญา: ${areaModels.lncode} (${areaModels.ln})',
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                              style: const TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  //fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ))
+                                                                                          ],
+                                                                                        ))),
+                                                                              if (areaModels.quantity == '1')
+                                                                                ListTile(
+                                                                                    onTap: () async {
+                                                                                      setState(() {
+                                                                                        Ser_Body = 3;
+                                                                                        Value_cid = areaModels.cid;
+                                                                                        ser_cidtan = '1';
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    title: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.grey[100],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        // width: MediaQuery.of(context).size.width,
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                                child: Text(
+                                                                                              'เช่าอยู่: ${areaModels.cid}',
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                              style: const TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  //fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ))
+                                                                                          ],
+                                                                                        ))),
+                                                                              if (areaModels.quantity == '1')
+                                                                                ListTile(
+                                                                                    onTap: () async {
+                                                                                      setState(() {
+                                                                                        Ser_Body = 4;
+                                                                                        Value_cid = areaModels.cid;
+                                                                                        ser_cidtan = '1';
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    title: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.grey[100],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        // width: MediaQuery.of(context).size.width,
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                                child: Text(
+                                                                                              'รับชำระ: ${areaModels.cid}',
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                              style: const TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  //fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ))
+                                                                                          ],
+                                                                                        ))),
+                                                                              if (areaModels.quantity == '2')
+                                                                                ListTile(
+                                                                                    onTap: () async {
+                                                                                      setState(() {
+                                                                                        Ser_Body = 3;
+                                                                                        Value_cid = areaModels.docno;
+                                                                                        ser_cidtan = '2';
+                                                                                      });
+                                                                                      Navigator.pop(context);
+                                                                                    },
+                                                                                    title: Container(
+                                                                                        decoration: BoxDecoration(
+                                                                                          color: Colors.grey[100],
+                                                                                          borderRadius: const BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                                                                        ),
+                                                                                        padding: const EdgeInsets.all(10),
+                                                                                        // width: MediaQuery.of(context).size.width,
+                                                                                        child: Row(
+                                                                                          children: [
+                                                                                            Expanded(
+                                                                                                child: Text(
+                                                                                              'เสนอราคา: ${areaModels.docno}',
+                                                                                              overflow: TextOverflow.ellipsis,
+                                                                                              style: const TextStyle(
+                                                                                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                                                                                  //fontWeight: FontWeight.bold,
+                                                                                                  fontFamily: Font_.Fonts_T),
+                                                                                            ))
+                                                                                          ],
+                                                                                        ))),
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        actions: <Widget>[
+                                                                          Column(
+                                                                            children: [
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              const Divider(
+                                                                                color: Colors.grey,
+                                                                                height: 4.0,
+                                                                              ),
+                                                                              const SizedBox(
+                                                                                height: 2.0,
+                                                                              ),
+                                                                              Padding(
+                                                                                padding: const EdgeInsets.all(8.0),
+                                                                                child: Row(
+                                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                                  children: [
+                                                                                    Padding(
+                                                                                      padding: const EdgeInsets.all(4.0),
+                                                                                      child: Row(
+                                                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                                                        children: [
+                                                                                          Container(
+                                                                                            width: 100,
+                                                                                            decoration: const BoxDecoration(
+                                                                                              color: Colors.redAccent,
+                                                                                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                                                                                             ),
-                                                                                            const Divider(
-                                                                                              color: Colors.grey,
-                                                                                              height: 4.0,
-                                                                                            ),
-                                                                                            const SizedBox(
-                                                                                              height: 2.0,
-                                                                                            ),
-                                                                                            Padding(
-                                                                                              padding: const EdgeInsets.all(8.0),
-                                                                                              child: Row(
-                                                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                children: [
-                                                                                                  Padding(
-                                                                                                    padding: const EdgeInsets.all(4.0),
-                                                                                                    child: Row(
-                                                                                                      mainAxisAlignment: MainAxisAlignment.center,
-                                                                                                      children: [
-                                                                                                        Container(
-                                                                                                          width: 100,
-                                                                                                          decoration: const BoxDecoration(
-                                                                                                            color: Colors.redAccent,
-                                                                                                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                                                                                                          ),
-                                                                                                          padding: const EdgeInsets.all(5.0),
-                                                                                                          child: TextButton(
-                                                                                                            onPressed: () => Navigator.pop(context, 'OK'),
-                                                                                                            child: const Text(
-                                                                                                              'ปิด',
-                                                                                                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
-                                                                                                            ),
-                                                                                                          ),
-                                                                                                        ),
-                                                                                                      ],
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
+                                                                                            padding: const EdgeInsets.all(5.0),
+                                                                                            child: TextButton(
+                                                                                              onPressed: () => Navigator.pop(context, 'OK'),
+                                                                                              child: const Text(
+                                                                                                'ปิด',
+                                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
                                                                                               ),
                                                                                             ),
-                                                                                          ],
-                                                                                        ),
-                                                                                      ],
+                                                                                          ),
+                                                                                        ],
+                                                                                      ),
                                                                                     ),
-                                                                                  );
-                                                                                },
-                                                                                child: Container(
-                                                                                  decoration: BoxDecoration(
-                                                                                    color: (areaFloorplanModelss?.id == areaModels.id)
-                                                                                        ? areaModels.quantity == '1'
-                                                                                            ? Colors.red[800]!.withOpacity(0.5)
-                                                                                            : areaModels.quantity == '2'
-                                                                                                ? Colors.blue[800]!.withOpacity(0.5)
-                                                                                                : areaModels.quantity == '3'
-                                                                                                    ? Colors.purple[800]!.withOpacity(0.5)
-                                                                                                    : Colors.green[800]!.withOpacity(0.5)
-                                                                                        : areaModels.quantity == '1'
-                                                                                            ? Colors.red[200]!.withOpacity(0.5)
-                                                                                            : areaModels.quantity == '2'
-                                                                                                ? Colors.blue[200]!.withOpacity(0.5)
-                                                                                                : areaModels.quantity == '3'
-                                                                                                    ? Colors.purple[200]!.withOpacity(0.5)
-                                                                                                    : Colors.green[200]!.withOpacity(0.5),
-                                                                                    //  color: (areaFloorplanModelss?.id == areaModels.id) ? Colors.deepPurple[400]!.withOpacity(0.5) : Colors.blue[600]!.withOpacity(0.5),
-                                                                                  ),
+                                                                                  ],
                                                                                 ),
                                                                               ),
-                                                                            ),
+                                                                            ],
                                                                           ),
-                                                                      ])),
+                                                                        ],
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: (areaFloorplanModelss?.id ==
+                                                                              areaModels.id)
+                                                                          ? areaModels.quantity == '1'
+                                                                              ? Colors.red[800]!.withOpacity(0.5)
+                                                                              : areaModels.quantity == '2'
+                                                                                  ? Colors.blue[800]!.withOpacity(0.5)
+                                                                                  : areaModels.quantity == '3'
+                                                                                      ? Colors.purple[800]!.withOpacity(0.5)
+                                                                                      : Colors.green[800]!.withOpacity(0.5)
+                                                                          : areaModels.quantity == '1'
+                                                                              ? Colors.red[200]!.withOpacity(0.5)
+                                                                              : areaModels.quantity == '2'
+                                                                                  ? Colors.blue[200]!.withOpacity(0.5)
+                                                                                  : areaModels.quantity == '3'
+                                                                                      ? Colors.purple[200]!.withOpacity(0.5)
+                                                                                      : Colors.green[200]!.withOpacity(0.5),
+                                                                      //  color: (areaFloorplanModelss?.id == areaModels.id) ? Colors.deepPurple[400]!.withOpacity(0.5) : Colors.blue[600]!.withOpacity(0.5),
+                                                                    ),
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                            Positioned(
-                                                              top: 10,
-                                                              right: 10,
-                                                              child: Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: Colors
-                                                                      .blueGrey
-                                                                      .withOpacity(
-                                                                          0.5),
-                                                                  borderRadius:
-                                                                      const BorderRadius
-                                                                          .only(
-                                                                    topLeft: Radius
-                                                                        .circular(
-                                                                            5),
-                                                                    topRight: Radius
-                                                                        .circular(
-                                                                            5),
-                                                                    bottomLeft:
-                                                                        Radius.circular(
-                                                                            5),
-                                                                    bottomRight:
-                                                                        Radius.circular(
-                                                                            5),
-                                                                  ),
-                                                                ),
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        2.0),
-                                                                child: Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .zoom_in,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      onPressed:
-                                                                          _zoomInSVG,
-                                                                    ),
-                                                                    IconButton(
-                                                                      icon:
-                                                                          const Icon(
-                                                                        Icons
-                                                                            .zoom_out,
-                                                                        color: Colors
-                                                                            .white,
-                                                                      ),
-                                                                      onPressed:
-                                                                          _zoomOutSVG,
-                                                                    ),
-                                                                    // Container(
-                                                                    //   decoration:
-                                                                    //       BoxDecoration(
-                                                                    //     color: Colors
-                                                                    //         .grey,
-                                                                    //     borderRadius:
-                                                                    //         const BorderRadius.only(
-                                                                    //       topLeft:
-                                                                    //           Radius.circular(5),
-                                                                    //       topRight:
-                                                                    //           Radius.circular(5),
-                                                                    //       bottomLeft:
-                                                                    //           Radius.circular(5),
-                                                                    //       bottomRight:
-                                                                    //           Radius.circular(5),
-                                                                    //     ),
-                                                                    //   ),
-                                                                    //   child:
-                                                                    //       Text(
-                                                                    //     (Ln_name ==
-                                                                    //             null)
-                                                                    //         ? "รหัสพื้นที่ :  "
-                                                                    //         : "รหัสพื้นที่ : $Ln_name ",
-                                                                    //     overflow:
-                                                                    //         TextOverflow.ellipsis,
-                                                                    //     // minFontSize: 1,
-                                                                    //     // maxFontSize: 12,
-                                                                    //     maxLines:
-                                                                    //         1,
-                                                                    //     textAlign:
-                                                                    //         TextAlign.left,
-                                                                    //     style:
-                                                                    //         TextStyle(
-                                                                    //       color:
-                                                                    //           Colors.white,
-                                                                    //       fontFamily:
-                                                                    //           Font_.Fonts_T,
-
-                                                                    //       //fontSize: 10.0s
-                                                                    //     ),
-                                                                    //   ),
-                                                                    // ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-
-                                                  // MyApp1(
-                                                  //     floorplan: zoneModels[
-                                                  //             Serindex_zoneModels_value]
-                                                  //         .img_floorplan,
-                                                  //     DBN_: DBN_)
-                                                ))
+                                                        ]),
+                                                      )),
+                                                ),
+                                              ),
+                                            ),
                                           ],
-                                        ))
-                                      ],
-                                    ),
-                                  ),
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          top: 10,
+                          right: 10,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey.withOpacity(0.5),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(5),
+                                topRight: Radius.circular(5),
+                                bottomLeft: Radius.circular(5),
+                                bottomRight: Radius.circular(5),
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(2.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.zoom_in,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: _zoomInSVG,
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.zoom_out,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: _zoomOutSVG,
+                                ),
+                                // Container(
+                                //   decoration: BoxDecoration(
+                                //     color: Colors.grey,
+                                //     borderRadius: const BorderRadius.only(
+                                //       topLeft: Radius.circular(5),
+                                //       topRight: Radius.circular(5),
+                                //       bottomLeft: Radius.circular(5),
+                                //       bottomRight: Radius.circular(5),
+                                //     ),
+                                //   ),
+                                //   child: Text(
+                                //     '${MediaQuery.of(context).size.width}',
+                                //     overflow: TextOverflow.ellipsis,
+                                //     // minFontSize: 1,
+                                //     // maxFontSize: 12,
+                                //     maxLines: 1,
+                                //     textAlign: TextAlign.left,
+                                //     style: TextStyle(
+                                //       color: Colors.white,
+                                //       fontFamily: Font_.Fonts_T,
+
+                                //       //fontSize: 10.0s
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
-                          )),
-                    )
-                  ]);
+                          ),
+                        )
+                      ],
+                    ),
+                  );
+
+    // Column(children: [
+    //     Padding(
+    //       padding: const EdgeInsets.all(8.0),
+    //       child: Container(
+    //         height: MediaQuery.of(context).size.height / 1.2,
+    //         width: 1600,
+    //         decoration: const BoxDecoration(
+    //           color: Colors.red,
+    //           borderRadius: BorderRadius.only(
+    //               topLeft: Radius.circular(10),
+    //               topRight: Radius.circular(10),
+    //               bottomLeft: Radius.circular(10),
+    //               bottomRight: Radius.circular(10)),
+    //           // border: Border.all(color: Colors.grey, width: 1),
+    //         ),
+    //         padding: const EdgeInsets.all(20),
+    //         // color: Colors.white,
+    //         child:
+    // Stack(
+    //           children: [
+    //             InteractiveViewer(
+    //               alignment: Alignment.center,
+    //               scaleEnabled: false,
+    //               trackpadScrollCausesScale: false,
+    //               transformationController: _controller,
+    //               minScale: 0.8,
+    //               maxScale: 2.0,
+    //               constrained: true,
+    //               boundaryMargin:
+    //                   const EdgeInsets.all(double.infinity),
+    //               child: Container(
+    //                 height: 500,
+    //                 width: 850,
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.white,
+    //                   image: DecorationImage(
+    //                     image: NetworkImage("$Img_Zone"),
+    //                     // fit: BoxFit.cover,
+    //                   ),
+    //                 ),
+    //                 child: Align(
+    //                   alignment: Alignment.center,
+    //                   child: KeyedSubtree(
+    //                       key: _countriesKey,
+    //                       child: Container(
+    //                         child: Stack(children: [
+    //                           for (var areaModels
+    //                               in areaFloorplanModels)
+    //                             Center(
+    //                               child: ClipPath(
+    //                                 clipper: Clipper(
+    //                                   svgPath: areaModels.path!,
+    //                                   height: 15.0,
+    //                                   width: 23.2,
+    //                                 ),
+    //                                 child: InkWell(
+    //                                   onTap: () async {
+    //                                     onCountrySelected
+    //                                         .call(areaModels);
+    //                                     print('${areaModels.id}  ');
+    //                                     setState(() {
+    //                                       Ln_name =
+    //                                           '${areaModels.lncode} (${areaModels.ln})';
+    //                                       // Ln_name = '${country.}//${areaModels.length}';
+    //                                     });
+    //                                     showDialog<String>(
+    //                                       context: context,
+    //                                       builder: (BuildContext
+    //                                               context) =>
+    //                                           AlertDialog(
+    //                                         shape: const RoundedRectangleBorder(
+    //                                             borderRadius:
+    //                                                 BorderRadius.all(
+    //                                                     Radius.circular(
+    //                                                         20.0))),
+    //                                         title: Center(
+    //                                             child: Column(
+    //                                           children: [
+    //                                             Text(
+    //                                               '$Ln_name',
+    //                                               style: const TextStyle(
+    //                                                   color: AdminScafScreen_Color
+    //                                                       .Colors_Text1_,
+    //                                                   fontWeight:
+    //                                                       FontWeight
+    //                                                           .bold,
+    //                                                   fontFamily:
+    //                                                       FontWeight_
+    //                                                           .Fonts_T),
+    //                                             ),
+    //                                             const SizedBox(
+    //                                               height: 5.0,
+    //                                             ),
+    //                                             Divider(
+    //                                               color: Colors
+    //                                                   .grey[100],
+    //                                               height: 4.0,
+    //                                             ),
+    //                                             const SizedBox(
+    //                                               height: 5.0,
+    //                                             ),
+    //                                           ],
+    //                                         )),
+    //                                         content:
+    //                                             SingleChildScrollView(
+    //                                           child: Column(
+    //                                             crossAxisAlignment:
+    //                                                 CrossAxisAlignment
+    //                                                     .center,
+    //                                             children: <Widget>[
+    //                                               if (areaModels
+    //                                                       .quantity !=
+    //                                                   '1')
+    //                                                 ListTile(
+    //                                                     onTap:
+    //                                                         () async {
+    //                                                       SharedPreferences
+    //                                                           preferences =
+    //                                                           await SharedPreferences
+    //                                                               .getInstance();
+    //                                                       preferences.setString(
+    //                                                           'zoneSer',
+    //                                                           areaModels
+    //                                                               .zser
+    //                                                               .toString());
+    //                                                       preferences.setString(
+    //                                                           'zonesName',
+    //                                                           areaModels
+    //                                                               .zn
+    //                                                               .toString());
+    //                                                       setState(
+    //                                                           () {
+    //                                                         Ser_Body =
+    //                                                             1;
+    //                                                         a_ln = areaModels
+    //                                                             .lncode;
+    //                                                         a_ser =
+    //                                                             areaModels.ser;
+    //                                                         a_area =
+    //                                                             areaModels.area;
+    //                                                         a_rent =
+    //                                                             areaModels.rent;
+    //                                                         a_page =
+    //                                                             '1';
+    //                                                       });
+
+    //                                                       Navigator.pop(
+    //                                                           context);
+    //                                                     },
+    //                                                     title: Container(
+    //                                                         decoration: BoxDecoration(
+    //                                                           color:
+    //                                                               Colors.grey[100],
+    //                                                           borderRadius: const BorderRadius.only(
+    //                                                               topLeft: Radius.circular(10),
+    //                                                               topRight: Radius.circular(10),
+    //                                                               bottomLeft: Radius.circular(10),
+    //                                                               bottomRight: Radius.circular(10)),
+    //                                                         ),
+    //                                                         padding: const EdgeInsets.all(10),
+    //                                                         // width: MediaQuery.of(context).size.width,
+    //                                                         child: Row(
+    //                                                           children: [
+    //                                                             Expanded(
+    //                                                                 child: Text(
+    //                                                               'เสนอราคา: ${areaModels.lncode} (${areaModels.ln})',
+    //                                                               overflow: TextOverflow.ellipsis,
+    //                                                               style: const TextStyle(
+    //                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                                                                   //fontWeight: FontWeight.bold,
+    //                                                                   fontFamily: Font_.Fonts_T),
+    //                                                             ))
+    //                                                           ],
+    //                                                         ))),
+    //                                               if (areaModels
+    //                                                       .quantity !=
+    //                                                   '1')
+    //                                                 ListTile(
+    //                                                     onTap:
+    //                                                         () async {
+    //                                                       SharedPreferences
+    //                                                           preferences =
+    //                                                           await SharedPreferences
+    //                                                               .getInstance();
+    //                                                       preferences.setString(
+    //                                                           'zoneSer',
+    //                                                           areaModels
+    //                                                               .zser
+    //                                                               .toString());
+    //                                                       preferences.setString(
+    //                                                           'zonesName',
+    //                                                           areaModels
+    //                                                               .zn
+    //                                                               .toString());
+
+    //                                                       setState(
+    //                                                           () {
+    //                                                         Ser_Body =
+    //                                                             2;
+    //                                                         a_ln = areaModels
+    //                                                             .lncode;
+    //                                                         a_ser =
+    //                                                             areaModels.ser;
+    //                                                         a_area =
+    //                                                             areaModels.area;
+    //                                                         a_rent =
+    //                                                             areaModels.rent;
+    //                                                         a_page =
+    //                                                             '1';
+    //                                                       });
+    //                                                       Navigator.pop(
+    //                                                           context);
+    //                                                     },
+    //                                                     title: Container(
+    //                                                         decoration: BoxDecoration(
+    //                                                           color:
+    //                                                               Colors.grey[100],
+    //                                                           borderRadius: const BorderRadius.only(
+    //                                                               topLeft: Radius.circular(10),
+    //                                                               topRight: Radius.circular(10),
+    //                                                               bottomLeft: Radius.circular(10),
+    //                                                               bottomRight: Radius.circular(10)),
+    //                                                         ),
+    //                                                         padding: const EdgeInsets.all(10),
+    //                                                         // width: MediaQuery.of(context).size.width,
+    //                                                         child: Row(
+    //                                                           children: [
+    //                                                             Expanded(
+    //                                                                 child: Text(
+    //                                                               'ทำสัญญา: ${areaModels.lncode} (${areaModels.ln})',
+    //                                                               overflow: TextOverflow.ellipsis,
+    //                                                               style: const TextStyle(
+    //                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                                                                   //fontWeight: FontWeight.bold,
+    //                                                                   fontFamily: Font_.Fonts_T),
+    //                                                             ))
+    //                                                           ],
+    //                                                         ))),
+    //                                               if (areaModels
+    //                                                       .quantity ==
+    //                                                   '1')
+    //                                                 ListTile(
+    //                                                     onTap:
+    //                                                         () async {
+    //                                                       setState(
+    //                                                           () {
+    //                                                         Ser_Body =
+    //                                                             3;
+    //                                                         Value_cid =
+    //                                                             areaModels.cid;
+    //                                                         ser_cidtan =
+    //                                                             '1';
+    //                                                       });
+    //                                                       Navigator.pop(
+    //                                                           context);
+    //                                                     },
+    //                                                     title: Container(
+    //                                                         decoration: BoxDecoration(
+    //                                                           color:
+    //                                                               Colors.grey[100],
+    //                                                           borderRadius: const BorderRadius.only(
+    //                                                               topLeft: Radius.circular(10),
+    //                                                               topRight: Radius.circular(10),
+    //                                                               bottomLeft: Radius.circular(10),
+    //                                                               bottomRight: Radius.circular(10)),
+    //                                                         ),
+    //                                                         padding: const EdgeInsets.all(10),
+    //                                                         // width: MediaQuery.of(context).size.width,
+    //                                                         child: Row(
+    //                                                           children: [
+    //                                                             Expanded(
+    //                                                                 child: Text(
+    //                                                               'เช่าอยู่: ${areaModels.cid}',
+    //                                                               overflow: TextOverflow.ellipsis,
+    //                                                               style: const TextStyle(
+    //                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                                                                   //fontWeight: FontWeight.bold,
+    //                                                                   fontFamily: Font_.Fonts_T),
+    //                                                             ))
+    //                                                           ],
+    //                                                         ))),
+    //                                               if (areaModels
+    //                                                       .quantity ==
+    //                                                   '1')
+    //                                                 ListTile(
+    //                                                     onTap:
+    //                                                         () async {
+    //                                                       setState(
+    //                                                           () {
+    //                                                         Ser_Body =
+    //                                                             4;
+    //                                                         Value_cid =
+    //                                                             areaModels.cid;
+    //                                                         ser_cidtan =
+    //                                                             '1';
+    //                                                       });
+    //                                                       Navigator.pop(
+    //                                                           context);
+    //                                                     },
+    //                                                     title: Container(
+    //                                                         decoration: BoxDecoration(
+    //                                                           color:
+    //                                                               Colors.grey[100],
+    //                                                           borderRadius: const BorderRadius.only(
+    //                                                               topLeft: Radius.circular(10),
+    //                                                               topRight: Radius.circular(10),
+    //                                                               bottomLeft: Radius.circular(10),
+    //                                                               bottomRight: Radius.circular(10)),
+    //                                                         ),
+    //                                                         padding: const EdgeInsets.all(10),
+    //                                                         // width: MediaQuery.of(context).size.width,
+    //                                                         child: Row(
+    //                                                           children: [
+    //                                                             Expanded(
+    //                                                                 child: Text(
+    //                                                               'รับชำระ: ${areaModels.cid}',
+    //                                                               overflow: TextOverflow.ellipsis,
+    //                                                               style: const TextStyle(
+    //                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                                                                   //fontWeight: FontWeight.bold,
+    //                                                                   fontFamily: Font_.Fonts_T),
+    //                                                             ))
+    //                                                           ],
+    //                                                         ))),
+    //                                               if (areaModels
+    //                                                       .quantity ==
+    //                                                   '2')
+    //                                                 ListTile(
+    //                                                     onTap:
+    //                                                         () async {
+    //                                                       setState(
+    //                                                           () {
+    //                                                         Ser_Body =
+    //                                                             3;
+    //                                                         Value_cid =
+    //                                                             areaModels.docno;
+    //                                                         ser_cidtan =
+    //                                                             '2';
+    //                                                       });
+    //                                                       Navigator.pop(
+    //                                                           context);
+    //                                                     },
+    //                                                     title: Container(
+    //                                                         decoration: BoxDecoration(
+    //                                                           color:
+    //                                                               Colors.grey[100],
+    //                                                           borderRadius: const BorderRadius.only(
+    //                                                               topLeft: Radius.circular(10),
+    //                                                               topRight: Radius.circular(10),
+    //                                                               bottomLeft: Radius.circular(10),
+    //                                                               bottomRight: Radius.circular(10)),
+    //                                                         ),
+    //                                                         padding: const EdgeInsets.all(10),
+    //                                                         // width: MediaQuery.of(context).size.width,
+    //                                                         child: Row(
+    //                                                           children: [
+    //                                                             Expanded(
+    //                                                                 child: Text(
+    //                                                               'เสนอราคา: ${areaModels.docno}',
+    //                                                               overflow: TextOverflow.ellipsis,
+    //                                                               style: const TextStyle(
+    //                                                                   color: PeopleChaoScreen_Color.Colors_Text2_,
+    //                                                                   //fontWeight: FontWeight.bold,
+    //                                                                   fontFamily: Font_.Fonts_T),
+    //                                                             ))
+    //                                                           ],
+    //                                                         ))),
+    //                                             ],
+    //                                           ),
+    //                                         ),
+    //                                         actions: <Widget>[
+    //                                           Column(
+    //                                             children: [
+    //                                               const SizedBox(
+    //                                                 height: 2.0,
+    //                                               ),
+    //                                               const Divider(
+    //                                                 color:
+    //                                                     Colors.grey,
+    //                                                 height: 4.0,
+    //                                               ),
+    //                                               const SizedBox(
+    //                                                 height: 2.0,
+    //                                               ),
+    //                                               Padding(
+    //                                                 padding:
+    //                                                     const EdgeInsets
+    //                                                             .all(
+    //                                                         8.0),
+    //                                                 child: Row(
+    //                                                   mainAxisAlignment:
+    //                                                       MainAxisAlignment
+    //                                                           .center,
+    //                                                   children: [
+    //                                                     Padding(
+    //                                                       padding:
+    //                                                           const EdgeInsets.all(
+    //                                                               4.0),
+    //                                                       child:
+    //                                                           Row(
+    //                                                         mainAxisAlignment:
+    //                                                             MainAxisAlignment.center,
+    //                                                         children: [
+    //                                                           Container(
+    //                                                             width:
+    //                                                                 100,
+    //                                                             decoration:
+    //                                                                 const BoxDecoration(
+    //                                                               color: Colors.redAccent,
+    //                                                               borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10), bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+    //                                                             ),
+    //                                                             padding:
+    //                                                                 const EdgeInsets.all(5.0),
+    //                                                             child:
+    //                                                                 TextButton(
+    //                                                               onPressed: () => Navigator.pop(context, 'OK'),
+    //                                                               child: const Text(
+    //                                                                 'ปิด',
+    //                                                                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontFamily: FontWeight_.Fonts_T),
+    //                                                               ),
+    //                                                             ),
+    //                                                           ),
+    //                                                         ],
+    //                                                       ),
+    //                                                     ),
+    //                                                   ],
+    //                                                 ),
+    //                                               ),
+    //                                             ],
+    //                                           ),
+    //                                         ],
+    //                                       ),
+    //                                     );
+    //                                   },
+    //                                   child: Container(
+    //                                     decoration: BoxDecoration(
+    //                                       color: (areaFloorplanModelss
+    //                                                   ?.id ==
+    //                                               areaModels.id)
+    //                                           ? areaModels.quantity ==
+    //                                                   '1'
+    //                                               ? Colors.red[800]!
+    //                                                   .withOpacity(
+    //                                                       0.5)
+    //                                               : areaModels.quantity ==
+    //                                                       '2'
+    //                                                   ? Colors.blue[800]!
+    //                                                       .withOpacity(
+    //                                                           0.5)
+    //                                                   : areaModels.quantity ==
+    //                                                           '3'
+    //                                                       ? Colors.purple[800]!.withOpacity(
+    //                                                           0.5)
+    //                                                       : Colors.green[800]!
+    //                                                           .withOpacity(
+    //                                                               0.5)
+    //                                           : areaModels.quantity ==
+    //                                                   '1'
+    //                                               ? Colors.red[200]!
+    //                                                   .withOpacity(
+    //                                                       0.5)
+    //                                               : areaModels.quantity ==
+    //                                                       '2'
+    //                                                   ? Colors
+    //                                                       .blue[200]!
+    //                                                       .withOpacity(0.5)
+    //                                                   : areaModels.quantity == '3'
+    //                                                       ? Colors.purple[200]!.withOpacity(0.5)
+    //                                                       : Colors.green[200]!.withOpacity(0.5),
+    //                                       //  color: (areaFloorplanModelss?.id == areaModels.id) ? Colors.deepPurple[400]!.withOpacity(0.5) : Colors.blue[600]!.withOpacity(0.5),
+    //                                     ),
+    //                                   ),
+    //                                 ),
+    //                               ),
+    //                             ),
+    //                         ]),
+    //                       )),
+    //                 ),
+    //               ),
+    //             ),
+    //             Positioned(
+    //               top: 10,
+    //               right: 10,
+    //               child: Container(
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.blueGrey.withOpacity(0.5),
+    //                   borderRadius: const BorderRadius.only(
+    //                     topLeft: Radius.circular(5),
+    //                     topRight: Radius.circular(5),
+    //                     bottomLeft: Radius.circular(5),
+    //                     bottomRight: Radius.circular(5),
+    //                   ),
+    //                 ),
+    //                 padding: const EdgeInsets.all(2.0),
+    //                 child: Column(
+    //                   mainAxisAlignment: MainAxisAlignment.center,
+    //                   children: [
+    //                     IconButton(
+    //                       icon: const Icon(
+    //                         Icons.zoom_in,
+    //                         color: Colors.white,
+    //                       ),
+    //                       onPressed: _zoomInSVG,
+    //                     ),
+    //                     IconButton(
+    //                       icon: const Icon(
+    //                         Icons.zoom_out,
+    //                         color: Colors.white,
+    //                       ),
+    //                       onPressed: _zoomOutSVG,
+    //                     ),
+    //                     Container(
+    //                       decoration: BoxDecoration(
+    //                         color: Colors.grey,
+    //                         borderRadius: const BorderRadius.only(
+    //                           topLeft: Radius.circular(5),
+    //                           topRight: Radius.circular(5),
+    //                           bottomLeft: Radius.circular(5),
+    //                           bottomRight: Radius.circular(5),
+    //                         ),
+    //                       ),
+    //                       child: Text(
+    //                         '${MediaQuery.of(context).size.width}',
+    //                         overflow: TextOverflow.ellipsis,
+    //                         // minFontSize: 1,
+    //                         // maxFontSize: 12,
+    //                         maxLines: 1,
+    //                         textAlign: TextAlign.left,
+    //                         style: TextStyle(
+    //                           color: Colors.white,
+    //                           fontFamily: Font_.Fonts_T,
+
+    //                           //fontSize: 10.0s
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               ),
+    //             )
+    //           ],
+    //         ),
+    //       ),
+    //     )
+    //   ]);
   }
 
   Widget createCard(int index) {
@@ -5079,33 +5498,35 @@ class _ChaoAreaScreenState extends State<ChaoAreaScreen> {
                     ))),
           ),
         if (areaModels[index].quantity == '2')
-          PopupMenuItem(
-            child: InkWell(
-                onTap: () async {
-                  setState(() {
-                    Ser_Body = 3;
-                    Value_cid = areaModels[index].docno;
-                    ser_cidtan = '2';
-                  });
-                  Navigator.pop(context);
-                },
-                child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'เสนอราคา: ${areaModels[index].docno}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              color: PeopleChaoScreen_Color.Colors_Text2_,
-                              //fontWeight: FontWeight.bold,
-                              fontFamily: Font_.Fonts_T),
-                        ))
-                      ],
-                    ))),
-          ),
+          for (int i = 0; i < areaQuotModels.length; i++)
+            if (areaModels[index].ser == areaQuotModels[i].ser)
+              PopupMenuItem(
+                child: InkWell(
+                    onTap: () async {
+                      setState(() {
+                        Ser_Body = 3;
+                        Value_cid = areaQuotModels[i].docno;
+                        ser_cidtan = '2';
+                      });
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          children: [
+                            Expanded(
+                                child: Text(
+                              'เสนอราคา: ${areaQuotModels[i].docno}',
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  color: PeopleChaoScreen_Color.Colors_Text2_,
+                                  //fontWeight: FontWeight.bold,
+                                  fontFamily: Font_.Fonts_T),
+                            ))
+                          ],
+                        ))),
+              ),
       ],
       child: Card(
           child: InkWell(

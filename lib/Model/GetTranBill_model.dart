@@ -9,18 +9,34 @@ class TransBillModel {
   String? invoice;
   String? descr;
   String? duedate;
+  String? nvat;
+  String? pvat;
+  String? vat;
+  String? nwht;
+  String? wht;
+  String? vtype;
+  String? vser;
+  String? meter;
 
-  TransBillModel(
-      {this.ser,
-      this.docno,
-      this.tno,
-      this.dtype,
-      this.date,
-      this.total,
-      this.expname,
-      this.invoice,
-      this.descr,
-      this.duedate});
+  TransBillModel({
+    this.ser,
+    this.docno,
+    this.tno,
+    this.dtype,
+    this.date,
+    this.total,
+    this.expname,
+    this.invoice,
+    this.descr,
+    this.duedate,
+    this.nvat,
+    this.pvat,
+    this.vat,
+    this.nwht,
+    this.wht,
+    this.vtype,
+    this.vser,this.meter,
+  });
 
   TransBillModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -33,6 +49,14 @@ class TransBillModel {
     invoice = json['invoice'];
     descr = json['descr'];
     duedate = json['duedate'];
+    nvat = json['nvat'];
+    pvat = json['pvat'];
+    vat = json['vat'];
+    nwht = json['nwht'];
+    wht = json['wht'];
+    vtype = json['vtype'];
+    vser = json['vser'];
+    meter= json['meter'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +71,14 @@ class TransBillModel {
     data['invoice'] = this.invoice;
     data['descr'] = this.descr;
     data['duedate'] = this.duedate;
+    data['nvat'] = this.nvat;
+    data['pvat'] = this.pvat;
+    data['vat'] = this.vat;
+    data['nwht'] = this.nwht;
+    data['wht'] = this.wht;
+    data['vtype'] = this.vtype;
+    data['vser'] = this.vser;
+    data['meter'] = this.meter;
 
     return data;
   }

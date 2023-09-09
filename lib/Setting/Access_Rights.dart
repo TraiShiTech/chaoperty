@@ -4,6 +4,7 @@ import 'dart:js_util';
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:crypto/crypto.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +48,8 @@ class _AccessrightsState extends State<Accessrights> {
   List<bool> _isChecks = [];
   List<RenTalModel> renTalModels = [];
   int? pkqty, pkuser, countarae;
-  String? rtname, type, typex, renname, pkname, ser_Zonex;
+  int renTal_lavel = 0;
+  String? rtname, type, typex, renname, pkname, ser_Zonex, laveluser;
 
   @override
   void initState() {
@@ -156,6 +158,7 @@ class _AccessrightsState extends State<Accessrights> {
     setState(() {
       renTal_user = preferences.getString('renTalSer');
       renTal_name = preferences.getString('renTalName');
+      renTal_lavel = int.parse(preferences.getString('lavel').toString());
     });
   }
 
@@ -1108,7 +1111,7 @@ class _AccessrightsState extends State<Accessrights> {
     final FormEmail_text = TextEditingController();
     final FormPassword_text = TextEditingController();
     final FormRank_text = TextEditingController();
-
+    String? laveluid = userModels[index].user_id;
     String? ser_ = userModels[index].ser;
     String? fname_ = userModels[index].fname;
     String? lname_ = userModels[index].lname;
@@ -1373,174 +1376,286 @@ class _AccessrightsState extends State<Accessrights> {
                   Row(
                     children: [
                       Expanded(
+                          flex: 1,
                           child: Column(
-                        children: [
-                          Row(
-                            children: const [
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'ตำแหน่ง',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color:
+                                            SettingScreen_Color.Colors_Text1_,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'ตำแหน่ง',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  // width: 200,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: FormRank_text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                      }
+                                      // if (int.parse(value.toString()) < 13) {
+                                      //   return '< 13';
+                                      // }
+                                      return null;
+                                    },
+                                    // maxLength: 13,
+                                    cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                        fillColor:
+                                            Colors.white.withOpacity(0.3),
+                                        filled: true,
+                                        // prefixIcon:
+                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        labelText: 'ตำแหน่ง',
+                                        labelStyle: const TextStyle(
+                                            color: SettingScreen_Color
+                                                .Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T)),
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.deny(
+                                          RegExp("[' ']")),
+                                      // for below version 2 use this
+                                      // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                      // for version 2 and greater youcan also use this
+                                      // FilteringTextInputFormatter.digitsOnly
+                                    ],
                                   ),
                                 ),
                               ),
                             ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              // width: 200,
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: FormRank_text,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                  }
-                                  // if (int.parse(value.toString()) < 13) {
-                                  //   return '< 13';
-                                  // }
-                                  return null;
-                                },
-                                // maxLength: 13,
-                                cursorColor: Colors.green,
-                                decoration: InputDecoration(
-                                    fillColor: Colors.white.withOpacity(0.3),
-                                    filled: true,
-                                    // prefixIcon:
-                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    labelText: 'ตำแหน่ง',
-                                    labelStyle: const TextStyle(
-                                        color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T)),
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.deny(
-                                      RegExp("[' ']")),
-                                  // for below version 2 use this
-                                  // FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  // for version 2 and greater youcan also use this
-                                  // FilteringTextInputFormatter.digitsOnly
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
+                          )),
                       Expanded(
+                          flex: 1,
                           child: Column(
-                        children: [
-                          Row(
-                            children: const [
+                            children: [
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Lavel',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                        color:
+                                            SettingScreen_Color.Colors_Text1_,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                  'เบอร์โทร',
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    color: SettingScreen_Color.Colors_Text1_,
-                                    fontFamily: FontWeight_.Fonts_T,
-                                    fontWeight: FontWeight.bold,
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  // width: 200,
+                                  child: DropdownButtonFormField2(
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      contentPadding: EdgeInsets.zero,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    ),
+                                    isExpanded: true,
+                                    hint: Text(
+                                      'Lavel $laveluid',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          color: PeopleChaoScreen_Color
+                                              .Colors_Text2_,
+                                          // fontWeight: FontWeight.bold,
+                                          fontFamily: Font_.Fonts_T),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.arrow_drop_down,
+                                      color: TextHome_Color.TextHome_Colors,
+                                    ),
+                                    style: TextStyle(
+                                      color: Colors.green.shade900,
+                                    ),
+                                    iconSize: 20,
+                                    buttonHeight: 50,
+                                    // buttonPadding: const EdgeInsets.only(left: 20, right: 10),
+                                    dropdownDecoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    items: [
+                                      DropdownMenuItem<String>(
+                                        value: '1',
+                                        child: Text(
+                                          'Lavel 1',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                      DropdownMenuItem<String>(
+                                        value: '2',
+                                        child: Text(
+                                          'Lavel 2',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      ),
+                                      DropdownMenuItem<String>(
+                                        value: '3',
+                                        child: Text(
+                                          'Lavel 3',
+                                          style: const TextStyle(
+                                              fontSize: 14,
+                                              color: PeopleChaoScreen_Color
+                                                  .Colors_Text2_,
+                                              // fontWeight: FontWeight.bold,
+                                              fontFamily: Font_.Fonts_T),
+                                        ),
+                                      )
+                                    ],
+
+                                    onChanged: (value) async {
+                                      setState(() {
+                                        laveluid = value;
+                                      });
+                                    },
                                   ),
                                 ),
                               ),
                             ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SizedBox(
-                              // width: 200,
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: FormTel_text,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'ใส่ข้อมูลให้ครบถ้วน ';
-                                  }
-                                  // if (int.parse(value.toString()) < 13) {
-                                  //   return '< 13';
-                                  // }
-                                  return null;
-                                },
-                                maxLength: 10,
-                                cursorColor: Colors.green,
-                                decoration: InputDecoration(
-                                    fillColor: Colors.white.withOpacity(0.3),
-                                    filled: true,
-                                    // prefixIcon:
-                                    //     const Icon(Icons.person_pin, color: Colors.black),
-                                    // suffixIcon: Icon(Icons.clear, color: Colors.black),
-                                    focusedBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    enabledBorder: const OutlineInputBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(15),
-                                        topLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15),
-                                        bottomLeft: Radius.circular(15),
-                                      ),
-                                      borderSide: BorderSide(
-                                        width: 1,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    labelText: 'เบอร์โทร',
-                                    labelStyle: const TextStyle(
+                          )),
+                      Expanded(
+                          flex: 3,
+                          child: Column(
+                            children: [
+                              Row(
+                                children: const [
+                                  Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'เบอร์โทร',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
                                         color:
-                                            SettingScreen_Color.Colors_Text2_,
-                                        fontFamily: Font_.Fonts_T)),
-                                inputFormatters: <TextInputFormatter>[
-                                  // for below version 2 use this
-                                  FilteringTextInputFormatter.allow(
-                                      RegExp(r'[0-9]')),
-                                  // for version 2 and greater youcan also use this
-                                  // FilteringTextInputFormatter.digitsOnly
+                                            SettingScreen_Color.Colors_Text1_,
+                                        fontFamily: FontWeight_.Fonts_T,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                          ),
-                        ],
-                      )),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  // width: 200,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    controller: FormTel_text,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'ใส่ข้อมูลให้ครบถ้วน ';
+                                      }
+                                      // if (int.parse(value.toString()) < 13) {
+                                      //   return '< 13';
+                                      // }
+                                      return null;
+                                    },
+                                    maxLength: 10,
+                                    cursorColor: Colors.green,
+                                    decoration: InputDecoration(
+                                        fillColor:
+                                            Colors.white.withOpacity(0.3),
+                                        filled: true,
+                                        // prefixIcon:
+                                        //     const Icon(Icons.person_pin, color: Colors.black),
+                                        // suffixIcon: Icon(Icons.clear, color: Colors.black),
+                                        focusedBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        enabledBorder: const OutlineInputBorder(
+                                          borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(15),
+                                            topLeft: Radius.circular(15),
+                                            bottomRight: Radius.circular(15),
+                                            bottomLeft: Radius.circular(15),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        labelText: 'เบอร์โทร',
+                                        labelStyle: const TextStyle(
+                                            color: SettingScreen_Color
+                                                .Colors_Text2_,
+                                            fontFamily: Font_.Fonts_T)),
+                                    inputFormatters: <TextInputFormatter>[
+                                      // for below version 2 use this
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp(r'[0-9]')),
+                                      // for version 2 and greater youcan also use this
+                                      // FilteringTextInputFormatter.digitsOnly
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
                     ],
                   ),
                   Row(children: [
@@ -2008,7 +2123,7 @@ class _AccessrightsState extends State<Accessrights> {
                                                     userModels[index].ser;
 
                                                 String url =
-                                                    '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle';
+                                                    '${MyConstant().domain}/UpC_Useradd.php?isAdd=true&ren=$ren&ser_id=$ser_id&ser_user=$ser_user&name=$name&lame=$lame&tel=$tel&email=$email&password=$password&renk=$renk&checked_value=$cle&laveluser=$laveluid';
                                                 Insert_log.Insert_logs(
                                                     'ตั้งค่า',
                                                     'สิทธิการเข้าถึง>>แก้ไขผู้ใช้งาน(${FormEmail_text.text.toString()})');

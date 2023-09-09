@@ -29,6 +29,9 @@ class RenTalModel {
   String? data_update;
   String? imglogo;
   String? province;
+  String? pksdate;
+  String? pkldate;
+  String? acc2;
 
   RenTalModel(
       {this.ser,
@@ -60,7 +63,10 @@ class RenTalModel {
       this.bill_default,
       this.data_update,
       this.province,
-      this.imglogo});
+      this.imglogo,
+      this.pksdate,
+      this.acc2,
+      this.pkldate});
 
   RenTalModel.fromJson(Map<String, dynamic> json) {
     ser = json['ser'];
@@ -93,6 +99,9 @@ class RenTalModel {
     data_update = json['data_update'];
     imglogo = json['imglogo'];
     province = json['province'];
+    pksdate = json['pksdate'];
+    pkldate = json['pkldate'];
+    acc2 = json['acc2'];
   }
 
   Map<String, dynamic> toJson() {
@@ -127,6 +136,9 @@ class RenTalModel {
     data['data_update'] = this.data_update;
     data['imglogo'] = this.imglogo;
     data['province'] = this.province;
+    data['pksdate'] = this.pksdate;
+    data['pkldate'] = this.pkldate;
+    data['acc2'] = this.acc2;
     return data;
   }
 }

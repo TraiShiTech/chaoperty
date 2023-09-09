@@ -34,6 +34,7 @@ class Pdfgen_RentalInforma {
       Form_ldate,
       Form_period,
       Form_rtname,
+      Form_cdate,
       quotxSelectModels,
       _TransModels,
       renTal_name,
@@ -67,6 +68,24 @@ class Pdfgen_RentalInforma {
     for (int i = 0; i < newValuePDFimg.length; i++) {
       netImage.add(await networkImage('${newValuePDFimg[i]}'));
     }
+    ///////////////////////------------------------------------------------->
+    // // Your date string
+
+    // String dateString = '${Form_cdate}';
+
+    // // Parse the date string into a DateTime object
+    // DateTime date_thai = DateTime.parse(dateString);
+    // List<String> dateParts = dateString.split('-');
+
+    // // The first part (index 0) will be the year
+    // String year = dateParts[0];
+    // // Define a Thai date format
+
+    // var thaiDateFormat = new DateFormat.MMMMd('th_TH');
+    // // Format the date in Thai date format
+    // String thai_Date = thaiDateFormat.format(date_thai);
+    ///////////////////////------------------------------------------------->
+
     ///////////////////////------------------------------------------------->
     final tableHeaders = [
       'งวด',
@@ -214,7 +233,11 @@ class Pdfgen_RentalInforma {
                         ),
                       ),
                       pw.Text(
-                        'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
+                        (Form_cdate.toString() == '0000-00-00')
+                            ? 'ณ วันที่: ${Form_sdate}'
+                            : 'ณ วันที่: ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${Form_cdate} 00:00:00')).toString()}',
+                        //pdf_AC_his_statusbill.dart 'ณ วันที่:  ${thai_Date} ${int.parse(year) + 543}',
+                        //'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
                         maxLines: 2,
                         style: pw.TextStyle(
                           fontSize: 10.0,
@@ -1397,7 +1420,11 @@ class Pdfgen_RentalInforma {
                       ),
                     ),
                     pw.Text(
-                      'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
+                      (Form_cdate.toString() == '0000-00-00')
+                          ? 'ณ วันที่: ${Form_sdate}'
+                          : 'ณ วันที่: ${DateFormat('dd-MM-yyyy').format(DateTime.parse('${Form_cdate} 00:00:00')).toString()}',
+                      // 'ณ วันที่:  ${thai_Date} ${int.parse(year) + 543}',
+                      // 'ณ วันที่:  $thaiDate ${DateTime.now().year + 543}',
                       maxLines: 2,
                       style: pw.TextStyle(
                         fontSize: 10.0,

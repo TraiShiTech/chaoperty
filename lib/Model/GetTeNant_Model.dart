@@ -17,6 +17,7 @@ class TeNantModel {
   String? total;
   String? sdate;
   String? ldate;
+  String? cdate;
   String? cname;
   String? sname;
   String? ln_c;
@@ -51,6 +52,13 @@ class TeNantModel {
   String? custno_1;
   String? custno_2;
   String? duedate;
+  String? amt;
+  String? amt_expser1;
+  String? amt_expser9;
+  String? amt_expser10;
+  String? amt_expser11;
+  String? amt_expser12;
+  String? cc_remark;
 
   TeNantModel({
     this.ser,
@@ -71,6 +79,7 @@ class TeNantModel {
     this.total,
     this.sdate,
     this.ldate,
+    this.cdate,
     this.cname,
     this.sname,
     this.ln_c,
@@ -105,6 +114,13 @@ class TeNantModel {
     this.custno_1,
     this.custno_2,
     this.duedate,
+    this.amt,
+    this.amt_expser1,
+    this.amt_expser9,
+    this.amt_expser10,
+    this.amt_expser11,
+    this.amt_expser12,
+    this.cc_remark,
   });
 
   TeNantModel.fromJson(Map<String, dynamic> json) {
@@ -125,6 +141,7 @@ class TeNantModel {
     dataUpdate = json['data_update'];
     total = json['total'];
     sdate = json['sdate'];
+    cdate = json['cdate'];
     ldate = json['ldate'];
     cname = json['cname'];
     sname = json['sname'];
@@ -162,6 +179,14 @@ class TeNantModel {
     custno_1 = json['custno_1'];
     custno_2 = json['custno_2'];
     duedate = json['duedate'];
+    amt = json['amt'];
+
+    amt_expser1 = json['amt_expser1'];
+    amt_expser9 = json['amt_expser9'];
+    amt_expser10 = json['amt_expser10'];
+    amt_expser11 = json['amt_expser11'];
+    amt_expser12 = json['amt_expser12'];
+    cc_remark = json['cc_remark'];
   }
 
   Map<String, dynamic> toJson() {
@@ -184,6 +209,7 @@ class TeNantModel {
     data['total'] = this.total;
     data['sdate'] = this.sdate;
     data['ldate'] = this.ldate;
+    data['cdate'] = this.cdate;
     data['cname'] = this.cname;
     data['sname'] = this.sname;
     data['ln_c'] = this.ln_c;
@@ -219,6 +245,14 @@ class TeNantModel {
     data['custno_1'] = this.custno_1;
     data['custno_2'] = this.custno_2;
     data['duedate'] = this.duedate;
+    data['amt'] = this.amt;
+
+    data['amt_expser1'] = this.amt_expser1;
+    data['amt_expser9'] = this.amt_expser9;
+    data['amt_expser10'] = this.amt_expser10;
+    data['amt_expser11'] = this.amt_expser11;
+    data['amt_expser12'] = this.amt_expser12;
+    data['cc_remark'] = this.cc_remark;
 
     return data;
   }

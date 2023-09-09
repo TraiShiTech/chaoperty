@@ -17,6 +17,7 @@ class PayMentModel {
   String? co;
   String? dataUpdate;
   String? auto;
+  String? ser_payweb;
 
   PayMentModel(
       {this.ser,
@@ -36,6 +37,7 @@ class PayMentModel {
       this.accode,
       this.co,
       this.dataUpdate,
+      this.ser_payweb,
       this.auto});
 
   PayMentModel.fromJson(Map<String, dynamic> json) {
@@ -57,6 +59,7 @@ class PayMentModel {
     co = json['co'];
     dataUpdate = json['data_update'];
     auto = json['auto'];
+    ser_payweb = json['ser_payweb'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +82,7 @@ class PayMentModel {
     data['co'] = this.co;
     data['data_update'] = this.dataUpdate;
     data['auto'] = this.auto;
+    data['ser_payweb'] = this.ser_payweb;
 
     return data;
   }
